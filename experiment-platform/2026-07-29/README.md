@@ -2,6 +2,18 @@
 
 Structural redesign exploration for the internal experiment configuration tool, run from the Figma MVP prototype and the Hamish / Alice research session of 28 July 2026.
 
+**Published copy:** https://github.com/hamish-getmosh/vibecode-demos/tree/main/experiment-platform/2026-07-29  
+**Share with colleagues:** https://hamish-getmosh.github.io/vibecode-demos/experiment-platform/2026-07-29/prototype/index.html
+
+This folder is the working copy. The public snapshot lives in `vibecode-demos/experiment-platform/2026-07-29/`. To publish edits:
+
+```bash
+rsync -a --exclude '.git' ./ ../vibecode-demos/experiment-platform/2026-07-29/
+cd ../vibecode-demos && git add experiment-platform/2026-07-29 && git commit -m "Update experiment platform 2026-07-29 snapshot" && git push origin main
+```
+
+Git history for this workspace is also on branch `experiment-platform/2026-07-29-git` in the same repo.
+
 ## Start the preview server
 
 Everything here is HTML and is meant to be viewed over HTTP, not opened as a file.
