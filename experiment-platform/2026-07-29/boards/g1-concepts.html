@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G1 · Concept mixboard · Experiment platform</title>
+<style>
+  :root{
+    --bg:#eeeeec; --panel:#fff; --ink:#1a1a18; --ink2:#5b5b56; --ink3:#8d8d86;
+    --line:#dededa; --line2:#c6c6c0;
+    --wf-bg:#f7f7f5; --wf-line:#c9c9c3; --wf-fill:#dcdcd6; --wf-dark:#b4b4ad;
+    --hot:#c2410c; --hot-soft:#fdefe6;
+    --ok:#15695a; --ok-soft:#e4f0ed;
+    --cold:#4a5568; --cold-soft:#eceef1;
+    --r:13px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 26px 90px}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,monospace}
+
+  header{background:#1a1a18;color:#f0f0ec;padding:32px 0 28px}
+  header .wrap{padding-bottom:0}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a3a39a;font-weight:600;margin-bottom:9px}
+  h1{margin:0 0 10px;font-size:28px;letter-spacing:-.02em;font-weight:650}
+  .scenario{background:#262622;border-left:3px solid #6b6b62;padding:13px 16px;border-radius:0 8px 8px 0;
+    max-width:88ch;font-size:14px;color:#cbcbc3;line-height:1.6;margin-top:16px}
+  .scenario b{color:#fff;font-weight:600}
+  .howto{margin:16px 0 0;font-size:13px;color:#9a9a92;max-width:80ch}
+
+  nav.jump{position:sticky;top:0;z-index:60;background:rgba(238,238,236,.94);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);margin-bottom:26px}
+  nav.jump .wrap{display:flex;gap:3px;padding:9px 26px;overflow-x:auto;align-items:center}
+  nav.jump a{color:var(--ink2);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:99px;white-space:nowrap;font-weight:500}
+  nav.jump a:hover{background:#e0e0dc;color:var(--ink)}
+  nav.jump .spacer{flex:1}
+  nav.jump .lofi{font-size:11px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+
+  section{margin-bottom:34px;scroll-margin-top:58px}
+  h2.sec{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:650;margin:0 0 6px}
+  .secsub{margin:0 0 16px;color:var(--ink2);font-size:14.5px;max-width:82ch}
+
+  /* control card */
+  .control{background:var(--panel);border:1px dashed var(--line2);border-radius:var(--r);padding:19px 22px;
+    display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start;opacity:.9}
+  .control h3{margin:0 0 5px;font-size:15.5px;font-weight:650}
+  .control .lab{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px}
+  .control p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.55}
+  .ctrl-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .ctrl-cols h5{margin:0 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+  .ctrl-cols ul{margin:0;padding-left:16px}
+  .ctrl-cols li{font-size:13px;color:var(--ink2);margin-bottom:3px}
+  .fix h5{color:var(--ok)} .nofix h5{color:var(--hot)}
+
+  /* concept panel */
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:22px}
+  .c-head{padding:20px 24px 18px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+  .c-title{display:flex;align-items:baseline;gap:11px;margin-bottom:7px}
+  .c-letter{font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:700;background:var(--ink);color:#fff;
+    padding:3px 8px;border-radius:5px}
+  .c-head h3{margin:0;font-size:21px;font-weight:650;letter-spacing:-.01em}
+  .c-thesis{margin:0;font-size:14.5px;color:var(--ink2);max-width:74ch;line-height:1.55}
+  .c-model{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+  .pill{font-size:11.5px;padding:4px 10px;border-radius:99px;border:1px solid var(--line2);color:var(--ink2);background:#fafaf8}
+  .pill b{font-weight:650;color:var(--ink)}
+
+  .c-body{display:grid;grid-template-columns:1fr 330px;gap:0}
+  .c-stage{padding:20px 24px;border-right:1px solid var(--line);background:#fbfbf9}
+  .c-side{padding:20px 22px}
+
+  /* moment tabs */
+  .moments{display:flex;gap:5px;margin-bottom:15px;flex-wrap:wrap}
+  .mtab{border:1px solid var(--line2);background:#fff;color:var(--ink2);font:inherit;font-size:12.5px;
+    padding:6px 12px;border-radius:7px;cursor:pointer;font-weight:500;transition:.12s}
+  .mtab:hover{border-color:var(--ink3)}
+  .mtab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .mtab .num{font-family:ui-monospace,Menlo,monospace;opacity:.55;margin-right:5px;font-size:11px}
+  .mpanel{display:none} .mpanel.on{display:block}
+  .mcap{font-size:13px;color:var(--ink2);margin:0 0 13px;line-height:1.5;min-height:38px}
+  .mcap b{color:var(--ink);font-weight:600}
+
+  /* ---- lo-fi wireframe kit ---- */
+  .wf{background:var(--wf-bg);border:1px solid var(--wf-line);border-radius:8px;overflow:hidden;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:9.5px;color:#6e6e68;user-select:none}
+  .wf-chrome{background:#e6e6e1;border-bottom:1px solid var(--wf-line);padding:5px 9px;display:flex;gap:5px;align-items:center}
+  .wf-dot{width:7px;height:7px;border-radius:99px;background:#c4c4bd}
+  .wf-url{margin-left:6px;font-size:9px;color:#8f8f88;letter-spacing:.02em}
+  .wf-body{display:flex;min-height:290px}
+  .wf-rail{width:52px;background:#e9e9e4;border-right:1px solid var(--wf-line);padding:9px 6px;flex-shrink:0}
+  .wf-rail .ri{height:6px;background:var(--wf-fill);border-radius:2px;margin-bottom:7px}
+  .wf-rail .ri.on{background:var(--wf-dark)}
+  .wf-main{flex:1;padding:11px 13px;min-width:0;display:flex;flex-direction:column}
+  .wf-topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:9px;margin-bottom:10px;
+    border-bottom:1px solid var(--wf-line)}
+  .lbl{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:#8b8b84;font-weight:700}
+  .bar{height:7px;background:var(--wf-fill);border-radius:2px}
+  .bar.d{background:var(--wf-dark)}
+  .bar.w60{width:60%}.bar.w45{width:45%}.bar.w80{width:80%}.bar.w30{width:30%}.bar.w100{width:100%}.bar.w70{width:70%}
+  .stack>*{margin-bottom:6px} .stack>*:last-child{margin-bottom:0}
+  .box{border:1px solid var(--wf-line);border-radius:5px;background:#fff;padding:9px 10px}
+  .box.dash{border-style:dashed;background:transparent}
+  .box.sel{border-color:#8a8a82;border-width:1.5px;background:#fff}
+  .box.hl{border-color:var(--hot);border-width:1.5px;background:var(--hot-soft)}
+  .box.tint{background:#f0f0ec}
+  .btn{display:inline-block;background:var(--wf-dark);color:#fff;border-radius:4px;padding:4px 9px;font-size:9px;letter-spacing:.03em}
+  .btn.ghost{background:transparent;border:1px solid var(--wf-line);color:#7d7d76}
+  .btn.hot{background:var(--hot)}
+  .row{display:flex;gap:7px} .row>*{flex:1}
+  .row.tight{gap:5px}
+  .grow{flex:1}
+  .cap{font-size:9px;color:#9a9a92;letter-spacing:.03em}
+  .tag{display:inline-block;font-size:8.5px;padding:2px 6px;border-radius:3px;background:#e4e4de;color:#75756e;letter-spacing:.04em}
+  .tag.hot{background:var(--hot-soft);color:var(--hot)}
+  .tag.ok{background:var(--ok-soft);color:var(--ok)}
+  .dot{width:6px;height:6px;border-radius:99px;background:var(--hot);display:inline-block;flex-shrink:0}
+  .overlay{position:relative}
+  .slideover{position:absolute;top:0;right:0;bottom:0;width:62%;background:#fff;border-left:1.5px solid #8a8a82;
+    box-shadow:-8px 0 20px rgba(0,0,0,.10);padding:11px 13px;overflow:hidden}
+  .scrim{position:absolute;inset:0;background:rgba(60,60,55,.16)}
+  .cols{display:grid;gap:7px}
+  .cols.c2{grid-template-columns:1fr 1fr} .cols.c3{grid-template-columns:1fr 1fr 1fr}
+  .gridhead{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#8b8b84;font-weight:700;padding-bottom:4px}
+  .cell{border:1px solid var(--wf-line);border-radius:4px;background:#fff;padding:7px 8px;min-height:26px}
+  .cell.diff{border-color:var(--hot);background:var(--hot-soft)}
+  .cell.same{background:#f2f2ee;border-style:dashed}
+  .rowlab{font-size:9px;color:#7d7d76;display:flex;align-items:center;gap:5px}
+  .spec{font-size:9.5px;line-height:1.75;white-space:pre;color:#6e6e68}
+  .spec .k{color:#3f6d5f} .spec .v{color:#8a5a2b} .spec .c{color:#a3a39a}
+  .phone{width:88px;border:1.5px solid var(--wf-line);border-radius:9px;background:#fff;padding:7px 6px;flex-shrink:0}
+
+  /* side meta */
+  .meta-b{margin-bottom:17px}
+  .meta-b:last-child{margin-bottom:0}
+  .meta-b h5{margin:0 0 7px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ink3)}
+  .meta-b ul{margin:0;padding-left:15px}
+  .meta-b li{font-size:13px;color:var(--ink2);margin-bottom:5px;line-height:1.45}
+  .kills li{color:var(--ink2)}
+  .risk{background:var(--hot-soft);border-radius:8px;padding:11px 13px;font-size:12.5px;color:#8a3d0d;line-height:1.5}
+  .risk b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:var(--hot)}
+  .covers{display:flex;gap:4px;flex-wrap:wrap}
+  .cv{font-family:ui-monospace,Menlo,monospace;font-size:10px;padding:3px 6px;border-radius:4px;background:var(--ok-soft);color:var(--ok);font-weight:600}
+  .cv.no{background:#eceef1;color:#8d8d86}
+
+  /* matrix */
+  table.mx{width:100%;border-collapse:collapse;background:var(--panel);border-radius:var(--r);overflow:hidden;
+    border:1px solid var(--line);font-size:13px}
+  table.mx th,table.mx td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line)}
+  table.mx thead th{background:#f6f6f3;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+  table.mx tbody th{font-weight:550;color:var(--ink);width:24%}
+  table.mx td{color:var(--ink2)}
+  table.mx tr:last-child th,table.mx tr:last-child td{border-bottom:0}
+  .v-good{color:var(--ok);font-weight:600} .v-bad{color:var(--hot);font-weight:600} .v-mid{color:var(--ink2)}
+
+  .callout{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cold);
+    border-radius:var(--r);padding:20px 24px}
+  .callout h4{margin:0 0 9px;font-size:15.5px;font-weight:650}
+  .callout p{margin:0 0 11px;font-size:14px;color:var(--ink2);line-height:1.6;max-width:86ch}
+  .callout p:last-child{margin-bottom:0}
+  .askbox{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}
+  .ask{border:1px solid var(--line);border-radius:9px;padding:13px 15px;background:#fafaf8}
+  .ask b{display:block;font-size:12.5px;margin-bottom:5px}
+  .ask span{font-size:12.5px;color:var(--ink2);line-height:1.45}
+
+  @media (max-width:1080px){
+    .c-body{grid-template-columns:1fr}
+    .c-stage{border-right:0;border-bottom:1px solid var(--line)}
+    .control{grid-template-columns:1fr}
+    .askbox{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Gate G1 · Concept selection · low fidelity</div>
+    <h1>Four structural models for the experiment flow</h1>
+    <div class="scenario">
+      <b>Same scenario in all four.</b> Set up a Moshy AU semaglutide pricing test. Variant A is the existing basic package. Variant B is a new premium tier adding a dietitian consult, a longevity consult and a protein shake. <b>The premium package does not exist yet.</b> Target Australia, iOS only, 25 percent of eligible traffic split evenly, publish to staging.
+    </div>
+    <p class="howto">These are structure sketches, not visual design. Grey blocks are deliberate. Each concept had to change both the navigation model and the primary work surface, so none of them is the current design with the panels swapped. That option is included separately as a control so you can see what the extra ambition buys.</p>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="wrap">
+    <a href="#control">Control</a>
+    <a href="#a">A · Ledger</a>
+    <a href="#b">B · Bench</a>
+    <a href="#c">C · Assembly</a>
+    <a href="#d">D · Spec</a>
+    <a href="#matrix">Comparison</a>
+    <a href="#ask">Your call</a>
+    <span class="spacer"></span>
+    <span class="lofi">Structure only</span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ CONTROL ============ -->
+<section id="control">
+  <h2 class="sec">The control</h2>
+  <p class="secsub">What the session itself proposed. Worth building if nothing else lands, and worth measuring the others against.</p>
+  <div class="control">
+    <div>
+      <div class="lab">Baseline</div>
+      <h3>Flip the panels</h3>
+      <p>Keep the five stages. Configurator moves left at two thirds, checkout preview right at one third. Add field-level change dots, tooltips, a traffic funnel, and honest save wording.</p>
+    </div>
+    <div class="ctrl-cols">
+      <div class="fix">
+        <h5>Fixes</h5>
+        <ul>
+          <li>Inverted hierarchy, partly</li>
+          <li>No live preview</li>
+          <li>Change tint granularity</li>
+          <li>Save anxiety wording</li>
+          <li>Two-tier traffic legibility</li>
+        </ul>
+      </div>
+      <div class="nofix">
+        <h5>Leaves intact</h5>
+        <ul>
+          <li>Package building crammed into a stage</li>
+          <li>Backwards variant duplication</li>
+          <li>Difference visible only at review</li>
+          <li>Test type still branches the flow</li>
+          <li>No stance on automation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A · LEDGER ============ -->
+<section id="a">
+  <div class="concept">
+    <div class="c-head">
+      <div>
+        <div class="c-title"><span class="c-letter">A</span><h3>Ledger</h3></div>
+        <p class="c-thesis">The experiment is one document, not five gates. Stop asking people to complete stages and let them fill in a record. Orientation comes from a table of contents and a readiness panel, not from locks.</p>
+        <div class="c-model">
+          <span class="pill"><b>Nav:</b> document plus contents rail</span>
+          <span class="pill"><b>Surface:</b> full-width single column</span>
+          <span class="pill"><b>Nesting:</b> inline, with focus mode</span>
+          <span class="pill"><b>Preview:</b> on demand</span>
+        </div>
+      </div>
+    </div>
+    <div class="c-body">
+      <div class="c-stage">
+        <div class="moments" role="tablist">
+          <button class="mtab" role="tab" aria-selected="true" data-c="a" data-m="1"><span class="num">01</span>Land</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="a" data-m="2"><span class="num">02</span>Two variants</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="a" data-m="3"><span class="num">03</span>Missing package</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="a" data-m="4"><span class="num">04</span>Publish</button>
+        </div>
+
+        <div class="mpanel on" data-c="a" data-m="1">
+          <p class="mcap">You land in an <b>empty record, not step one of five</b>. Everything is present and scrollable from the first second. The contents rail shows what exists; the readiness panel shows what is blocking publish. Nothing is locked.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/new</span></div>
+            <div class="wf-body">
+              <div class="wf-rail"><div class="ri on"></div><div class="ri"></div><div class="ri"></div><div class="ri"></div></div>
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Untitled experiment</span><span class="tag">Draft · saving</span></div>
+                <div style="display:flex;gap:12px;flex:1">
+                  <div style="width:118px;flex-shrink:0">
+                    <div class="lbl" style="margin-bottom:7px">Contents</div>
+                    <div class="stack">
+                      <div class="box tint" style="padding:5px 7px"><div class="bar w80"></div></div>
+                      <div class="box" style="padding:5px 7px;border:0"><div class="bar w60"></div></div>
+                      <div class="box" style="padding:5px 7px;border:0"><div class="bar w70"></div></div>
+                      <div class="box" style="padding:5px 7px;border:0"><div class="bar w45"></div></div>
+                      <div class="box" style="padding:5px 7px;border:0"><div class="bar w60"></div></div>
+                    </div>
+                    <div style="margin-top:14px" class="lbl">Readiness</div>
+                    <div class="box dash" style="margin-top:6px;padding:7px">
+                      <div class="stack">
+                        <div style="display:flex;gap:5px;align-items:center"><span class="dot"></span><div class="bar w70"></div></div>
+                        <div style="display:flex;gap:5px;align-items:center"><span class="dot"></span><div class="bar w60"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grow stack">
+                    <div class="box sel"><div class="lbl" style="margin-bottom:7px">Setup</div>
+                      <div class="stack"><div class="bar w60 d"></div><div class="row tight"><div class="bar w45"></div><div class="bar w30"></div></div>
+                      <div class="cap">key autofilled · editable</div></div></div>
+                    <div class="box dash"><div class="lbl">Variants</div><div class="cap" style="margin-top:5px">empty</div></div>
+                    <div class="box dash"><div class="lbl">Audience</div><div class="cap" style="margin-top:5px">will derive from variants</div></div>
+                    <div class="box dash"><div class="lbl">Traffic</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="a" data-m="2">
+          <p class="mcap">Variant B is created by <b>cloning A from inside A</b>. The compare toggle flips the variants section into aligned columns so difference is legible without leaving the document.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004#variants</span></div>
+            <div class="wf-body">
+              <div class="wf-rail"><div class="ri"></div><div class="ri on"></div><div class="ri"></div><div class="ri"></div></div>
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Variants</span><span><span class="btn ghost">compare</span> <span class="btn">preview</span></span></div>
+                <div class="cols c2" style="flex:1">
+                  <div class="box">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span class="lbl">A · control</span><span class="tag">clone</span></div>
+                    <div class="stack">
+                      <div class="box tint" style="padding:6px 7px"><div class="bar w70"></div><div class="cap" style="margin-top:4px">AU-Semaglutide-basic</div></div>
+                      <div class="box tint" style="padding:6px 7px"><div class="bar w45"></div></div>
+                    </div>
+                  </div>
+                  <div class="box sel">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span class="lbl">B · test</span><span class="tag hot">3 changes</span></div>
+                    <div class="stack">
+                      <div class="box tint" style="padding:6px 7px"><div class="bar w70"></div><div class="cap" style="margin-top:4px">AU-Semaglutide-basic</div></div>
+                      <div class="box hl" style="padding:6px 7px"><div style="display:flex;gap:5px;align-items:center"><span class="dot"></span><div class="bar w60"></div></div><div class="cap" style="margin-top:4px">premium · not created yet</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box dash" style="margin-top:8px;text-align:center;padding:7px"><span class="cap">+ add variant</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="a" data-m="3">
+          <p class="mcap">The premium package does not exist. It opens in a <b>full-screen focus mode</b> rather than a cramped panel, because building a package needs room. Escape returns you to the exact scroll position in the document.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004#variants · focus: new package</span></div>
+            <div class="wf-body">
+              <div class="wf-main" style="padding:11px 13px">
+                <div class="wf-topbar"><span class="lbl">New package · AU-Semaglutide-premium</span><span><span class="btn ghost">esc to return</span> <span class="btn">attach to B</span></span></div>
+                <div style="display:flex;gap:11px;flex:1">
+                  <div class="grow stack">
+                    <div class="row">
+                      <div class="box"><div class="lbl">Plan · 3 month</div><div class="stack" style="margin-top:6px"><div class="bar w80"></div><div class="bar w60"></div><div class="bar w45"></div></div></div>
+                      <div class="box"><div class="lbl">Plan · monthly</div><div class="stack" style="margin-top:6px"><div class="bar w80"></div><div class="bar w60"></div><div class="bar w45"></div></div></div>
+                    </div>
+                    <div class="box"><div class="lbl">Care products</div>
+                      <div class="row tight" style="margin-top:7px"><span class="tag">dietitian</span><span class="tag">longevity</span><span class="tag">shake</span><span class="tag" style="background:transparent;border:1px dashed var(--wf-line)">+ add</span></div></div>
+                    <div class="box dash"><span class="cap">saves to Care packages library · reusable in future experiments</span></div>
+                  </div>
+                  <div class="phone">
+                    <div class="lbl" style="font-size:8px;margin-bottom:5px">Checkout</div>
+                    <div class="stack">
+                      <div class="bar w80"></div><div class="box tint" style="padding:5px"><div class="bar w70"></div></div>
+                      <div class="box sel" style="padding:5px"><div class="bar w80"></div><div class="bar w45" style="margin-top:3px"></div></div>
+                      <div class="bar w60"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="a" data-m="4">
+          <p class="mcap">There is no review destination. The <b>readiness panel was always visible</b>, so publish is just the last unchecked item. Environment behaviour is stated at the button, not discovered after.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004#launch</span></div>
+            <div class="wf-body">
+              <div class="wf-rail"><div class="ri"></div><div class="ri"></div><div class="ri"></div><div class="ri on"></div></div>
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Launch</span><span class="tag ok">all checks pass</span></div>
+                <div style="display:flex;gap:12px;flex:1">
+                  <div class="grow stack">
+                    <div class="box"><div class="lbl" style="margin-bottom:7px">What differs between A and B</div>
+                      <div class="stack">
+                        <div style="display:flex;gap:6px;align-items:center"><span class="dot"></span><div class="bar w80"></div></div>
+                        <div class="cap">B adds package AU-Semaglutide-premium · everything else identical</div>
+                      </div></div>
+                    <div class="box tint"><div class="lbl">Audience · 25% of eligible</div>
+                      <div style="display:flex;gap:3px;margin-top:8px;align-items:center">
+                        <div style="height:16px;flex:3;background:var(--wf-dark);border-radius:3px"></div>
+                        <div style="height:16px;flex:3;background:#cfcfc8;border-radius:3px"></div>
+                        <div style="height:16px;flex:6;background:#eaeae4;border-radius:3px"></div>
+                      </div>
+                      <div class="cap" style="margin-top:5px">12.5% A · 12.5% B · 75% not enrolled</div></div>
+                  </div>
+                  <div style="width:132px;flex-shrink:0">
+                    <div class="box dash"><div class="lbl">Readiness</div>
+                      <div class="stack" style="margin-top:7px">
+                        <div class="bar w80"></div><div class="bar w70"></div><div class="bar w60"></div></div></div>
+                    <div style="margin-top:9px"><span class="btn hot" style="display:block;text-align:center;padding:7px">Publish to staging</span>
+                      <div class="cap" style="margin-top:5px">staging goes live immediately</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-side">
+        <div class="meta-b"><h5>Bets on</h5><ul>
+          <li>Gating was never the value. Orientation was.</li>
+          <li>A readiness checklist beats sequential locks.</li>
+          <li>People revisit constantly, so free movement is the default need.</li>
+        </ul></div>
+        <div class="meta-b kills"><h5>Kills</h5><ul>
+          <li>The stepper and completion gates</li>
+          <li>The permanent flowchart canvas</li>
+          <li>The separate review destination</li>
+        </ul></div>
+        <div class="meta-b"><h5>Covers</h5><div class="covers">
+          <span class="cv">R1</span><span class="cv">R4</span><span class="cv">R5</span><span class="cv">R10</span><span class="cv">R11</span><span class="cv">R12</span><span class="cv">R3</span><span class="cv no">R14</span>
+        </div></div>
+        <div class="risk"><b>Risk</b>A long scrolling record can feel unbounded on first use. Needs strong section collapse and a genuinely good readiness panel or it becomes a wall.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B · BENCH ============ -->
+<section id="b">
+  <div class="concept">
+    <div class="c-head">
+      <div>
+        <div class="c-title"><span class="c-letter">B</span><h3>Bench</h3></div>
+        <p class="c-thesis">The unit of work is not the experiment, it is the difference between variants. Make variants columns, attributes rows, and configure inside the comparison itself. Difference stops being a feature and becomes the structure.</p>
+        <div class="c-model">
+          <span class="pill"><b>Nav:</b> no stages at all</span>
+          <span class="pill"><b>Surface:</b> editable comparison grid</span>
+          <span class="pill"><b>Nesting:</b> slide-over from the cell</span>
+          <span class="pill"><b>Preview:</b> per column</span>
+        </div>
+      </div>
+    </div>
+    <div class="c-body">
+      <div class="c-stage">
+        <div class="moments" role="tablist">
+          <button class="mtab" role="tab" aria-selected="true" data-c="b" data-m="1"><span class="num">01</span>Land</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="b" data-m="2"><span class="num">02</span>Two variants</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="b" data-m="3"><span class="num">03</span>Missing package</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="b" data-m="4"><span class="num">04</span>Publish</button>
+        </div>
+
+        <div class="mpanel on" data-c="b" data-m="1">
+          <p class="mcap">You start with <b>one column and a plus</b>. Audience sits in a band above the grid, traffic in a band below, because both are small next to variant configuration. There is nothing to complete, only cells to fill.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/new</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Untitled · draft</span><span class="tag">auto saved</span></div>
+                <div class="box tint" style="margin-bottom:9px;padding:7px 9px">
+                  <div style="display:flex;justify-content:space-between;align-items:center"><span class="lbl">Audience</span><span class="cap">derives from variants</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:78px 1fr 92px;gap:7px;flex:1">
+                  <div><div class="gridhead">Attribute</div>
+                    <div class="stack"><div class="rowlab">package</div><div class="rowlab">plans</div><div class="rowlab">care</div><div class="rowlab">price</div></div></div>
+                  <div><div class="gridhead">Variant A · control</div>
+                    <div class="stack"><div class="cell"><div class="bar w70"></div></div><div class="cell"><div class="bar w60"></div></div><div class="cell same"></div><div class="cell"><div class="bar w45"></div></div></div></div>
+                  <div><div class="gridhead">&nbsp;</div>
+                    <div class="box dash" style="height:100%;display:flex;align-items:center;justify-content:center"><span class="cap">+ variant</span></div></div>
+                </div>
+                <div class="box tint" style="margin-top:9px;padding:7px 9px"><span class="lbl">Traffic</span> <span class="cap">100% · single variant</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="b" data-m="2">
+          <p class="mcap">Adding B <b>clones A into a new column</b>. Rows that match are dimmed, rows that diverge are marked. You never ask what is different, you are looking at it. Accidental A/A is impossible to miss because no row is marked.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">AU Moshy · semaglutide tiered</span><span><span class="tag hot">1 row differs</span> <span class="btn ghost">preview both</span></span></div>
+                <div class="box tint" style="margin-bottom:9px;padding:7px 9px">
+                  <div style="display:flex;gap:5px;align-items:center"><span class="lbl">Audience</span>
+                    <span class="tag">AU</span><span class="tag">Moshy</span><span class="tag">weight loss</span><span class="tag">iOS</span>
+                    <span class="tag" style="background:transparent;border:1px dashed var(--wf-line)">+</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:78px 1fr 1fr;gap:7px;flex:1">
+                  <div><div class="gridhead">Attribute</div>
+                    <div class="stack"><div class="rowlab">package</div><div class="rowlab"><span class="dot"></span>package 2</div><div class="rowlab">plans</div><div class="rowlab">price</div></div></div>
+                  <div><div class="gridhead">A · control</div>
+                    <div class="stack"><div class="cell"><div class="bar w70"></div></div><div class="cell same"><span class="cap">none</span></div><div class="cell"><div class="bar w60"></div></div><div class="cell"><div class="bar w45"></div></div></div></div>
+                  <div><div class="gridhead">B · test</div>
+                    <div class="stack"><div class="cell same"><div class="bar w70"></div></div><div class="cell diff"><span class="cap">+ premium</span></div><div class="cell same"><div class="bar w60"></div></div><div class="cell same"><div class="bar w45"></div></div></div></div>
+                </div>
+                <div class="box tint" style="margin-top:9px;padding:7px 9px">
+                  <div style="display:flex;gap:7px;align-items:center"><span class="lbl">Traffic</span>
+                    <div style="flex:1;display:flex;gap:2px"><div style="height:11px;flex:1;background:var(--wf-dark);border-radius:2px"></div><div style="height:11px;flex:1;background:#cfcfc8;border-radius:2px"></div><div style="height:11px;flex:6;background:#eaeae4;border-radius:2px"></div></div>
+                    <span class="cap">25% enrolled</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="b" data-m="3">
+          <p class="mcap">The missing package opens as a <b>slide-over anchored to the cell</b>. The grid stays visible behind it, so you keep the comparison in view while authoring the thing that creates the difference.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004 · new package</span></div>
+            <div class="wf-body overlay">
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">AU Moshy · semaglutide tiered</span><span class="tag hot">1 row differs</span></div>
+                <div style="display:grid;grid-template-columns:78px 1fr 1fr;gap:7px;flex:1">
+                  <div><div class="gridhead">Attribute</div><div class="stack"><div class="rowlab">package</div><div class="rowlab"><span class="dot"></span>package 2</div><div class="rowlab">plans</div></div></div>
+                  <div><div class="gridhead">A</div><div class="stack"><div class="cell"><div class="bar w70"></div></div><div class="cell same"></div><div class="cell"><div class="bar w60"></div></div></div></div>
+                  <div><div class="gridhead">B</div><div class="stack"><div class="cell same"><div class="bar w70"></div></div><div class="cell diff"><div class="bar w45"></div></div><div class="cell same"><div class="bar w60"></div></div></div></div>
+                </div>
+              </div>
+              <div class="scrim"></div>
+              <div class="slideover">
+                <div class="wf-topbar"><span class="lbl">New package · premium</span><span class="btn ghost">close</span></div>
+                <div class="stack">
+                  <div class="box"><div class="lbl">Plans</div><div class="row tight" style="margin-top:6px"><div class="bar w80"></div><div class="bar w60"></div></div></div>
+                  <div class="box"><div class="lbl">Care products</div><div class="row tight" style="margin-top:6px"><span class="tag">dietitian</span><span class="tag">longevity</span><span class="tag">shake</span></div></div>
+                  <div class="box dash"><span class="cap">layer 2 of 2 · plan editor stacks on top if opened</span></div>
+                  <div style="display:flex;gap:5px"><span class="btn ghost">cancel</span><span class="btn">save and attach</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="b" data-m="4">
+          <p class="mcap">Publishing is a <b>filter, not a page</b>. Show only differing rows and you already have the review. The grid you built in is the grid you sign off.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004 · changes only</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span><span class="btn">changes only</span> <span class="btn ghost">show all</span></span><span class="btn hot">Publish to staging</span></div>
+                <div style="display:grid;grid-template-columns:78px 1fr 1fr;gap:7px">
+                  <div><div class="gridhead">Attribute</div><div class="rowlab"><span class="dot"></span>package 2</div></div>
+                  <div><div class="gridhead">A</div><div class="cell same"><span class="cap">none</span></div></div>
+                  <div><div class="gridhead">B</div><div class="cell diff"><span class="cap">AU-Semaglutide-premium</span></div></div>
+                </div>
+                <div class="box dash" style="margin-top:10px;text-align:center;padding:9px"><span class="cap">1 of 14 attributes differs · 13 hidden</span></div>
+                <div class="row" style="margin-top:10px">
+                  <div class="box tint"><div class="lbl">Audience</div><div class="cap" style="margin-top:5px">AU · Moshy · weight loss · iOS</div></div>
+                  <div class="box tint"><div class="lbl">Traffic</div><div class="cap" style="margin-top:5px">25% enrolled · 12.5 / 12.5</div></div>
+                  <div class="box tint"><div class="lbl">On publish</div><div class="cap" style="margin-top:5px">staging · active immediately</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-side">
+        <div class="meta-b"><h5>Bets on</h5><ul>
+          <li>The job is authoring a difference. Everything else is small.</li>
+          <li>Alignment beats annotation for showing change.</li>
+          <li>Review is a view of the workspace, not a separate place.</li>
+        </ul></div>
+        <div class="meta-b kills"><h5>Kills</h5><ul>
+          <li>Stages, entirely</li>
+          <li>The review destination</li>
+          <li>Whole-window change tinting</li>
+          <li>Cohort and traffic as full steps</li>
+        </ul></div>
+        <div class="meta-b"><h5>Covers</h5><div class="covers">
+          <span class="cv">R4</span><span class="cv">R5</span><span class="cv">R6</span><span class="cv">R10</span><span class="cv">R11</span><span class="cv">R8</span><span class="cv no">R13</span><span class="cv no">R14</span>
+        </div></div>
+        <div class="risk"><b>Risk</b>Does not obviously extend to experiment types where variants are not attribute-comparable, such as a redirect or a page flow test. Also gets wide past three or four variants.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ C · ASSEMBLY ============ -->
+<section id="c">
+  <div class="concept">
+    <div class="c-head">
+      <div>
+        <div class="c-title"><span class="c-letter">C</span><h3>Assembly</h3></div>
+        <p class="c-thesis">Take the IKEA metaphor literally. Parts live in a library, and the experiment is a shallow assembly of parts. Building a part is a first-class job with its own full-width surface, not something squeezed into a sidebar.</p>
+        <div class="c-model">
+          <span class="pill"><b>Nav:</b> library plus assembly tray</span>
+          <span class="pill"><b>Surface:</b> thin tray, fat library</span>
+          <span class="pill"><b>Nesting:</b> zone switch, not a drawer</span>
+          <span class="pill"><b>Preview:</b> in the tray</span>
+        </div>
+      </div>
+    </div>
+    <div class="c-body">
+      <div class="c-stage">
+        <div class="moments" role="tablist">
+          <button class="mtab" role="tab" aria-selected="true" data-c="c" data-m="1"><span class="num">01</span>Land</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="c" data-m="2"><span class="num">02</span>Two variants</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="c" data-m="3"><span class="num">03</span>Missing package</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="c" data-m="4"><span class="num">04</span>Publish</button>
+        </div>
+
+        <div class="mpanel on" data-c="c" data-m="1">
+          <p class="mcap">The library is <b>permanently present on the left</b>, searchable. The experiment on the right is deliberately thin: slots waiting for parts. The tool tells you immediately that it is about assembling, not authoring.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/new</span></div>
+            <div class="wf-body">
+              <div style="width:150px;background:#efefea;border-right:1px solid var(--wf-line);padding:10px;flex-shrink:0">
+                <div class="lbl" style="margin-bottom:7px">Library</div>
+                <div class="box" style="padding:5px 7px;margin-bottom:8px"><span class="cap">search parts…</span></div>
+                <div class="row tight" style="margin-bottom:8px"><span class="tag">packages</span><span class="tag">care</span></div>
+                <div class="stack">
+                  <div class="box" style="padding:6px 7px"><div class="bar w80"></div><div class="cap" style="margin-top:3px">basic</div></div>
+                  <div class="box" style="padding:6px 7px"><div class="bar w70"></div><div class="cap" style="margin-top:3px">contrave</div></div>
+                  <div class="box" style="padding:6px 7px"><div class="bar w60"></div></div>
+                  <div class="box dash" style="padding:6px 7px;text-align:center"><span class="cap">+ new part</span></div>
+                </div>
+              </div>
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Assembly</span><span class="tag">draft</span></div>
+                <div class="stack" style="flex:1">
+                  <div class="box"><div class="lbl">Setup</div><div class="row tight" style="margin-top:6px"><div class="bar w60"></div><div class="bar w30"></div></div></div>
+                  <div class="box sel"><div class="lbl" style="margin-bottom:6px">Variant A · control</div>
+                    <div class="box dash" style="text-align:center;padding:11px"><span class="cap">drop a package here, or pick from library</span></div></div>
+                  <div class="box dash" style="text-align:center;padding:8px"><span class="cap">+ variant</span></div>
+                  <div class="row"><div class="box tint"><span class="lbl">Audience</span></div><div class="box tint"><span class="lbl">Traffic</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="c" data-m="2">
+          <p class="mcap">Parts are <b>discrete and named</b>, so what differs between variants is legible without a diff engine. Variant B is A plus one more part. That sentence is the whole design.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004</span></div>
+            <div class="wf-body">
+              <div style="width:150px;background:#efefea;border-right:1px solid var(--wf-line);padding:10px;flex-shrink:0">
+                <div class="lbl" style="margin-bottom:7px">Library</div>
+                <div class="stack">
+                  <div class="box sel" style="padding:6px 7px"><div class="bar w80 d"></div><div class="cap" style="margin-top:3px">basic · used 2×</div></div>
+                  <div class="box" style="padding:6px 7px"><div class="bar w70"></div></div>
+                  <div class="box dash" style="padding:6px 7px;text-align:center"><span class="cap">+ new part</span></div>
+                </div>
+              </div>
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Assembly</span><span class="tag hot">B = A + 1 part</span></div>
+                <div class="cols c2" style="flex:1">
+                  <div class="box"><div class="lbl" style="margin-bottom:6px">A · control</div>
+                    <div class="stack"><div class="box tint" style="padding:6px 7px"><div class="bar w70"></div><div class="cap" style="margin-top:3px">basic</div></div></div></div>
+                  <div class="box sel"><div class="lbl" style="margin-bottom:6px">B · test</div>
+                    <div class="stack">
+                      <div class="box tint" style="padding:6px 7px"><div class="bar w70"></div><div class="cap" style="margin-top:3px">basic</div></div>
+                      <div class="box hl" style="padding:6px 7px"><div style="display:flex;gap:5px;align-items:center"><span class="dot"></span><div class="bar w60"></div></div><div class="cap" style="margin-top:3px">premium · missing from library</div></div>
+                    </div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="c" data-m="3">
+          <p class="mcap">Authoring the part <b>takes over the whole surface</b>. It is not a drawer or a modal, it is the library zone doing its actual job. The assembly stays pinned as a small return affordance, so you know exactly where you came from.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/library/packages/new · from experiment 004</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Building part · AU-Semaglutide-premium</span>
+                  <span class="box" style="padding:4px 8px;border-style:dashed"><span class="cap">← returning to experiment 004 · variant B</span></span></div>
+                <div style="display:flex;gap:11px;flex:1">
+                  <div class="grow stack">
+                    <div class="row">
+                      <div class="box"><div class="lbl">Plan · 3 month</div><div class="stack" style="margin-top:6px"><div class="bar w80"></div><div class="bar w60"></div><div class="bar w45"></div></div></div>
+                      <div class="box"><div class="lbl">Plan · monthly</div><div class="stack" style="margin-top:6px"><div class="bar w80"></div><div class="bar w60"></div><div class="bar w45"></div></div></div>
+                      <div class="box dash" style="display:flex;align-items:center;justify-content:center"><span class="cap">+ plan</span></div>
+                    </div>
+                    <div class="box"><div class="lbl">Care products from library</div>
+                      <div class="row tight" style="margin-top:7px"><span class="tag">dietitian</span><span class="tag">longevity</span><span class="tag">shake</span><span class="tag" style="background:transparent;border:1px dashed var(--wf-line)">+ pick</span></div></div>
+                    <div class="box tint"><span class="cap">this part becomes reusable · other experiments can attach it</span></div>
+                  </div>
+                  <div class="phone">
+                    <div class="lbl" style="font-size:8px;margin-bottom:5px">Checkout</div>
+                    <div class="stack"><div class="bar w80"></div><div class="box tint" style="padding:5px"><div class="bar w70"></div></div>
+                      <div class="box sel" style="padding:5px"><div class="bar w80"></div><div class="bar w45" style="margin-top:3px"></div></div></div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:5px;justify-content:flex-end;margin-top:9px"><span class="btn ghost">discard</span><span class="btn">save part and return</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="c" data-m="4">
+          <p class="mcap">Review reads as a <b>parts list</b>, closest to the IKEA framing. Because parts are named objects, the difference statement writes itself and the audience rule can be derived from the parts attached.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004 · publish</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span class="lbl">Parts list</span><span class="btn hot">Publish to staging</span></div>
+                <div class="stack" style="flex:1">
+                  <div class="box"><div class="row">
+                    <div><div class="lbl">A uses</div><div class="cap" style="margin-top:5px">1 part · basic</div></div>
+                    <div><div class="lbl">B uses</div><div class="cap" style="margin-top:5px">2 parts · basic, premium</div></div>
+                    <div><div class="lbl">Difference</div><div class="cap" style="margin-top:5px">B adds premium</div></div>
+                  </div></div>
+                  <div class="box tint"><div class="lbl">Audience derived from parts</div>
+                    <div class="row tight" style="margin-top:6px"><span class="tag">AU</span><span class="tag">Moshy</span><span class="tag">weight loss</span><span class="tag">semaglutide</span><span class="tag hot">iOS added</span></div></div>
+                  <div class="box tint"><div class="lbl">Traffic</div>
+                    <div style="display:flex;gap:2px;margin-top:7px"><div style="height:13px;flex:1;background:var(--wf-dark);border-radius:2px"></div><div style="height:13px;flex:1;background:#cfcfc8;border-radius:2px"></div><div style="height:13px;flex:6;background:#eaeae4;border-radius:2px"></div></div>
+                    <div class="cap" style="margin-top:4px">12.5 / 12.5 of 25% enrolled</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-side">
+        <div class="meta-b"><h5>Bets on</h5><ul>
+          <li>Package reuse across experiments is real and currently unrewarded.</li>
+          <li>The existing nav already implies this model.</li>
+          <li>A thin experiment is easier to extend to new test types.</li>
+        </ul></div>
+        <div class="meta-b kills"><h5>Kills</h5><ul>
+          <li>Package building inside the experiment flow</li>
+          <li>The deep sidebar editor</li>
+          <li>Rebuilding the same package per experiment</li>
+        </ul></div>
+        <div class="meta-b"><h5>Covers</h5><div class="covers">
+          <span class="cv">R3</span><span class="cv">R5</span><span class="cv">R7</span><span class="cv">R11</span><span class="cv">R13</span><span class="cv">R15</span><span class="cv no">R6</span><span class="cv no">R14</span>
+        </div></div>
+        <div class="risk"><b>Risk</b>A mode switch mid-task can feel like leaving, unless the return path is handled precisely. Also front-loads a library concept that people have not needed until now.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D · SPEC ============ -->
+<section id="d">
+  <div class="concept">
+    <div class="c-head">
+      <div>
+        <div class="c-title"><span class="c-letter">D</span><h3>Spec</h3></div>
+        <p class="c-thesis">If MCP is genuinely the primary interface for power users, design the object first and treat the UI as one client of it. The experiment is a readable structured record; forms are just one way to edit it, and an agent is another.</p>
+        <div class="c-model">
+          <span class="pill"><b>Nav:</b> command bar plus two views</span>
+          <span class="pill"><b>Surface:</b> editable structured spec</span>
+          <span class="pill"><b>Nesting:</b> expand in place</span>
+          <span class="pill"><b>Preview:</b> rendered view</span>
+        </div>
+      </div>
+    </div>
+    <div class="c-body">
+      <div class="c-stage">
+        <div class="moments" role="tablist">
+          <button class="mtab" role="tab" aria-selected="true" data-c="d" data-m="1"><span class="num">01</span>Land</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="d" data-m="2"><span class="num">02</span>Two variants</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="d" data-m="3"><span class="num">03</span>Missing package</button>
+          <button class="mtab" role="tab" aria-selected="false" data-c="d" data-m="4"><span class="num">04</span>Publish</button>
+        </div>
+
+        <div class="mpanel on" data-c="d" data-m="1">
+          <p class="mcap">You can type or you can click. The <b>command bar accepts the same operations MCP does</b>, and the spec below is the live object. Nothing is hidden behind a form you cannot see the shape of.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/new</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="box sel" style="margin-bottom:10px;padding:8px 10px">
+                  <div style="display:flex;gap:7px;align-items:center"><span class="cap">›</span><div class="bar w60 d"></div></div>
+                  <div class="cap" style="margin-top:5px">"new semaglutide pricing test, AU Moshy, basic vs premium"</div>
+                </div>
+                <div class="wf-topbar"><span><span class="btn">spec</span> <span class="btn ghost">rendered</span></span><span class="tag">draft · v1</span></div>
+                <div class="spec" style="flex:1"><span class="k">experiment</span>:
+  <span class="k">key</span>:        <span class="v">004</span>          <span class="c"># editable, stable</span>
+  <span class="k">name</span>:       <span class="v">AU Moshy · semaglutide tiered</span>
+  <span class="k">hypothesis</span>: <span class="c">null            # optional</span>
+  <span class="k">variants</span>:   <span class="c">[]              # none yet</span>
+  <span class="k">audience</span>:   <span class="c">derived</span>
+  <span class="k">traffic</span>:    <span class="c">unset</span>
+  <span class="k">publish</span>:    <span class="c">staging</span>
+</div>
+                <div class="box dash" style="margin-top:8px"><span class="cap">every field addressable by path · same shape the MCP exposes</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="d" data-m="2">
+          <p class="mcap">Cloning is <b>an operation, not a wizard branch</b>. Because the record is structured, "B inherits from A" can be stated literally rather than implied by a copy-from dropdown.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="box" style="margin-bottom:10px;padding:7px 9px"><div style="display:flex;gap:7px;align-items:center"><span class="cap">›</span><span class="cap">clone variant A as B</span></div></div>
+                <div class="wf-topbar"><span><span class="btn">spec</span> <span class="btn ghost">rendered</span></span><span class="tag hot">1 override</span></div>
+                <div class="spec" style="flex:1"><span class="k">variants</span>:
+  - <span class="k">id</span>: <span class="v">A</span>  <span class="k">role</span>: <span class="v">control</span>
+    <span class="k">packages</span>: [<span class="v">AU-Semaglutide-basic</span>]
+  - <span class="k">id</span>: <span class="v">B</span>  <span class="k">role</span>: <span class="v">test</span>
+    <span class="k">inherits</span>: <span class="v">A</span>        <span class="c"># explicit lineage</span>
+    <span class="k">overrides</span>:
+      <span class="k">packages</span>: [<span class="v">AU-Semaglutide-basic</span>, <span class="v">AU-Semaglutide-premium</span>]
+                          <span class="c">⚠ premium does not exist</span>
+</div>
+                <div class="box hl" style="margin-top:8px;padding:7px 9px"><div style="display:flex;gap:6px;align-items:center"><span class="dot"></span><span class="cap">unresolved reference · create it, or point at an existing package</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="d" data-m="3">
+          <p class="mcap">The missing package is an <b>unresolved reference</b>, which is a familiar and precise idea. Resolving it expands a sub-spec in place. Depth is not a stack of panels, it is indentation.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004 · resolving reference</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span><span class="btn">spec</span> <span class="btn ghost">rendered</span></span><span class="tag hot">resolving 1</span></div>
+                <div style="display:flex;gap:11px;flex:1">
+                  <div class="grow">
+                    <div class="spec"><span class="c">…</span>
+      <span class="k">packages</span>: [<span class="v">basic</span>, <span class="v">premium</span>]
+
+  <span class="k">premium</span>:  <span class="c"># new · expanded in place</span>
+    <span class="k">region</span>: <span class="v">AU</span>
+    <span class="k">plans</span>:
+      - <span class="k">type</span>: <span class="v">3-month</span>   <span class="k">price</span>: <span class="v">…</span>
+      - <span class="k">type</span>: <span class="v">monthly</span>   <span class="k">price</span>: <span class="v">…</span>
+    <span class="k">care_products</span>:
+      - <span class="v">dietitian-consult</span>
+      - <span class="v">longevity-consult</span>
+      - <span class="v">protein-shake</span>
+</div>
+                    <div class="box dash" style="margin-top:8px"><span class="cap">on save · writes to the Care packages library, reference resolves</span></div>
+                  </div>
+                  <div class="phone">
+                    <div class="lbl" style="font-size:8px;margin-bottom:5px">Rendered</div>
+                    <div class="stack"><div class="bar w80"></div><div class="box tint" style="padding:5px"><div class="bar w70"></div></div>
+                      <div class="box sel" style="padding:5px"><div class="bar w80"></div><div class="bar w45" style="margin-top:3px"></div></div>
+                      <div class="bar w60"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpanel" data-c="d" data-m="4">
+          <p class="mcap">The diff is <b>native, not constructed</b>. Structured data compares itself, so review is a genuine change set and the same payload can be handed to Amplitude as a schema.</p>
+          <div class="wf">
+            <div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-url">/experiments/004 · publish</span></div>
+            <div class="wf-body">
+              <div class="wf-main">
+                <div class="wf-topbar"><span><span class="btn ghost">spec</span> <span class="btn">diff</span></span><span class="btn hot">Publish to staging</span></div>
+                <div class="box" style="flex:1;padding:10px">
+                  <div class="lbl" style="margin-bottom:8px">A → B change set</div>
+                  <div class="spec">  <span class="k">variants.B.packages</span>
+    <span class="c">−</span> [<span class="v">basic</span>]
+    <span class="c">+</span> [<span class="v">basic</span>, <span class="v">premium</span>]
+
+  <span class="c">1 changed path · 13 identical paths hidden</span>
+</div>
+                </div>
+                <div class="row" style="margin-top:9px">
+                  <div class="box tint"><div class="lbl">On publish</div><div class="cap" style="margin-top:4px">staging · active immediately</div></div>
+                  <div class="box tint"><div class="lbl">Also emits</div><div class="cap" style="margin-top:4px">Amplitude schema payload</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-side">
+        <div class="meta-b"><h5>Bets on</h5><ul>
+          <li>Your actual workflow is the leading indicator, not the exception.</li>
+          <li>An inspectable object beats a form you cannot see the shape of.</li>
+          <li>Designing the API shape first makes MCP free rather than retrofitted.</li>
+        </ul></div>
+        <div class="meta-b kills"><h5>Kills</h5><ul>
+          <li>Forms as the primary authoring mechanism</li>
+          <li>The UI as the only entry point</li>
+          <li>Constructed, hand-built diff logic</li>
+        </ul></div>
+        <div class="meta-b"><h5>Covers</h5><div class="covers">
+          <span class="cv">R2</span><span class="cv">R4</span><span class="cv">R5</span><span class="cv">R13</span><span class="cv">R14</span><span class="cv">R12</span><span class="cv no">R15</span><span class="cv no">R8</span>
+        </div></div>
+        <div class="risk"><b>Risk</b>The clearest fit for you and the worst fit for the marketing team. Alienates exactly the non-technical audience the tool is supposed to open up, unless the rendered view carries real weight.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATRIX ============ -->
+<section id="matrix">
+  <h2 class="sec">How they handle the stress tests</h2>
+  <p class="secsub">The seven edge cases from R0, plus the two questions that decide whether this scales.</p>
+  <table class="mx">
+    <thead><tr><th>Stress test</th><th>Control</th><th>A Ledger</th><th>B Bench</th><th>C Assembly</th><th>D Spec</th></tr></thead>
+    <tbody>
+      <tr><th>Clone a variant, change one price</th>
+        <td class="v-bad">clone is backwards</td><td class="v-good">clone in place</td><td class="v-good">clone column</td><td class="v-mid">clone slots</td><td class="v-good">explicit inherit</td></tr>
+      <tr><th>Package does not exist yet</th>
+        <td class="v-bad">cramped in sidebar</td><td class="v-good">focus mode</td><td class="v-good">slide-over</td><td class="v-good">its own zone</td><td class="v-mid">expand in place</td></tr>
+      <tr><th>Add a third variant late</th>
+        <td class="v-bad">navigate back a step</td><td class="v-good">just add</td><td class="v-mid">grid gets wide</td><td class="v-good">add a slot</td><td class="v-good">append</td></tr>
+      <tr><th>Spot accidental A/A</th>
+        <td class="v-bad">no signal</td><td class="v-mid">compare toggle</td><td class="v-good">structurally obvious</td><td class="v-good">parts match</td><td class="v-good">empty diff</td></tr>
+      <tr><th>Return to an earlier area</th>
+        <td class="v-mid">back through steps</td><td class="v-good">scroll or jump</td><td class="v-good">always there</td><td class="v-good">always there</td><td class="v-good">always there</td></tr>
+      <tr><th>Difference buried three levels down</th>
+        <td class="v-bad">manual hunt</td><td class="v-mid">compare columns</td><td class="v-good">row marked</td><td class="v-mid">part level only</td><td class="v-good">path level diff</td></tr>
+      <tr><th>An experiment type that is not pricing</th>
+        <td class="v-bad">branches the flow</td><td class="v-good">sections vary</td><td class="v-bad">weak fit</td><td class="v-good">parts vary</td><td class="v-good">schema varies</td></tr>
+      <tr><th>Serves a non-technical marketer</th>
+        <td class="v-good">familiar</td><td class="v-good">readable</td><td class="v-good">very readable</td><td class="v-mid">new concept</td><td class="v-bad">poor fit</td></tr>
+      <tr><th>Makes MCP native rather than bolted on</th>
+        <td class="v-bad">no</td><td class="v-bad">no</td><td class="v-bad">no</td><td class="v-mid">partly</td><td class="v-good">yes</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ ASK ============ -->
+<section id="ask">
+  <h2 class="sec">Where I have landed, provisionally</h2>
+  <div class="callout">
+    <h4>Two of these are probably one concept</h4>
+    <p><strong>B Bench</strong> and <strong>C Assembly</strong> are solving adjacent halves of the same problem. Bench makes difference structural but has no good answer for where packages come from. Assembly answers exactly that, but its variant comparison is coarse, only at the part level. A hybrid where the workspace is a comparison grid and the cells are filled from a parts library covers more of the requirements than either alone.</p>
+    <p><strong>A Ledger</strong> is the safest genuine improvement. It removes the gating problem and the review-destination problem without asking anyone to learn a new mental model. If the appetite for change is moderate, this is the one.</p>
+    <p><strong>D Spec</strong> is the most interesting and the most dangerous. It is right about where the tooling is going and wrong about who else has to use it. My read is that its best ideas, explicit inheritance, native diff, addressable paths, should be absorbed into whichever concept wins rather than shipped as the primary interface.</p>
+    <div class="askbox">
+      <div class="ask"><b>Kill anything?</b><span>If a concept is a dead end, say so now and I will not carry it into mid-fi.</span></div>
+      <div class="ask"><b>Hybridise B and C?</b><span>My instinct. Comparison grid as the workspace, library parts as the fill.</span></div>
+      <div class="ask"><b>Settle the scope call</b><span>Does the experiment own package building, or consume from the library? Everything downstream depends on it.</span></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.mtab').forEach(t => {
+    t.addEventListener('click', () => {
+      const c = t.dataset.c, m = t.dataset.m;
+      document.querySelectorAll(`.mtab[data-c="${c}"]`).forEach(x => x.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      document.querySelectorAll(`.mpanel[data-c="${c}"]`).forEach(p => {
+        p.classList.toggle('on', p.dataset.m === m);
+      });
+    });
+  });
+</script>
+</body>
+</html>

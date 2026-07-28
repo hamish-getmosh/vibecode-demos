@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experiment platform · clickable prototype</title>
+<style>
+:root{
+  --ink:#16211d; --ink2:#54635d; --ink3:#8b9691;
+  --line:#e3e8e6; --line2:#d2dad7;
+  --bg:#f7f9f8; --panel:#fff;
+  --accent:#0f6b52; --accent-d:#0b543f; --accent-s:#e4f0ec;
+  --hot:#b8501c; --hot-s:#fdf1e8;
+  --amber:#8a6a12; --amber-s:#fbf3dc;
+  --nav:#12211c;
+  --r:10px;
+  --sh:0 1px 2px rgba(18,33,28,.05);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:14px/1.5 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace}
+
+/* ---------- shell ---------- */
+.shell{display:flex;height:100vh;overflow:hidden}
+.nav{width:198px;background:var(--nav);color:#a9c2b8;padding:16px 12px;flex-shrink:0;display:flex;flex-direction:column}
+.nav .logo{color:#fff;font-weight:650;font-size:14px;margin-bottom:20px;padding:0 8px;display:flex;align-items:center;gap:8px}
+.nav .logo i{width:20px;height:20px;border-radius:6px;background:var(--accent);display:block}
+.nav a{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:7px;
+  color:#9ab5aa;text-decoration:none;margin-bottom:2px;font-size:13px}
+.nav a:hover{background:#1a2f28;color:#d3e3dc}
+.nav a.on{background:#1e3830;color:#fff;font-weight:550}
+.nav .grp{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#5d786e;margin:16px 0 6px;padding:0 9px;font-weight:700}
+.nav .count{font-size:11px;color:#6f8b80}
+.nav .foot{margin-top:auto;display:flex;align-items:center;gap:8px;padding:8px 9px;border-top:1px solid #1e332c;font-size:12px}
+.nav .av{width:24px;height:24px;border-radius:99px;background:#2c4a3f;color:#cfe0d9;display:flex;
+  align-items:center;justify-content:center;font-size:10px;font-weight:700}
+
+.stage{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.top{background:var(--panel);border-bottom:1px solid var(--line);padding:13px 22px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
+.top .lhs{min-width:0}
+.top h1{margin:0;font-size:17px;font-weight:650;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+.top .meta{font-size:12px;color:var(--ink3);margin-top:2px;display:flex;gap:9px;align-items:center}
+.top .rhs{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.content{flex:1;overflow-y:auto;padding:22px}
+.content-inner{max-width:1180px;margin:0 auto}
+
+/* ---------- atoms ---------- */
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:7px 13px;font-size:13px;
+  font-weight:550;border:1px solid transparent;background:transparent;color:var(--ink2);transition:.12s;white-space:nowrap}
+.btn:hover{background:#eef1f0}
+.btn.pri{background:var(--accent);color:#fff}
+.btn.pri:hover{background:var(--accent-d)}
+.btn.pri:disabled{background:#c3d2cc;cursor:not-allowed}
+.btn.sec{background:#fff;border-color:var(--line2);color:var(--ink)}
+.btn.sec:hover{background:#f4f7f6;border-color:#b9c4c0}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:6px}
+.btn.xs{padding:3px 7px;font-size:11px;border-radius:5px}
+.btn.danger{color:var(--hot)} .btn.danger:hover{background:var(--hot-s)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:4px 10px;border-radius:99px;
+  background:#edf1ef;color:var(--ink2);font-weight:550;white-space:nowrap;border:1px solid transparent;
+  font-family:inherit;line-height:1.5}
+.chip.g{background:var(--accent-s);color:var(--accent)}
+.chip.h{background:var(--hot-s);color:var(--hot)}
+.chip.a{background:var(--amber-s);color:var(--amber)}
+.chip.out{background:transparent;border:1px dashed var(--line2);color:var(--ink3)}
+.chip.pick{cursor:pointer;transition:.12s;border:1px solid var(--line2);background:#fff;color:var(--ink2)}
+.chip.pick:hover{border-color:var(--ink3);background:#f4f7f6}
+.chip.pick.on{background:var(--nav);border-color:var(--nav);color:#fff}
+.chip.rm{cursor:pointer}
+.chip .x{opacity:.5;font-weight:700}
+.chip .x:hover{opacity:1}
+
+.dot{width:6px;height:6px;border-radius:99px;background:var(--hot);display:inline-block;flex-shrink:0}
+.info{width:14px;height:14px;border-radius:99px;background:#e7ecea;color:var(--ink3);font-size:9px;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:700;cursor:help;position:relative}
+.info.down:hover::after{bottom:auto;top:130%}
+.info:hover::after{content:attr(data-t);position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+  background:var(--nav);color:#e4ede9;padding:7px 10px;border-radius:7px;font-size:11.5px;font-weight:400;
+  width:210px;line-height:1.45;z-index:200;letter-spacing:0;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.16)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.h5{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin:0}
+.k{font-size:12px;color:var(--ink3)}
+.v{font-size:13.5px;font-weight:550}
+
+.flab{font-size:11.5px;color:var(--ink3);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.fld{width:100%;background:#fff;border:1px solid var(--line2);border-radius:7px;padding:8px 11px;
+  font-size:13.5px;color:var(--ink);outline:none;transition:.12s}
+.fld:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
+.fld::placeholder{color:#a8b2ae}
+.fld.lock{background:#f2f5f4;color:var(--ink2);border-style:dashed}
+.row{display:flex;gap:11px} .row>*{flex:1}
+.sep{height:1px;background:var(--line);margin:12px 0}
+
+/* ---------- document layout ---------- */
+.doc-wrap{display:flex;gap:22px;align-items:flex-start}
+.rail{width:196px;flex-shrink:0;position:sticky;top:0}
+.rail a{display:flex;justify-content:space-between;align-items:center;padding:7px 11px;border-radius:7px;
+  font-size:13px;color:var(--ink2);text-decoration:none;margin-bottom:1px;cursor:pointer}
+.rail a:hover{background:#ecf0ee}
+.rail a.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:var(--sh);border:1px solid var(--line)}
+.rail .tick{color:var(--accent);font-weight:700;font-size:12px}
+.rail .warn{color:var(--amber);font-weight:700;font-size:12px}
+.ready{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;box-shadow:var(--sh)}
+.ready.ok{border-color:#c6ddd4;background:#f7fcfa}
+.ready ul{margin:9px 0 0;padding:0;list-style:none}
+.ready li{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink2);margin-bottom:7px;line-height:1.4}
+.ready li:last-child{margin-bottom:0}
+.ready .g{color:var(--accent);font-weight:700;line-height:1.2}
+.ready .w{color:var(--amber);font-weight:700;line-height:1.2}
+
+.doc{flex:1;min-width:0}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;
+  margin-bottom:13px;box-shadow:var(--sh);scroll-margin-top:12px}
+.sec.act{border-color:#b3c8c0;box-shadow:0 0 0 3px rgba(15,107,82,.055)}
+.sec-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.sec-h .nm{font-size:15px;font-weight:650}
+.sec-h .rt{display:flex;gap:7px;align-items:center}
+
+/* ---------- variant cards ---------- */
+.vcard{border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:9px;background:#fff}
+.vcard.ctrl{background:#fbfcfc}
+.vcard.diff{border-color:#e5bb9c;background:#fffaf6}
+.vcard.aa{border-color:#e2cf93;background:#fdfaf1}
+.vcard-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.slots{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.slot{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:8px;
+  padding:6px 10px;font-size:12.5px;background:#fff;cursor:pointer;transition:.12s;
+  font-family:inherit;color:var(--ink);text-align:left}
+.slot:hover{border-color:var(--ink3);background:#f7f9f8}
+.slot.new{border-color:#dda87f;background:var(--hot-s);color:var(--hot)}
+.slot.add{border-style:dashed;color:var(--ink3)}
+.slot .pm{font-size:11px;color:var(--ink3)}
+.slot.new .pm{color:#a3562a}
+
+/* ---------- compare grid ---------- */
+.grid{display:grid;column-gap:8px;overflow-x:auto;align-items:start}
+.gh,.colh{height:30px;display:flex;align-items:center;gap:7px;justify-content:space-between}
+.gh{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+.gl{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:6px;height:46px;margin-bottom:8px}
+.cel{border:1px solid var(--line);border-radius:8px;background:#fff;padding:9px 11px;height:46px;margin-bottom:8px;
+  display:flex;align-items:center;gap:7px;font-size:12.5px;line-height:1.3;overflow:hidden}
+.cel .txt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0}
+.cel.same{background:#f5f8f7;border-style:dashed;color:#7b8985}
+.cel.none{color:var(--ink3)}
+.cel.diff{border-color:#dda87f;background:#fff8f3}
+.grid-actions{height:34px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+/* ---------- funnel ---------- */
+.fun{display:flex;gap:2px;height:36px;border-radius:8px;overflow:hidden}
+.fun i{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-style:normal;
+  color:#fff;font-weight:600;transition:flex .25s ease;min-width:0;overflow:hidden;white-space:nowrap}
+.fun .o{background:#e3e8e6;color:var(--ink3)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+
+/* ---------- popover ---------- */
+.pop-bg{position:fixed;inset:0;background:rgba(18,33,28,.28);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px}
+.pop{background:#fff;border-radius:14px;width:min(520px,100%);max-height:80vh;display:flex;flex-direction:column;
+  box-shadow:0 18px 50px rgba(18,33,28,.28);overflow:hidden}
+.pop-h{padding:15px 18px;border-bottom:1px solid var(--line)}
+.pop-h .t{font-size:15px;font-weight:650}
+.pop-b{padding:14px 18px;overflow-y:auto;flex:1}
+.pop-f{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
+  align-items:center;background:#fafbfb}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);
+  border-radius:9px;margin-bottom:8px;cursor:pointer;transition:.12s;background:#fff}
+.opt:hover{border-color:var(--ink3);background:#f7f9f8}
+.opt.dis{opacity:.45;cursor:not-allowed}
+.opt .on{font-size:13.5px;font-weight:600}
+.opt .od{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.opt.create{border-style:dashed;border-color:var(--accent);color:var(--accent);background:var(--accent-s)}
+.opt.create .on{color:var(--accent)}
+
+/* ---------- focus mode ---------- */
+.focus{position:fixed;inset:0;background:var(--bg);z-index:400;display:flex;flex-direction:column}
+.focus-top{background:#fff;border-bottom:1px solid var(--line);padding:12px 22px;display:flex;
+  justify-content:space-between;align-items:center;gap:16px}
+.crumb{font-size:11.5px;color:var(--ink3);display:flex;gap:6px;align-items:center;margin-bottom:3px}
+.focus-body{flex:1;overflow-y:auto;padding:22px}
+.focus-inner{max-width:1100px;margin:0 auto;display:flex;gap:22px;align-items:flex-start}
+.phone{width:250px;flex-shrink:0;background:#fff;border:1px solid var(--line2);border-radius:22px;
+  padding:16px 14px 18px;box-shadow:0 6px 22px rgba(18,33,28,.08);position:sticky;top:0}
+.phone .nub{width:52px;height:4px;background:#e0e5e3;border-radius:9px;margin:0 auto 14px}
+.pl{border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:9px;transition:.15s}
+.pl.on{border-color:var(--accent);background:var(--accent-s);box-shadow:0 0 0 2px rgba(15,107,82,.08)}
+.pl .pt{font-size:12.5px;font-weight:650;display:flex;justify-content:space-between;align-items:center}
+.pl .pp{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
+.pl .pp span{font-size:11.5px;font-weight:500;color:var(--ink3)}
+.pl .pm{font-size:11px;color:var(--ink3);margin-top:4px;line-height:1.4}
+
+/* ---------- dashboard ---------- */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px}
+.dc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--sh);
+  cursor:pointer;transition:.14s}
+.dc:hover{border-color:#b9c4c0;box-shadow:0 3px 12px rgba(18,33,28,.07);transform:translateY(-1px)}
+.brand{width:22px;height:22px;border-radius:7px;color:#fff;font-size:10px;display:inline-flex;
+  align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.metric{display:flex;align-items:baseline;gap:7px;margin:11px 0 4px}
+.metric .big{font-size:25px;font-weight:700;letter-spacing:-.025em}
+.up{color:var(--accent)} .dn{color:var(--hot)} .fl{color:var(--ink3)}
+.ci{height:6px;background:#eef2f0;border-radius:9px;position:relative;margin:8px 0 5px}
+.ci .band{position:absolute;top:0;bottom:0;background:#b3d2c6;border-radius:9px}
+.ci .zero{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:var(--ink3)}
+
+/* ---------- toast + misc ---------- */
+.toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:600;display:flex;
+  flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:var(--nav);color:#e2ece8;padding:10px 16px;border-radius:9px;font-size:13px;
+  box-shadow:0 8px 24px rgba(18,33,28,.26);animation:tin .22s ease}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.saving{font-size:11.5px;color:var(--ink3);display:flex;align-items:center;gap:5px}
+.saving i{width:6px;height:6px;border-radius:99px;background:var(--accent);display:block}
+.saving.busy i{background:var(--amber)}
+
+.banner{border-radius:9px;padding:12px 14px;display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.banner.a{background:var(--amber-s);border:1px solid #e6d5a3}
+.banner.g{background:var(--accent-s);border:1px solid #c6ddd4}
+.banner .bt{font-size:13.5px;font-weight:600;margin-bottom:2px}
+.banner .bd{font-size:12px;color:var(--ink2);line-height:1.45}
+
+pre.spec{background:var(--nav);color:#cadbd4;border-radius:10px;padding:16px 18px;font-size:12px;
+  line-height:1.75;overflow-x:auto;margin:0;font-family:ui-monospace,Menlo,monospace}
+pre.spec .kk{color:#82d3b3} pre.spec .vv{color:#e0b482} pre.spec .cc{color:#7b9089}
+
+.empty{display:block;width:100%;text-align:center;padding:22px;border:1px dashed var(--line2);border-radius:9px;
+  color:var(--ink3);font-size:13px;cursor:pointer;transition:.12s;background:transparent;font-family:inherit}
+.empty:hover{border-color:var(--ink3);background:#f7f9f8;color:var(--ink2)}
+.hide{display:none !important}
+
+/* ---------- spine switch ---------- */
+.seg{display:inline-flex;background:#eef1f0;border-radius:8px;padding:2px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--ink3);font-size:12px;font-weight:600;
+  padding:5px 11px;border-radius:6px;transition:.12s}
+.seg button:hover{color:var(--ink2)}
+.seg button.on{background:#fff;color:var(--accent);
+  box-shadow:0 1px 2px rgba(18,33,28,.12),0 0 0 1px rgba(18,33,28,.07)}
+
+/* ---------- grid spine ---------- */
+.band{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:11px 15px;
+  margin-bottom:11px;box-shadow:var(--sh);display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.band .bl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+  font-weight:700;width:64px;flex-shrink:0}
+.band .br{margin-left:auto;display:flex;gap:8px;align-items:center;flex-shrink:0}
+.bench-main{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 17px;margin-bottom:11px;box-shadow:var(--sh)}
+.scrollnote{font-size:11.5px;color:var(--amber);background:var(--amber-s);border-radius:6px;padding:2px 8px;font-weight:550}
+
+/* ---------- plan editor ---------- */
+.plan{border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:9px;background:#fff}
+.plan-h{display:flex;gap:9px;align-items:center;margin-bottom:11px;flex-wrap:wrap}
+.sel{background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;font-size:13px;
+  color:var(--ink);outline:none}
+.sel:focus{border-color:var(--accent)}
+.doses{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px}
+.dose .dl{font-size:11px;color:var(--ink3);margin-bottom:4px}
+.dose input{width:100%;background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;
+  font-size:13px;outline:none;text-align:right}
+.dose input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
+.pfx{position:relative}
+.pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px}
+.pfx input{padding-left:22px;text-align:left}
+
+/* ---------- stacked layer ---------- */
+.layer{position:fixed;inset:0;z-index:500;background:rgba(18,33,28,.32);display:flex;justify-content:flex-end}
+.layer-panel{width:min(440px,100%);background:var(--bg);height:100%;display:flex;flex-direction:column;
+  box-shadow:-10px 0 34px rgba(18,33,28,.24);animation:sl .18s ease}
+@keyframes sl{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+.layer-top{background:#fff;border-bottom:1px solid var(--line);padding:13px 18px}
+.layer-body{flex:1;overflow-y:auto;padding:18px}
+.layer-foot{background:#fff;border-top:1px solid var(--line);padding:12px 18px;display:flex;
+  justify-content:space-between;align-items:center;gap:10px}
+
+/* ---------- tables ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+  font-weight:700;padding:0 12px 9px;border-bottom:1px solid var(--line)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.rw:hover td{background:#f7f9f8}
+.tbl .nmc{font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let CARE = {
+  dietitian:{id:'dietitian', name:'Dietitian consult', kind:'Consult', mode:'included', price:0,
+    note:'30 minutes, monthly'},
+  longevity:{id:'longevity', name:'Longevity consult', kind:'Consult', mode:'addon', price:79,
+    note:'One off, practitioner led'},
+  shake:{id:'shake', name:'Protein shake', kind:'Product', mode:'addon', price:39,
+    note:'Shipped monthly with treatment'},
+  bloods:{id:'bloods', name:'Blood panel', kind:'Test', mode:'included', price:0,
+    note:'Baseline and month three'}
+};
+
+const DOSES = {
+  'Semaglutide':['0.25 mg','0.5 mg','1.0 mg','1.7 mg','2.4 mg'],
+  'Tirzepatide':['2.5 mg','5 mg','7.5 mg','10 mg'],
+  'Contrave':['Standard']
+};
+const PLAN_TYPES = ['Monthly','3-month','6-month','12-month'];
+const flat = (type, price) => ({type, mode:'flat', price, tiers:{}});
+
+let library = {
+  pkg_basic:{id:'pkg_basic', name:'AU Semaglutide Basic', region:'AU', vertical:'Weight loss',
+    medication:'Semaglutide', plans:[flat('3-month',349), flat('Monthly',399)], care:[], uses:6},
+  pkg_maint:{id:'pkg_maint', name:'AU Semaglutide Maintenance', region:'AU', vertical:'Weight loss',
+    medication:'Semaglutide', plans:[flat('3-month',289), flat('Monthly',329)], care:['dietitian'], uses:2},
+  pkg_contrave:{id:'pkg_contrave', name:'AU Contrave Standard', region:'AU', vertical:'Weight loss',
+    medication:'Contrave', plans:[flat('3-month',219), flat('Monthly',249)], care:[], uses:3}
+};
+
+const AUD_GROUPS = [
+  {id:'country', label:'Country', opts:['AU','NZ']},
+  {id:'brand',   label:'Brand',   opts:['MOSHY','MOSH']},
+  {id:'vertical',label:'Vertical',opts:['Weight loss','Sex','Hair','Skin']},
+  {id:'customer',label:'Customer',opts:['New','Returning','Any']}
+];
+const EXTRA_PROPS = ['Device is iOS','Device is Android','Session count > 1','Referrer is paid',
+  'Has abandoned cart','Age band 25-34','State is VIC','Landed on pricing page'];
+
+let S = {
+  view:'dashboard',           // dashboard | library | experiment
+  spine:'doc',                // doc | grid   <- the structural question, switchable live
+  libTab:'packages',          // packages | products
+  focus:null,                 // package draft when the package builder is open
+  focus2:null,                // care product draft stacked over the package builder
+  activeSection:'setup',
+  compare:true,               // variants rendering inside the document spine
+  reviewOnly:false,           // grid spine: show only rows that differ
+  saving:false,
+  modal:null,
+  exp:null,
+  published:false
+};
+
+function newExperiment(){
+  return {
+    key:'005', name:'', hypothesis:'',
+    variants:[],
+    audience:{country:'AU', brand:'MOSHY', vertical:'Weight loss', customer:'New', extra:[]},
+    audienceTouched:false,
+    traffic:25,
+    env:'staging',
+    aaAcknowledged:false
+  };
+}
+
+/* =====================================================================
+   DERIVATIONS
+   ===================================================================== */
+function pkg(id){ return library[id]; }
+function doses(med){ return DOSES[med] || DOSES['Semaglutide']; }
+
+/* a plan prices either one number, or one number per dosage tier */
+function planPrices(p){
+  if(p.mode === 'tiered'){
+    return Object.values(p.tiers||{}).filter(x => x !== '' && x != null).map(Number);
+  }
+  return (p.price === '' || p.price == null) ? [] : [Number(p.price)];
+}
+function pkgPrices(P){ return P ? P.plans.flatMap(planPrices) : []; }
+function money(n){ return '$' + Number(n).toLocaleString(); }
+function planLabel(p){
+  const ps = planPrices(p);
+  if(!ps.length) return p.type + ' unpriced';
+  const lo = Math.min(...ps), hi = Math.max(...ps);
+  return p.type + ' ' + (lo === hi ? money(lo) : money(lo)+' to '+money(hi));
+}
+function pkgFrom(P){ const ps = pkgPrices(P); return ps.length ? Math.min(...ps) : null; }
+
+function priceRange(v){
+  const ps = v.packages.filter(Boolean).flatMap(id => pkgPrices(pkg(id)));
+  if(!ps.length) return null;
+  const lo = Math.min(...ps), hi = Math.max(...ps);
+  return lo === hi ? money(lo) : money(lo) + ' to ' + money(hi);
+}
+function planTypes(v){
+  const t = [...new Set(v.packages.filter(Boolean).flatMap(id => pkg(id) ? pkg(id).plans.map(p=>p.type) : []))];
+  return t.length ? t.join(', ') : null;
+}
+function careList(v){
+  const c = [...new Set(v.packages.filter(Boolean).flatMap(id => pkg(id) ? pkg(id).care : []))];
+  return c.length ? c.map(id => CARE[id] ? CARE[id].name : id).join(', ') : null;
+}
+function pricingShape(v){
+  const ps = v.packages.filter(Boolean).map(pkg).filter(Boolean);
+  if(!ps.length) return null;
+  const tiered = ps.some(P => P.plans.some(p => p.mode === 'tiered'));
+  return tiered ? 'Per dose' : 'One price per plan';
+}
+const ATTRS = [
+  {id:'pkg1',  label:'Package 1',     get:v=> v.packages[0] ? pkg(v.packages[0]).name : null},
+  {id:'pkg2',  label:'Package 2',     get:v=> v.packages[1] ? pkg(v.packages[1]).name : null},
+  {id:'plans', label:'Plans',         get:v=> planTypes(v)},
+  {id:'price', label:'Price range',   get:v=> priceRange(v)},
+  {id:'shape', label:'Pricing model', get:v=> pricingShape(v)},
+  {id:'care',  label:'Care products', get:v=> careList(v)}
+];
+
+function diffRows(){
+  const vs = S.exp.variants;
+  if(vs.length < 2) return [];
+  const ctrl = vs[0];
+  return ATTRS.map(a => {
+    const base = a.get(ctrl);
+    const vals = vs.map(v => a.get(v));
+    const differs = vals.some(x => x !== base);
+    return {attr:a, base, vals, differs};
+  });
+}
+function overrideCount(v){
+  const ctrl = S.exp.variants[0];
+  if(!ctrl || v === ctrl) return 0;
+  return ATTRS.filter(a => a.get(v) !== a.get(ctrl)).length;
+}
+function diffCount(){ return diffRows().filter(r=>r.differs).length; }
+function aaVariants(){
+  return S.exp.variants.slice(1).filter(v => overrideCount(v) === 0);
+}
+function unresolved(){
+  return S.exp.variants.some(v => v.packages.some(p => p && !library[p]));
+}
+
+function readiness(){
+  const e = S.exp, out = [];
+  out.push({ok: !!e.name.trim(), t: e.name.trim() ? 'Named and keyed' : 'Name the experiment', block:true});
+  out.push({ok: e.variants.length >= 2, t: e.variants.length >= 2
+    ? `${e.variants.length} variants` : 'Add at least two variants', block:true});
+  const hasPkg = e.variants.length>0 && e.variants.every(v=>v.packages.filter(Boolean).length>0);
+  out.push({ok: hasPkg, t: hasPkg ? 'Every variant has a package' : 'A variant has no package', block:true});
+  out.push({ok: e.traffic > 0, t: e.traffic>0 ? 'Traffic allocated' : 'Set traffic', block:true});
+  const aa = aaVariants();
+  if(aa.length && !e.aaAcknowledged){
+    out.push({ok:false, warn:true, block:false,
+      t:`${aa.map(v=>v.id).join(', ')} identical to ${e.variants[0].id}`});
+  } else if(aa.length && e.aaAcknowledged){
+    out.push({ok:true, block:false, t:'A/A confirmed intentional'});
+  }
+  return out;
+}
+function canPublish(){ return readiness().filter(r=>r.block).every(r=>r.ok); }
+
+const ELIGIBLE = 16700;
+function perVariantWeekly(){
+  const n = Math.max(S.exp.variants.length,1);
+  return Math.round(ELIGIBLE * (S.exp.traffic/100) / n);
+}
+function daysToDetect(){
+  const n = perVariantWeekly();
+  if(!n) return 'not enough traffic';
+  return Math.max(3, Math.round(2600 / n * 7)) + ' days';
+}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+function save(){
+  S.saving = true; render();
+  clearTimeout(save._t);
+  save._t = setTimeout(()=>{ S.saving=false; render(); }, 550);
+}
+function toast(msg){
+  const el = document.createElement('div');
+  el.className='toast'; el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), 2600);
+}
+const nextLetter = () => String.fromCharCode(65 + S.exp.variants.length);
+
+function addVariant(){
+  S.exp.variants.push({id:nextLetter(), role:S.exp.variants.length?'test':'control', packages:[], inherits:null});
+  S.activeSection='variants'; save(); render();
+  toast('Variant added. Traffic rebalanced.');
+}
+function cloneVariant(src){
+  const id = nextLetter();
+  S.exp.variants.push({id, role:'test', packages:[...src.packages], inherits:src.id});
+  S.exp.aaAcknowledged = false;
+  S.activeSection='variants'; save(); render();
+  toast(`Variant ${id} inherits ${src.id}. Traffic rebalanced.`);
+}
+function removeVariant(v){
+  S.exp.variants = S.exp.variants.filter(x=>x!==v);
+  S.exp.variants.forEach((x,i)=>{ x.id = String.fromCharCode(65+i); x.role = i?'test':'control'; });
+  save(); render(); toast('Variant removed.');
+}
+function deriveAudience(){
+  if(S.exp.audienceTouched) return;
+  const ps = S.exp.variants.flatMap(v=>v.packages).filter(Boolean).map(pkg).filter(Boolean);
+  if(!ps.length) return;
+  S.exp.audience.country = ps[0].region;
+  S.exp.audience.vertical = ps[0].vertical;
+}
+
+/* --- modals --- */
+function openPackagePicker(variant, slotIndex){
+  S.modal = {type:'pkg', variant, slotIndex}; render();
+}
+function attachPackage(variant, slotIndex, id){
+  if(slotIndex >= variant.packages.length) variant.packages.push(id);
+  else variant.packages[slotIndex] = id;
+  library[id].uses = (library[id].uses||0)+1;
+  S.exp.aaAcknowledged = false;
+  S.modal = null; deriveAudience(); save(); render();
+  toast(`${library[id].name} attached to variant ${variant.id}.`);
+}
+function openRulePicker(){ S.modal = {type:'rule'}; render(); }
+function openSpec(){ S.modal = {type:'spec'}; render(); }
+
+/* =====================================================================
+   PACKAGE BUILDER  (same surface whether opened from an experiment or the library)
+   ===================================================================== */
+function blankPlan(type){ return {type, mode:'flat', price:'', tiers:{}}; }
+
+/* returnTo is either {variantId, slotIndex} or {view:'library'} */
+function openPackageBuilder(returnTo, existing){
+  S.modal = null;
+  if(existing){
+    S.focus = {
+      returnTo, editId:existing.id,
+      name:existing.name, region:existing.region, vertical:existing.vertical, medication:existing.medication,
+      plans:existing.plans.map(p=>({type:p.type, mode:p.mode||'flat', price:p.price ?? '',
+        tiers:Object.assign({}, p.tiers)})),
+      care:[...existing.care]
+    };
+  } else {
+    const inExp = returnTo && returnTo.variantId;
+    S.focus = {
+      returnTo, editId:null,
+      name:'',
+      region: inExp ? S.exp.audience.country : 'AU',
+      vertical: inExp ? S.exp.audience.vertical : 'Weight loss',
+      medication:'Semaglutide',
+      plans:[blankPlan('3-month'), blankPlan('Monthly')],
+      care:[]
+    };
+  }
+  render();
+}
+
+function pkgIssues(){
+  const f = S.focus, out = [];
+  if(!f.name.trim()) out.push('Name the package');
+  const priced = f.plans.filter(p => planPrices(p).length);
+  if(!priced.length) out.push('Price at least one plan');
+  f.plans.forEach(p=>{
+    if(p.mode === 'tiered'){
+      const missing = doses(f.medication).filter(d => !p.tiers[d] && p.tiers[d] !== 0);
+      if(missing.length && missing.length < doses(f.medication).length){
+        out.push(`${p.type}: ${missing.length} dose${missing.length===1?'':'s'} unpriced`);
+      }
+    }
+  });
+  const names = Object.values(library).filter(P => P.id !== f.editId).map(P => P.name.toLowerCase());
+  if(f.name.trim() && names.includes(f.name.trim().toLowerCase())) out.push('A package already has this name');
+  return out;
+}
+
+function savePackage(){
+  const f = S.focus, issues = pkgIssues();
+  if(issues.length){ toast(issues[0] + '.'); return; }
+  const id = f.editId || ('pkg_' + Date.now());
+  const wasEdit = !!f.editId;
+  const prev = library[id];
+  library[id] = {
+    id, name:f.name.trim(), region:f.region, vertical:f.vertical, medication:f.medication,
+    plans:f.plans.filter(p => planPrices(p).length).map(p=>({
+      type:p.type, mode:p.mode,
+      price: p.mode === 'flat' ? Number(p.price) : null,
+      tiers: p.mode === 'tiered' ? Object.assign({}, p.tiers) : {}
+    })),
+    care:[...f.care],
+    uses: prev ? prev.uses : 0,
+    isNew: wasEdit ? prev.isNew : true
+  };
+
+  const ret = f.returnTo;
+  S.focus = null;
+
+  if(ret && ret.variantId){
+    const v = S.exp.variants.find(x => x.id === ret.variantId);
+    const slot = ret.slotIndex;
+    if(slot >= v.packages.length) v.packages.push(id); else v.packages[slot] = id;
+    library[id].uses = Math.max(library[id].uses, 1);
+    S.exp.aaAcknowledged = false;
+    S.activeSection = 'variants';
+    deriveAudience(); save(); render();
+    toast(`Saved to Care packages and attached to variant ${v.id}.`);
+    return;
+  }
+  S.view = 'library'; render();
+  toast(wasEdit
+    ? `${library[id].name} updated. ${library[id].uses} experiment${library[id].uses===1?'':'s'} reference it.`
+    : `${library[id].name} added to the library.`);
+}
+
+/* --- plan editing --- */
+function addPlan(){
+  const used = S.focus.plans.map(p=>p.type);
+  const next = PLAN_TYPES.find(t => !used.includes(t)) || 'Monthly';
+  S.focus.plans.push(blankPlan(next)); render();
+}
+function removePlan(i){ S.focus.plans.splice(i,1); render(); }
+function setPlanMode(i, mode){
+  const p = S.focus.plans[i];
+  if(p.mode === mode) return;
+  if(mode === 'tiered' && p.price !== ''){
+    // carry the flat price across every dose so the switch is not destructive
+    doses(S.focus.medication).forEach(d => p.tiers[d] = p.price);
+  }
+  if(mode === 'flat'){
+    const ps = planPrices(p);
+    if(ps.length && p.price === '') p.price = Math.min(...ps);
+  }
+  p.mode = mode; render();
+}
+
+/* --- care product layer, stacked over the package builder --- */
+function openCareProduct(){
+  S.focus2 = {name:'', kind:'Consult', mode:'included', price:'', note:''};
+  render();
+}
+function saveCareProduct(){
+  const f = S.focus2;
+  if(!f.name.trim()){ toast('Name the care product first.'); return; }
+  const id = 'care_' + Date.now();
+  CARE[id] = {id, name:f.name.trim(), kind:f.kind, mode:f.mode,
+    price: f.mode === 'addon' ? Number(f.price||0) : 0, note:f.note.trim(), isNew:true};
+  if(S.focus) S.focus.care = [...S.focus.care, id];
+  S.focus2 = null; render();
+  toast(`${CARE[id].name} created and selected.`);
+}
+
+function publish(){
+  S.published = true; render();
+  toast('Published to ' + S.exp.env + '. Amplitude schema emitted.');
+}
+
+function loadSample(){
+  S.exp = newExperiment();
+  S.exp.key = '004';
+  S.exp.name = 'AU Moshy: semaglutide tiered checkout';
+  S.exp.variants = [{id:'A', role:'control', packages:['pkg_basic'], inherits:null}];
+  S.activeSection='variants'; save(); render();
+  toast('Sample scenario loaded. Clone A to start.');
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+const el = (h) => h;
+const esc = (s) => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = S.view === 'dashboard' ? viewDashboard()
+                : S.view === 'library'   ? viewLibrary()
+                :                          viewExperiment();
+  if(S.focus)  app.insertAdjacentHTML('beforeend', viewFocus());
+  if(S.focus2) app.insertAdjacentHTML('beforeend', viewCareLayer());
+  if(S.modal)  app.insertAdjacentHTML('beforeend', viewModal());
+  bind();
+}
+
+/* ---------- nav ---------- */
+function nav(active){
+  const lib = S.view === 'library';
+  return `<div class="nav">
+    <div class="logo"><i></i>Commerce</div>
+    <a data-act="go-dash" class="${active==='exp'?'on':''}">Experiments <span class="count">4</span></a>
+    <div class="grp">Library</div>
+    <a data-act="go-lib" data-t="packages" class="${lib&&S.libTab==='packages'?'on':''}">
+      Care packages <span class="count">${Object.keys(library).length}</span></a>
+    <a data-act="go-lib" data-t="products" class="${lib&&S.libTab==='products'?'on':''}">
+      Care products <span class="count">${Object.keys(CARE).length}</span></a>
+    <a>Customer properties <span class="count">42</span></a>
+    <div class="grp">Analyse</div>
+    <a>Results</a>
+    <div class="foot"><span class="av">SK</span><span>Sarah K.</span></div>
+  </div>`;
+}
+
+/* ---------- library ---------- */
+function viewLibrary(){
+  const packages = S.libTab === 'packages';
+  return `<div class="shell">${nav('lib')}
+    <div class="stage">
+      <div class="top">
+        <div class="lhs"><h1>${packages?'Care packages':'Care products'}</h1>
+          <div class="meta">${packages
+            ? 'Built once, referenced by any experiment. Editing here changes every experiment that references it.'
+            : 'Attached to packages. A product can appear in many packages.'}</div></div>
+        <div class="rhs">
+          ${packages
+            ? `<button class="btn pri" data-act="new-pkg-lib">New package</button>`
+            : `<button class="btn pri" data-act="new-care-lib">New care product</button>`}
+        </div>
+      </div>
+      <div class="content"><div class="content-inner">
+        <div class="tabs">
+          <button class="chip pick ${packages?'on':''}" data-act="go-lib" data-t="packages">
+            Packages ${Object.keys(library).length}</button>
+          <button class="chip pick ${packages?'':'on'}" data-act="go-lib" data-t="products">
+            Products ${Object.keys(CARE).length}</button>
+        </div>
+        <div class="card" style="padding:15px 7px">
+          ${packages ? pkgTable() : careTable()}
+        </div>
+        <div class="k" style="margin-top:12px;padding:0 3px;line-height:1.55">
+          ${packages
+            ? 'This is the same editor an experiment opens in place. Nothing about a package depends on the experiment that created it.'
+            : 'Care products carry their own pricing mode. A package decides which products it includes.'}
+        </div>
+      </div></div>
+    </div></div>`;
+}
+
+function pkgTable(){
+  return `<table class="tbl">
+    <thead><tr><th>Package</th><th>Medication</th><th>Plans</th><th>Care products</th>
+      <th>Referenced by</th><th></th></tr></thead>
+    <tbody>
+      ${Object.values(library).map(P=>`<tr class="rw">
+        <td><div class="nmc">${esc(P.name)} ${P.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
+          <div class="k">${P.region} · ${P.vertical}</div></td>
+        <td>${P.medication}<div class="k">${doses(P.medication).length} dose${doses(P.medication).length===1?'':'s'}</div></td>
+        <td>${P.plans.map(p=>`<div style="font-size:12.5px">${esc(planLabel(p))}
+          ${p.mode==='tiered'?'<span class="chip a" style="font-size:10px">per dose</span>':''}</div>`).join('')}</td>
+        <td>${P.care.length
+          ? P.care.map(id=>`<div style="font-size:12.5px">${esc(CARE[id]?CARE[id].name:id)}</div>`).join('')
+          : '<span class="k">none</span>'}</td>
+        <td><span class="chip ${P.uses?'':'out'}">${P.uses||0} experiment${P.uses===1?'':'s'}</span></td>
+        <td style="text-align:right"><button class="btn sec sm" data-act="edit-pkg" data-p="${P.id}">Edit</button></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function careTable(){
+  const usedBy = id => Object.values(library).filter(P=>P.care.includes(id)).length;
+  return `<table class="tbl">
+    <thead><tr><th>Care product</th><th>Type</th><th>Pricing</th><th>In packages</th></tr></thead>
+    <tbody>
+      ${Object.values(CARE).map(c=>`<tr class="rw">
+        <td><div class="nmc">${esc(c.name)} ${c.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
+          ${c.note?`<div class="k">${esc(c.note)}</div>`:''}</td>
+        <td>${c.kind}</td>
+        <td>${c.mode==='included'
+          ? '<span class="chip g">Included</span>'
+          : `<span class="chip">Add-on ${money(c.price)}</span>`}</td>
+        <td><span class="chip ${usedBy(c.id)?'':'out'}">${usedBy(c.id)}</span></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+/* ---------- dashboard ---------- */
+function viewDashboard(){
+  const cards = [
+    {b:'M', bg:'#0f6b52', t:'Semaglutide tiered checkout', s:'MOSHY AU · day 12 of 21',
+     m:'+8.4%', cls:'up', lab:'checkout conversion', ci:'95% CI +1.2% to +15.1%',
+     band:'left:38%;right:14%', zero:'left:34%', tr:'4,180 / week', st:'significant in ~4 days', stc:'g'},
+    {b:'M', bg:'#2d4a63', t:'Sex upsell flow', s:'MOSH AU · day 3 of 28',
+     m:'−0.6%', cls:'fl', lab:'order value', ci:'95% CI −9.4% to +8.1%',
+     band:'left:22%;right:26%', zero:'left:52%', tr:'1,940 / week', st:'too early to read', stc:'a'},
+    {b:'M', bg:'#5a3d6b', t:'Contrave pricing', s:'MOSHY NZ · day 19 of 21',
+     m:'−4.1%', cls:'dn', lab:'checkout conversion', ci:'95% CI −7.8% to −0.4%',
+     band:'left:12%;right:58%', zero:'left:44%', tr:'2,610 / week', st:'control winning', stc:'h'}
+  ];
+  return `<div class="shell">${nav('exp')}
+    <div class="stage">
+      <div class="top">
+        <div class="lhs"><h1>Experiments</h1><div class="meta">3 running · 1 draft · 12 finished</div></div>
+        <div class="rhs">
+          <button class="btn sec" data-act="sample">Load sample scenario</button>
+          <button class="btn pri" data-act="new">New experiment</button>
+        </div>
+      </div>
+      <div class="content"><div class="content-inner">
+        <div style="display:flex;gap:7px;margin-bottom:16px">
+          <button class="chip pick on">Running 3</button><button class="chip pick">Draft 1</button>
+          <button class="chip pick">Finished 12</button><button class="chip pick">Archived</button>
+        </div>
+        <div class="dgrid">
+          ${cards.map(c=>`
+            <div class="dc" data-act="sample">
+              <div style="display:flex;gap:9px;align-items:flex-start">
+                <span class="brand" style="background:${c.bg}">${c.b}</span>
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:650;line-height:1.3">${c.t}</div>
+                  <div class="k" style="margin-top:2px">${c.s}</div>
+                </div>
+              </div>
+              <div class="metric"><span class="big ${c.cls}">${c.m}</span><span class="k">${c.lab}</span></div>
+              <div class="ci"><span class="band" style="${c.band}"></span><span class="zero" style="${c.zero}"></span></div>
+              <div class="k">${c.ci}</div>
+              <div class="sep"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="k">${c.tr}</span><span class="chip ${c.stc}">${c.st}</span>
+              </div>
+            </div>`).join('')}
+        </div>
+        <button class="empty" style="margin-top:14px" data-act="new">
+          Setup detail lives inside each record. Drafts and finished experiments below.
+        </button>
+      </div></div>
+    </div></div>`;
+}
+
+/* ---------- experiment ---------- */
+function viewExperiment(){
+  const e = S.exp, allOk = canPublish();
+  return `<div class="shell">${nav('exp')}
+    <div class="stage">
+      <div class="top">
+        <div class="lhs">
+          <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'}
+            ${S.published ? `<span class="chip g">Live on ${e.env}</span>` : `<span class="chip out">Draft</span>`}</h1>
+          <div class="meta">
+            <span class="mono">exp_${e.key}</span>
+            <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
+          </div>
+        </div>
+        <div class="rhs">
+          <div class="seg" title="Two candidate page structures over the same record">
+            <button class="${S.spine==='doc'?'on':''}" data-act="spine" data-v="doc">Document</button>
+            <button class="${S.spine==='grid'?'on':''}" data-act="spine" data-v="grid">Grid</button>
+          </div>
+          <span class="info down" data-t="Document: the record is a stack of sections and the grid is one view inside Variants. Grid: the comparison table is the whole page, with audience and traffic as bands.">i</span>
+          <button class="btn sec" data-act="spec">View as data</button>
+          <button class="btn sec" data-act="go-dash">Close</button>
+          <button class="btn pri" data-act="jump" data-s="launch" ${allOk?'':'disabled'}
+            title="${allOk?'':'Readiness checks outstanding'}">
+            ${S.published?'Published':'Publish'}</button>
+        </div>
+      </div>
+      <div class="content"><div class="content-inner">
+        ${S.spine === 'doc' ? spineDoc() : spineGrid()}
+      </div></div>
+    </div></div>`;
+}
+
+/* ---------- spine A: document ---------- */
+function spineDoc(){
+  const e = S.exp, r = readiness(), allOk = canPublish();
+  const secs = [
+    {id:'setup', label:'Setup', done: !!e.name.trim()},
+    {id:'variants', label:'Variants', done: e.variants.length>=2 && !unresolved(),
+      warn: aaVariants().length>0 && !e.aaAcknowledged},
+    {id:'audience', label:'Audience', done: true},
+    {id:'traffic', label:'Traffic', done: e.traffic>0},
+    {id:'launch', label:'Launch', done: allOk}
+  ];
+  return `<div class="doc-wrap">
+    <div class="rail">
+      ${secs.map(s=>`<a data-act="jump" data-s="${s.id}" class="${S.activeSection===s.id?'on':''}">
+        <span>${s.label}</span>
+        ${s.warn?'<span class="warn">!</span>':(s.done?'<span class="tick">✓</span>':'')}</a>`).join('')}
+      <div class="ready ${allOk?'ok':''}">
+        <div class="h5">Readiness</div>
+        <ul>${r.map(x=>`<li>
+          ${x.ok?'<span class="g">✓</span>':(x.warn?'<span class="w">!</span>':'<span class="dot" style="margin-top:5px"></span>')}
+          <span>${x.t}</span></li>`).join('')}</ul>
+      </div>
+      <div class="k" style="margin-top:11px;padding:0 3px;line-height:1.5">
+        Nothing is locked. Move between areas freely.
+      </div>
+    </div>
+    <div class="doc">
+      ${secSetup()}
+      ${secVariants()}
+      ${secAudience()}
+      ${secTraffic()}
+      ${secLaunch()}
+    </div>
+  </div>`;
+}
+
+function funnelInner(each, rest, shades){
+  return S.exp.variants.map((v,i)=>`<i style="flex:${each*10};background:${shades[i%4]}">
+      ${each>=8?`${v.id} ${each.toFixed(each%1?1:0)}%`:''}</i>`).join('')
+    + (rest>0?`<i class="o" style="flex:${rest*10}">${rest>14?'Not enrolled '+rest+'%':''}</i>`:'');
+}
+
+/* ---------- spine B: grid is the page ---------- */
+function spineGrid(){
+  const e = S.exp, a = e.audience, n = e.variants.length;
+  const allOk = canPublish(), dc = diffCount(), aa = aaVariants();
+  const each = n ? e.traffic / n : 0;
+  const shades = ['#0f6b52','#3d8a72','#6aa993','#97c8b5'];
+  const rest = 100 - e.traffic;
+  const blockers = readiness().filter(r=>r.block && !r.ok);
+
+  return `
+  <div class="band">
+    <span class="bl">Setup</span>
+    <input class="fld" data-f="name" value="${esc(e.name)}" style="flex:1;min-width:220px"
+      placeholder="Region Brand: what is being tested">
+    <input class="fld mono" data-f="key" value="${esc(e.key)}" style="max-width:96px">
+    <div class="br">
+      <button class="btn sec sm" data-act="add-variant">+ Variant</button>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="bl">Audience</span>
+    ${AUD_GROUPS.map(g=>`<div style="display:flex;gap:5px">
+      ${g.opts.filter(o=>o===a[g.id]).map(o=>`<button class="chip pick on" data-act="aud-cycle" data-g="${g.id}"
+        title="Click to cycle ${g.label.toLowerCase()}">${o}</button>`).join('')}
+    </div>`).join('')}
+    ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
+      ${esc(x)} <span class="x">×</span></button>`).join('')}
+    <button class="chip out" style="cursor:pointer" data-act="add-rule">+ rule</button>
+    <div class="br"><span class="k">${ELIGIBLE.toLocaleString()} match weekly</span></div>
+  </div>
+
+  <div class="bench-main">
+    <div class="sec-h">
+      <span class="nm">Variants</span>
+      <div class="rt">
+        ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
+                     : `<span class="chip a">no differences</span>`) : ''}
+        ${n>3 ? `<span class="scrollnote">${n} columns, scrolls sideways</span>` : ''}
+        ${n>=2 ? `<button class="btn sec sm" data-act="review-only">
+          ${S.reviewOnly?'Show all attributes':'Changes only'}</button>` : ''}
+      </div>
+    </div>
+    ${(aa.length && !e.aaAcknowledged) ? `
+      <div class="banner a">
+        <div style="flex:1">
+          <div class="bt">Variant ${aa.map(v=>v.id).join(' and ')} ${aa.length>1?'are':'is'} identical to ${e.variants[0].id}</div>
+          <div class="bd">A valid A/A test for measuring noise. Confirm if intended, or add an override.</div>
+        </div>
+        <button class="btn sec sm" data-act="ack-aa">Intentional A/A</button>
+      </div>` : ''}
+    ${n === 0
+      ? `<button class="empty" data-act="add-variant">+ Add the first variant</button>`
+      : (n === 1
+        ? `<button class="empty" data-act="clone" data-v="${e.variants[0].id}">
+             Variant A only. Clone it to get a column to compare against.</button>` + gridView(true)
+        : gridView(true))}
+  </div>
+
+  <div class="band">
+    <span class="bl">Traffic</span>
+    <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic"
+      style="flex:1;min-width:150px;max-width:240px">
+    <span class="v" id="tPct" style="width:42px">${e.traffic}%</span>
+    <div class="fun" id="tFun" style="flex:1;min-width:180px">${funnelInner(each, rest, shades)}</div>
+    <div class="br"><span class="k" id="tPer">${perVariantWeekly().toLocaleString()} per variant weekly</span>
+      <span class="chip a" id="tDays">${daysToDetect()} to detect 5%</span></div>
+  </div>
+
+  ${S.published ? `
+    <div class="band" style="border-color:#c6ddd4;background:#f7fbf9">
+      <span class="bl">Live</span>
+      <div style="flex:1"><span class="v">Published to ${e.env}.</span>
+        <span class="k">Amplitude schema emitted.</span></div>
+      <div class="br"><button class="btn sec sm" data-act="spec">View payload</button></div>
+    </div>` : `
+    <div class="band" style="border-color:${allOk?'#c6ddd4':'var(--line)'};background:${allOk?'#f7fbf9':'#fff'}">
+      <span class="bl">Launch</span>
+      <div style="flex:1;min-width:200px">
+        ${allOk
+          ? `<span class="k">${dc} attribute${dc===1?'':'s'} change across ${n} variants. ${e.traffic}% enrolled.</span>`
+          : `<span class="k">${blockers.map(b=>b.t).join(' · ')}</span>`}
+      </div>
+      <div class="br">
+        <button class="chip pick ${e.env==='staging'?'on':''}" data-act="env" data-e="staging">Staging</button>
+        <button class="chip pick ${e.env==='production'?'on':''}" data-act="env" data-e="production">Production</button>
+        <button class="btn pri" data-act="publish" ${allOk?'':'disabled'}>Publish</button>
+      </div>
+    </div>`}
+
+  <div class="k" style="margin-top:4px;padding:0 3px;line-height:1.55">
+    Same record, no sections. Everything that is not a variant comparison is compressed into a band.
+    Try adding a fourth variant to see where this structure strains.
+  </div>`;
+}
+
+function secSetup(){
+  const e = S.exp;
+  return `<div class="sec ${S.activeSection==='setup'?'act':''}" id="sec-setup">
+    <div class="sec-h"><span class="nm">Setup</span>
+      <div class="rt"><span class="chip out">1 required field</span></div></div>
+    <div class="row" style="margin-bottom:13px">
+      <div style="flex:2">
+        <div class="flab">Experiment name</div>
+        <input class="fld" data-f="name" value="${esc(e.name)}"
+          placeholder="Region Brand: what is being tested">
+        <div class="k" style="margin-top:5px">Convention is enforced here, not on the key.</div>
+      </div>
+      <div style="max-width:130px">
+        <div class="flab">Key <span class="info" data-t="A stable ID used in Amplitude and GrowthBook. Autogenerated, editable until the experiment goes live, immutable after.">i</span></div>
+        <input class="fld mono" data-f="key" value="${esc(e.key)}">
+      </div>
+    </div>
+    <div>
+      <div class="flab">Hypothesis <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
+      <input class="fld" data-f="hypothesis" value="${esc(e.hypothesis)}"
+        placeholder="Paste a Notion link, or leave empty">
+      <div class="k" style="margin-top:5px">The record of record is Notion. This field never blocks publish.</div>
+    </div>
+  </div>`;
+}
+
+function secVariants(){
+  const e = S.exp, n = e.variants.length, aa = aaVariants(), dc = diffCount();
+  const gridable = n >= 2 && n <= 3;
+  const showGrid = S.compare && gridable;
+
+  let inner;
+  if(n === 0){
+    inner = `<button class="empty" data-act="add-variant">+ Add the first variant</button>`;
+  } else if(showGrid){
+    inner = gridView();
+  } else {
+    inner = e.variants.map(v=>cardView(v)).join('') +
+      `<button class="empty" style="margin-top:4px" data-act="add-variant">+ Add variant</button>`;
+  }
+
+  const aaBanner = (aa.length && !e.aaAcknowledged) ? `
+    <div class="banner a">
+      <div style="flex:1">
+        <div class="bt">Variant ${aa.map(v=>v.id).join(' and ')} ${aa.length>1?'are':'is'} identical to ${e.variants[0].id}</div>
+        <div class="bd">That is a valid A/A test for measuring noise. Confirm if intended, or add an override.</div>
+      </div>
+      <button class="btn sec sm" data-act="ack-aa">Intentional A/A</button>
+    </div>` : '';
+
+  return `<div class="sec ${S.activeSection==='variants'?'act':''}" id="sec-variants">
+    <div class="sec-h"><span class="nm">Variants</span>
+      <div class="rt">
+        ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
+                     : `<span class="chip a">no differences</span>`) : ''}
+        ${gridable ? `<button class="btn sec sm" data-act="toggle-compare">
+            ${showGrid?'Card view':'Compare view'}</button>` : ''}
+        ${n>3 ? `<span class="chip out">card view · ${n} variants</span>` : ''}
+      </div></div>
+    ${aaBanner}
+    ${inner}
+  </div>`;
+}
+
+function cardView(v){
+  const isCtrl = v.role === 'control';
+  const ov = overrideCount(v);
+  const aa = !isCtrl && ov === 0 && !S.exp.aaAcknowledged;
+  return `<div class="vcard ${isCtrl?'ctrl':(aa?'aa':(ov?'diff':''))}">
+    <div class="vcard-h">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span class="v">${v.id} · ${isCtrl?'control':'test'}</span>
+        ${v.inherits ? `<span class="chip ${ov?'h':'a'}">inherits ${v.inherits} · ${ov} override${ov===1?'':'s'}</span>`
+                     : (isCtrl?'<span class="chip out">baseline</span>':'')}
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn sec xs" data-act="clone" data-v="${v.id}">Clone to new variant</button>
+        ${!isCtrl?`<button class="btn danger xs" data-act="rm-variant" data-v="${v.id}">Remove</button>`:''}
+      </div>
+    </div>
+    <div class="slots">
+      ${v.packages.map((p,i)=>{
+        const P = library[p];
+        return `<button class="slot ${P&&P.isNew?'new':''}" data-act="pick" data-v="${v.id}" data-i="${i}">
+          ${P?esc(P.name):'empty slot'}
+          <span class="pm">${P?P.plans.map(x=>'$'+x.price).join(' / '):''}</span>
+          ${P&&P.isNew?'<span class="dot"></span>':''}</button>`;
+      }).join('')}
+      <button class="slot add" data-act="pick" data-v="${v.id}" data-i="${v.packages.length}">+ add package</button>
+    </div>
+  </div>`;
+}
+
+function gridView(bench){
+  const vs = S.exp.variants;
+  let rows = diffRows();
+  const hidden = bench && S.reviewOnly ? rows.filter(r=>!r.differs).length : 0;
+  if(bench && S.reviewOnly && rows.some(r=>r.differs)) rows = rows.filter(r=>r.differs);
+
+  const canAdd = bench ? vs.length < 4 : vs.length < 3;
+  const wide = vs.length > 3;
+  const colW = wide ? '200px' : 'minmax(180px,1fr)';
+  const cols = `152px repeat(${vs.length}, ${colW})` + (canAdd ? ' 116px' : '');
+  const bodyH = rows.length * 54;
+  return `<div class="grid" style="grid-template-columns:${cols}">
+    <div><div class="gh">Attribute</div>
+      ${rows.map(r=>`<div class="gl">${r.differs?'<span class="dot"></span>':''}${r.attr.label}</div>`).join('')}
+      <div class="grid-actions"></div>
+    </div>
+    ${vs.map((v,ci)=>{
+      const ov = overrideCount(v);
+      return `<div>
+        <div class="colh">
+          <span style="font-size:12.5px;font-weight:650">${v.id} · ${v.role}</span>
+          ${ci===0
+            ? `<button class="btn sec xs" data-act="clone" data-v="${v.id}">Clone →</button>`
+            : `<span class="chip ${ov?'h':'a'}" style="font-size:10.5px">${ov} override${ov===1?'':'s'}</span>`}
+        </div>
+        ${rows.map(r=>{
+          const val = r.vals[ci];
+          const same = ci>0 && val === r.base;
+          const diff = ci>0 && val !== r.base;
+          const cls = diff ? 'diff' : (same ? 'same' : (val===null ? 'none' : ''));
+          return `<div class="cel ${cls}" title="${val===null?'none':esc(val)}">
+            ${diff?'<span class="dot"></span>':''}<span class="txt">${val===null?'none':esc(val)}</span></div>`;
+        }).join('')}
+        <div class="grid-actions">
+          <button class="slot add" style="font-size:11.5px;padding:5px 9px"
+            data-act="pick" data-v="${v.id}" data-i="${v.packages.length}">+ package</button>
+          ${v.role!=='control'?`<button class="btn danger xs" data-act="rm-variant" data-v="${v.id}">Remove</button>`:''}
+        </div>
+      </div>`;
+    }).join('')}
+    ${canAdd?`<div><div class="gh">&nbsp;</div>
+      <button class="empty" style="height:${bodyH - 8}px;width:100%;display:flex;align-items:center;justify-content:center"
+        data-act="add-variant">+ variant</button></div>`:''}
+  </div>
+  <div class="k" style="margin-top:6px">Dashed cells are identical to the control. Marked cells diverge.
+    ${hidden?`<b style="color:var(--ink)">${hidden} identical attribute${hidden===1?'':'s'} hidden.</b>`:''}</div>`;
+}
+
+function secAudience(){
+  const a = S.exp.audience;
+  return `<div class="sec ${S.activeSection==='audience'?'act':''}" id="sec-audience">
+    <div class="sec-h"><span class="nm">Audience</span>
+      <div class="rt"><span class="chip g">${S.exp.audienceTouched?'edited':'derived from variants'}</span></div></div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      ${AUD_GROUPS.map(g=>`
+        <div style="display:flex;gap:9px;align-items:center">
+          <span class="k" style="width:74px;flex-shrink:0">${g.label}</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${g.opts.map(o=>`<button class="chip pick ${a[g.id]===o?'on':''}"
+              data-act="aud" data-g="${g.id}" data-o="${esc(o)}">${o}</button>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="sep"></div>
+    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+      <span class="k" style="width:74px;flex-shrink:0">And</span>
+      ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
+        ${esc(x)} <span class="x">×</span></button>`).join('')}
+      <button class="chip out" style="cursor:pointer" data-act="add-rule">+ add rule from 42 properties</button>
+      <span class="k" style="margin-left:auto">${ELIGIBLE.toLocaleString()} match per week</span>
+    </div>
+  </div>`;
+}
+
+function secTraffic(){
+  const e = S.exp, n = Math.max(e.variants.length,1);
+  const each = e.traffic / n;
+  const rest = 100 - e.traffic;
+  const shades = ['#0f6b52','#3d8a72','#6aa993','#97c8b5'];
+  return `<div class="sec ${S.activeSection==='traffic'?'act':''}" id="sec-traffic">
+    <div class="sec-h"><span class="nm">Traffic</span>
+      <div class="rt"><span class="chip out">split evenly across ${n} variant${n===1?'':'s'}</span></div></div>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">
+      <div style="flex:1">
+        <div class="flab">Enrol <span class="info" data-t="The share of eligible traffic that enters the experiment at all. The remainder never sees a variant.">i</span></div>
+        <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic">
+      </div>
+      <div style="width:96px">
+        <div class="flab">&nbsp;</div>
+        <div class="fld lock" style="text-align:center;font-weight:650">${e.traffic}%</div>
+      </div>
+    </div>
+    <div class="fun">
+      ${e.variants.map((v,i)=>`<i style="flex:${each*10};background:${shades[i%4]}">
+        ${each>=6?`${v.id} · ${each.toFixed(each%1?1:0)}%`:''}</i>`).join('')}
+      ${rest>0?`<i class="o" style="flex:${rest*10}">Not enrolled · ${rest}%</i>`:''}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px">
+      <span class="k">${perVariantWeekly().toLocaleString()} people per variant per week</span>
+      <span class="chip a">about ${daysToDetect()} to detect a 5% lift</span>
+    </div>
+  </div>`;
+}
+
+function secLaunch(){
+  const e = S.exp, ok = canPublish(), rows = diffRows().filter(r=>r.differs);
+  const same = ATTRS.length - rows.length;
+  if(S.published){
+    return `<div class="sec act" id="sec-launch">
+      <div class="sec-h"><span class="nm">Launch</span><span class="chip g">Live on ${e.env}</span></div>
+      <div class="banner g">
+        <div style="flex:1">
+          <div class="bt">Published to ${e.env}</div>
+          <div class="bd">${e.env==='staging'
+            ? 'Active immediately. Nothing further needed.'
+            : 'Published inactive. Switch it on when you are ready.'}
+            Amplitude schema payload emitted for dashboard generation.</div>
+        </div>
+        <button class="btn sec sm" data-act="spec">View payload</button>
+      </div>
+    </div>`;
+  }
+  return `<div class="sec ${S.activeSection==='launch'?'act':''}" id="sec-launch">
+    <div class="sec-h"><span class="nm">Launch</span>
+      <div class="rt">${ok?'<span class="chip g">all checks pass</span>':'<span class="chip out">checks outstanding</span>'}</div></div>
+
+    <div style="border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:12px;background:#fbfcfc">
+      <div class="h5" style="margin-bottom:9px">Change set</div>
+      ${e.variants.length<2 ? `<div class="k">Add a second variant to see a change set.</div>` :
+        (rows.length ? rows.map(r=>{
+          const parts = e.variants.slice(1).map((v,i)=>{
+            const val = r.vals[i+1];
+            return val === r.base ? null : `<div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <span class="dot"></span>
+              <span class="mono" style="font-size:11.5px;color:var(--ink)">variants.${v.id}.${r.attr.id}</span>
+              <span class="k">${r.base===null?'none':esc(r.base)} → <b style="color:var(--ink)">${val===null?'none':esc(val)}</b></span>
+              <button class="btn sec xs" style="margin-left:auto" data-act="jump" data-s="variants">Edit here</button>
+            </div>`;
+          }).filter(Boolean).join('');
+          return parts;
+        }).join('') : `<div class="k">No differences. This is an A/A test.</div>`)}
+      ${e.variants.length>=2?`<div class="k" style="margin-top:10px">${same} of ${ATTRS.length} attributes identical across all variants.</div>`:''}
+    </div>
+
+    <div class="row" style="margin-bottom:12px">
+      <div style="border:1px solid var(--line);border-radius:9px;padding:11px 13px">
+        <div class="h5">Audience</div>
+        <div class="k" style="margin-top:5px">${[e.audience.country,e.audience.brand,e.audience.vertical,
+          e.audience.customer+' customer',...e.audience.extra].join(' · ')}</div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:9px;padding:11px 13px">
+        <div class="h5">Traffic</div>
+        <div class="k" style="margin-top:5px">${e.traffic}% enrolled · ${perVariantWeekly().toLocaleString()} per variant weekly</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid #c6ddd4;background:#f7fbf9;border-radius:9px;padding:13px 15px;
+      display:flex;justify-content:space-between;align-items:center;gap:14px">
+      <div>
+        <div style="display:flex;gap:7px;align-items:center;margin-bottom:5px">
+          <span class="v">Publish to</span>
+          <button class="chip pick ${e.env==='staging'?'on':''}" data-act="env" data-e="staging">Staging</button>
+          <button class="chip pick ${e.env==='production'?'on':''}" data-act="env" data-e="production">Production</button>
+        </div>
+        <div class="k">${e.env==='staging'
+          ? 'Staging goes active immediately.'
+          : 'Production publishes inactive. You switch it on manually afterwards.'}
+          The Amplitude schema is emitted as part of publishing.</div>
+      </div>
+      <button class="btn pri" data-act="publish" ${ok?'':'disabled'}>Publish</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- package builder ---------- */
+function viewFocus(){
+  const f = S.focus, ret = f.returnTo, issues = pkgIssues();
+  const inExp = ret && ret.variantId;
+  const crumb = inExp
+    ? `← Experiment ${S.exp.key} · Variant ${ret.variantId} · package slot ${ret.slotIndex+1}`
+    : `← Care packages library`;
+  const title = f.editId ? esc(f.name || 'Care package') : 'New care package';
+  const saveLabel = inExp ? `Save and return to variant ${ret.variantId}` : 'Save to library';
+  const refs = f.editId ? (library[f.editId].uses || 0) : 0;
+
+  return `<div class="focus">
+    <div class="focus-top">
+      <div>
+        <div class="crumb">${crumb}</div>
+        <h1 style="margin:0;font-size:17px;font-weight:650;display:flex;align-items:center;gap:9px">${title}
+          ${issues.length
+            ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
+            : `<span class="chip g">ready</span>`}</h1>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        ${refs > 1 ? `<span class="chip a">edits reach ${refs} experiments</span>` : ''}
+        <button class="btn sec" data-act="focus-cancel">Cancel</button>
+        <button class="btn pri" data-act="focus-save" ${issues.length?'disabled':''}
+          title="${issues.length?issues.join(' · '):''}">${saveLabel}</button>
+      </div>
+    </div>
+    <div class="focus-body"><div class="focus-inner">
+      <div style="flex:1;min-width:0">
+
+        <div class="card" style="padding:17px 19px;margin-bottom:13px">
+          <div class="row" style="margin-bottom:13px">
+            <div style="flex:2">
+              <div class="flab">Package name</div>
+              <input class="fld" data-ff="name" value="${esc(f.name)}"
+                placeholder="AU Semaglutide Premium" ${f.editId?'':'autofocus'}>
+            </div>
+            <div style="max-width:150px">
+              <div class="flab">Medication
+                <span class="info" data-t="Medication decides the dosage tiers available to price against.">i</span></div>
+              <select class="sel" data-fm style="width:100%">
+                ${Object.keys(DOSES).map(m=>`<option ${f.medication===m?'selected':''}>${m}</option>`).join('')}
+              </select>
+            </div>
+            <div style="max-width:90px"><div class="flab">Region</div><div class="fld lock">${f.region}</div></div>
+          </div>
+          <div class="k">${inExp
+            ? `Region ${f.region} and vertical ${f.vertical.toLowerCase()} are inherited from the experiment audience.`
+            : `Region ${f.region}, vertical ${f.vertical.toLowerCase()}. Built outside an experiment, so nothing is inherited.`}
+            ${doses(f.medication).length} dosage tier${doses(f.medication).length===1?'':'s'} available:
+            ${doses(f.medication).join(', ')}.</div>
+        </div>
+
+        <div class="card" style="padding:17px 19px;margin-bottom:13px">
+          <div class="sec-h" style="margin-bottom:4px">
+            <span class="nm" style="font-size:14px">Plans</span>
+            <button class="btn sec sm" data-act="add-plan"
+              ${f.plans.length >= PLAN_TYPES.length?'disabled':''}>+ Add plan</button>
+          </div>
+          <div class="k" style="margin-bottom:13px">
+            A plan is a commitment duration, not a different product. Price it once, or once per dose.</div>
+          ${f.plans.map((p,i)=>planEditor(p,i,f)).join('')}
+          ${f.plans.length === 0
+            ? `<button class="empty" data-act="add-plan">+ Add the first plan</button>` : ''}
+        </div>
+
+        <div class="card" style="padding:17px 19px">
+          <div class="h5" style="margin-bottom:4px">Care products</div>
+          <div class="k" style="margin-bottom:13px">
+            Picked from the library. Create one here if it does not exist yet.</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            ${Object.values(CARE).map(c=>`<button class="chip pick ${f.care.includes(c.id)?'on':''}"
+              data-act="care" data-c="${c.id}"
+              title="${c.kind} · ${c.mode==='included'?'included':'add-on '+money(c.price)}">
+              ${esc(c.name)}${c.mode==='addon'?' '+money(c.price):''}</button>`).join('')}
+            <button class="chip out" style="cursor:pointer;border-color:var(--accent);color:var(--accent)"
+              data-act="new-care">+ New care product</button>
+          </div>
+        </div>
+
+        <div class="k" style="margin-top:13px;padding:0 3px;line-height:1.55">
+          Saves to <b style="color:var(--ink)">Care packages</b>.
+          ${f.editId
+            ? 'This package already exists, so saving updates every experiment that references it.'
+            : 'Reusable in future experiments without rebuilding.'}
+        </div>
+      </div>
+
+      <div class="phone" id="pv">${previewInner()}</div>
+    </div></div>
+  </div>`;
+}
+
+function planEditor(p, i, f){
+  const ds = doses(f.medication);
+  const single = ds.length === 1;
+  return `<div class="plan">
+    <div class="plan-h">
+      <select class="sel" data-fpt="${i}">
+        ${PLAN_TYPES.map(t=>`<option ${p.type===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      ${single ? `<span class="chip out">single dose, one price</span>` : `
+        <div class="seg">
+          <button class="${p.mode==='flat'?'on':''}" data-act="plan-mode" data-i="${i}" data-m="flat">One price</button>
+          <button class="${p.mode==='tiered'?'on':''}" data-act="plan-mode" data-i="${i}" data-m="tiered">Price per dose</button>
+        </div>`}
+      <span class="k" style="margin-left:auto">${esc(planLabel(p))}</span>
+      ${f.plans.length > 1
+        ? `<button class="btn danger xs" data-act="rm-plan" data-i="${i}">Remove</button>` : ''}
+    </div>
+    ${(p.mode === 'tiered' && !single) ? `
+      <div class="flab">Price per month, in dollars, at each dose</div>
+      <div class="doses">
+        ${ds.map(d=>`<div class="dose">
+          <div class="dl">${d}</div>
+          <input value="${esc(p.tiers[d] ?? '')}" data-fd="${i}" data-d="${esc(d)}"
+            placeholder="0" inputmode="numeric" aria-label="Price at ${esc(d)}">
+        </div>`).join('')}
+      </div>
+      <div class="k" style="margin-top:9px">Checkout shows the lowest dose price and steps up as the dose does.</div>
+    ` : `
+      <div style="max-width:170px">
+        <div class="flab">Price per month</div>
+        <div class="pfx"><span>$</span>
+          <input value="${esc(p.price)}" data-fp="${i}" placeholder="429" inputmode="numeric"></div>
+      </div>
+    `}
+  </div>`;
+}
+
+function previewInner(){
+  const f = S.focus;
+  const priced = f.plans.filter(p => planPrices(p).length);
+  const inc = f.care.map(id=>CARE[id]).filter(c=>c && c.mode==='included');
+  const add = f.care.map(id=>CARE[id]).filter(c=>c && c.mode==='addon');
+  const cheapest = priced.length
+    ? priced.reduce((a,b)=> Math.min(...planPrices(a)) <= Math.min(...planPrices(b)) ? a : b) : null;
+  return `<div class="nub"></div>
+    <div class="k" style="margin-bottom:11px">Checkout preview</div>
+    ${priced.length ? priced.map(p=>{
+      const ps = planPrices(p), lo = Math.min(...ps), hi = Math.max(...ps);
+      const best = p === cheapest;
+      return `<div class="pl ${best?'on':''}">
+        <div class="pt">${p.type}${best&&priced.length>1?'<span class="chip g" style="font-size:9.5px">best value</span>':''}</div>
+        <div class="pp">${money(lo)}<span>/mo</span></div>
+        <div class="pm">${p.mode==='tiered'
+          ? (lo===hi ? 'Same at every dose' : 'From ' + money(lo) + ' to ' + money(hi) + ' by dose')
+          : 'One price at every dose'}</div>
+      </div>`;
+    }).join('') : `<div class="pl"><div class="pt">No priced plan yet</div>
+        <div class="pm" style="margin-top:4px">Add a price to see the checkout.</div></div>`}
+    ${inc.length ? `<div class="k" style="margin:11px 0 5px">Included</div>
+      ${inc.map(c=>`<div style="font-size:12px;display:flex;gap:6px;margin-bottom:3px">
+        <span style="color:var(--accent);font-weight:700">✓</span>${esc(c.name)}</div>`).join('')}` : ''}
+    ${add.length ? `<div class="k" style="margin:11px 0 5px">Add to your plan</div>
+      ${add.map(c=>`<div style="font-size:12px;display:flex;justify-content:space-between;margin-bottom:3px">
+        <span>${esc(c.name)}</span><span class="k">+${money(c.price)}</span></div>`).join('')}` : ''}
+    <button class="btn pri" style="width:100%;justify-content:center;margin-top:12px">Continue</button>
+    <div class="k" style="margin-top:9px;text-align:center;font-size:11px">Updates as you type</div>`;
+}
+
+/* ---------- care product layer, stacked over the builder ---------- */
+function viewCareLayer(){
+  const f = S.focus2;
+  return `<div class="layer" data-act="care-cancel"><div class="layer-panel" data-stop>
+    <div class="layer-top">
+      <div class="crumb">← ${S.focus ? (S.focus.editId ? esc(S.focus.name||'Care package') : 'New care package') : 'Care products'}</div>
+      <div style="font-size:16px;font-weight:650">New care product</div>
+      <div class="k" style="margin-top:3px">Saving returns you to the package with this selected.</div>
+    </div>
+    <div class="layer-body">
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        <div class="flab">Name</div>
+        <input class="fld" data-fc="name" value="${esc(f.name)}" placeholder="Sleep coaching call" autofocus>
+        <div class="flab" style="margin-top:13px">Type</div>
+        <div style="display:flex;gap:6px">
+          ${['Consult','Product','Test'].map(k=>`<button class="chip pick ${f.kind===k?'on':''}"
+            data-act="care-kind" data-k="${k}">${k}</button>`).join('')}
+        </div>
+      </div>
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        <div class="flab">Pricing</div>
+        <div style="display:flex;gap:6px;margin-bottom:11px">
+          <button class="chip pick ${f.mode==='included'?'on':''}" data-act="care-mode" data-m="included">
+            Included in package</button>
+          <button class="chip pick ${f.mode==='addon'?'on':''}" data-act="care-mode" data-m="addon">
+            Priced add-on</button>
+        </div>
+        ${f.mode==='addon' ? `
+          <div style="max-width:150px">
+            <div class="flab">Add-on price</div>
+            <div class="pfx"><span>$</span>
+              <input value="${esc(f.price)}" data-fc="price" placeholder="79" inputmode="numeric"></div>
+          </div>` : `<div class="k">Bundled into the plan price. Nothing extra at checkout.</div>`}
+      </div>
+      <div class="card" style="padding:15px 16px">
+        <div class="flab">Short description <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
+        <input class="fld" data-fc="note" value="${esc(f.note)}" placeholder="30 minutes, monthly">
+      </div>
+      <div class="k" style="margin-top:12px;line-height:1.55">
+        Two levels deep is the limit. This layer creates one object and hands it straight back.
+      </div>
+    </div>
+    <div class="layer-foot">
+      <button class="btn sec" data-act="care-cancel">Cancel</button>
+      <button class="btn pri" data-act="care-save">Save and select</button>
+    </div>
+  </div></div>`;
+}
+
+/* ---------- modals ---------- */
+function viewModal(){
+  const m = S.modal;
+  if(m.type === 'pkg'){
+    const used = m.variant.packages.filter(Boolean);
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop>
+      <div class="pop-h">
+        <div class="t">Attach a package to variant ${m.variant.id}</div>
+        <div class="k" style="margin-top:3px">Packages live in the Care packages library and are reusable.</div>
+      </div>
+      <div class="pop-b">
+        ${Object.values(library).map(p=>{
+          const dis = used.includes(p.id);
+          return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="attach" data-p="${p.id}"`}>
+            <div><div class="on">${esc(p.name)}</div>
+              <div class="od">${p.plans.map(x=>esc(planLabel(x))).join(' · ')}
+                ${p.care.length?' · '+p.care.length+' care product'+(p.care.length===1?'':'s'):''}
+                ${dis?' · already attached':` · used in ${p.uses||0} experiments`}</div></div>
+            ${dis?'<span class="chip out">attached</span>':'<span class="chip">Attach</span>'}
+          </div>`;
+        }).join('')}
+        <div class="opt create" data-act="build-pkg">
+          <div><div class="on">+ Create a new package</div>
+            <div class="od" style="color:var(--accent)">Opens a full-width editor, returns you here</div></div>
+        </div>
+      </div>
+      <div class="pop-f">
+        <span class="k">${Object.keys(library).length} packages in the library</span>
+        <button class="btn sec" data-act="close-modal">Cancel</button>
+      </div>
+    </div></div>`;
+  }
+  if(m.type === 'rule'){
+    const cur = S.exp.audience.extra;
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop>
+      <div class="pop-h"><div class="t">Add a rule layer</div>
+        <div class="k" style="margin-top:3px">The four common properties are toggles. Everything else lives here.</div></div>
+      <div class="pop-b">
+        ${EXTRA_PROPS.map(p=>{
+          const dis = cur.includes(p);
+          return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="add-rule-do" data-r="${esc(p)}"`}>
+            <div class="on">${p}</div>${dis?'<span class="chip out">added</span>':'<span class="chip">Add</span>'}</div>`;
+        }).join('')}
+      </div>
+      <div class="pop-f"><span class="k">42 properties available</span>
+        <button class="btn sec" data-act="close-modal">Done</button></div>
+    </div></div>`;
+  }
+  if(m.type === 'spec'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" style="width:min(660px,100%)" data-stop>
+      <div class="pop-h"><div class="t">Experiment as data</div>
+        <div class="k" style="margin-top:3px">The same shape the API and MCP expose. Every field is addressable by path.</div></div>
+      <div class="pop-b"><pre class="spec">${specText()}</pre></div>
+      <div class="pop-f"><span class="k">Emitted to Amplitude on publish</span>
+        <button class="btn sec" data-act="close-modal">Close</button></div>
+    </div></div>`;
+  }
+  return '';
+}
+
+function specText(){
+  const e = S.exp;
+  const q = s => `<span class="vv">${esc(s)}</span>`;
+  const k = s => `<span class="kk">${s}</span>`;
+  let out = `${k('experiment')}:
+  ${k('key')}:        ${q(e.key)}
+  ${k('name')}:       ${e.name ? q(e.name) : '<span class="cc">null</span>'}
+  ${k('hypothesis')}: ${e.hypothesis ? q(e.hypothesis) : '<span class="cc">null</span>'}
+  ${k('variants')}:
+`;
+  e.variants.forEach(v=>{
+    out += `    - ${k('id')}: ${q(v.id)}  ${k('role')}: ${q(v.role)}\n`;
+    if(v.inherits) out += `      ${k('inherits')}: ${q(v.inherits)}   <span class="cc"># ${overrideCount(v)} override(s)</span>\n`;
+    out += `      ${k('packages')}: [${v.packages.filter(Boolean).map(p=>q(library[p].name)).join(', ')||'<span class="cc">empty</span>'}]\n`;
+  });
+  const a = e.audience;
+  out += `  ${k('audience')}:
+    ${k('country')}:  ${q(a.country)}
+    ${k('brand')}:    ${q(a.brand)}
+    ${k('vertical')}: ${q(a.vertical)}
+    ${k('customer')}: ${q(a.customer)}
+${a.extra.map(x=>`    ${k('rule')}:     ${q(x)}`).join('\n')}${a.extra.length?'\n':''}  ${k('traffic')}:
+    ${k('enrolled_pct')}: ${q(e.traffic)}
+    ${k('split')}:        <span class="cc">even across ${e.variants.length||1}</span>
+  ${k('publish')}:
+    ${k('environment')}: ${q(e.env)}
+    ${k('active_on_publish')}: ${q(e.env==='staging' ? 'true' : 'false')}`;
+  return out;
+}
+
+/* =====================================================================
+   BINDING
+   ===================================================================== */
+/* the traffic slider must survive a drag, so patch around it rather than re-render */
+function patchTraffic(){
+  if(S.spine === 'doc'){
+    const sec = document.getElementById('sec-traffic');
+    if(sec){ sec.outerHTML = secTraffic(); bind(); }
+    return;
+  }
+  const e = S.exp, n = Math.max(e.variants.length,1);
+  const each = e.variants.length ? e.traffic / n : 0, rest = 100 - e.traffic;
+  const set = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+  set('tPct', e.traffic + '%');
+  set('tFun', funnelInner(each, rest, ['#0f6b52','#3d8a72','#6aa993','#97c8b5']));
+  set('tPer', perVariantWeekly().toLocaleString() + ' per variant weekly');
+  set('tDays', daysToDetect() + ' to detect 5%');
+}
+
+function bind(){
+  document.querySelectorAll('[data-stop]').forEach(n=>n.addEventListener('click', ev=>ev.stopPropagation()));
+
+  document.querySelectorAll('[data-act]').forEach(n=>{
+    n.addEventListener('click', ev=>{
+      const a = n.dataset.act;
+      const V = id => S.exp.variants.find(v=>v.id===id);
+      switch(a){
+        case 'go-dash': S.view='dashboard'; S.modal=null; render(); break;
+        case 'go-lib': S.view='library'; S.libTab=n.dataset.t||'packages'; S.modal=null; render(); break;
+        case 'new': S.exp=newExperiment(); S.published=false; S.view='experiment'; S.activeSection='setup'; render(); break;
+        case 'sample': loadSample(); S.view='experiment'; S.published=false; render(); break;
+        case 'spine': S.spine = n.dataset.v; render();
+          toast(n.dataset.v==='doc'
+            ? 'Document spine. Variants is one section of five.'
+            : 'Grid spine. The comparison table is the page.'); break;
+        case 'review-only': S.reviewOnly = !S.reviewOnly; render(); break;
+        case 'new-pkg-lib': openPackageBuilder({view:'library'}); break;
+        case 'edit-pkg': openPackageBuilder({view:'library'}, library[n.dataset.p]); break;
+        case 'new-care-lib': openCareProduct(); break;
+        case 'new-care': openCareProduct(); break;
+        case 'care-cancel': S.focus2=null; render(); break;
+        case 'care-save': saveCareProduct(); break;
+        case 'care-kind': S.focus2.kind = n.dataset.k; render(); break;
+        case 'care-mode': S.focus2.mode = n.dataset.m; render(); break;
+        case 'add-plan': addPlan(); break;
+        case 'rm-plan': removePlan(Number(n.dataset.i)); break;
+        case 'plan-mode': setPlanMode(Number(n.dataset.i), n.dataset.m); break;
+        case 'aud-cycle': {
+          const g = AUD_GROUPS.find(x=>x.id===n.dataset.g);
+          const cur = g.opts.indexOf(S.exp.audience[g.id]);
+          S.exp.audience[g.id] = g.opts[(cur+1) % g.opts.length];
+          S.exp.audienceTouched = true; save(); render(); break;
+        }
+        case 'jump': {
+          S.activeSection = n.dataset.s; render();
+          const t = document.getElementById('sec-'+n.dataset.s);
+          if(t){ t.scrollIntoView({behavior:'smooth', block:'start'}); }
+          else {
+            // grid spine has no sections, so launch lives at the bottom of the page
+            const c = document.querySelector('.content');
+            if(c) c.scrollTo({top:c.scrollHeight, behavior:'smooth'});
+          }
+          break;
+        }
+        case 'add-variant': addVariant(); break;
+        case 'clone': cloneVariant(V(n.dataset.v)); break;
+        case 'rm-variant': removeVariant(V(n.dataset.v)); break;
+        case 'toggle-compare': S.compare = !S.compare; render(); break;
+        case 'ack-aa': S.exp.aaAcknowledged = true; save(); render(); toast('A/A confirmed as intentional.'); break;
+        case 'pick': openPackagePicker(V(n.dataset.v), Number(n.dataset.i)); break;
+        case 'attach': attachPackage(S.modal.variant, S.modal.slotIndex, n.dataset.p); break;
+        case 'build-pkg': openPackageBuilder({variantId:S.modal.variant.id, slotIndex:S.modal.slotIndex}); break;
+        case 'close-modal': S.modal=null; render(); break;
+        case 'focus-cancel': S.focus=null; render(); toast('Discarded. Nothing was saved.'); break;
+        case 'focus-save': savePackage(); break;
+        case 'care': {
+          const c = n.dataset.c, f = S.focus;
+          f.care = f.care.includes(c) ? f.care.filter(x=>x!==c) : [...f.care, c];
+          render(); break;
+        }
+        case 'aud': S.exp.audience[n.dataset.g] = n.dataset.o; S.exp.audienceTouched=true; save(); render(); break;
+        case 'add-rule': openRulePicker(); break;
+        case 'add-rule-do': S.exp.audience.extra.push(n.dataset.r); S.exp.audienceTouched=true;
+          S.modal=null; save(); render(); toast('Rule layer added.'); break;
+        case 'rm-rule': S.exp.audience.extra.splice(Number(n.dataset.i),1); save(); render(); break;
+        case 'env': S.exp.env = n.dataset.e; save(); render(); break;
+        case 'publish': publish(); break;
+        case 'spec': openSpec(); break;
+      }
+    });
+  });
+
+  // text fields on the experiment record
+  document.querySelectorAll('[data-f]').forEach(inp=>{
+    const f = inp.dataset.f;
+    if(f === 'traffic'){
+      inp.addEventListener('input', ()=>{ S.exp.traffic = Number(inp.value); patchTraffic(); save(); });
+      // the launch summary also reads traffic, so settle the whole page once the drag ends
+      inp.addEventListener('change', ()=>render());
+      return;
+    }
+    inp.addEventListener('input', ()=>{
+      S.exp[f] = inp.value;
+      // live-update chrome without losing caret
+      const h = document.querySelector('.top h1');
+      if(f==='name' && h) h.childNodes[0].nodeValue = inp.value.trim() || 'Untitled experiment';
+      save._quiet = true; save();
+    });
+    inp.addEventListener('blur', ()=>render());
+  });
+
+  /* ----- package builder fields -----
+     Inputs patch state and repaint only the preview, so the caret never moves.
+     Blur triggers a full render to refresh validation and plan labels. */
+  const repaint = () => {
+    const pv = document.getElementById('pv');
+    if(pv) pv.innerHTML = previewInner();
+  };
+  const num = s => s.replace(/[^0-9]/g,'');
+
+  document.querySelectorAll('[data-ff]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{ S.focus[inp.dataset.ff] = inp.value; repaint(); });
+    inp.addEventListener('blur', ()=>render());
+  });
+  document.querySelectorAll('[data-fp]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      inp.value = num(inp.value);
+      S.focus.plans[Number(inp.dataset.fp)].price = inp.value;
+      repaint();
+    });
+    inp.addEventListener('blur', ()=>render());
+  });
+  document.querySelectorAll('[data-fd]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      inp.value = num(inp.value);
+      const p = S.focus.plans[Number(inp.dataset.fd)];
+      if(inp.value === '') delete p.tiers[inp.dataset.d];
+      else p.tiers[inp.dataset.d] = inp.value;
+      repaint();
+    });
+    inp.addEventListener('blur', ()=>render());
+  });
+  document.querySelectorAll('[data-fpt]').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      S.focus.plans[Number(sel.dataset.fpt)].type = sel.value; render();
+    });
+  });
+  const med = document.querySelector('[data-fm]');
+  if(med) med.addEventListener('change', ()=>{
+    S.focus.medication = med.value;
+    const valid = doses(med.value);
+    S.focus.plans.forEach(p=>{
+      // carry a price forward before dropping tiers that no longer have a dose
+      const carried = planPrices(p);
+      Object.keys(p.tiers).forEach(d=>{ if(!valid.includes(d)) delete p.tiers[d]; });
+      if(valid.length === 1){
+        if(p.price === '' && carried.length) p.price = String(Math.min(...carried));
+        p.mode = 'flat';
+      }
+    });
+    render();
+    toast(valid.length === 1
+      ? `${med.value} has one dose, so per-dose pricing collapsed to one price.`
+      : `Dosage tiers switched to ${med.value}.`);
+  });
+
+  /* ----- care product layer fields ----- */
+  document.querySelectorAll('[data-fc]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const f = inp.dataset.fc;
+      S.focus2[f] = f === 'price' ? num(inp.value) : inp.value;
+      if(f === 'price') inp.value = S.focus2.price;
+    });
+  });
+
+  // keep focus on the field the user was typing in
+  if(bind._focusId){
+    const r = document.querySelector(`[data-f="${bind._focusId}"]`);
+    if(r){ r.focus(); r.setSelectionRange(r.value.length, r.value.length); }
+    bind._focusId = null;
+  }
+}
+
+/* boot */
+S.exp = newExperiment();
+render();
+</script>
+</body>
+</html>

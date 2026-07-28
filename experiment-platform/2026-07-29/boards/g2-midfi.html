@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G2 · Mid-fi directions · Experiment platform</title>
+<style>
+  :root{
+    --bg:#eceeed; --ink:#16211d; --ink2:#55635e; --ink3:#8b9691; --line:#dfe3e1; --line2:#c8cfcc;
+    --panel:#fff; --accent:#0f6b52; --accent2:#e4f0ec; --hot:#b8501c; --hot2:#fbeee5;
+    --amber:#8a6a12; --amber2:#faf1d8; --r:12px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1680px;margin:0 auto;padding:0 24px 90px}
+
+  header{background:#12211c;color:#e8f0ec;padding:30px 0 26px}
+  header .wrap{padding-bottom:0}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7cb39c;font-weight:600;margin-bottom:9px}
+  h1{margin:0 0 9px;font-size:27px;letter-spacing:-.02em;font-weight:650}
+  header p{margin:0;color:#98b0a8;max-width:88ch;font-size:14.5px}
+  .hbadges{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+  .hb{background:#1e332c;border:1px solid #2c463d;border-radius:7px;padding:6px 11px;font-size:12.5px;color:#b6cbc3}
+  .hb b{color:#fff;font-weight:600}
+
+  /* scrubber */
+  .scrub{position:sticky;top:0;z-index:80;background:rgba(236,238,237,.95);backdrop-filter:blur(9px);
+    border-bottom:1px solid var(--line);padding:11px 0;margin-bottom:24px}
+  .scrub .wrap{display:flex;gap:8px;align-items:center;padding:0 24px;flex-wrap:wrap}
+  .slab{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-right:3px}
+  .sbtn{border:1px solid var(--line2);background:#fff;color:var(--ink2);font:inherit;font-size:13px;
+    padding:7px 13px;border-radius:8px;cursor:pointer;font-weight:500;transition:.12s;white-space:nowrap}
+  .sbtn:hover{border-color:var(--ink3)}
+  .sbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .sbtn .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;opacity:.5;margin-right:6px}
+  .scrub .sp{flex:1}
+  .stress{border:1px solid var(--line2);background:#fff;border-radius:8px;padding:7px 13px;font-size:12.5px;color:var(--ink2)}
+  .stress b{color:var(--hot);font-weight:650}
+
+  /* moment */
+  .moment{display:none} .moment.on{display:block}
+  .m-head{margin-bottom:16px}
+  .m-head h2{margin:0 0 6px;font-size:21px;font-weight:650;letter-spacing:-.01em}
+  .m-head p{margin:0;color:var(--ink2);font-size:14.5px;max-width:92ch}
+  .m-head .tests{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+  .tst{background:var(--hot2);color:var(--hot);font-size:11.5px;padding:4px 10px;border-radius:99px;font-weight:600}
+
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  .pair.single{grid-template-columns:1fr}
+  .dir{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .dir-head{padding:13px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .dir-head h3{margin:0;font-size:15px;font-weight:650;display:flex;align-items:center;gap:9px}
+  .dir-head .dl{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--ink);color:#fff;padding:2px 7px;border-radius:4px}
+  .dir-head .note{font-size:12.5px;color:var(--ink3)}
+  .dir-note{padding:11px 17px;background:#f7f9f8;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink2);line-height:1.5}
+  .dir-note b{color:var(--ink);font-weight:600}
+
+  /* ---------- APP KIT (mid fidelity) ---------- */
+  .app{background:#fafbfa;font-size:11.5px;line-height:1.45;color:#233029;display:flex;min-height:460px;
+    font-family:ui-sans-serif,-apple-system,"Segoe UI",Inter,sans-serif}
+  .rail{width:118px;background:#12211c;color:#a9c2b8;padding:12px 9px;flex-shrink:0;display:flex;flex-direction:column}
+  .rail .logo{color:#fff;font-weight:650;font-size:11.5px;margin-bottom:14px;padding:0 4px;letter-spacing:-.01em}
+  .rail a{display:block;padding:5px 7px;border-radius:5px;color:#9ab5aa;text-decoration:none;margin-bottom:2px;font-size:11px}
+  .rail a.on{background:#1e3830;color:#fff;font-weight:550}
+  .rail .grp{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#5d786e;margin:11px 0 5px;padding:0 7px;font-weight:700}
+  .rail .foot{margin-top:auto;font-size:10px;color:#5d786e;padding:0 7px}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;background:#fafbfa}
+
+  .tb{padding:11px 15px;border-bottom:1px solid #e4e8e6;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff}
+  .tb .t{font-weight:650;font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .tb .sub{font-size:10.5px;color:#8b9691;font-family:ui-monospace,Menlo,monospace}
+  .tbr{display:flex;gap:6px;align-items:center}
+  .body{padding:14px 15px;flex:1;overflow:hidden}
+
+  .b{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:550;
+    border:1px solid transparent;cursor:default;white-space:nowrap}
+  .b.pri{background:var(--accent);color:#fff}
+  .b.sec{background:#fff;border-color:#d3dad7;color:#3d4d47}
+  .b.gho{color:#5c6b65}
+  .b.sm{padding:3px 8px;font-size:10.5px}
+  .b.hot{background:var(--hot);color:#fff}
+
+  .chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:99px;
+    background:#eef1f0;color:#54635d;font-weight:550;white-space:nowrap}
+  .chip.g{background:var(--accent2);color:var(--accent)}
+  .chip.h{background:var(--hot2);color:var(--hot)}
+  .chip.a{background:var(--amber2);color:var(--amber)}
+  .chip.sel{background:#12211c;color:#fff}
+  .chip.out{background:transparent;border:1px dashed #c2cbc7;color:#8b9691}
+
+  .card{background:#fff;border:1px solid #e4e8e6;border-radius:9px;padding:12px 13px}
+  .card.sel{border-color:#9fb5ac;box-shadow:0 0 0 2px rgba(15,107,82,.07)}
+  .card.diff{border-color:#e0b294;background:#fffaf6}
+  .card.gh{border-style:dashed;background:transparent;color:#8b9691}
+  .h5{font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:#8b9691;font-weight:700;margin:0 0 7px}
+  .k{font-size:10.5px;color:#8b9691}
+  .v{font-size:12px;color:#233029;font-weight:550}
+  .st{display:flex;flex-direction:column;gap:8px}
+  .rw{display:flex;gap:8px} .rw>*{flex:1}
+  .sep{height:1px;background:#e9ecea;margin:9px 0}
+
+  .fld{background:#fff;border:1px solid #d8dedb;border-radius:6px;padding:6px 9px;font-size:11.5px;color:#233029}
+  .fld.ph{color:#a3ada9}
+  .fld.lock{background:#f2f5f4;color:#6d7a75}
+  .flab{font-size:10px;color:#8b9691;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+  .info{width:11px;height:11px;border-radius:99px;background:#e4e8e6;color:#8b9691;font-size:8px;
+    display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+
+  .dot{width:6px;height:6px;border-radius:99px;background:var(--hot);display:inline-block;flex-shrink:0}
+
+  /* comparison grid */
+  .grid{display:grid;gap:7px}
+  .gh{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:#8b9691;font-weight:700;padding:0 0 5px}
+  .gl{font-size:11px;color:#54635d;display:flex;align-items:center;gap:5px;padding:9px 0;min-height:34px}
+  .cel{border:1px solid #e4e8e6;border-radius:7px;background:#fff;padding:8px 9px;min-height:34px;display:flex;
+    align-items:center;gap:6px;font-size:11.5px}
+  .cel.same{background:#f5f7f6;border-style:dashed;color:#7c8a84}
+  .cel.diff{border-color:#dda87f;background:#fff7f1}
+  .cel.empty{background:transparent;border-style:dashed;color:#a3ada9;justify-content:center;font-size:10.5px}
+  .colhead{display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;gap:6px}
+
+  /* funnel */
+  .fun{display:flex;gap:2px;height:26px;border-radius:5px;overflow:hidden}
+  .fun i{display:flex;align-items:center;justify-content:center;font-size:9.5px;font-style:normal;color:#fff;font-weight:600}
+  .fun .a{background:var(--accent)} .fun .bb{background:#5f9a86} .fun .o{background:#dfe4e2;color:#7c8a84}
+
+  /* phone */
+  .ph{width:126px;border:1px solid #d3dad7;border-radius:12px;background:#fff;padding:9px 8px;flex-shrink:0}
+  .ph .nub{width:32px;height:3px;background:#dfe4e2;border-radius:9px;margin:0 auto 8px}
+  .ph .pl{border:1px solid #e4e8e6;border-radius:7px;padding:6px 7px;margin-bottom:5px}
+  .ph .pl.on{border-color:var(--accent);background:var(--accent2)}
+  .ph .pt{font-size:9.5px;font-weight:650}
+  .ph .pp{font-size:11px;font-weight:700}
+  .ph .pm{font-size:8.5px;color:#8b9691}
+
+  /* slide over */
+  .ov{position:relative;overflow:hidden}
+  .scrim{position:absolute;inset:0;background:rgba(18,33,28,.22)}
+  .so{position:absolute;top:0;right:0;bottom:0;width:66%;background:#fff;border-left:1px solid #cdd5d1;
+    box-shadow:-10px 0 26px rgba(18,33,28,.13);display:flex;flex-direction:column}
+  .so-h{padding:11px 14px;border-bottom:1px solid #e4e8e6;display:flex;justify-content:space-between;align-items:center}
+  .so-b{padding:13px 14px;flex:1;overflow:hidden}
+  .so-f{padding:10px 14px;border-top:1px solid #e4e8e6;display:flex;justify-content:space-between;align-items:center;background:#fafbfa}
+  .crumb{font-size:9.5px;color:#8b9691;display:flex;gap:5px;align-items:center}
+
+  /* doc (ledger) */
+  .toc{width:120px;flex-shrink:0;border-right:1px solid #e9ecea;padding-right:11px}
+  .toc a{display:block;font-size:11px;color:#7c8a84;padding:4px 7px;border-radius:5px;text-decoration:none;margin-bottom:1px}
+  .toc a.on{background:#eef1f0;color:#233029;font-weight:600}
+  .toc a .tick{float:right;color:var(--accent);font-size:10px}
+  .doc{flex:1;min-width:0}
+  .sec{border:1px solid #e4e8e6;border-radius:9px;background:#fff;padding:12px 13px;margin-bottom:9px}
+  .sec.act{border-color:#9fb5ac}
+  .sec-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+  .sec-h .nm{font-size:12.5px;font-weight:650}
+  .ready{background:#fff;border:1px solid #e4e8e6;border-radius:9px;padding:11px 12px}
+  .ready li{list-style:none;display:flex;gap:7px;align-items:flex-start;font-size:10.5px;color:#54635d;margin-bottom:6px}
+  .ready ul{margin:0;padding:0}
+  .tickg{color:var(--accent);font-weight:700;font-size:11px;line-height:1}
+
+  /* dashboard */
+  .dcards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .dc{background:#fff;border:1px solid #e4e8e6;border-radius:9px;padding:11px 12px}
+  .dc .dt{font-size:12px;font-weight:650;margin-bottom:3px;line-height:1.3}
+  .dc .brand{width:16px;height:16px;border-radius:5px;background:#12211c;color:#fff;font-size:8px;
+    display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+  .metric{display:flex;align-items:baseline;gap:5px;margin:8px 0 3px}
+  .metric .big{font-size:19px;font-weight:700;letter-spacing:-.02em}
+  .metric .big.up{color:var(--accent)} .metric .big.dn{color:var(--hot)} .metric .big.fl{color:#8b9691}
+  .ci{height:5px;background:#eef1f0;border-radius:9px;position:relative;margin:6px 0 4px}
+  .ci .band{position:absolute;top:0;bottom:0;background:#b9d3c8;border-radius:9px}
+  .ci .zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:#8b9691}
+
+  /* footer sections */
+  section.blk{margin:34px 0 0}
+  h2.sec2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:650;margin:0 0 6px}
+  .sub2{margin:0 0 15px;color:var(--ink2);font-size:14.5px;max-width:88ch}
+  table.mx{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--r);overflow:hidden;font-size:13.5px}
+  table.mx th,table.mx td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  table.mx thead th{background:#f6f8f7;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+  table.mx tbody th{font-weight:550;width:26%}
+  table.mx td{color:var(--ink2)}
+  table.mx tr:last-child th,table.mx tr:last-child td{border-bottom:0}
+  .gd{color:var(--accent);font-weight:600} .bd{color:var(--hot);font-weight:600}
+
+  .rec{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:var(--r);padding:22px 25px}
+  .rec h4{margin:0 0 10px;font-size:16.5px;font-weight:650}
+  .rec p{margin:0 0 12px;font-size:14.5px;color:var(--ink2);line-height:1.6;max-width:92ch}
+  .rec p:last-child{margin-bottom:0}
+  .rec .flip{background:#f6f8f7;border-radius:9px;padding:14px 16px;margin-top:14px;font-size:13.5px;color:var(--ink2)}
+  .rec .flip b{color:var(--ink)}
+
+  @media (max-width:1300px){ .pair{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Gate G2 · Direction lock · mid fidelity</div>
+    <h1>Bench and Ledger, same scenario, side by side</h1>
+    <p>Two surviving directions from G1, deepened into the screens that decide it. Bench is the merged Bench plus Assembly concept: a comparison workspace fed by a parts library. Ledger is the document model. Both absorbed the three ideas worth keeping from Spec: explicit inheritance, path-addressable fields and a computed change set.</p>
+    <div class="hbadges">
+      <span class="hb"><b>Scenario</b> AU Moshy semaglutide tiered, 004</span>
+      <span class="hb"><b>Variant B</b> needs a package that does not exist</span>
+      <span class="hb"><b>Traffic</b> 25 percent enrolled, split evenly</span>
+      <span class="hb"><b>Publish</b> staging</span>
+    </div>
+  </div>
+</header>
+
+<div class="scrub">
+  <div class="wrap">
+    <span class="slab">Moment</span>
+    <button class="sbtn" aria-pressed="true" data-m="1"><span class="n">01</span>Dashboard</button>
+    <button class="sbtn" aria-pressed="false" data-m="2"><span class="n">02</span>Start</button>
+    <button class="sbtn" aria-pressed="false" data-m="3"><span class="n">03</span>Two variants</button>
+    <button class="sbtn" aria-pressed="false" data-m="4"><span class="n">04</span>Missing package</button>
+    <button class="sbtn" aria-pressed="false" data-m="5"><span class="n">05</span>Audience and traffic</button>
+    <button class="sbtn" aria-pressed="false" data-m="6"><span class="n">06</span>Review and publish</button>
+    <button class="sbtn" aria-pressed="false" data-m="7"><span class="n">07</span>Third variant, A/A</button>
+    <span class="sp"></span>
+    <span class="stress">Stress tests carried: <b>5 of 7</b></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= M1 DASHBOARD ================= -->
+<div class="moment on" data-m="1">
+  <div class="m-head">
+    <h2>Dashboard: a pulse read, not a setup index</h2>
+    <p>Shared across both directions, because the evidence on this was unambiguous and direction-independent. Setup metadata drops out of the card. What comes in: brand recognition at a glance, days running, weekly traffic, the primary metric with its confidence interval, and a projection of when significance lands. Traffic split moves to the detail view, since it stops being interesting once setup is done.</p>
+    <div class="m-head tests"><span class="tst">D01 pulse check</span><span class="tst">R16 health read</span></div>
+  </div>
+  <div class="pair single">
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">Shared</span>Experiments</h3><span class="note">Same in both directions</span></div>
+      <div class="app">
+        <div class="rail">
+          <div class="logo">Commerce</div>
+          <a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div>
+          <a href="#">Care packages</a>
+          <a href="#">Care products</a>
+          <a href="#">Customer properties</a>
+          <div class="grp">Analyse</div>
+          <a href="#">Results</a>
+          <div class="foot">Sarah K.</div>
+        </div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">Experiments</div><div class="sub" style="font-family:inherit;font-size:11px">3 running · 1 draft</div></div>
+            <div class="tbr"><span class="b sec">Filters</span><span class="b pri">New experiment</span></div>
+          </div>
+          <div class="body">
+            <div style="display:flex;gap:6px;margin-bottom:12px">
+              <span class="chip sel">Running 3</span><span class="chip">Draft 1</span><span class="chip">Finished 12</span>
+              <span class="chip out">Archived</span>
+            </div>
+            <div class="dcards">
+              <div class="dc">
+                <div style="display:flex;gap:7px;align-items:flex-start;margin-bottom:2px">
+                  <span class="brand">M</span>
+                  <div><div class="dt">Semaglutide tiered checkout</div>
+                    <div class="k">MOSHY AU · day 12 of 21</div></div>
+                </div>
+                <div class="metric"><span class="big up">+8.4%</span><span class="k">checkout conversion</span></div>
+                <div class="ci"><span class="band" style="left:38%;right:14%"></span><span class="zero" style="left:34%"></span></div>
+                <div class="k">95% CI +1.2% to +15.1%</div>
+                <div class="sep"></div>
+                <div style="display:flex;justify-content:space-between"><span class="k">4,180 / week</span><span class="chip g">significant in ~4 days</span></div>
+              </div>
+              <div class="dc">
+                <div style="display:flex;gap:7px;align-items:flex-start;margin-bottom:2px">
+                  <span class="brand" style="background:#2d4a63">M</span>
+                  <div><div class="dt">Sex upsell flow</div>
+                    <div class="k">MOSH AU · day 3 of 28</div></div>
+                </div>
+                <div class="metric"><span class="big fl">−0.6%</span><span class="k">order value</span></div>
+                <div class="ci"><span class="band" style="left:22%;right:26%"></span><span class="zero" style="left:52%"></span></div>
+                <div class="k">95% CI −9.4% to +8.1%</div>
+                <div class="sep"></div>
+                <div style="display:flex;justify-content:space-between"><span class="k">1,940 / week</span><span class="chip a">too early to read</span></div>
+              </div>
+              <div class="dc">
+                <div style="display:flex;gap:7px;align-items:flex-start;margin-bottom:2px">
+                  <span class="brand" style="background:#5a3d6b">M</span>
+                  <div><div class="dt">Contrave pricing</div>
+                    <div class="k">MOSHY NZ · day 19 of 21</div></div>
+                </div>
+                <div class="metric"><span class="big dn">−4.1%</span><span class="k">checkout conversion</span></div>
+                <div class="ci"><span class="band" style="left:12%;right:58%"></span><span class="zero" style="left:44%"></span></div>
+                <div class="k">95% CI −7.8% to −0.4%</div>
+                <div class="sep"></div>
+                <div style="display:flex;justify-content:space-between"><span class="k">2,610 / week</span><span class="chip h">control winning</span></div>
+              </div>
+            </div>
+            <div class="card gh" style="margin-top:11px;text-align:center;padding:10px">
+              Drafts and finished experiments below · setup detail lives inside the record
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>What changed.</b> The card no longer repeats what you configured. Brand is a mark rather than three text pills, status is expressed as days elapsed against planned duration, and the confidence interval is drawn against zero so a negative result is visible without reading numbers. The projection line is the thing that makes this a pulse rather than a list.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M2 START ================= -->
+<div class="moment" data-m="2">
+  <div class="m-head">
+    <h2>Starting an experiment</h2>
+    <p>Neither direction opens on step one of five. Bench opens the workspace with a single variant column and a plus. Ledger opens an empty record with every section already present. In both, hypothesis is optional, the key is generated as an ID with an override, and the naming convention is enforced on the name instead.</p>
+    <div class="m-head tests"><span class="tst">R1 optional fields</span><span class="tst">R2 stable key</span><span class="tst">R10 no save ritual</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">Comparison workspace</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">Untitled experiment</div><div class="sub">exp_005 · saved just now</div></div>
+            <div class="tbr"><span class="b gho">Discard</span><span class="b sec">Preview</span><span class="b pri">Publish</span></div>
+          </div>
+          <div class="body">
+            <div class="rw" style="margin-bottom:12px">
+              <div style="flex:2"><div class="flab">Name</div><div class="fld ph">AU Moshy: semaglutide tiered checkout</div></div>
+              <div><div class="flab">Key <span class="info">i</span></div><div class="fld lock">005</div></div>
+              <div><div class="flab">Hypothesis <span class="chip" style="font-size:9px;padding:1px 6px">optional</span></div><div class="fld ph">Link Notion page</div></div>
+            </div>
+            <div class="card" style="margin-bottom:11px;padding:9px 12px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="display:flex;gap:6px;align-items:center"><span class="h5" style="margin:0">Audience</span>
+                  <span class="chip out">derives once variants are set</span></div>
+                <span class="b sm sec">Edit rule</span>
+              </div>
+            </div>
+            <div class="grid" style="grid-template-columns:96px 1fr 118px">
+              <div><div class="gh">Attribute</div>
+                <div class="gl">Package</div><div class="gl">Plans</div><div class="gl">Care products</div><div class="gl">Price</div></div>
+              <div>
+                <div class="colhead"><span class="gh" style="padding:0">Variant A · control</span><span class="chip">baseline</span></div>
+                <div class="st">
+                  <div class="cel empty">Choose from library</div>
+                  <div class="cel empty">not set</div>
+                  <div class="cel empty">not set</div>
+                  <div class="cel empty">not set</div>
+                </div>
+              </div>
+              <div><div class="gh">&nbsp;</div>
+                <div class="card gh" style="height:calc(100% - 16px);display:flex;align-items:center;justify-content:center;text-align:center;font-size:10.5px">
+                  + Add variant</div></div>
+            </div>
+            <div class="card" style="margin-top:11px;padding:9px 12px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="h5" style="margin:0">Traffic</span><span class="k">100% · single variant</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> The whole experiment is one screen from the first second. Audience and traffic are bands rather than stages because they are small next to variant work. Nothing is locked and nothing says save.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Document model</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">Untitled experiment</div><div class="sub">exp_005 · saved just now</div></div>
+            <div class="tbr"><span class="b sec">Preview</span><span class="b pri">Publish</span></div>
+          </div>
+          <div class="body" style="display:flex;gap:13px">
+            <div class="toc">
+              <a class="on" href="#">Setup</a>
+              <a href="#">Variants</a>
+              <a href="#">Audience</a>
+              <a href="#">Traffic</a>
+              <a href="#">Launch</a>
+              <div class="h5" style="margin:14px 0 7px">Readiness</div>
+              <div class="ready" style="padding:9px 10px">
+                <ul>
+                  <li><span class="dot"></span><span>Name the experiment</span></li>
+                  <li><span class="dot"></span><span>Add at least one variant</span></li>
+                  <li><span class="dot"></span><span>Set traffic</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="doc">
+              <div class="sec act">
+                <div class="sec-h"><span class="nm">Setup</span><span class="chip out">3 fields</span></div>
+                <div class="rw" style="margin-bottom:9px">
+                  <div style="flex:2"><div class="flab">Name</div><div class="fld ph">AU Moshy: semaglutide tiered checkout</div></div>
+                  <div><div class="flab">Key <span class="info">i</span></div><div class="fld lock">005</div></div>
+                </div>
+                <div><div class="flab">Hypothesis <span class="chip" style="font-size:9px;padding:1px 6px">optional</span></div>
+                  <div class="fld ph">Paste a Notion link, or leave empty</div></div>
+              </div>
+              <div class="sec"><div class="sec-h"><span class="nm">Variants</span><span class="chip out">empty</span></div>
+                <div class="card gh" style="text-align:center;padding:12px;font-size:10.5px">+ Add first variant</div></div>
+              <div class="sec"><div class="sec-h"><span class="nm">Audience</span><span class="chip out">derives from variants</span></div></div>
+              <div class="sec"><div class="sec-h"><span class="nm">Traffic</span><span class="chip out">not set</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Sections exist before they are filled, so the shape of the job is visible without a stepper. The readiness list is the only thing that tracks completion, and it never blocks movement.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M3 TWO VARIANTS ================= -->
+<div class="moment" data-m="3">
+  <div class="m-head">
+    <h2>Two variants, cloned from A</h2>
+    <p>The clone is initiated from inside variant A, which is the direction people expected. Both directions state inheritance explicitly rather than implying it with a copy-from dropdown, and both mark the single attribute that diverges. This is the moment where the two models start to feel genuinely different.</p>
+    <div class="m-head tests"><span class="tst">Stress 1 clone then change one thing</span><span class="tst">R4 duplication</span><span class="tst">R5 always-visible difference</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">Difference is the structure</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">AU Moshy: semaglutide tiered checkout</div><div class="sub">exp_004 · saved 2s ago</div></div>
+            <div class="tbr"><span class="chip h">1 of 14 attributes differ</span><span class="b sec">Preview both</span><span class="b pri">Publish</span></div>
+          </div>
+          <div class="body">
+            <div class="card" style="margin-bottom:11px;padding:9px 12px">
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <span class="h5" style="margin:0;margin-right:4px">Audience</span>
+                <span class="chip g">AU</span><span class="chip g">MOSHY</span><span class="chip g">Weight loss</span>
+                <span class="chip g">Semaglutide</span><span class="chip out">+ add rule</span>
+                <span style="margin-left:auto" class="k">est. 16,700 / week eligible</span>
+              </div>
+            </div>
+            <div class="grid" style="grid-template-columns:92px 1fr 1fr">
+              <div><div class="gh">Attribute</div>
+                <div class="gl">Package</div>
+                <div class="gl"><span class="dot"></span>Package 2</div>
+                <div class="gl">Plans</div>
+                <div class="gl">Price 3-mo</div></div>
+              <div>
+                <div class="colhead"><span class="gh" style="padding:0">A · control</span>
+                  <span class="b sm sec">Clone →</span></div>
+                <div class="st">
+                  <div class="cel">Semaglutide Basic</div>
+                  <div class="cel same">none</div>
+                  <div class="cel same">3-month, Monthly</div>
+                  <div class="cel same">$349 / mo</div>
+                </div>
+              </div>
+              <div>
+                <div class="colhead"><span class="gh" style="padding:0">B · test</span>
+                  <span class="chip out">inherits A</span></div>
+                <div class="st">
+                  <div class="cel same">Semaglutide Basic</div>
+                  <div class="cel diff"><span class="dot"></span>Semaglutide Premium</div>
+                  <div class="cel same">3-month, Monthly</div>
+                  <div class="cel same">$349 / mo</div>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="margin-top:11px;padding:9px 12px">
+              <div style="display:flex;gap:9px;align-items:center">
+                <span class="h5" style="margin:0">Traffic</span>
+                <div class="fun" style="flex:1"><i class="a" style="flex:125">12.5% A</i><i class="bb" style="flex:125">12.5% B</i><i class="o" style="flex:750">75% not enrolled</i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Dimmed dashed cells mean identical to control. You never ask what differs because one row is marked and thirteen are not. Cloning is a control on column A, pushing rightwards, which matches the expectation from the session.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Difference on a toggle</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">AU Moshy: semaglutide tiered checkout</div><div class="sub">exp_004 · saved 2s ago</div></div>
+            <div class="tbr"><span class="b sec">Compare</span><span class="b sec">Preview</span><span class="b pri">Publish</span></div>
+          </div>
+          <div class="body" style="display:flex;gap:13px">
+            <div class="toc">
+              <a href="#">Setup <span class="tick">✓</span></a>
+              <a class="on" href="#">Variants</a>
+              <a href="#">Audience <span class="tick">✓</span></a>
+              <a href="#">Traffic</a>
+              <a href="#">Launch</a>
+              <div class="h5" style="margin:14px 0 7px">Readiness</div>
+              <div class="ready" style="padding:9px 10px"><ul>
+                <li><span class="tickg">✓</span><span>Named</span></li>
+                <li><span class="tickg">✓</span><span>2 variants</span></li>
+                <li><span class="dot"></span><span>Premium package missing</span></li>
+                <li><span class="dot"></span><span>Traffic not set</span></li>
+              </ul></div>
+            </div>
+            <div class="doc">
+              <div class="sec act">
+                <div class="sec-h"><span class="nm">Variants</span>
+                  <div style="display:flex;gap:5px"><span class="chip h">1 difference</span><span class="b sm sec">Compare view</span></div></div>
+                <div class="card" style="margin-bottom:8px;padding:10px 11px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+                    <span class="v">A · control</span>
+                    <div style="display:flex;gap:5px"><span class="b sm sec">Clone to new variant</span><span class="b sm gho">···</span></div></div>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap"><span class="chip">Semaglutide Basic</span>
+                    <span class="chip out">3-month $349</span><span class="chip out">Monthly $399</span></div>
+                </div>
+                <div class="card diff" style="padding:10px 11px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+                    <span class="v">B · test</span>
+                    <span class="chip h">inherits A · 1 override</span></div>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap"><span class="chip">Semaglutide Basic</span>
+                    <span class="chip h"><span class="dot"></span>Semaglutide Premium</span>
+                    <span class="chip out">+ add package</span></div>
+                </div>
+                <div class="card gh" style="text-align:center;padding:9px;margin-top:8px;font-size:10.5px">+ Add third variant</div>
+              </div>
+              <div class="sec"><div class="sec-h"><span class="nm">Audience</span><span class="chip g">4 rules derived</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Difference is annotated rather than structural. The override badge and the marked chip do real work, but you have to trust the annotation. Compare view is one click away and turns this section into Bench's grid, which is telling.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M4 MISSING PACKAGE ================= -->
+<div class="moment" data-m="4">
+  <div class="m-head">
+    <h2>The package does not exist yet</h2>
+    <p>The hardest moment, and the one that killed the current design. Both directions treat the package as a library object with an in-context authoring route, so the thing you build is reusable afterwards rather than trapped inside one experiment. They differ in how much context they keep on screen while you build it.</p>
+    <div class="m-head tests"><span class="tst">Stress 2 missing dependency</span><span class="tst">R3 create without leaving</span><span class="tst">D11 not in a sidebar</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">Slide-over from the cell, grid stays behind</span></div>
+      <div class="app ov">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004</div></div></div>
+          <div class="body">
+            <div class="grid" style="grid-template-columns:92px 1fr 1fr">
+              <div><div class="gh">Attribute</div><div class="gl">Package</div><div class="gl"><span class="dot"></span>Package 2</div><div class="gl">Plans</div></div>
+              <div><div class="gh">A · control</div><div class="st">
+                <div class="cel">Semaglutide Basic</div><div class="cel same">none</div><div class="cel same">3-month, Monthly</div></div></div>
+              <div><div class="gh">B · test</div><div class="st">
+                <div class="cel same">Semaglutide Basic</div><div class="cel diff">Premium</div><div class="cel same">3-month, Monthly</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="scrim"></div>
+        <div class="so">
+          <div class="so-h">
+            <div><div class="crumb">Experiment 004 · Variant B · Package 2</div>
+              <div class="v" style="font-size:13px;margin-top:2px">New care package</div></div>
+            <span class="b sm gho">Close</span>
+          </div>
+          <div class="so-b">
+            <div class="rw" style="margin-bottom:10px">
+              <div style="flex:2"><div class="flab">Name</div><div class="fld">AU Semaglutide Premium</div></div>
+              <div><div class="flab">Region</div><div class="fld lock">AU</div></div>
+            </div>
+            <div class="h5">Plans <span style="text-transform:none;letter-spacing:0;font-weight:400">commitment duration</span></div>
+            <div class="rw" style="margin-bottom:9px">
+              <div class="card" style="padding:9px 10px">
+                <div class="v" style="margin-bottom:6px">3-month</div>
+                <div class="flab">Price per month</div><div class="fld">$429</div>
+              </div>
+              <div class="card" style="padding:9px 10px">
+                <div class="v" style="margin-bottom:6px">Monthly</div>
+                <div class="flab">Price per month</div><div class="fld">$479</div>
+              </div>
+              <div class="card gh" style="display:flex;align-items:center;justify-content:center;font-size:10.5px">+ plan</div>
+            </div>
+            <div class="h5">Care products</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+              <span class="chip g">Dietitian consult</span><span class="chip g">Longevity consult</span>
+              <span class="chip g">Protein shake</span><span class="chip out">+ from library</span>
+            </div>
+            <div class="card gh" style="padding:9px 10px;font-size:10.5px">
+              Saves to <b style="color:#233029">Care packages</b>. Reusable in future experiments.</div>
+          </div>
+          <div class="so-f">
+            <span class="k">Layer 1 of 1 · plan editor stacks if opened</span>
+            <div style="display:flex;gap:6px"><span class="b sec">Cancel</span><span class="b pri">Save and attach to B</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> The comparison stays visible behind the scrim, so you never lose sight of why you are building this. The footer names the layer depth, which is how Google Tag Manager keeps stacked panels survivable. Risk: at two or three layers deep the remaining grid width gets thin.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Focus mode, full width</span></div>
+      <div class="app">
+        <div class="rail" style="opacity:.45"><div class="logo">Commerce</div><a href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="crumb" style="margin-bottom:2px">← Experiment 004 · Variants · Variant B</div>
+              <div class="t">New care package</div></div>
+            <div class="tbr"><span class="b sec">Cancel</span><span class="b pri">Save and return</span></div>
+          </div>
+          <div class="body" style="display:flex;gap:14px">
+            <div style="flex:1;min-width:0">
+              <div class="rw" style="margin-bottom:11px">
+                <div style="flex:2"><div class="flab">Name</div><div class="fld">AU Semaglutide Premium</div></div>
+                <div><div class="flab">Region</div><div class="fld lock">AU</div></div>
+                <div><div class="flab">Vertical</div><div class="fld lock">Weight loss</div></div>
+              </div>
+              <div class="h5">Plans <span style="text-transform:none;letter-spacing:0;font-weight:400">commitment duration, not product</span></div>
+              <div class="rw" style="margin-bottom:11px">
+                <div class="card" style="padding:10px 11px">
+                  <div class="v" style="margin-bottom:7px">3-month</div>
+                  <div class="flab">Price per month</div><div class="fld" style="margin-bottom:6px">$429</div>
+                  <div class="flab">Dosage tiers</div><div class="fld lock">0.25 – 2.4 mg</div>
+                </div>
+                <div class="card" style="padding:10px 11px">
+                  <div class="v" style="margin-bottom:7px">Monthly</div>
+                  <div class="flab">Price per month</div><div class="fld" style="margin-bottom:6px">$479</div>
+                  <div class="flab">Dosage tiers</div><div class="fld lock">0.25 – 2.4 mg</div>
+                </div>
+                <div class="card gh" style="display:flex;align-items:center;justify-content:center;font-size:10.5px">+ plan</div>
+              </div>
+              <div class="h5">Care products</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                <span class="chip g">Dietitian consult</span><span class="chip g">Longevity consult</span>
+                <span class="chip g">Protein shake</span><span class="chip out">+ from library</span>
+              </div>
+            </div>
+            <div class="ph">
+              <div class="nub"></div>
+              <div class="k" style="font-size:9px;margin-bottom:6px">Checkout preview</div>
+              <div class="pl"><div class="pt">Basic</div><div class="pp">$349<span class="pm">/mo</span></div><div class="pm">3-month plan</div></div>
+              <div class="pl on"><div class="pt">Premium</div><div class="pp">$429<span class="pm">/mo</span></div>
+                <div class="pm">+ dietitian, longevity, shake</div></div>
+              <div class="b pri sm" style="width:100%;justify-content:center;margin-top:7px">Continue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Full width means plans sit side by side and the checkout preview fits without compromise, which was a specific ask. Cost: the experiment context is reduced to a breadcrumb, so you are trusting the return path rather than seeing it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M5 AUDIENCE + TRAFFIC ================= -->
+<div class="moment" data-m="5">
+  <div class="m-head">
+    <h2>Audience and traffic</h2>
+    <p>The audience rule is derived from the variants and presented as editable chips rather than static grey text, with common properties as toggles and the long tail behind a picker. Traffic is drawn rather than typed, so the two-tier maths reads without explanation. Both directions treat these as small, which is the actual finding.</p>
+    <div class="m-head tests"><span class="tst">R7 derived and editable</span><span class="tst">R8 legible traffic maths</span><span class="tst">D14 bubbles not dropdowns</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">Bands above and below the grid</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004 · saved</div></div>
+            <div class="tbr"><span class="b sec">Preview both</span><span class="b pri">Publish</span></div></div>
+          <div class="body">
+            <div class="card sel" style="margin-bottom:11px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+                <span class="h5" style="margin:0">Audience rule</span>
+                <span class="chip g">derived from variants · editable</span></div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px">
+                <span class="chip sel">AU</span><span class="chip out">NZ</span>
+                <span style="width:9px"></span>
+                <span class="chip sel">MOSHY</span><span class="chip out">MOSH</span>
+                <span style="width:9px"></span>
+                <span class="chip sel">Weight loss</span><span class="chip out">Sex</span><span class="chip out">Hair</span>
+                <span style="width:9px"></span>
+                <span class="chip sel">New customer</span><span class="chip out">Returning</span>
+              </div>
+              <div class="sep"></div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <span class="k">and</span>
+                <span class="chip">Device is iOS</span>
+                <span class="chip out">+ add rule from 40+ properties</span>
+                <span style="margin-left:auto" class="k">16,700 / week match</span>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:11px;padding:10px 12px">
+              <div style="display:flex;gap:5px;align-items:center"><span class="h5" style="margin:0">Variants</span>
+                <span class="chip h">1 of 14 differ</span><span class="k" style="margin-left:auto">collapsed</span></div>
+            </div>
+            <div class="card sel">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <span class="h5" style="margin:0">Traffic</span>
+                <div style="display:flex;gap:6px;align-items:center"><span class="k">Enrol</span><div class="fld" style="padding:3px 8px">25%</div></div>
+              </div>
+              <div class="fun" style="margin-bottom:7px">
+                <i class="a" style="flex:125">A · 12.5%</i><i class="bb" style="flex:125">B · 12.5%</i>
+                <i class="o" style="flex:750">Not enrolled · 75%</i></div>
+              <div style="display:flex;justify-content:space-between">
+                <span class="k">2,088 / week per variant</span>
+                <span class="chip a">~14 days to detect a 5% lift</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> The funnel bar is drawn to scale against the whole eligible population, so 25 percent enrolled and 12.5 each is a picture rather than a calculation. The days-to-detect estimate turns the number into a decision.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Sections in the document</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004 · saved</div></div>
+            <div class="tbr"><span class="b sec">Preview</span><span class="b pri">Publish</span></div></div>
+          <div class="body" style="display:flex;gap:13px">
+            <div class="toc">
+              <a href="#">Setup <span class="tick">✓</span></a><a href="#">Variants <span class="tick">✓</span></a>
+              <a class="on" href="#">Audience</a><a href="#">Traffic</a><a href="#">Launch</a>
+              <div class="h5" style="margin:14px 0 7px">Readiness</div>
+              <div class="ready" style="padding:9px 10px"><ul>
+                <li><span class="tickg">✓</span><span>Named</span></li>
+                <li><span class="tickg">✓</span><span>2 variants differ</span></li>
+                <li><span class="tickg">✓</span><span>Audience set</span></li>
+                <li><span class="dot"></span><span>Traffic not set</span></li>
+              </ul></div>
+            </div>
+            <div class="doc">
+              <div class="sec act">
+                <div class="sec-h"><span class="nm">Audience</span><span class="chip g">derived · editable</span></div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px">
+                  <span class="chip sel">AU</span><span class="chip out">NZ</span><span style="width:9px"></span>
+                  <span class="chip sel">MOSHY</span><span class="chip out">MOSH</span><span style="width:9px"></span>
+                  <span class="chip sel">Weight loss</span><span class="chip out">Sex</span><span style="width:9px"></span>
+                  <span class="chip sel">New customer</span><span class="chip out">Returning</span>
+                </div>
+                <div class="sep"></div>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <span class="k">and</span><span class="chip">Device is iOS</span>
+                  <span class="chip out">+ add rule</span>
+                  <span style="margin-left:auto" class="k">16,700 / week</span></div>
+              </div>
+              <div class="sec">
+                <div class="sec-h"><span class="nm">Traffic</span><span class="chip out">not set</span></div>
+                <div style="display:flex;gap:9px;align-items:center;margin-bottom:9px">
+                  <span class="k">Enrol</span><div class="fld" style="padding:3px 8px;width:56px">25%</div>
+                  <span class="k">of eligible traffic</span></div>
+                <div class="fun" style="margin-bottom:6px">
+                  <i class="a" style="flex:125">A · 12.5%</i><i class="bb" style="flex:125">B · 12.5%</i>
+                  <i class="o" style="flex:750">Not enrolled</i></div>
+                <div class="k">2,088 per variant per week · about 14 days to detect a 5 percent lift</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Functionally identical treatment, which is the point: these two moments do not separate the directions. Ledger reaches them by scrolling, Bench keeps them permanently framing the grid.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M6 REVIEW + PUBLISH ================= -->
+<div class="moment" data-m="6">
+  <div class="m-head">
+    <h2>Review and publish</h2>
+    <p>Neither direction has a review destination you navigate to. Both compute the change set from path-addressable fields, so review is a filter over the workspace you already know. Environment behaviour is stated at the button rather than discovered afterwards, and the Amplitude schema is emitted as part of publishing rather than as a separate action.</p>
+    <div class="m-head tests"><span class="tst">Stress 6 buried difference</span><span class="tst">R12 environment defaults</span><span class="tst">D16 exact differences</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">Review is a filter on the grid</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb">
+            <div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004</div></div>
+            <div class="tbr"><span class="chip sel">Changes only</span><span class="chip out">Show all 14</span>
+              <span class="b pri">Publish to staging</span></div></div>
+          <div class="body">
+            <div class="card" style="margin-bottom:11px;padding:11px 13px;background:#fbfdfc">
+              <div class="v" style="margin-bottom:3px">Variant B is identical to variant A except one added package.</div>
+              <div class="k">13 of 14 attributes match. Editing anything below stays inline.</div>
+            </div>
+            <div class="grid" style="grid-template-columns:92px 1fr 1fr;margin-bottom:11px">
+              <div><div class="gh">Attribute</div><div class="gl"><span class="dot"></span>Package 2</div></div>
+              <div><div class="gh">A · control</div><div class="cel same">none</div></div>
+              <div><div class="gh">B · test</div><div class="cel diff">
+                <span class="dot"></span>Semaglutide Premium
+                <span class="chip out" style="margin-left:auto">new</span></div></div>
+            </div>
+            <div class="rw" style="margin-bottom:11px">
+              <div class="card" style="padding:10px 11px"><div class="h5">Audience</div>
+                <div class="k">AU · MOSHY · Weight loss · New customer · iOS</div></div>
+              <div class="card" style="padding:10px 11px"><div class="h5">Traffic</div>
+                <div class="k">25% enrolled · 12.5 / 12.5</div></div>
+            </div>
+            <div class="card" style="padding:11px 13px;border-color:#cfe0d8;background:#f7fbf9">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div><div class="v" style="margin-bottom:2px">Publishing to staging</div>
+                  <div class="k">Goes active immediately. Production publishes inactive and needs a manual switch.</div></div>
+                <span class="chip g">Amplitude schema emitted</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Nothing new is learned here, which is the strongest argument for Bench. The reviewer has been looking at the diff the entire time, so sign-off is confirmation rather than discovery.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Launch section, editable inline</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004</div></div>
+            <div class="tbr"><span class="b sec">Preview</span><span class="b pri">Publish to staging</span></div></div>
+          <div class="body" style="display:flex;gap:13px">
+            <div class="toc">
+              <a href="#">Setup <span class="tick">✓</span></a><a href="#">Variants <span class="tick">✓</span></a>
+              <a href="#">Audience <span class="tick">✓</span></a><a href="#">Traffic <span class="tick">✓</span></a>
+              <a class="on" href="#">Launch</a>
+              <div class="h5" style="margin:14px 0 7px">Readiness</div>
+              <div class="ready" style="padding:9px 10px;border-color:#cfe0d8;background:#f7fbf9"><ul>
+                <li><span class="tickg">✓</span><span>Named and keyed</span></li>
+                <li><span class="tickg">✓</span><span>Variants differ</span></li>
+                <li><span class="tickg">✓</span><span>Audience set</span></li>
+                <li><span class="tickg">✓</span><span>Traffic allocated</span></li>
+              </ul></div>
+            </div>
+            <div class="doc">
+              <div class="sec act">
+                <div class="sec-h"><span class="nm">Launch</span><span class="chip g">all checks pass</span></div>
+                <div class="card" style="margin-bottom:9px;padding:10px 11px;background:#fbfdfc">
+                  <div class="v" style="margin-bottom:5px">What differs</div>
+                  <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
+                    <span class="dot"></span><span class="k"><b style="color:#233029">variants.B.packages</b> adds Semaglutide Premium</span>
+                    <span class="b sm gho" style="margin-left:auto">Edit here</span></div>
+                  <div class="k">13 other attributes identical</div>
+                </div>
+                <div class="rw" style="margin-bottom:9px">
+                  <div class="card" style="padding:9px 10px"><div class="h5">Audience</div>
+                    <div class="k">AU · MOSHY · Weight loss · New · iOS</div></div>
+                  <div class="card" style="padding:9px 10px"><div class="h5">Traffic</div>
+                    <div class="k">25% · 12.5 / 12.5</div></div>
+                </div>
+                <div class="card" style="padding:10px 11px;border-color:#cfe0d8;background:#f7fbf9">
+                  <div class="v" style="margin-bottom:2px">Publishing to staging</div>
+                  <div class="k">Active immediately. Production publishes inactive.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> The change set names the field path, which came from Spec, so the reviewer gets precision without needing the grid. Edit here keeps you in the launch section rather than sending you back, fixing the specific complaint about review being read-only.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= M7 THIRD VARIANT / A A ================= -->
+<div class="moment" data-m="7">
+  <div class="m-head">
+    <h2>Third variant, and the accidental A/A</h2>
+    <p>Two stress tests at once. A third variant is added after traffic is already split, and it is initially an exact copy of A, which is the accidental A/A case. Deliberate A/A must still be possible, so this is a warning with an acknowledgement, never a block.</p>
+    <div class="m-head tests"><span class="tst">Stress 3 late third variant</span><span class="tst">Stress 4 identical variants</span><span class="tst">R6 warn but allow</span></div>
+  </div>
+  <div class="pair">
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">B</span>Bench</h3><span class="note">A third column, self-evidently identical</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004 · 3 variants</div></div>
+            <div class="tbr"><span class="chip a">C matches A exactly</span><span class="b pri">Publish</span></div></div>
+          <div class="body">
+            <div class="card" style="margin-bottom:10px;padding:10px 12px;background:#fdfaf0;border-color:#e6d5a3">
+              <div style="display:flex;gap:9px;align-items:center">
+                <div style="flex:1"><div class="v" style="margin-bottom:2px">Variant C is identical to variant A</div>
+                  <div class="k">That is a valid A/A test for measuring noise. Confirm if intended.</div></div>
+                <span class="b sm sec">Intentional A/A</span><span class="b sm sec">Edit C</span></div>
+            </div>
+            <div class="grid" style="grid-template-columns:86px 1fr 1fr 1fr">
+              <div><div class="gh">Attribute</div><div class="gl">Package</div><div class="gl"><span class="dot"></span>Package 2</div><div class="gl">Price</div></div>
+              <div><div class="colhead"><span class="gh" style="padding:0">A</span></div><div class="st">
+                <div class="cel">Basic</div><div class="cel same">none</div><div class="cel">$349</div></div></div>
+              <div><div class="colhead"><span class="gh" style="padding:0">B</span><span class="chip h">1</span></div><div class="st">
+                <div class="cel same">Basic</div><div class="cel diff">Premium</div><div class="cel same">$349</div></div></div>
+              <div><div class="colhead"><span class="gh" style="padding:0">C</span><span class="chip a">0</span></div><div class="st">
+                <div class="cel same">Basic</div><div class="cel same">none</div><div class="cel same">$349</div></div></div>
+            </div>
+            <div class="card" style="margin-top:11px;padding:10px 12px">
+              <div style="display:flex;gap:9px;align-items:center"><span class="h5" style="margin:0">Traffic</span>
+                <div class="fun" style="flex:1"><i class="a" style="flex:83">8.3%</i><i class="bb" style="flex:83">8.3%</i>
+                  <i style="flex:83;background:#8fb8a8">8.3%</i><i class="o" style="flex:750">75%</i></div>
+                <span class="chip g">rebalanced automatically</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> The A/A warning is almost redundant because column C has no marked cells, which is visible before you read anything. Traffic rebalances in place with no navigation. Cost: three columns at this width are already tight, and four would need horizontal scroll.</div>
+    </div>
+
+    <div class="dir">
+      <div class="dir-head"><h3><span class="dl">L</span>Ledger</h3><span class="note">Third card, warning in readiness</span></div>
+      <div class="app">
+        <div class="rail"><div class="logo">Commerce</div><a class="on" href="#">Experiments</a>
+          <div class="grp">Library</div><a href="#">Care packages</a><a href="#">Care products</a><a href="#">Customer properties</a>
+          <div class="foot">Sarah K.</div></div>
+        <div class="main">
+          <div class="tb"><div><div class="t">AU Moshy: semaglutide tiered</div><div class="sub">exp_004 · 3 variants</div></div>
+            <div class="tbr"><span class="b sec">Compare</span><span class="b pri">Publish</span></div></div>
+          <div class="body" style="display:flex;gap:13px">
+            <div class="toc">
+              <a href="#">Setup <span class="tick">✓</span></a><a class="on" href="#">Variants</a>
+              <a href="#">Audience <span class="tick">✓</span></a><a href="#">Traffic <span class="tick">✓</span></a><a href="#">Launch</a>
+              <div class="h5" style="margin:14px 0 7px">Readiness</div>
+              <div class="ready" style="padding:9px 10px;border-color:#e6d5a3;background:#fdfaf0"><ul>
+                <li><span class="tickg">✓</span><span>Named and keyed</span></li>
+                <li><span class="tickg" style="color:#8a6a12">!</span><span>C matches A exactly</span></li>
+                <li><span class="tickg">✓</span><span>Traffic rebalanced to 3</span></li>
+              </ul></div>
+            </div>
+            <div class="doc">
+              <div class="sec act">
+                <div class="sec-h"><span class="nm">Variants</span>
+                  <div style="display:flex;gap:5px"><span class="chip a">1 warning</span><span class="b sm sec">Compare view</span></div></div>
+                <div class="card" style="margin-bottom:7px;padding:9px 11px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span class="v">A · control</span><span class="chip out">baseline</span></div></div>
+                <div class="card diff" style="margin-bottom:7px;padding:9px 11px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span class="v">B · test</span><span class="chip h">1 override</span></div></div>
+                <div class="card" style="padding:9px 11px;border-color:#e6d5a3;background:#fdfaf0">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                    <span class="v">C · test</span><span class="chip a">0 overrides</span></div>
+                  <div class="k" style="margin-bottom:7px">Identical to A. Valid as an A/A noise check.</div>
+                  <div style="display:flex;gap:5px"><span class="b sm sec">Intentional A/A</span><span class="b sm sec">Add an override</span></div>
+                </div>
+              </div>
+              <div class="sec"><div class="sec-h"><span class="nm">Traffic</span>
+                <span class="chip g">rebalanced 8.3 / 8.3 / 8.3</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-note"><b>Read.</b> Scales better than Bench past three variants, since cards stack rather than columns compressing. Cost: identical-ness is asserted by a badge saying zero overrides, not shown. You are trusting the count.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= COMPARISON ================= -->
+<section class="blk">
+  <h2 class="sec2">Where they actually separate</h2>
+  <p class="sub2">Four of the seven moments are effectively identical between the directions, which is a useful result: it means those decisions are settled regardless of which spine wins.</p>
+  <table class="mx">
+    <thead><tr><th>Dimension</th><th>Bench</th><th>Ledger</th></tr></thead>
+    <tbody>
+      <tr><th>Difference between variants</th>
+        <td class="gd">Structural. You are always looking at it.</td>
+        <td>Annotated. Accurate, but you trust the badge.</td></tr>
+      <tr><th>Accidental A/A</th>
+        <td class="gd">Visible before you read the warning.</td>
+        <td>A warning you have to read.</td></tr>
+      <tr><th>Four or more variants</th>
+        <td class="bd">Columns compress, needs horizontal scroll.</td>
+        <td class="gd">Cards stack, scales cleanly.</td></tr>
+      <tr><th>Building a missing package</th>
+        <td>Slide-over, keeps context, narrower canvas.</td>
+        <td class="gd">Full width, plans side by side, loses context.</td></tr>
+      <tr><th>Non-pricing experiment types</th>
+        <td class="bd">Weak. A redirect test has no attribute grid.</td>
+        <td class="gd">Sections vary by type without breaking the spine.</td></tr>
+      <tr><th>First-time comprehension</th>
+        <td class="gd">The screen explains the job immediately.</td>
+        <td>Familiar, but the shape of the job is less obvious.</td></tr>
+      <tr><th>Long experiments with many fields</th>
+        <td>Grid stays fixed, rows grow.</td>
+        <td class="bd">Long scroll, depends on section collapse.</td></tr>
+      <tr><th>Effort to build</th>
+        <td class="bd">Higher. The grid is a real component.</td>
+        <td class="gd">Lower. Sections and cards are conventional.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="blk">
+  <h2 class="sec2">Recommendation for G2</h2>
+  <div class="rec">
+    <h4>Ledger as the spine, Bench as a view inside it</h4>
+    <p>Bench wins every moment that involves reasoning about difference, and difference is the core job. But it loses on the two things that determine whether this tool survives contact with the roadmap: more than three variants, and experiment types that are not pricing. A redirect test has no attribute grid to sit in, and the session was explicit that boxing the tool in is the thing to avoid.</p>
+    <p>Ledger has the opposite profile. It scales and generalises, and it is cheaper to build, but its handling of difference is annotation rather than structure, which is exactly the weakness that made the current design frustrating.</p>
+    <p>The resolution is visible in the mid-fi itself. Ledger already has a <strong>Compare view</strong> control on the variants section, and pressing it produces Bench. So the answer is not to choose. Make the document the spine, since it generalises and scales, and make the comparison grid the default rendering of the variants section whenever there are two or three variants and the experiment type is attribute-comparable. Past three variants, or on a non-pricing type, the section falls back to stacked cards without anything else changing.</p>
+    <div class="flip">
+      <b>What this commits to.</b> One navigation model, document with a contents rail and a readiness panel, no gates. One authoring surface for library objects, full-width focus mode, because that was the clearer of the two treatments. Difference computed from path-addressable fields, rendered as a grid when a grid fits and as annotation when it does not. Review as a filter, never a destination.
+    </div>
+    <div class="flip" style="background:#fdf8f2">
+      <b>If you disagree.</b> If you want the comparison grid as the permanent spine and are willing to accept that non-pricing tests get a different surface later, say so and Bench becomes primary. That is a defensible call, it just trades generality for focus.
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.scrub .sbtn').forEach(b => {
+    b.addEventListener('click', () => {
+      const m = b.dataset.m;
+      document.querySelectorAll('.scrub .sbtn').forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      document.querySelectorAll('.moment').forEach(p => p.classList.toggle('on', p.dataset.m === m));
+      window.scrollTo({top:0,behavior:'instant'});
+    });
+  });
+</script>
+</body>
+</html>

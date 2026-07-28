@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R0 · Requirements board · Experiment platform</title>
+<style>
+  :root{
+    --bg:#f4f5f3;
+    --panel:#ffffff;
+    --ink:#14201c;
+    --ink-2:#4a5a54;
+    --ink-3:#84948d;
+    --line:#e0e4e0;
+    --line-2:#cdd4cf;
+    --accent:#0f6b52;
+    --accent-soft:#e6f2ee;
+    --warn:#b4571a;
+    --warn-soft:#fbeee2;
+    --flag:#6c3fb5;
+    --flag-soft:#efe9fa;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,monospace}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 28px 100px}
+
+  /* header */
+  header{
+    background:linear-gradient(160deg,#132a23 0%,#0f211c 100%);
+    color:#eaf2ee;padding:34px 0 30px;margin-bottom:30px;
+  }
+  header .wrap{padding-bottom:0}
+  .eyebrow{
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:#7fb9a4;font-weight:600;margin-bottom:10px;
+  }
+  h1{margin:0 0 8px;font-size:29px;letter-spacing:-.02em;font-weight:650}
+  .sub{color:#9fb6ad;max-width:74ch;margin:0;font-size:14.5px}
+  .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:#7d9990}
+  .meta b{color:#cfe0d9;font-weight:550}
+
+  /* nav */
+  nav.jump{
+    position:sticky;top:0;z-index:40;background:rgba(244,245,243,.93);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-bottom:28px;
+  }
+  nav.jump .wrap{display:flex;gap:4px;padding:9px 28px;overflow-x:auto}
+  nav.jump a{
+    color:var(--ink-2);text-decoration:none;font-size:13px;padding:6px 12px;
+    border-radius:99px;white-space:nowrap;font-weight:500;
+  }
+  nav.jump a:hover{background:#e7eae7;color:var(--ink)}
+
+  section{margin-bottom:44px;scroll-margin-top:60px}
+  h2{
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+    font-weight:650;margin:0 0 6px;
+  }
+  .h2sub{margin:0 0 18px;color:var(--ink-2);font-size:14.5px;max-width:80ch}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+
+  /* the decision */
+  .decision{
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--flag);
+    border-radius:var(--radius);padding:24px 26px;
+  }
+  .decision .tag{
+    display:inline-block;background:var(--flag-soft);color:var(--flag);
+    font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 9px;border-radius:5px;margin-bottom:12px;
+  }
+  .decision .q{font-size:19px;line-height:1.45;font-weight:600;margin:0 0 16px;max-width:70ch}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  .opt{border:1px solid var(--line);border-radius:10px;padding:15px 17px;background:#fbfcfb}
+  .opt.lean{border-color:var(--accent);background:var(--accent-soft)}
+  .opt h4{margin:0 0 6px;font-size:14px;font-weight:650}
+  .opt p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .opt .lean-badge{
+    float:right;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  /* object model */
+  .tree{
+    background:#10211c;color:#c9dbd4;border-radius:var(--radius);padding:22px 24px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px;line-height:1.85;
+    overflow-x:auto;white-space:pre;
+  }
+  .tree .lib{color:#7fd6b4}
+  .tree .note{color:#6e857d;font-style:italic}
+  .tree .root{color:#fff;font-weight:600}
+
+  .twocol{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+
+  .keypoint{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:18px 20px}
+  .keypoint h4{margin:0 0 8px;font-size:13.5px;font-weight:650}
+  .keypoint p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2)}
+  .keypoint p:last-child{margin-bottom:0}
+
+  /* filters */
+  .filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .chip{
+    border:1px solid var(--line-2);background:var(--panel);color:var(--ink-2);
+    font:inherit;font-size:12.5px;padding:6px 13px;border-radius:99px;cursor:pointer;
+    transition:.13s;font-weight:500;
+  }
+  .chip:hover{border-color:var(--ink-3)}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+  /* evidence */
+  .ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+  .ev{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;transition:.15s;
+  }
+  .ev:hover{border-color:var(--line-2);box-shadow:0 2px 10px rgba(20,32,28,.05)}
+  .ev.hide{display:none}
+  .ev-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:9px}
+  .ev-id{font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:.06em}
+  .ev h3{margin:0 0 9px;font-size:14.5px;font-weight:640;line-height:1.35}
+  .ev ul{margin:0;padding-left:16px}
+  .ev li{font-size:13px;color:var(--ink-2);margin-bottom:5px;line-height:1.5}
+  .ev li:last-child{margin-bottom:0}
+  .ts{font-size:10.5px;color:var(--ink-3);font-family:ui-monospace,Menlo,monospace}
+  .theme{
+    font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 8px;border-radius:4px;white-space:nowrap;
+  }
+  .t-structure{background:var(--flag-soft);color:var(--flag)}
+  .t-clarity{background:var(--accent-soft);color:var(--accent)}
+  .t-trust{background:var(--warn-soft);color:var(--warn)}
+  .t-scale{background:#e8eef5;color:#2d5686}
+
+  /* requirements */
+  .req-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:11px}
+  .req{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:13px 15px;display:flex;gap:11px;align-items:flex-start;
+  }
+  .req .n{
+    background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;
+    padding:3px 7px;border-radius:5px;flex-shrink:0;font-family:ui-monospace,Menlo,monospace;
+  }
+  .req p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.45}
+
+  /* edge cases */
+  ol.edges{margin:0;padding-left:20px;columns:2;column-gap:34px}
+  ol.edges li{font-size:13.5px;color:var(--ink-2);margin-bottom:9px;break-inside:avoid;line-height:1.5}
+
+  /* questions */
+  .q-list{display:grid;gap:10px}
+  .qq{
+    background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:0;overflow:hidden;
+  }
+  .qq summary{
+    padding:15px 18px;cursor:pointer;font-size:14.5px;font-weight:580;
+    display:flex;gap:12px;align-items:center;list-style:none;
+  }
+  .qq summary::-webkit-details-marker{display:none}
+  .qq summary::after{content:"+";margin-left:auto;color:var(--ink-3);font-size:17px;font-weight:400}
+  .qq[open] summary::after{content:"−"}
+  .qq summary:hover{background:#fafbfa}
+  .qq .qn{
+    background:var(--accent-soft);color:var(--accent);font-size:10.5px;font-weight:700;
+    padding:3px 8px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;flex-shrink:0;
+  }
+  .qbody{padding:0 18px 17px 52px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+  .qbody .why{color:var(--ink-3);font-size:12.5px;margin-top:8px;display:block}
+
+  footer{
+    border-top:1px solid var(--line);padding-top:22px;margin-top:10px;
+    font-size:13px;color:var(--ink-3);
+  }
+  footer b{color:var(--ink-2);font-weight:600}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Gate R0 · Align on the problem</div>
+    <h1>Experiment platform: what the system must do</h1>
+    <p class="sub">Requirements extracted from the Figma file and the Alice research session, deliberately stated without reference to any interface. The current flowchart canvas, sidebar configurator and staged wizard are treated as one possible answer, not as the starting point.</p>
+    <div class="meta">
+      <span><b>17</b> evidence clusters</span>
+      <span><b>16</b> requirements</span>
+      <span><b>7</b> edge cases</span>
+      <span><b>1</b> scope decision to settle</span>
+    </div>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="wrap">
+    <a href="#decision">Scope decision</a>
+    <a href="#model">Object model</a>
+    <a href="#evidence">Evidence</a>
+    <a href="#reqs">Requirements</a>
+    <a href="#edges">Edge cases</a>
+    <a href="#questions">Design questions</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="decision">
+  <h2>The decision that changes everything downstream</h2>
+  <p class="h2sub">This one has to be settled before concepting, because it determines whether the experiment surface is a <em>builder</em> or an <em>assembler</em>. Every structural concept branches from here.</p>
+  <div class="decision">
+    <span class="tag">Blocking · needs your call</span>
+    <p class="q">Does the experiment tool <strong>own</strong> package construction, or does it <strong>consume</strong> packages owned by the Care packages section, with an in-context route to create one when it is missing?</p>
+    <div class="opts">
+      <div class="opt">
+        <h4>A. Experiment owns package building</h4>
+        <p>Everything happens inside the experiment. Matches the current prototype. Nothing to learn elsewhere, but the experiment surface has to carry a deep object editor, and the same package gets rebuilt per experiment.</p>
+      </div>
+      <div class="opt lean">
+        <span class="lean-badge">Evidence leans here</span>
+        <h4>B. Experiment assembles library objects</h4>
+        <p>Packages live in Care packages. The experiment attaches them, and a layered work surface lets you author a missing one without losing your place. Matches the existing nav and the "lay all the parts out first" model from the session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="model">
+  <h2>Object model and dependencies</h2>
+  <p class="h2sub">Two relationships in here are doing more work than the current design acknowledges.</p>
+  <div class="twocol">
+    <div class="tree">
+<span class="root">Experiment</span>
+  ├─ metadata          <span class="note">name, key, hypothesis, environment, tags</span>
+  ├─ test type         <span class="note">changes which fields are required</span>
+  ├─ <span class="root">Variants</span> (2..n)
+  │    └─ <span class="lib">Packages</span> (1..n)      <span class="note">← platform object</span>
+  │         ├─ Plans (1..n)   <span class="note">commitment duration</span>
+  │         │    └─ prices per dosage tier
+  │         └─ <span class="lib">Care products</span>   <span class="note">← platform object</span>
+  ├─ Target cohort rule       <span class="note">derivable from variants</span>
+  │    └─ extra rule layers   <span class="note">device, customer type</span>
+  ├─ Traffic allocation
+  │    ├─ % of eligible traffic entering
+  │    └─ split across variants
+  └─ Publish state            <span class="note">environment + active/inactive</span>
+    </div>
+    <div>
+      <div class="keypoint" style="margin-bottom:14px">
+        <h4>Cohort is downstream, not a peer step</h4>
+        <p>Brand, country, vertical and medication are all inferable from the packages attached to the variants. Treating cohort as an independent stage asks for information the system already holds.</p>
+      </div>
+      <div class="keypoint">
+        <h4>Traffic is two-tier, and that is the confusing part</h4>
+        <p>A global eligibility percentage, then a split inside it. 25 percent eligible becomes 12.5 and 12.5. This is the number people get wrong when it is expressed as two unrelated sliders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <h2>Evidence from the session</h2>
+  <p class="h2sub">Problems separated from the fixes proposed in the room, because a proposed fix is not a requirement. Filter by theme.</p>
+  <div class="filters" id="filters">
+    <button class="chip" data-f="all" aria-pressed="true">All 17</button>
+    <button class="chip" data-f="structure" aria-pressed="false">Structure</button>
+    <button class="chip" data-f="clarity" aria-pressed="false">Comprehension</button>
+    <button class="chip" data-f="trust" aria-pressed="false">Trust and safety</button>
+    <button class="chip" data-f="scale" aria-pressed="false">Scale and futureproofing</button>
+  </div>
+  <div class="ev-grid" id="evgrid">
+
+    <article class="ev" data-t="structure">
+      <div class="ev-top"><span class="ev-id">D01</span><span class="theme t-structure">Structure</span></div>
+      <h3>Dashboard is a setup artifact, not a pulse check</h3>
+      <ul>
+        <li>Reads as information-dense on landing <span class="ts">09:11</span></li>
+        <li>Traffic split on cards is nice to know, not critical <span class="ts">12:30</span></li>
+        <li>Wanted at a glance: what is live, weekly traffic volume, brand logos for recognition, primary metric with confidence interval and a projection to significance <span class="ts">13:38</span></li>
+        <li>Once setup is done, setup information stops being interesting <span class="ts">14:39</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="structure">
+      <div class="ev-top"><span class="ev-id">D02</span><span class="theme t-structure">Structure</span></div>
+      <h3>Hierarchy is inverted</h3>
+      <ul>
+        <li>The work happens in a sidebar while a passive canvas holds the main area <span class="ts">36:52</span></li>
+        <li>Wanted: work surface at two thirds, preview at one third, expandable to full screen <span class="ts">37:52</span></li>
+        <li>Narrow panel forces scrolling; with width, plans could sit side by side <span class="ts">37:52</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="structure">
+      <div class="ev-top"><span class="ev-id">D11</span><span class="theme t-structure">Structure</span></div>
+      <h3>Package building does not belong in the sidebar</h3>
+      <ul>
+        <li>Too much configuration for the space, heavy scrolling <span class="ts">46:17</span></li>
+        <li>IKEA model: lay all the parts out first, then follow the instructions <span class="ts">47:23</span></li>
+        <li>Experiment tool should focus on assigning blocks to variants, cohorts, splits <span class="ts">50:21</span></li>
+        <li>But creating a missing package mid-flow must still be possible <span class="ts">51:33</span></li>
+        <li>Named reference: Google Tag Manager layered slide-out surfaces, stackable to depth, returning you to your place <span class="ts">49:35</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="structure">
+      <div class="ev-top"><span class="ev-id">D09</span><span class="theme t-structure">Structure</span></div>
+      <h3>Variant duplication is inverted</h3>
+      <ul>
+        <li>Expected: stand in variant A and clone it. Actual: create B, then choose copy from A <span class="ts">39:54</span></li>
+        <li>Copy should be surfaced in both places as a shortcut <span class="ts">41:47</span></li>
+        <li>Copy from variant A currently reads as attached to package one, not to the variant <span class="ts">43:46</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D16</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>Review does not answer the reviewer's question</h3>
+      <ul>
+        <li>Cannot edit on review; must navigate back <span class="ts">1:05:31</span></li>
+        <li>Wanted: exact differences stated plainly, "B is identical to A except one new package" <span class="ts">1:06:34</span></li>
+        <li>Staging publishes active, production publishes inactive and needs a manual toggle <span class="ts">1:05:31</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D15</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>Two-tier traffic maths is not legible</h3>
+      <ul>
+        <li>Two tiers of splitting catch people out, especially when explaining to marketing <span class="ts">1:04:42</span></li>
+        <li>Wanted: bar or funnel showing 25 percent eligible, then 12.5 and 12.5 within it <span class="ts">1:05:31</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D12</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>Change indication is at the wrong granularity</h3>
+      <ul>
+        <li>Whole-window tint forces cross-comparison to find the actual change <span class="ts">55:22</span></li>
+        <li>Wanted: field-level dot, plus a package-level marker when a whole package is new <span class="ts">56:27</span></li>
+        <li>Package headers carry too much contrast; see-through fill preferred <span class="ts">57:22</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D14</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>Cohort rules do not look editable</h3>
+      <ul>
+        <li>Derived default rule shown as static grey text <span class="ts">1:01:33</span></li>
+        <li>Derivation itself is valued, it removes re-entry friction <span class="ts">1:00:29</span></li>
+        <li>Wanted: country, brand, vertical, customer type as bubbles or toggles; long-tail properties stay dropdowns given forty-plus exist <span class="ts">1:03:37</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D08</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>Terminology is in transition</h3>
+      <ul>
+        <li>Package, care product and plan are not self-evident; "plan" actually means commitment duration <span class="ts">45:09</span></li>
+        <li>Tooltips wanted throughout; one was already broken in the prototype <span class="ts">35:57</span></li>
+        <li>Configuration errors are expensive, so the design should reduce hesitation <span class="ts">34:52</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="clarity">
+      <div class="ev-top"><span class="ev-id">D07</span><span class="theme t-clarity">Comprehension</span></div>
+      <h3>No live preview of the thing being configured</h3>
+      <ul>
+        <li>Wanted: a mobile checkout render that updates as prices and plans change <span class="ts">32:48</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="trust">
+      <div class="ev-top"><span class="ev-id">D13</span><span class="theme t-trust">Trust</span></div>
+      <h3>Save semantics create anxiety</h3>
+      <ul>
+        <li>"Save and continue" implies going back loses work <span class="ts">58:19</span></li>
+        <li>The button exists only for reassurance; data persists regardless <span class="ts">58:19</span></li>
+        <li>Preferred: "Complete" or "Next", with save language removed <span class="ts">59:28</span></li>
+        <li>Adding a third variant requires navigating back a step <span class="ts">59:28</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="trust">
+      <div class="ev-top"><span class="ev-id">D10</span><span class="theme t-trust">Trust</span></div>
+      <h3>No guard against accidental A/A</h3>
+      <ul>
+        <li>Warning wanted when variants are identical <span class="ts">41:47</span></li>
+        <li>Deliberate A/A must remain possible, it is used to measure noise <span class="ts">42:39</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="trust">
+      <div class="ev-top"><span class="ev-id">D05</span><span class="theme t-trust">Trust</span></div>
+      <h3>Experiment key is an identifier, not a description</h3>
+      <ul>
+        <li>Autogenerated semantic keys become description slop and vary by author <span class="ts">25:18</span></li>
+        <li>ID convention (004) is searchable in Amplitude and stable across tools <span class="ts">25:18</span></li>
+        <li>Keys are immutable once live <span class="ts">24:18</span></li>
+        <li>Agreed: autogenerate with override on key, enforce convention on the name instead <span class="ts">27:37</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="trust">
+      <div class="ev-top"><span class="ev-id">D03</span><span class="theme t-trust">Trust</span></div>
+      <h3>Mandatory fields get defeated</h3>
+      <ul>
+        <li>Hypothesis is required, but the real record lives in Notion, so the field just collects junk <span class="ts">19:57</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="scale">
+      <div class="ev-top"><span class="ev-id">D06</span><span class="theme t-scale">Scale</span></div>
+      <h3>Test-type gating risks boxing the tool in</h3>
+      <ul>
+        <li>A pure redirect test fits none of the three offered types <span class="ts">28:33</span></li>
+        <li>Test type changes both fields and setup model; a future drag-and-drop page editor motivates the canvas <span class="ts">30:44</span></li>
+        <li>MVP is pricing and packaging, but the structure should not foreclose other types <span class="ts">31:49</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="scale">
+      <div class="ev-top"><span class="ev-id">D04</span><span class="theme t-scale">Scale</span></div>
+      <h3>The UI is not the only intended interface</h3>
+      <ul>
+        <li>Current method is Cursor plus MCP: settle hypothesis, write Notion, drive GrowthBook, generate Amplitude dashboards <span class="ts">21:19</span></li>
+        <li>Full MCP control described as a game changer, with the UI as an edit and review layer <span class="ts">22:18</span></li>
+        <li>A standalone UI is still required for people who do not use MCP <span class="ts">23:21</span></li>
+      </ul>
+    </article>
+
+    <article class="ev" data-t="scale">
+      <div class="ev-top"><span class="ev-id">D17</span><span class="theme t-scale">Scale</span></div>
+      <h3>Analysis lives elsewhere, for now</h3>
+      <ul>
+        <li>A button creates an Amplitude dashboard on publish <span class="ts">15:37</span></li>
+        <li>Wanted: export a JSON schema so Amplitude AI builds dashboards without manual setup <span class="ts">17:45</span></li>
+        <li>An initial results layer in the experiment record is desirable but post-MVP <span class="ts">16:43</span></li>
+      </ul>
+    </article>
+
+  </div>
+</section>
+
+<section id="reqs">
+  <h2>Requirements, stated without an interface</h2>
+  <p class="h2sub">What any concept has to satisfy. If a concept cannot do one of these, it fails regardless of how it looks.</p>
+  <div class="req-grid">
+    <div class="req"><span class="n">R1</span><p>Create and edit an experiment without every field being mandatory at creation time.</p></div>
+    <div class="req"><span class="n">R2</span><p>Set a stable, human-authored identifier, with autogeneration as a convenience.</p></div>
+    <div class="req"><span class="n">R3</span><p>Assemble variants from reusable packages, and create a missing package without leaving the task.</p></div>
+    <div class="req"><span class="n">R4</span><p>Duplicate a variant from the variant itself, and understand what the duplicate inherits.</p></div>
+    <div class="req"><span class="n">R5</span><p>See what differs between variants at any point, not only at review.</p></div>
+    <div class="req"><span class="n">R6</span><p>Warn on unintentionally identical variants while permitting deliberate A/A.</p></div>
+    <div class="req"><span class="n">R7</span><p>Derive the cohort rule from configuration, and edit it directly where it is shown.</p></div>
+    <div class="req"><span class="n">R8</span><p>Express two-tier traffic so a non-specialist can read the resulting audience maths.</p></div>
+    <div class="req"><span class="n">R9</span><p>Preview the resulting customer-facing surface while configuring it.</p></div>
+    <div class="req"><span class="n">R10</span><p>Persist work continuously and communicate persistence without a save ritual.</p></div>
+    <div class="req"><span class="n">R11</span><p>Move between areas of an in-progress experiment non-linearly without losing position.</p></div>
+    <div class="req"><span class="n">R12</span><p>Publish with environment-specific default states made explicit before the action.</p></div>
+    <div class="req"><span class="n">R13</span><p>Accommodate future experiment types without re-architecting the primary structure.</p></div>
+    <div class="req"><span class="n">R14</span><p>Expose the same capabilities to automation as to the interface.</p></div>
+    <div class="req"><span class="n">R15</span><p>Explain transitional vocabulary in place, at the moment of use.</p></div>
+    <div class="req"><span class="n">R16</span><p>Give a running experiment a health read, distinct from its setup record.</p></div>
+  </div>
+</section>
+
+<section id="edges">
+  <h2>Edge cases every concept must survive</h2>
+  <p class="h2sub">These are the stress tests. Concepts get scored against them at G1 and G2.</p>
+  <div class="card">
+    <ol class="edges">
+      <li>Clone a variant, then change one price in one plan.</li>
+      <li>Reach variant setup with the needed package not yet existing.</li>
+      <li>Add a third variant after traffic has already been split.</li>
+      <li>Two variants end up identical, both accidentally and deliberately.</li>
+      <li>Return to an earlier area after later areas are complete.</li>
+      <li>Review a change set where the only difference is buried three levels down.</li>
+      <li>Run an experiment type that is neither pricing nor packaging, such as a redirect.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="questions">
+  <h2>Design questions to answer before concepting</h2>
+  <p class="h2sub">Open questions, deliberately not resolved into patterns yet. Your answers steer what gets built at G1.</p>
+  <div class="q-list">
+    <details class="qq" open>
+      <summary><span class="qn">Q1</span>Is a staged wizard the right spine at all?</summary>
+      <div class="qbody">The current design assumes linear stages with a completion gate between each. But the object being built is not linear: cohort derives from variants, traffic depends on variant count, and people revisit constantly. An alternative is a single editable experiment object with areas you move between freely, validated at publish rather than at each step.
+      <span class="why">Bears on: D02, D13, R11</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q2</span>What earns the primary work surface?</summary>
+      <div class="qbody">Right now a read-only flowchart holds two thirds of the screen and the actual work happens in a third. The obvious correction is to flip it. The less obvious question is whether a persistent map is needed at all, or whether orientation can come from something lighter that costs no canvas.
+      <span class="why">Bears on: D02, D11</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q3</span>What is the preview actually for?</summary>
+      <div class="qbody">Two different jobs are being asked of one panel: showing the customer-facing checkout as prices change, and showing experiment structure and progress. These may want different surfaces, or the structural one may not need to be persistent at all.
+      <span class="why">Bears on: D07, D02</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q4</span>Should difference between variants be a mode, a view, or the default?</summary>
+      <div class="qbody">Currently difference is a review-time summary and a background tint. It could instead be a persistent comparison view, a toggle available anywhere, or the primary way variants are presented once more than one exists.
+      <span class="why">Bears on: D12, D16, R5</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q5</span>How deep should layered work surfaces go?</summary>
+      <div class="qbody">Google Tag Manager was named as the model: slide-outs that stack arbitrarily and return you to your place. Package, then plan, then price is already three levels. The question is whether depth is acceptable or whether the model should flatten.
+      <span class="why">Bears on: D11, R3</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q6</span>Does test type branch the flow, or configure a common one?</summary>
+      <div class="qbody">If choosing a type changes the fields and the setup model, the tool becomes several tools sharing a shell. If type is metadata over a common structure of variants, cohort and traffic, then redirects and page tests slot in without a rebuild.
+      <span class="why">Bears on: D06, R13</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q7</span>What is the dashboard optimising for?</summary>
+      <div class="qbody">A pulse check on running experiments and a portal into setup records are different products. The evidence is clear that the pulse read is what is missing, but analysis capability is post-MVP, which constrains how far this can go now.
+      <span class="why">Bears on: D01, D17, R16</span></div>
+    </details>
+    <details class="qq">
+      <summary><span class="qn">Q8</span>Is MCP a first-class surface or a later integration?</summary>
+      <div class="qbody">If automation is genuinely the primary interaction for power users, the underlying model should be designed as an API shape first and the UI as one client. That is an architectural stance with real consequences, not a feature to add later.
+      <span class="why">Bears on: D04, R14</span></div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <p><b>Next:</b> Phase 2 pattern research is already running. At G1 you will get three to four structurally different concepts as a clickable mixboard, each running the same scenario end to end: set up a Moshy AU semaglutide basic versus premium tiered test, two variants, one package that does not exist yet.</p>
+  <p style="margin-bottom:0"><b>Source:</b> <span class="mono">notes/01-requirements.md</span> · Figma <span class="mono">pS2pi2BR6d9xpE4hxvUWmA</span> · session transcript 28 Jul 2026</p>
+</footer>
+
+</div>
+
+<script>
+  const chips = document.querySelectorAll('#filters .chip');
+  const cards = document.querySelectorAll('#evgrid .ev');
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(x => x.setAttribute('aria-pressed','false'));
+    c.setAttribute('aria-pressed','true');
+    const f = c.dataset.f;
+    cards.forEach(card => {
+      card.classList.toggle('hide', !(f === 'all' || card.dataset.t === f));
+    });
+  }));
+</script>
+</body>
+</html>
