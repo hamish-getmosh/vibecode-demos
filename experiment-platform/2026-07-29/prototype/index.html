@@ -31,6 +31,7 @@ input,select{font:inherit}
 .nav{width:198px;background:var(--nav);color:#a9c2b8;padding:16px 12px;flex-shrink:0;display:flex;flex-direction:column}
 .nav .logo{color:#fff;font-weight:650;font-size:14px;margin-bottom:20px;padding:0 8px;display:flex;align-items:center;gap:8px}
 .nav .logo i{width:20px;height:20px;border-radius:6px;background:var(--accent);display:block}
+.nav .logo img{width:22px;height:22px;border-radius:6px;background:#fff;object-fit:contain;padding:1px}
 .nav a{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:7px;
   color:#9ab5aa;text-decoration:none;margin-bottom:2px;font-size:13px;cursor:pointer}
 .nav a:hover{background:#1a2f28;color:#d3e3dc}
@@ -68,6 +69,10 @@ input,select{font:inherit}
   border-radius:10px;box-shadow:0 4px 14px rgba(107,63,160,.28)}
 .btn.pub:hover{background:var(--purple-d)}
 .btn.pub:disabled{background:#d4c6e4;color:#f7f2fb;cursor:not-allowed;box-shadow:none}
+.btn.amp{background:var(--blue);color:#fff;font-weight:600}
+.btn.amp:hover{background:#2450a4}
+.btn.ampout{background:var(--blue-s);color:var(--blue);border-color:#c8d8f4;font-weight:600}
+.btn.ampout:hover{background:#e3ecfa}
 
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:4px 10px;border-radius:99px;
   background:#edf1ef;color:var(--ink2);font-weight:550;white-space:nowrap;border:1px solid transparent;
@@ -196,10 +201,35 @@ input[type=range]:active{cursor:grabbing}
 .splitrow{display:flex;align-items:center;gap:12px}
 .splitrow .sl{width:72px;font-weight:600;font-size:13px}
 .splitrow .sr{width:56px;text-align:right;font-weight:650}
-.mdebox{border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin-top:14px;background:#fbfcfc}
-.mdeout{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
-.mdeout .mo{flex:1;min-width:140px}
-.mdeout .mv{font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.goalstrip{border:1px solid var(--line);border-radius:9px;padding:13px 15px;margin-top:10px;background:#fbfcfc}
+.gsteps{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.gsteps .gs{background:#fff;border:1px solid var(--line);border-radius:99px;padding:5px 11px;
+  font-size:12.5px;font-weight:600}
+.gsteps .gs.on{border-color:var(--accent);color:var(--accent);background:var(--accent-s)}
+.gsteps .garr{color:var(--ink3);font-size:13px}
+.gfacts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gfacts .gf .mv{font-size:17px;font-weight:650;letter-spacing:-.02em}
+.gfacts .gf .ml{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.35}
+.mdebox{border:1px solid var(--line);border-radius:9px;padding:16px 17px;margin-top:14px;background:#fbfcfc}
+.mde-row{display:grid;grid-template-columns:1fr 1.15fr 1.15fr;gap:12px;margin:12px 0 10px}
+.mde-row .mm{padding:4px 2px}
+.mde-row .mm .mv{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.mde-row .mm .ml{font-size:11.5px;color:var(--ink3);margin-top:3px;font-weight:550}
+.mde-row .mm.lock .mv{color:var(--ink2);font-size:22px;font-weight:650}
+.mde-row .mm.lock .ml{color:var(--ink3)}
+.mde-row .mm.want .mv{color:var(--ink)}
+.mde-row .mm.want .ml{color:var(--ink2)}
+.mde-row .mm input.fld{font-size:22px;font-weight:700;letter-spacing:-.03em;padding:4px 8px;width:100%}
+.codeprev{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;font-weight:650;
+  letter-spacing:-.01em;padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:#fbfcfc;
+  margin-top:12px;line-height:1.45}
+.codeprev .dim{color:var(--ink3);font-weight:500}
+.codeprev .ok{color:var(--ink)}
+.codegroup{margin-bottom:12px}
+.codegroup .flab{margin-bottom:6px}
+.mdeout{display:flex;gap:14px;margin-top:4px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.mdeout .mo{flex:1;min-width:120px}
+.mdeout .mv{font-size:18px;font-weight:650;letter-spacing:-.02em;color:var(--ink2)}
 .mdeout .ml{font-size:11.5px;color:var(--ink3);margin-top:2px}
 
 /* ---------- launch checklist ---------- */
@@ -232,8 +262,59 @@ input[type=range]:active{cursor:grabbing}
 .pop-h{padding:15px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
 .pop-h .t{font-size:15px;font-weight:650}
 .pop-b{padding:14px 18px;overflow-y:auto;flex:1;min-height:0}
+.pop.wide{width:min(680px,100%)}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;
+  font:inherit;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
+.tabs button.on{border-color:var(--accent);color:var(--accent);background:var(--accent-s)}
+
+/* live pulse, brand marks */
+.pulse{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink2);
+  background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 8px;white-space:nowrap}
+.pulse i{width:7px;height:7px;border-radius:99px;background:var(--accent);position:relative;flex-shrink:0}
+.pulse i::after{content:'';position:absolute;inset:-4px;border-radius:99px;border:1.5px solid var(--accent);
+  opacity:.55;animation:ping 1.7s cubic-bezier(.2,.6,.3,1) infinite}
+.pulse.off i{background:var(--ink3)}
+.pulse.off i::after{display:none}
+@keyframes ping{0%{transform:scale(.6);opacity:.6}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+.bmark{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;
+  object-fit:contain;padding:2px;flex-shrink:0}
+.bmark.sm{width:22px;height:22px;border-radius:6px}
+
+/* agent chat sidebar */
+.chatbtn{position:fixed;right:18px;bottom:18px;z-index:390;border:0;border-radius:99px;cursor:pointer;
+  background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:600;padding:11px 16px;
+  box-shadow:0 10px 26px rgba(18,33,28,.26);display:flex;align-items:center;gap:8px}
+.chatbtn i{width:8px;height:8px;border-radius:99px;background:#7fd8b8}
+.chat{position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);z-index:400;background:#fff;
+  border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:-14px 0 44px rgba(18,33,28,.18);
+  animation:gin .18s cubic-bezier(.2,.85,.25,1)}
+.chat-h{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.chat-h .t{font-size:14px;font-weight:650}
+.chat-b{flex:1;overflow-y:auto;padding:14px 15px;display:flex;flex-direction:column;gap:11px;background:#fbfcfc}
+.msg{max-width:92%;font-size:13px;line-height:1.5;padding:9px 12px;border-radius:11px;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:4px}
+.msg.ag{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.tool{align-self:stretch;max-width:100%;background:#f3f6f5;border:1px dashed var(--line2);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink2);white-space:pre-wrap}
+.propose{background:#fff;border:1px solid var(--accent);border-radius:11px;padding:12px 13px;align-self:stretch}
+.propose .pt{font-size:12.5px;font-weight:650;margin-bottom:7px}
+.propose .prow{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:3px 0}
+.propose .prow span:first-child{color:var(--ink3)}
+.propose .prow span:last-child{font-weight:600;text-align:right}
+.propose .pacts{display:flex;gap:7px;margin-top:10px}
+.chat-f{border-top:1px solid var(--line);padding:11px 13px;background:#fff}
+.chat-f .qk{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.chat-f .qk button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 10px;
+  font:inherit;font-size:11.5px;color:var(--ink2);cursor:pointer}
+.chat-f .qk button:hover{border-color:var(--accent);color:var(--accent)}
+.chat-in{display:flex;gap:8px;align-items:flex-end}
+.chat-in textarea{flex:1;resize:none;border:1px solid var(--line2);border-radius:9px;padding:9px 10px;
+  font:inherit;font-size:13px;min-height:40px;max-height:120px;outline:none}
+.chat-in textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.08)}
 .pop-f{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
-  align-items:center;background:#fafbfb;flex-shrink:0}
+  align-items:center;background:#fafbfb;flex-shrink:0;gap:8px}
+.pop-f .btn.pri{margin-left:auto}
 .opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);
   border-radius:9px;margin-bottom:8px;cursor:pointer;transition:.12s;background:#fff}
 .opt:hover{border-color:var(--ink3);background:#f7f9f8}
@@ -246,15 +327,16 @@ input[type=range]:active{cursor:grabbing}
 .scrollist .opt{margin-bottom:8px}
 .scrollist .opt:last-child{margin-bottom:0}
 
-/* ---------- GTM slide over: stays inside the white stage, not over the nav ---------- */
-.gtm{position:absolute;inset:0;z-index:50;background:rgba(18,33,28,.22);display:flex;justify-content:flex-end}
-.gtm-panel{background:var(--bg);height:100%;display:flex;flex-direction:column;width:min(920px,92%);
+/* ---------- GTM full page panel: covers the whole stage, like Tag Manager ---------- */
+.gtm{position:absolute;inset:0;z-index:50;display:flex;justify-content:flex-end}
+.gtm-panel{background:var(--bg);height:100%;display:flex;flex-direction:column;width:100%;
   box-shadow:-12px 0 40px rgba(18,33,28,.2);animation:gin .2s cubic-bezier(.2,.85,.25,1)}
-@keyframes gin{from{transform:translateX(36px);opacity:.6}to{transform:none;opacity:1}}
+@keyframes gin{from{transform:translateX(48px);opacity:.4}to{transform:none;opacity:1}}
 .gtm-top{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;
   justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
 .gtm-body{flex:1;overflow-y:auto;padding:20px}
-.gtm-inner{max-width:100%;margin:0 auto;display:flex;gap:18px;align-items:flex-start}
+.gtm-inner{max-width:1060px;margin:0 auto;display:flex;gap:18px;align-items:flex-start}
+.gtm-inner.solo{max-width:760px;display:block}
 .crumb{font-size:11.5px;color:var(--ink3);display:flex;gap:6px;align-items:center;margin-bottom:3px}
 .crumb b{color:var(--ink2);font-weight:600}
 
@@ -276,6 +358,11 @@ input[type=range]:active{cursor:grabbing}
 .dose input{width:100%;background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;
   font-size:13px;outline:none;text-align:right}
 .dose input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
+.sfx{position:relative;flex-shrink:0}
+.sfx span{position:absolute;right:9px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:12.5px;
+  pointer-events:none}
+.sfx input{padding-right:23px;text-align:right;width:100%;font-weight:650}
+.sfx input::-webkit-outer-spin-button,.sfx input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .pfx{position:relative}
 .pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px}
 .pfx input{padding-left:22px;text-align:left}
@@ -443,17 +530,87 @@ const EXTRA_PROPS = [
   'Lifetime orders > 3','Lifetime value > $1000','Opted into marketing','Has referral code'
 ];
 
+/* funnel steps, in order. A conversion goal is one step to a later step.
+   wk = observed volume per week across the whole funnel, last 28 days. */
+const FUNNEL = [
+  {id:'lp_view',    label:'Landing page view',       wk:16700},
+  {id:'quiz_start', label:'Consult started',         wk:7100},
+  {id:'quiz_done',  label:'Consult submitted',       wk:4200},
+  {id:'outcome',    label:'Eligibility outcome sent', wk:3600},
+  {id:'plan_view',  label:'Plan assigned',           wk:3100},
+  {id:'checkout',   label:'Checkout started',        wk:1400},
+  {id:'purchase',   label:'Purchase',                wk:980},
+  {id:'activated',  label:'Subscription activated',  wk:910}
+];
+const stepIdx  = id => FUNNEL.findIndex(f => f.id === id);
+const funnelStep = id => FUNNEL[stepIdx(id)] || FUNNEL[0];
+
+let GOALS = {
+  goal_lp_purchase:{id:'goal_lp_purchase', name:'Landing page to purchase',
+    start:'lp_view', event:'purchase', window:14, baseline:null, uses:6,
+    note:'Default acquisition goal for landing page and quiz entry tests'},
+  goal_lp_plan:{id:'goal_lp_plan', name:'Landing page to plan assigned',
+    start:'lp_view', event:'plan_view', window:7, baseline:null, uses:4,
+    note:'Faster read, stops short of revenue'},
+  goal_quiz:{id:'goal_quiz', name:'Consult start to submitted',
+    start:'quiz_start', event:'quiz_done', window:3, baseline:null, uses:3,
+    note:'Screener completion only'},
+  goal_plan_purchase:{id:'goal_plan_purchase', name:'Plan assigned to purchase',
+    start:'plan_view', event:'purchase', window:14, baseline:null, uses:2,
+    note:'For tests that only change the plan page'}
+};
+
 /* =====================================================================
    STAGES
    ===================================================================== */
 const STAGES = [
-  {id:'setup',    label:'Setup'},
+  {id:'setup',    label:'Name'},
+  {id:'goal',     label:'Goal'},
   {id:'audience', label:'Audience'},
   {id:'variants', label:'Variants'},
   {id:'traffic',  label:'Traffic'},
   {id:'launch',   label:'Review'}
 ];
 const stageIdx = id => STAGES.findIndex(s => s.id === id);
+
+/* shorthand used in the experiment code: [005-MSY-AU-WL-LP] - [Redirect Test] */
+const CODE_BRAND = [
+  {id:'MSH', label:'MOSH', brand:'MOSH'},
+  {id:'MSY', label:'MOSHY', brand:'MOSHY'}
+];
+const CODE_GEO = [
+  {id:'AU', label:'Australia'},
+  {id:'NZ', label:'New Zealand'},
+  {id:'MY', label:'Malaysia'}
+];
+const CODE_VERT = [
+  {id:'WL', label:'Weight loss', vertical:'Weight loss'},
+  {id:'SX', label:'Sex', vertical:'Sex'},
+  {id:'HL', label:'Hair', vertical:'Hair'},
+  {id:'SK', label:'Skin', vertical:'Skin'}
+];
+const CODE_LOC = [
+  {id:'LP', label:'Landing page'},
+  {id:'QZ', label:'Quiz'},
+  {id:'CK', label:'Checkout'}
+];
+function expCode(e){
+  const c = e.code || {};
+  return `${e.key}-${c.brand}-${c.country}-${c.vertical}-${c.location}`;
+}
+function composeExpName(e){
+  const desc = String(e.descriptor || '').trim();
+  return desc ? `[${expCode(e)}] - [${desc}]` : '';
+}
+function syncExpName(){
+  S.exp.name = composeExpName(S.exp);
+  // keep audience in step with the code toggles
+  const brand = CODE_BRAND.find(x => x.id === S.exp.code.brand);
+  const vert = CODE_VERT.find(x => x.id === S.exp.code.vertical);
+  if(brand) S.exp.audience.brand = brand.brand;
+  if(S.exp.code.country) S.exp.audience.country = S.exp.code.country;
+  if(vert) S.exp.audience.vertical = vert.vertical;
+}
 
 let S = {
   view:'dashboard',
@@ -470,6 +627,8 @@ let S = {
   modal:null,
   exp:null,
   published:false,
+  retired:false,
+  chat:{open:false, input:'', msgs:[], pending:null},
   // global analysis settings: drive every result card
   conf:95,                    // significance / confidence level
   power:80
@@ -477,16 +636,22 @@ let S = {
 
 function newExperiment(){
   return {
-    key:'005', name:'', hypothesis:'',
+    key:'005',                // overwritten by nextExpKey() when creating a new draft
+    descriptor:'',
+    code:{brand:'MSY', country:'AU', vertical:'WL', location:'LP'},
+    name:'',                  // composed from key + code + descriptor
     variants:[],
     audience:{country:'AU', brand:'MOSHY', vertical:'Weight loss', customer:'New', extra:[]},
-    traffic:25,
+    goal:null,                // set in the Goal stage
+    traffic:100,
     evenSplit:true,
     splits:{},                // variantId -> share of enrolled traffic
-    mde:5,                    // desired minimum detectable effect, %
+    baselineCR:null,          // always inherits the goal's observed baseline
+    mde:10,                   // desired relative uplift, %
     lengthDays:21,
     envs:['staging'],         // can be staging, production, or both
-    aaAcknowledged:false
+    aaAcknowledged:false,
+    amp:{created:false, id:null}   // Amplitude dashboard for the analysis
   };
 }
 
@@ -521,9 +686,17 @@ function planTypes(v){
   const t = [...new Set(v.packages.filter(Boolean).flatMap(id => pkg(id) ? pkg(id).plans.map(p=>p.type) : []))];
   return t.length ? t.join(', ') : null;
 }
+function pkgCareIds(v){
+  return [...new Set(v.packages.filter(Boolean).flatMap(id => pkg(id) ? pkg(id).care : []))];
+}
+/* everything the customer gets: inside the packages plus anything attached straight to the variant */
 function careList(v){
-  const c = [...new Set(v.packages.filter(Boolean).flatMap(id => pkg(id) ? pkg(id).care : []))];
+  const c = [...new Set([...pkgCareIds(v), ...(v.care||[])])];
   return c.length ? c.map(id => CARE[id] ? CARE[id].name : id).join(', ') : null;
+}
+function directCareList(v){
+  const c = (v.care||[]).filter(id => CARE[id]);
+  return c.length ? c.map(id => CARE[id].name).join(', ') : null;
 }
 function pricingShape(v){
   const ps = v.packages.filter(Boolean).map(pkg).filter(Boolean);
@@ -536,7 +709,8 @@ const ATTRS = [
   {id:'plans', label:'Plans',         get:v=> planTypes(v)},
   {id:'price', label:'Price range',   get:v=> priceRange(v)},
   {id:'shape', label:'Pricing model', get:v=> pricingShape(v)},
-  {id:'care',  label:'Care products', get:v=> careList(v)}
+  {id:'care',  label:'Care products', get:v=> careList(v)},
+  {id:'careAdd', label:'Attached directly', get:v=> directCareList(v)}
 ];
 
 function diffRows(){
@@ -559,43 +733,156 @@ function aaVariants(){ return S.exp.variants.slice(1).filter(v => overrideCount(
 
 const ELIGIBLE = 16700;
 
-/* keep splits in sync with the variant list */
+/* --- conversion goals --- */
+function goalOf(id){ return GOALS[id || S.exp.goal] || null; }
+/* observed rate for a goal: volume at the goal event over volume at the start point */
+function goalObserved(g){
+  if(!g) return 0;
+  const s = funnelStep(g.start), t = funnelStep(g.event);
+  if(!s.wk) return 0;
+  return +((t.wk / s.wk) * 100).toFixed(2);
+}
+function goalBaseline(g){
+  if(!g) return 0;
+  const o = Number(g.baseline);
+  return g.baseline != null && Number.isFinite(o) && o > 0 ? o : goalObserved(g);
+}
+function goalPath(g){
+  if(!g) return 'No goal set';
+  return `${funnelStep(g.start).label} → ${funnelStep(g.event).label}`;
+}
+/* baseline used by the maths: the goal's baseline unless this experiment overrides it */
+function baseCR(){
+  const o = Number(S.exp.baselineCR);
+  if(S.exp.baselineCR != null && Number.isFinite(o) && o > 0) return o;
+  return goalBaseline(goalOf()) || 5;
+}
+const baseOverridden = () => S.exp.baselineCR != null;
+/* people entering the goal's start point each week, scaled by the audience */
+function entrantsWeekly(){
+  const g = goalOf();
+  const start = g ? funnelStep(g.start) : FUNNEL[0];
+  return Math.round(ELIGIBLE * (start.wk / FUNNEL[0].wk));
+}
+function goalIssues(f){
+  f = f || S.libDraft;
+  const out = [];
+  if(!String(f.name||'').trim()) out.push('Name the goal');
+  if(stepIdx(f.event) <= stepIdx(f.start)) out.push('The goal event must come after the start point');
+  if(!(Number(f.window) > 0)) out.push('Set a conversion window in days');
+  const names = Object.values(GOALS).filter(g => g.id !== f.editId).map(g => g.name.toLowerCase());
+  if(String(f.name||'').trim() && names.includes(f.name.trim().toLowerCase()))
+    out.push('A goal already has this name');
+  return out;
+}
+function blankGoalDraft(){
+  return {editId:null, name:'', start:'lp_view', event:'purchase', window:14, baseline:'', note:''};
+}
+function libGoalDraft(g){
+  return {editId:g.id, name:g.name, start:g.start, event:g.event,
+    window:g.window, baseline:g.baseline == null ? '' : String(g.baseline), note:g.note||''};
+}
+function persistGoal(f){
+  const id = f.editId || ('goal_' + Date.now());
+  const prev = GOALS[id];
+  const ov = Number(f.baseline);
+  GOALS[id] = {
+    id, name:f.name.trim(), start:f.start, event:f.event,
+    window:Number(f.window) || 14,
+    baseline: String(f.baseline||'').trim() !== '' && Number.isFinite(ov) && ov > 0 ? +ov.toFixed(2) : null,
+    note:f.note||'',
+    uses: prev ? prev.uses : 0,
+    isNew: prev ? prev.isNew : true
+  };
+  return {id, wasEdit: !!f.editId};
+}
+
+/* keep splits in sync with the variant list; always sum to 100 */
 function ensureSplits(){
   const e = S.exp, vs = e.variants;
   if(!vs.length){ e.splits = {}; return; }
-  if(e.evenSplit){
-    const each = Math.round((100 / vs.length) * 10) / 10;
-    const out = {};
-    vs.forEach((v,i)=>{
-      out[v.id] = i === vs.length-1
-        ? Math.round((100 - each*(vs.length-1))*10)/10
+  if(e.evenSplit || !Object.keys(e.splits).length){
+    rebalanceEven();
+    return;
+  }
+  vs.forEach(v=>{ if(e.splits[v.id] == null) e.splits[v.id] = 0; });
+  Object.keys(e.splits).forEach(id=>{ if(!vs.find(v=>v.id===id)) delete e.splits[id]; });
+  // normalise any drift so the sum is always exactly 100
+  const ids = vs.map(v=>v.id);
+  const sum = ids.reduce((a,id)=>a+Number(e.splits[id]||0),0);
+  if(Math.abs(sum - 100) > 0.01 && ids.length){
+    if(sum <= 0){ rebalanceEven(); return; }
+    ids.forEach((id,i)=>{
+      e.splits[id] = i === ids.length-1
+        ? Math.round((100 - ids.slice(0,-1).reduce((a,x)=>a+Number(e.splits[x]||0),0))*10)/10
+        : Math.round((Number(e.splits[id])/sum*100)*10)/10;
+    });
+  }
+}
+function rebalanceEven(){
+  const e = S.exp, vs = e.variants;
+  if(!vs.length){ e.splits = {}; return; }
+  const each = Math.round((100 / vs.length) * 10) / 10;
+  const out = {};
+  vs.forEach((v,i)=>{
+    out[v.id] = i === vs.length-1
+      ? Math.round((100 - each*(vs.length-1))*10)/10
+      : each;
+  });
+  e.splits = out;
+  e.evenSplit = true;
+}
+/* drag one arm; the others absorb the remainder so the sum stays 100 */
+function setSplitLinked(id, value){
+  const e = S.exp, vs = e.variants;
+  if(!vs.length) return;
+  e.evenSplit = false;
+  const others = vs.filter(v => v.id !== id);
+  const clamped = Math.max(0, Math.min(100, Math.round(Number(value))));
+  e.splits[id] = clamped;
+  const remain = 100 - clamped;
+  if(!others.length) return;
+  const prior = others.reduce((a,v)=>a+Number(e.splits[v.id]||0),0);
+  if(prior <= 0){
+    const each = Math.round((remain / others.length) * 10) / 10;
+    others.forEach((v,i)=>{
+      e.splits[v.id] = i === others.length-1
+        ? Math.round((remain - each*(others.length-1))*10)/10
         : each;
     });
-    e.splits = out;
   } else {
-    vs.forEach(v=>{ if(e.splits[v.id] == null) e.splits[v.id] = 0; });
-    Object.keys(e.splits).forEach(id=>{ if(!vs.find(v=>v.id===id)) delete e.splits[id]; });
+    others.forEach((v,i)=>{
+      e.splits[v.id] = i === others.length-1
+        ? Math.round((remain - others.slice(0,-1).reduce((a,x)=>a+Number(e.splits[x.id]||0),0))*10)/10
+        : Math.round((Number(e.splits[v.id])/prior*remain)*10)/10;
+    });
   }
 }
 function splitOf(id){ return S.exp.splits[id] ?? 0; }
 function splitSum(){ return Object.values(S.exp.splits).reduce((a,b)=>a+Number(b||0),0); }
+function absUplift(){
+  const m = Number(S.exp.mde);
+  return +((baseCR() * (Number.isFinite(m) ? m : 0) / 100).toFixed(2));
+}
 
 function perVariantWeekly(id){
   const share = id ? splitOf(id) : (100 / Math.max(S.exp.variants.length,1));
-  return Math.round(ELIGIBLE * (S.exp.traffic/100) * (share/100));
+  return Math.round(entrantsWeekly() * (S.exp.traffic/100) * (share/100));
 }
-/* days to detect the desired MDE at current traffic, for the smallest arm */
+const perVariantDaily = id => Math.round(perVariantWeekly(id) / 7);
+/* days to detect the desired relative uplift at current traffic, for the smallest arm */
 function daysToDetectNum(mde){
   const m = mde == null ? S.exp.mde : mde;
+  const p = baseCR() / 100;
   const n = Math.min(...(S.exp.variants.length
     ? S.exp.variants.map(v => perVariantWeekly(v.id))
     : [perVariantWeekly()]));
-  if(!n || !m) return Infinity;
-  // rough sample-size model: needed ~ (z_alpha + z_power)^2 * p*(1-p) * 2 / (mde)^2
-  // simplified to a constant scaled by mde and power/conf
+  if(!n || !m || !p) return Infinity;
   const zA = S.conf === 95 ? 1.96 : (S.conf === 90 ? 1.645 : 1.28);
   const zP = S.power === 90 ? 1.28 : (S.power === 80 ? 0.84 : 0.52);
-  const needed = Math.round(Math.pow(zA+zP,2) * 0.25 * 2 / Math.pow(m/100,2));
+  const delta = p * (m/100);
+  if(delta <= 0) return Infinity;
+  const needed = Math.round(Math.pow(zA+zP,2) * 2 * p * (1-p) / Math.pow(delta,2));
   return Math.max(1, Math.ceil(needed / n * 7));
 }
 function daysToDetect(mde){
@@ -606,7 +893,10 @@ function daysToDetect(mde){
 /* --- stage gating --- */
 function stageBlockers(id){
   const e = S.exp;
-  if(id === 'setup')    return e.name.trim() ? [] : ['Give the experiment a name'];
+  if(id === 'setup'){
+    return String(e.descriptor||'').trim() ? [] : ['Add a short descriptor'];
+  }
+  if(id === 'goal') return goalOf() ? [] : ['Pick a conversion goal'];
   if(id === 'audience') return [];
   if(id === 'variants'){
     const out = [];
@@ -614,12 +904,7 @@ function stageBlockers(id){
     else if(e.variants.some(v => !v.packages.filter(Boolean).length)) out.push('Every variant needs a package');
     return out;
   }
-  if(id === 'traffic'){
-    const out = [];
-    if(e.traffic <= 0) out.push('Allocate some traffic');
-    else if(Math.abs(splitSum() - 100) > 0.5) out.push('Variant shares must add to 100%');
-    return out;
-  }
+  if(id === 'traffic')  return e.traffic > 0 ? [] : ['Allocate some traffic'];
   return [];
 }
 function stageDone(id){
@@ -635,9 +920,18 @@ function checklist(){
   const aud = [e.audience.country, e.audience.brand, e.audience.vertical,
     e.audience.customer + ' customer', ...e.audience.extra].join(' · ');
 
-  out.push({ok: !!e.name.trim(), block:true, jump:'setup',
+  out.push({ok: !!String(e.descriptor||'').trim(), block:true, jump:'setup',
     t:'Named and keyed',
-    d: e.name.trim() ? `${e.name.trim()} · exp_${e.key}` : 'The name is still empty'});
+    d: String(e.descriptor||'').trim()
+      ? `${composeExpName(e)}`
+      : 'Add a short descriptor so the experiment has a name'});
+
+  const g = goalOf();
+  out.push({ok: !!g, block:true, jump:'goal',
+    t:'Conversion goal set',
+    d: g
+      ? `${g.name} · ${goalPath(g)} · ${g.window} day conversion window · baseline ${baseCR()}%`
+      : 'Without a goal there is no conversion rate to move'});
 
   out.push({ok:true, block:false, jump:'audience',
     t:'Audience defined',
@@ -669,19 +963,18 @@ function checklist(){
         : `${dc} of ${ATTRS.length} attributes diverge from the control`});
   }
 
-  const splitOk = e.traffic > 0 && Math.abs(splitSum() - 100) <= 0.5;
-  out.push({ok: splitOk, block:true, jump:'traffic',
+  out.push({ok: e.traffic > 0, block:true, jump:'traffic',
     t:'Traffic allocated',
     d: e.traffic > 0
       ? `${e.traffic}% enrolled · ${e.evenSplit ? 'even split' : 'custom split'} · ${e.variants.map(v=>`${v.name||v.id} ${splitOf(v.id)}%`).join(', ')||'no arms'}`
       : 'Nobody is enrolled'});
 
-  const d = daysToDetectNum(), fits = d <= e.lengthDays;
-  out.push({ok: fits, warn: !fits, block:false, jump:'traffic',
-    t:`${e.mde}% lift detectable within the run`,
+  const d = daysToDetectNum();
+  out.push({ok: d !== Infinity, warn: d === Infinity || d > e.lengthDays, block:false, jump:'traffic',
+    t:`Days needed to detect a ${e.mde}% lift`,
     d: d === Infinity
       ? 'Not enough traffic to detect anything'
-      : `About ${d} days at current traffic, against a ${e.lengthDays} day run`});
+      : `${d} days at current traffic · baseline ${baseCR()}% CR · +${absUplift()}pp absolute`});
 
   out.push({ok: e.envs.length > 0, block:true, jump:'launch',
     t:'Publish destination chosen',
@@ -722,6 +1015,11 @@ function goStage(id){
 function goNext(from){
   const i = stageIdx(from), b = stageBlockers(from);
   if(b.length){ toast(b[0] + '.'); return; }
+  if(from === 'setup'){
+    syncExpName();
+    save();
+    toast(`Named ${S.exp.name}.`);
+  }
   const nx = STAGES[i+1];
   if(!nx) return;
   S.maxStage = Math.max(S.maxStage, i+1);
@@ -733,14 +1031,14 @@ function goNext(from){
 
 function addVariant(){
   const id = nextLetter();
-  S.exp.variants.push({id, name:id, role:S.exp.variants.length?'test':'control', packages:[], inherits:null});
+  S.exp.variants.push({id, name:id, role:S.exp.variants.length?'test':'control', packages:[], care:[], inherits:null});
   ensureSplits();
   S.activeSection='variants'; save(); render();
   toast('Variant added. Traffic rebalanced.');
 }
 function cloneVariant(src){
   const id = nextLetter();
-  S.exp.variants.push({id, name:id, role:'test', packages:[...src.packages], inherits:src.id});
+  S.exp.variants.push({id, name:id, role:'test', packages:[...src.packages], care:[...(src.care||[])], inherits:src.id});
   S.exp.aaAcknowledged = false;
   ensureSplits();
   S.activeSection='variants'; save(); render();
@@ -757,7 +1055,9 @@ function removeVariant(v){
   save(); render(); toast('Variant removed.');
 }
 
-function openPackagePicker(variant, slotIndex){ S.modal = {type:'pkg', variant, slotIndex}; render(); }
+function openPackagePicker(variant, slotIndex, tab){
+  S.modal = {type:'pick', variant, slotIndex, tab: tab || 'packages'}; render();
+}
 function attachPackage(variant, slotIndex, id){
   if(slotIndex >= variant.packages.length) variant.packages.push(id);
   else variant.packages[slotIndex] = id;
@@ -766,10 +1066,24 @@ function attachPackage(variant, slotIndex, id){
   S.modal = null; save(); render();
   toast(`${library[id].name} attached to ${variant.name||variant.id}.`);
 }
+function attachCare(variant, id){
+  variant.care = variant.care || [];
+  if(!variant.care.includes(id)) variant.care.push(id);
+  S.exp.aaAcknowledged = false;
+  S.modal = null; save(); render();
+  toast(`${CARE[id].name} attached to ${variant.name||variant.id}.`);
+}
+function detachCare(variantId, id){
+  const v = S.exp.variants.find(x=>x.id===variantId);
+  if(!v) return;
+  v.care = (v.care||[]).filter(x=>x!==id);
+  S.exp.aaAcknowledged = false;
+  save(); render();
+}
 function openRulePicker(){ S.modal = {type:'rule'}; S.ruleQuery=''; render(); }
 
 /* =====================================================================
-   PACKAGE BUILDER  (GTM slide-over, only when creating from an experiment)
+   FULL PAGE BUILDER  (GTM style, one shell for packages, care products and goals)
    ===================================================================== */
 function blankPlan(type){ return {type, mode:'flat', price:'', tiers:{}}; }
 
@@ -777,7 +1091,7 @@ function openPackageBuilder(returnTo, existing){
   S.modal = null;
   if(existing){
     S.focus = {
-      returnTo, editId:existing.id,
+      builder:'package', returnTo, editId:existing.id,
       name:existing.name, region:existing.region, vertical:existing.vertical, medication:existing.medication,
       plans:existing.plans.map(p=>({type:p.type, mode:p.mode||'flat', price:p.price ?? '',
         tiers:Object.assign({}, p.tiers)})),
@@ -786,7 +1100,7 @@ function openPackageBuilder(returnTo, existing){
   } else {
     const inExp = returnTo && returnTo.variantId;
     S.focus = {
-      returnTo, editId:null, name:'',
+      builder:'package', returnTo, editId:null, name:'',
       region: inExp ? S.exp.audience.country : 'AU',
       vertical: inExp ? S.exp.audience.vertical : 'Weight loss',
       medication:'Semaglutide',
@@ -795,6 +1109,79 @@ function openPackageBuilder(returnTo, existing){
     };
   }
   render();
+}
+function openCareBuilder(returnTo, seed){
+  S.modal = null;
+  S.focus = Object.assign(blankLibCare(), seed || {}, {builder:'care', returnTo});
+  render();
+}
+function openGoalBuilder(returnTo, seed){
+  S.modal = null;
+  S.focus = Object.assign(blankGoalDraft(), seed || {}, {builder:'goal', returnTo});
+  render();
+}
+function focusIssues(){
+  const f = S.focus;
+  if(!f) return [];
+  if(f.builder === 'care') return careIssues(f);
+  if(f.builder === 'goal') return goalIssues(f);
+  return pkgIssues(f);
+}
+function saveFocus(){
+  const f = S.focus;
+  if(!f) return;
+  if(f.builder === 'care') return saveCareFocus();
+  if(f.builder === 'goal') return saveGoalFocus();
+  return savePackage();
+}
+function saveCareFocus(){
+  const f = S.focus, issues = careIssues(f);
+  if(issues.length){ toast(issues[0] + '.'); return; }
+  const id = f.editId || ('care_' + Date.now());
+  const prev = CARE[id];
+  CARE[id] = {id, name:f.name.trim(), kind:f.kind || 'Consult', mode:f.mode,
+    price: f.mode === 'addon' ? Number(f.price||0) : 0, note:(f.note||'').trim(),
+    isNew: prev ? prev.isNew : true};
+  const ret = f.returnTo;
+  S.focus = null;
+  if(ret && ret.variantId){
+    const v = S.exp.variants.find(x => x.id === ret.variantId);
+    if(v){
+      v.care = v.care || [];
+      if(!v.care.includes(id)) v.care.push(id);
+      S.exp.aaAcknowledged = false;
+      S.activeSection = 'variants';
+      save(); render();
+      toast(`Saved and attached to ${v.name||v.id}.`);
+      return;
+    }
+  }
+  if(ret && ret.pkgDraft){
+    // came from the package builder: hand the draft back with the product ticked
+    S.focus = ret.pkgDraft;
+    if(!S.focus.care.includes(id)) S.focus.care.push(id);
+    render(); toast(`${CARE[id].name} created and added to the package.`);
+    return;
+  }
+  S.view = 'library'; S.libTab = 'products'; S.libSel = id; S.libDraft = libCareDraft(CARE[id]);
+  render(); toast(`${CARE[id].name} saved.`);
+}
+function saveGoalFocus(){
+  const f = S.focus, issues = goalIssues(f);
+  if(issues.length){ toast(issues[0] + '.'); return; }
+  const {id} = persistGoal(f);
+  const ret = f.returnTo;
+  S.focus = null;
+  if(ret && ret.setPrimary){
+    GOALS[id].uses = Math.max(GOALS[id].uses, 1);
+    S.exp.goal = id;
+    S.activeSection = 'goal';
+    save(); render();
+    toast(`${GOALS[id].name} created and set as the primary goal.`);
+    return;
+  }
+  S.view = 'library'; S.libTab = 'goals'; S.libSel = id; S.libDraft = libGoalDraft(GOALS[id]);
+  render(); toast(`${GOALS[id].name} saved.`);
 }
 
 function pkgIssues(f){
@@ -855,12 +1242,16 @@ function removePlan(i){ S.focus.plans.splice(i,1); render(); }
 function setPlanMode(i, mode){
   const p = S.focus.plans[i];
   if(p.mode === mode) return;
-  if(mode === 'tiered' && p.price !== ''){
-    doses(S.focus.medication).forEach(d => p.tiers[d] = p.price);
+  if(mode === 'tiered'){
+    const seed = p.price !== '' && p.price != null ? p.price
+      : (planPrices(p).length ? String(Math.min(...planPrices(p))) : '');
+    doses(S.focus.medication).forEach(d => {
+      if(p.tiers[d] == null || p.tiers[d] === '') p.tiers[d] = seed;
+    });
   }
   if(mode === 'flat'){
     const ps = planPrices(p);
-    if(ps.length && p.price === '') p.price = Math.min(...ps);
+    if(ps.length && (p.price === '' || p.price == null)) p.price = Math.min(...ps);
   }
   p.mode = mode; render();
 }
@@ -905,6 +1296,14 @@ function saveLibDetail(){
     S.libDraft = libPkgDraft(library[id]);
     render();
     toast(`${library[id].name} saved.`);
+  } else if(S.libTab === 'goals'){
+    const f = S.libDraft, issues = goalIssues(f);
+    if(issues.length){ toast(issues[0] + '.'); return; }
+    const {id} = persistGoal(f);
+    S.libSel = id;
+    S.libDraft = libGoalDraft(GOALS[id]);
+    render();
+    toast(`${GOALS[id].name} saved.`);
   } else {
     const f = S.libDraft, issues = careIssues(f);
     if(issues.length){ toast(issues[0] + '.'); return; }
@@ -922,8 +1321,18 @@ function saveLibDetail(){
 
 function publish(){
   if(!S.exp.envs.length){ toast('Pick at least one destination.'); return; }
-  S.published = true; S.maxStage = STAGES.length-1; render();
+  S.published = true; S.retired = false; S.maxStage = STAGES.length-1; render();
   toast('Published to ' + S.exp.envs.join(' and ') + '.');
+}
+function retireExperiment(){
+  if(!S.published) return;
+  S.retired = true; save(); render();
+  toast('Retired. Nobody new is being enrolled.');
+}
+function createAmpDashboard(){
+  S.exp.amp = {created:true, id:'dash_' + S.exp.key};
+  save(); render();
+  toast(`Amplitude dashboard created with ${ampCharts().length} charts.`);
 }
 
 /* =====================================================================
@@ -1003,36 +1412,75 @@ function cardStats(d){
 function openRun(d){
   S.exp = newExperiment();
   S.exp.key = d.key;
-  S.exp.name = `${d.cc||'AU'} ${d.bk==='MOSH'?'Mosh':'Moshy'}: ${d.t.toLowerCase()}`;
+  S.exp.descriptor = d.t;
+  S.exp.code = {
+    brand: (d.bk||'MOSHY') === 'MOSH' ? 'MSH' : 'MSY',
+    country: d.cc || 'AU',
+    vertical: CODE_VERT.find(v => v.vertical === (d.vert||'Weight loss'))?.id || 'WL',
+    location: 'CK'
+  };
   S.exp.audience = {country:d.cc||'AU', brand:d.bk||'MOSHY', vertical:d.vert||'Weight loss',
     customer:'New', extra:[]};
-  S.exp.traffic = d.traffic || 25;
+  S.exp.goal = 'goal_lp_purchase';
+  S.exp.traffic = d.traffic || 100;
   S.exp.lengthDays = d.of;
+  syncExpName();
   S.exp.variants = [
-    {id:'A', name:'A', role:'control', packages:[d.a||'pkg_basic'], inherits:null},
-    {id:'B', name:'B', role:'test',    packages:[d.v||'pkg_maint'], inherits:'A'}
+    {id:'A', name:'A', role:'control', packages:[d.a||'pkg_basic'], care:[], inherits:null},
+    {id:'B', name:'B', role:'test',    packages:[d.v||'pkg_maint'], care:['dietitian'], inherits:'A'}
   ];
+  S.exp.amp = {created:true, id:'dash_' + d.key};
   ensureSplits();
   S.maxStage = STAGES.length - 1;
   S.published = true;
+  S.retired = false;
   S.view = 'experiment';
   S.activeSection = 'variants';
   render();
 }
+function nextExpKey(){
+  const nums = [...RUNS, ...FINISHED].map(d => Number(d.key)).filter(n => Number.isFinite(n));
+  return String(Math.max(4, ...nums) + 1).padStart(3, '0');
+}
 function newExperimentFlow(){
   S.exp = newExperiment();
+  S.exp.key = nextExpKey();
+  syncExpName();
   S.published = false;
+  S.retired = false;
   S.maxStage = 0;
   S.activeSection = 'setup';
   S.view = 'experiment';
   render();
-  toast('Start with Setup. Later stages unlock as you go.');
+  toast('Start with the name. Later stages unlock as you go.');
 }
 
 /* =====================================================================
    RENDER
    ===================================================================== */
 const esc = (s) => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* real brand marks rather than a coloured letter */
+function brandMark(brand, cls){
+  const mosh = String(brand||'').toUpperCase() === 'MOSH';
+  return `<img class="bmark ${cls||''}" src="assets/${mosh?'mosh-mark.jpg':'moshy-mark.png'}"
+    alt="${mosh?'MOSH':'MOSHY'}">`;
+}
+/* Amplitude is where the analysis lives */
+function ampButton(){
+  const a = S.exp.amp || {};
+  return a.created
+    ? `<a class="btn ampout" href="https://app.amplitude.com" target="_blank" rel="noopener">View in Amplitude</a>`
+    : `<button class="btn amp" data-act="amp-create">Create Amplitude dashboard</button>`;
+}
+function ampCharts(){
+  const g = goalOf();
+  return [
+    g ? `${g.name} conversion by variant` : 'Primary goal conversion by variant',
+    'Funnel from ' + (g ? funnelStep(g.start).label.toLowerCase() : 'entry') + ' to purchase',
+    'Enrolment per day by variant',
+    'Revenue per enrolled user'
+  ];
+}
 const pc = (n, dp) => (n > 0 ? '+' : '') + Number(n).toFixed(dp === undefined ? 1 : dp) + '%';
 
 function render(){
@@ -1045,9 +1493,13 @@ function render(){
   app.innerHTML = S.view === 'dashboard' ? viewDashboard()
                 : S.view === 'library'   ? viewLibrary()
                 :                          viewExperiment();
-  // GTM builder only appears when creating a package from an experiment
-  if(S.focus && S.view === 'experiment') app.querySelector('.stage').insertAdjacentHTML('beforeend', viewPkgBuilder());
-  if(S.modal)  app.insertAdjacentHTML('beforeend', viewModal());
+  // full page GTM style builder, over the stage in whichever view opened it
+  if(S.focus){
+    const stage = app.querySelector('.stage');
+    if(stage) stage.insertAdjacentHTML('beforeend', viewBuilder());
+  }
+  if(S.modal) app.insertAdjacentHTML('beforeend', viewModal());
+  app.insertAdjacentHTML('beforeend', S.chat.open ? viewChat() : chatLauncher());
   bind();
 
   if(fid){
@@ -1063,13 +1515,15 @@ function render(){
 function nav(active){
   const lib = S.view === 'library';
   return `<div class="nav">
-    <div class="logo"><i></i>Commerce</div>
+    <div class="logo"><img src="assets/mosh-mark.jpg" alt="MOSH">Commerce</div>
     <a data-act="go-dash" class="${active==='exp'?'on':''}">Experiments <span class="count">${RUNS.length}</span></a>
     <div class="grp">Library</div>
     <a data-act="go-lib" data-t="packages" class="${lib&&S.libTab==='packages'?'on':''}">
       Care packages <span class="count">${Object.keys(library).length}</span></a>
     <a data-act="go-lib" data-t="products" class="${lib&&S.libTab==='products'?'on':''}">
       Care products <span class="count">${Object.keys(CARE).length}</span></a>
+    <a data-act="go-lib" data-t="goals" class="${lib&&S.libTab==='goals'?'on':''}">
+      Conversion goals <span class="count">${Object.keys(GOALS).length}</span></a>
     <div class="foot"><span class="av">SK</span><span>Sarah K.</span></div>
   </div>`;
 }
@@ -1104,13 +1558,17 @@ function resultCard(d, i, kind){
   const pos = v => ((v - dmin) / (dmax - dmin)) * 100;
   const mid = pos(d.abs);
   const bandL = pos(st.lo), bandR = pos(st.hi);
+  const live = kind !== 'fin';
+  const daily = Math.round(d.weekly / 7);
   return `<div class="dc" data-act="open-run" data-k="${kind}" data-i="${i}">
     <div class="dc-h">
-      <span class="brand" style="background:${d.bg}">M</span>
+      ${brandMark(d.bk)}
       <div style="min-width:0;flex:1">
         <div class="dct">${esc(d.t)}</div>
         <div class="k" style="margin-top:2px">${d.b} · day ${d.day} of ${d.of} · ${d.metric}</div>
       </div>
+      <span class="pulse ${live?'':'off'}" title="${live?'Enrolling now':'Finished'}">
+        <i></i>${daily.toLocaleString()} / day</span>
     </div>
 
     <div class="tiles">
@@ -1134,7 +1592,7 @@ function resultCard(d, i, kind){
 
     <div class="statbar ${state.bar}">${state.label}</div>
     <div class="dcf">
-      <span class="k">${d.weekly.toLocaleString()} / week</span>
+      <span class="k">${live ? 'Enrolling · ' : 'Closed · '}${d.traffic || 25}% of traffic</span>
       <span class="k mono">p = ${st.p.toFixed(3)}</span>
     </div>
   </div>`;
@@ -1163,7 +1621,7 @@ function viewDashboard(){
     body = `<div class="dgrid">
       <div class="dc" data-act="new">
         <div class="dc-h">
-          <span class="brand" style="background:#8b9691">M</span>
+          ${brandMark('MOSHY')}
           <div style="min-width:0;flex:1">
             <div class="dct">Untitled experiment</div>
             <div class="k" style="margin-top:2px">Draft · created today · exp_005</div>
@@ -1202,35 +1660,39 @@ function viewDashboard(){
 
 /* ---------- library master-detail ---------- */
 function viewLibrary(){
-  const packages = S.libTab === 'packages';
+  const tab = S.libTab;
+  const packages = tab === 'packages', goals = tab === 'goals';
+  const store = packages ? library : (goals ? GOALS : CARE);
   if(!S.libDraft){
-    if(packages){
-      const first = Object.values(library)[0];
-      S.libSel = S.libSel || (first && first.id);
-      S.libDraft = S.libSel ? libPkgDraft(library[S.libSel]) : blankLibPkg();
-    } else {
-      const first = Object.values(CARE)[0];
-      S.libSel = S.libSel || (first && first.id);
-      S.libDraft = S.libSel ? libCareDraft(CARE[S.libSel]) : blankLibCare();
-    }
+    const first = Object.values(store)[0];
+    S.libSel = S.libSel || (first && first.id);
+    if(packages) S.libDraft = S.libSel ? libPkgDraft(library[S.libSel]) : blankLibPkg();
+    else if(goals) S.libDraft = S.libSel ? libGoalDraft(GOALS[S.libSel]) : blankGoalDraft();
+    else S.libDraft = S.libSel ? libCareDraft(CARE[S.libSel]) : blankLibCare();
   }
+  const title = packages ? 'Care packages' : (goals ? 'Conversion goals' : 'Care products');
+  const meta = packages
+    ? 'Click a row to edit it. Changes save to every experiment that references it.'
+    : goals
+      ? 'A goal is a start point and a goal event. Every experiment picks one as its primary measure.'
+      : 'Click a row to edit it. A product can appear in many packages.';
+  const newLabel = packages ? 'New package' : (goals ? 'New goal' : 'New care product');
+  const listLabel = packages ? 'Packages' : (goals ? 'Goals' : 'Products');
   return `<div class="shell">${nav('lib')}
     <div class="stage">
       <div class="top">
-        <div class="lhs"><h1>${packages?'Care packages':'Care products'}</h1>
-          <div class="meta">${packages
-            ? 'Click a row to edit it. Changes save to every experiment that references it.'
-            : 'Click a row to edit it. A product can appear in many packages.'}</div></div>
+        <div class="lhs"><h1>${title}</h1>
+          <div class="meta">${meta}</div></div>
         <div class="rhs">
-          <button class="btn pri" data-act="lib-new">${packages?'New package':'New care product'}</button>
+          <button class="btn pri" data-act="lib-new">${newLabel}</button>
         </div>
       </div>
       <div class="content"><div class="content-inner">
         <div class="lib-split">
           <div class="lib-list">
             <div class="lib-list-h">
-              <span class="v">${packages?'Packages':'Products'}</span>
-              <span class="k">${packages?Object.keys(library).length:Object.keys(CARE).length}</span>
+              <span class="v">${listLabel}</span>
+              <span class="k">${Object.keys(store).length}</span>
             </div>
             <div class="lib-rows">
               ${packages
@@ -1238,6 +1700,12 @@ function viewLibrary(){
                     data-act="lib-sel" data-id="${P.id}">
                     <div class="rn">${esc(P.name)} ${P.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
                     <div class="rm">${P.region} · ${P.medication} · ${P.uses||0} experiments</div>
+                  </div>`).join('')
+                : goals
+                ? Object.values(GOALS).map(g=>`<div class="lib-row ${S.libSel===g.id?'on':''}"
+                    data-act="lib-sel" data-id="${g.id}">
+                    <div class="rn">${esc(g.name)} ${g.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
+                    <div class="rm">${esc(goalPath(g))} · ${goalBaseline(g)}% · ${g.uses||0} experiments</div>
                   </div>`).join('')
                 : Object.values(CARE).map(c=>`<div class="lib-row ${S.libSel===c.id?'on':''}"
                     data-act="lib-sel" data-id="${c.id}">
@@ -1248,12 +1716,100 @@ function viewLibrary(){
           </div>
           <div class="lib-detail">
             ${S.libDraft
-              ? (packages ? libPkgDetail() : libCareDetail())
+              ? (packages ? libPkgDetail() : goals ? libGoalDetail() : libCareDetail())
               : `<div class="lib-empty">Select a row, or create a new one.</div>`}
           </div>
         </div>
       </div></div>
     </div></div>`;
+}
+
+function goalFields(f, pfx){
+  // pfx keeps field ids unique between the library editor and the in-experiment modal
+  const startWk = funnelStep(f.start).wk, evWk = funnelStep(f.event).wk;
+  const observed = stepIdx(f.event) > stepIdx(f.start) && startWk
+    ? +((evWk / startWk) * 100).toFixed(2) : null;
+  const scaled = Math.round(ELIGIBLE * (startWk / FUNNEL[0].wk));
+  return `
+    <div class="row" style="margin-bottom:12px">
+      <div style="flex:1">
+        <div class="flab">Start point
+          <span class="info" data-t="The denominator. Only people who reach this step can convert, so it also sets how many people per week are measurable.">i</span></div>
+        <select class="sel" data-${pfx}s style="width:100%">
+          ${FUNNEL.map(s=>`<option value="${s.id}" ${f.start===s.id?'selected':''}>${esc(s.label)}</option>`).join('')}
+        </select>
+      </div>
+      <div style="flex:1">
+        <div class="flab">Goal event
+          <span class="info" data-t="The numerator. The step you want more people to reach.">i</span></div>
+        <select class="sel" data-${pfx}e style="width:100%">
+          ${FUNNEL.map(s=>`<option value="${s.id}" ${f.event===s.id?'selected':''}>${esc(s.label)}</option>`).join('')}
+        </select>
+      </div>
+      <div style="max-width:140px">
+        <div class="flab">Conversion window</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input class="fld" type="number" min="1" max="90" step="1" value="${esc(f.window)}"
+            data-${pfx}w data-fid="${pfx}-win" style="width:72px">
+          <span class="k">days</span>
+        </div>
+      </div>
+    </div>
+    <div class="goalstrip" style="margin-top:0">
+      <div class="gsteps">
+        <span class="gs">Start · ${esc(funnelStep(f.start).label)}</span>
+        <span class="garr">→</span>
+        <span class="gs ${observed!==null?'on':''}">Goal · ${esc(funnelStep(f.event).label)}</span>
+      </div>
+      <div class="gfacts">
+        <div class="gf"><div class="mv">${scaled.toLocaleString()}</div>
+          <div class="ml">reach the start point each week</div></div>
+        <div class="gf"><div class="mv">${observed===null?'—':observed+'%'}</div>
+          <div class="ml">observed CR, last 28 days</div></div>
+        <div class="gf"><div class="mv">${String(f.baseline||'').trim()!=='' ? f.baseline+'%' : 'observed'}</div>
+          <div class="ml">baseline used for planning</div></div>
+      </div>
+      ${observed===null?`<div class="k" style="margin-top:9px;color:var(--hot)">
+        The goal event needs to sit after the start point in the funnel.</div>`:''}
+    </div>`;
+}
+
+function libGoalDetail(){
+  const f = S.libDraft, issues = goalIssues(f);
+  const refs = f.editId ? (GOALS[f.editId].uses || 0) : 0;
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <div class="k">${f.editId ? 'Editing goal' : 'New goal'}</div>
+        <div style="font-size:16px;font-weight:650;margin-top:2px">${esc(f.name)||'Untitled goal'}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        ${refs > 1 ? `<span class="chip a">used by ${refs} experiments</span>` : ''}
+        <span id="libReady">${readyChip(issues)}</span>
+        <button class="btn pri" data-act="lib-save" ${issues.length?'disabled':''}>Save</button>
+      </div>
+    </div>
+    <div class="card" style="padding:15px 16px;margin-bottom:12px">
+      <div class="flab">Goal name</div>
+      <input class="fld" data-ld="name" data-fid="ld-gname" value="${esc(f.name)}"
+        placeholder="Landing page to purchase">
+    </div>
+    <div class="card" style="padding:15px 16px;margin-bottom:12px">
+      ${goalFields(f, 'ldg')}
+    </div>
+    <div class="card" style="padding:15px 16px">
+      <div class="flab">Baseline override
+        <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
+      <div style="display:flex;align-items:center;gap:6px;max-width:170px">
+        <input class="fld" type="number" min="0.1" max="90" step="0.01" value="${esc(f.baseline)}"
+          data-ld="baseline" data-fid="ld-gbase" placeholder="observed">
+        <span class="k">%</span>
+      </div>
+      <div class="k" style="margin-top:6px">Leave empty to keep using the observed rate.</div>
+      <div class="flab" style="margin-top:13px">Short description</div>
+      <input class="fld" data-ld="note" data-fid="ld-gnote" value="${esc(f.note)}"
+        placeholder="When to use this goal">
+    </div>`;
 }
 
 function libPkgDetail(){
@@ -1383,19 +1939,27 @@ function libCareDetail(){
 /* ---------- experiment record ---------- */
 function viewExperiment(){
   const e = S.exp;
+  const statusChip = S.retired
+    ? '<span class="chip">Retired</span>'
+    : (S.published ? `<span class="chip g">Live on ${e.envs.join(' + ')}</span>` : '<span class="chip out">Draft</span>');
   return `<div class="shell">${nav('exp')}
     <div class="stage">
       <div class="top">
-        <div class="lhs">
-          <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'}
-            ${S.published ? `<span class="chip g">Live on ${e.envs.join(' + ')}</span>` : `<span class="chip out">Draft</span>`}</h1>
-          <div class="meta">
-            <span class="mono">exp_${e.key}</span>
-            <span>stage ${stageIdx(S.activeSection)+1} of ${STAGES.length}</span>
-            <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
+        <div class="lhs" style="display:flex;gap:11px;align-items:flex-start">
+          ${brandMark(e.audience.brand)}
+          <div>
+            <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'} ${statusChip}</h1>
+            <div class="meta">
+              <span class="mono">exp_${e.key}</span>
+              <span>stage ${stageIdx(S.activeSection)+1} of ${STAGES.length}</span>
+              <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
+            </div>
           </div>
         </div>
         <div class="rhs">
+          ${S.published ? ampButton() : ''}
+          ${S.published && !S.retired
+            ? `<button class="btn sec" data-act="retire">Retire</button>` : ''}
           <button class="btn sec" data-act="go-dash">Save and exit</button>
         </div>
       </div>
@@ -1443,6 +2007,7 @@ function lockedSection(s, i){
 
 function sectionFor(id){
   if(id === 'setup')    return secSetup();
+  if(id === 'goal')     return secGoal();
   if(id === 'audience') return secAudience();
   if(id === 'variants') return secVariants();
   if(id === 'traffic')  return secTraffic();
@@ -1452,6 +2017,7 @@ function sectionFor(id){
 function nextLabel(id){
   const nx = STAGES[stageIdx(id)+1];
   if(!nx) return '';
+  if(id === 'setup') return 'Next: Goal';
   if(nx.id === 'launch') return 'Review details';
   return `Next: ${nx.label}`;
 }
@@ -1472,31 +2038,105 @@ function secHead(id, right){
   </div>`;
 }
 
-const setupRight = () => S.exp.name.trim()
-  ? '<span class="chip g">named</span>'
+const setupRight = () => {
+  const b = stageBlockers('setup');
+  return b.length
+    ? `<span class="chip out">${b.length} required field${b.length===1?'':'s'}</span>`
+    : '<span class="chip g">ready to name</span>';
+};
+const goalRight = () => goalOf()
+  ? '<span class="chip g">goal set</span>'
   : '<span class="chip out">1 required field</span>';
+
+function codeToggleRow(label, opts, field, tip){
+  const cur = S.exp.code[field];
+  return `<div class="codegroup">
+    <div class="flab">${label}${tip?` <span class="info" data-t="${tip}">i</span>`:''}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${opts.map(o=>`<button class="chip pick ${cur===o.id?'on':''}"
+        data-act="code" data-f="${field}" data-v="${o.id}">${esc(o.label)}
+        <span class="k" style="margin-left:2px">${o.id}</span></button>`).join('')}
+    </div>
+  </div>`;
+}
 
 function secSetup(){
   const e = S.exp;
+  const preview = composeExpName(e);
+  const hasDesc = !!String(e.descriptor||'').trim();
   return `<div class="stg ${S.activeSection==='setup'?'act':''}" id="sec-setup">
     ${secHead('setup', setupRight())}
-    <div class="row" style="margin-bottom:13px">
-      <div style="flex:2">
-        <div class="flab">Experiment name</div>
-        <input class="fld" data-f="name" data-fid="e-name" value="${esc(e.name)}"
-          placeholder="Region Brand: what is being tested">
+    <div class="k" style="margin-bottom:14px">
+      The key is issued automatically. Brand, geo, vertical and location build the code.
+      The descriptor is the short human name.</div>
+
+    <div class="row" style="margin-bottom:14px">
+      <div style="max-width:110px">
+        <div class="flab">Key
+          <span class="info" data-t="Auto issued, like a Jira ticket number. Used in Amplitude and GrowthBook.">i</span></div>
+        <div class="fld lock mono" style="text-align:center;font-weight:700">${esc(e.key)}</div>
       </div>
-      <div style="max-width:130px">
-        <div class="flab">Key <span class="info" data-t="Stable ID used in Amplitude and GrowthBook.">i</span></div>
-        <input class="fld mono" data-f="key" data-fid="e-key" value="${esc(e.key)}">
+      <div style="flex:1">
+        <div class="flab">Descriptor
+          <span class="info" data-t="The longhand name. Example: Redirect Test.">i</span></div>
+        <input class="fld" data-f="descriptor" data-fid="e-desc" value="${esc(e.descriptor)}"
+          placeholder="Redirect Test">
       </div>
     </div>
-    <div>
-      <div class="flab">Hypothesis <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
-      <input class="fld" data-f="hypothesis" data-fid="e-hyp" value="${esc(e.hypothesis)}"
-        placeholder="Paste a Notion link, or describe what you expect">
+
+    ${codeToggleRow('Brand', CODE_BRAND, 'brand')}
+    ${codeToggleRow('Geo', CODE_GEO, 'country')}
+    ${codeToggleRow('Vertical', CODE_VERT, 'vertical')}
+    ${codeToggleRow('Location', CODE_LOC, 'location',
+      'Where the experiment runs in the funnel: landing page, quiz, or checkout.')}
+
+    <div class="flab" style="margin-top:4px">Experiment name</div>
+    <div class="codeprev" id="namePrev">
+      <span class="ok">[${esc(expCode(e))}]</span>
+      <span class="dim"> - </span>
+      <span class="${hasDesc?'ok':'dim'}">[${hasDesc?esc(e.descriptor):'Descriptor'}]</span>
     </div>
+    <div class="k" style="margin-top:7px">This becomes the experiment title when you continue.</div>
     ${secFoot('setup')}
+  </div>`;
+}
+
+/* the conversion goal defines both ends of the rate: start point and goal event */
+function secGoal(){
+  const e = S.exp, g = goalOf();
+  return `<div class="stg ${S.activeSection==='goal'?'act':''}" id="sec-goal">
+    ${secHead('goal', goalRight())}
+    <div class="k" style="margin-bottom:13px">
+      Pick what a conversion is for this experiment. The start point is the denominator,
+      so it also decides how many people per week can be measured.</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select class="sel" data-goal style="flex:1">
+        <option value="" ${!e.goal?'selected':''}>Select a conversion goal</option>
+        ${Object.values(GOALS).map(x=>`<option value="${x.id}" ${e.goal===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}
+      </select>
+      <button class="btn sec" data-act="new-goal">New goal</button>
+    </div>
+
+    ${g ? `<div class="goalstrip">
+      <div class="gsteps">
+        <span class="gs">Start · ${esc(funnelStep(g.start).label)}</span>
+        <span class="garr">→</span>
+        <span class="gs on">Goal · ${esc(funnelStep(g.event).label)}</span>
+      </div>
+      <div class="gfacts">
+        <div class="gf"><div class="mv">${entrantsWeekly().toLocaleString()}</div>
+          <div class="ml">reach the start point each week</div></div>
+        <div class="gf"><div class="mv">${goalBaseline(g)}%</div>
+          <div class="ml">baseline CR, last 28 days</div></div>
+        <div class="gf"><div class="mv">${g.window} days</div>
+          <div class="ml">conversion window</div></div>
+      </div>
+      ${g.note ? `<div class="k" style="margin-top:9px">${esc(g.note)}</div>` : ''}
+      <div class="k" style="margin-top:9px">
+        Edit the definition in <a data-act="go-lib" data-t="goals" style="cursor:pointer;color:var(--accent);font-weight:600">Conversion goals</a>.
+      </div>
+    </div>` : `<div class="k" style="margin-top:10px;color:var(--hot)">Pick a goal so the platform knows what a conversion is.</div>`}
+    ${secFoot('goal')}
   </div>`;
 }
 
@@ -1598,6 +2238,22 @@ function cardView(v){
       }).join('')}
       <button class="slot add" data-act="pick" data-v="${v.id}" data-i="${v.packages.length}">+ add package</button>
     </div>
+    ${careRow(v)}
+  </div>`;
+}
+
+/* care products attached straight to a variant, on top of whatever the packages include */
+function careRow(v){
+  const direct = (v.care||[]).filter(id => CARE[id]);
+  const inherited = pkgCareIds(v).filter(id => CARE[id] && !direct.includes(id));
+  return `<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px;
+    padding-top:10px;border-top:1px dashed var(--line)">
+    <span class="k" style="margin-right:2px">Care products</span>
+    ${direct.map(id=>`<button class="chip rm" data-act="rm-care" data-v="${v.id}" data-c="${id}">
+      ${esc(CARE[id].name)} <span class="x">×</span></button>`).join('')}
+    ${inherited.map(id=>`<span class="chip out" title="Comes with an attached package">
+      ${esc(CARE[id].name)} · in package</span>`).join('')}
+    <button class="chip out" style="cursor:pointer" data-act="pick-care" data-v="${v.id}">+ add care product</button>
   </div>`;
 }
 
@@ -1634,6 +2290,8 @@ function gridView(){
         <div class="grid-actions">
           <button class="slot add" style="font-size:11.5px;padding:5px 9px"
             data-act="pick" data-v="${v.id}" data-i="${v.packages.length}">+ package</button>
+          <button class="slot add" style="font-size:11.5px;padding:5px 9px"
+            data-act="pick-care" data-v="${v.id}">+ care product</button>
           ${v.role!=='control'?`<button class="btn danger xs" data-act="rm-variant" data-v="${v.id}">Remove</button>`:''}
         </div>
       </div>`;
@@ -1658,17 +2316,22 @@ function funnelInner(){
 }
 
 function secTraffic(){
-  const e = S.exp;
+  const e = S.exp, g = goalOf();
   ensureSplits();
   const n = Math.max(e.variants.length,1);
   const d = daysToDetectNum();
+  const abs = absUplift();
   return `<div class="stg ${S.activeSection==='traffic'?'act':''}" id="sec-traffic">
     ${secHead('traffic', `<span class="chip out">${e.evenSplit?'even split':'custom split'} · ${n} arm${n===1?'':'s'}</span>`)}
+    <div class="k" style="margin-bottom:12px">
+      ${g ? `Measuring <b style="color:var(--ink)">${esc(g.name)}</b> · ${esc(goalPath(g))} · ${entrantsWeekly().toLocaleString()} reach the start point each week.`
+          : 'No conversion goal set. Go back to Setup.'}
+    </div>
 
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px">
       <div style="flex:1">
         <div class="flab">Total enrolled traffic
-          <span class="info" data-t="Share of eligible traffic that enters the experiment at all.">i</span></div>
+          <span class="info" data-t="Share of the people reaching the goal start point who enter the experiment at all.">i</span></div>
         <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic" data-fid="e-traffic">
       </div>
       <div style="width:96px">
@@ -1681,35 +2344,59 @@ function secTraffic(){
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;margin-bottom:6px">
       <span class="v" style="font-size:13px">Traffic per variant</span>
       <button class="chip pick ${e.evenSplit?'on':''}" data-act="toggle-even">
-        ${e.evenSplit?'Even split · click to customise':'Custom split · click to rebalance evenly'}</button>
+        ${e.evenSplit?'Even split':'Rebalance evenly'}</button>
     </div>
+    <div class="k" style="margin-bottom:8px">Drag or type a share. The other arms absorb the difference so they always add to 100%.</div>
     <div class="splits" id="tSplits">
       ${e.variants.map(v=>`<div class="splitrow">
         <span class="sl">${esc(v.name||v.id)}</span>
         <input type="range" min="0" max="100" step="1" value="${splitOf(v.id)}"
-          data-split="${v.id}" data-fid="sp-${v.id}" ${e.evenSplit?'disabled':''}
-          style="flex:1;opacity:${e.evenSplit?0.6:1}">
-        <span class="sr" id="spv-${v.id}">${splitOf(v.id)}%</span>
-        <span class="k" style="width:110px;text-align:right">${perVariantWeekly(v.id).toLocaleString()} / wk</span>
+          data-split="${v.id}" data-fid="sp-${v.id}" style="flex:1">
+        <div class="sfx" style="width:74px">
+          <input class="fld" type="number" min="0" max="100" step="1" value="${splitOf(v.id)}"
+            data-splitn="${v.id}" data-fid="spn-${v.id}">
+          <span>%</span>
+        </div>
+        <span class="k" id="spw-${v.id}" style="width:104px;text-align:right">${perVariantDaily(v.id).toLocaleString()} / day</span>
       </div>`).join('')}
-      ${!e.evenSplit && Math.abs(splitSum()-100)>0.5
-        ? `<div class="k" style="color:var(--hot)">Shares add to ${splitSum().toFixed(0)}%. They need to add to 100%.</div>` : ''}
     </div>
 
     <div class="mdebox">
-      <div class="flab">Desired minimum detectable effect
-        <span class="info" data-t="The smallest relative lift you want to be able to detect. Lower MDEs need more traffic or a longer run.">i</span></div>
-      <div style="display:flex;gap:12px;align-items:center">
-        <input type="range" min="1" max="20" step="1" value="${e.mde}" data-f="mde" data-fid="e-mde" style="flex:1">
-        <div class="fld lock" id="mdePct" style="width:72px;text-align:center;font-weight:650">${e.mde}%</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div class="flab" style="margin:0">Minimum detectable effect
+          <span class="info" data-t="The smallest lift you want the experiment to be able to detect, given baseline conversion, traffic, significance and power.">i</span></div>
+        <span class="chip out">planning preview</span>
       </div>
+      <div class="k" style="margin:6px 0 0">
+        Nothing in this box is saved to the experiment. It is a sanity check on whether the traffic above can
+        find a lift this size, so you can size the run before you publish.</div>
+
+      <div class="mde-row">
+        <div class="mm lock">
+          <div class="mv" id="mdeBase">${baseCR()}%</div>
+          <div class="ml">Baseline CR
+            <span class="info" data-t="${g ? 'Locked to the observed rate for '+g.name+', last 28 days.' : 'Set a conversion goal first.'}">i</span></div>
+        </div>
+        <div class="mm want">
+          <div class="mv" id="mdePct">${e.mde}%</div>
+          <div class="ml">Desired relative uplift</div>
+        </div>
+        <div class="mm want">
+          <div class="mv" id="mdeAbs">+${abs} pp</div>
+          <div class="ml" id="mdeAbsHint">Desired absolute · ${baseCR()}% → ${(baseCR() + abs).toFixed(2)}%</div>
+        </div>
+      </div>
+      <input type="range" min="1" max="20" step="1" value="${e.mde}" data-f="mde" data-fid="e-mde">
+
       <div class="mdeout">
-        <div class="mo"><div class="mv" id="mdeDays">${d===Infinity?'—':d}</div>
-          <div class="ml">days to detect a ${e.mde}% lift</div></div>
-        <div class="mo"><div class="mv" id="mdeRun">${e.lengthDays}</div>
-          <div class="ml">planned run length (days)</div></div>
-        <div class="mo"><div class="mv" id="mdeFit" style="color:${d<=e.lengthDays?'var(--accent)':'var(--hot)'}">${d===Infinity?'No':(d<=e.lengthDays?'Fits':'Short')}</div>
-          <div class="ml">${d===Infinity?'not enough traffic':(d<=e.lengthDays?'detectable within the run':'needs more traffic or time')}</div></div>
+        <div class="mo">
+          <div class="mv" id="mdeDays">${d===Infinity?'—':d}</div>
+          <div class="ml">days needed to detect</div>
+        </div>
+        <div class="mo">
+          <div class="mv" id="mdeSample">${d===Infinity?'—':Math.min(...(e.variants.length?e.variants.map(v=>perVariantWeekly(v.id)):[perVariantWeekly()])).toLocaleString()}</div>
+          <div class="ml">people / week in the smallest arm</div>
+        </div>
       </div>
     </div>
     ${secFoot('traffic')}
@@ -1722,14 +2409,39 @@ function secLaunch(){
   const outstanding = cks.filter(c=>!c.ok).length;
 
   if(S.published){
+    const a = e.amp || {};
     return `<div class="stg ${S.activeSection==='launch'?'act':''}" id="sec-launch">
-      ${secHead('launch', `<span class="chip g">Live on ${e.envs.join(' + ')}</span>`)}
-      <div class="banner g">
+      ${secHead('launch', S.retired
+        ? '<span class="chip">Retired</span>'
+        : `<span class="chip g">Live on ${e.envs.join(' + ')}</span>`)}
+      <div class="banner ${S.retired?'a':'g'}">
         <div style="flex:1">
-          <div class="bt">Published to ${e.envs.join(' and ')}</div>
-          <div class="bd">Amplitude schema payload emitted for dashboard generation.</div>
+          <div class="bt">${S.retired
+            ? 'Retired, no longer enrolling'
+            : 'Published to ' + e.envs.join(' and ')}</div>
+          <div class="bd">${S.retired
+            ? 'Assignments stopped. History and the Amplitude dashboard stay available.'
+            : 'Analysis runs in Amplitude against the conversion goal.'}</div>
         </div>
+        ${!S.retired ? `<button class="btn sec" data-act="retire">Retire experiment</button>` : ''}
       </div>
+
+      <div style="border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin-bottom:14px;background:#fbfcfc">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px">
+          <div>
+            <div class="h5">Analysis in Amplitude</div>
+            <div class="k" style="margin-top:3px">${a.created
+              ? `Dashboard <span class="mono">${esc(a.id)}</span> is live with ${ampCharts().length} charts.`
+              : 'No dashboard yet. Generate one from the goals and variants on this experiment.'}</div>
+          </div>
+          ${ampButton()}
+        </div>
+        ${a.created ? `<div style="display:flex;flex-direction:column;gap:6px">
+          ${ampCharts().map(c=>`<div style="display:flex;gap:8px;align-items:center;font-size:12.5px">
+            <span class="dot"></span>${esc(c)}</div>`).join('')}
+        </div>` : ''}
+      </div>
+
       <div class="ckl">${cks.map(c=>ckRow(c)).join('')}</div>
     </div>`;
   }
@@ -1796,16 +2508,10 @@ const readyChip = (issues) => issues.length
   ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
   : `<span class="chip g">ready</span>`;
 
-function viewPkgBuilder(){
-  const f = S.focus, ret = f.returnTo, issues = pkgIssues();
-  const inExp = ret && ret.variantId;
-  const crumb = inExp
-    ? `Variant <b>${esc((S.exp.variants.find(v=>v.id===ret.variantId)||{}).name||ret.variantId)}</b> · new package`
-    : `Care packages`;
-  const title = f.editId ? esc(f.name || 'Care package') : 'New care package';
-
-  return `<div class="gtm" data-act="focus-cancel">
-    <div class="gtm-panel" data-stop>
+/* one shell, three bodies */
+function gtmShell({crumb, title, issues, saveLabel, body, solo}){
+  return `<div class="gtm">
+    <div class="gtm-panel">
       <div class="gtm-top">
         <div>
           <div class="crumb">${crumb}</div>
@@ -1815,10 +2521,122 @@ function viewPkgBuilder(){
         <div style="display:flex;gap:8px;align-items:center">
           <button class="btn sec" data-act="focus-cancel">Cancel</button>
           <button class="btn pri" data-act="focus-save" ${issues.length?'disabled':''}
-            title="${issues.length?issues.join(' · '):''}">Save and attach</button>
+            title="${issues.length?issues.join(' · '):''}">${saveLabel}</button>
         </div>
       </div>
-      <div class="gtm-body"><div class="gtm-inner">
+      <div class="gtm-body"><div class="gtm-inner ${solo?'solo':''}">${body}</div></div>
+    </div>
+  </div>`;
+}
+
+function viewBuilder(){
+  const b = S.focus.builder;
+  if(b === 'care') return viewCareBuilder();
+  if(b === 'goal') return viewGoalBuilder();
+  return viewPkgBuilder();
+}
+
+function builderCrumb(what){
+  const ret = S.focus.returnTo;
+  if(ret && ret.variantId){
+    const v = S.exp.variants.find(x=>x.id===ret.variantId) || {};
+    return `Variant <b>${esc(v.name||ret.variantId)}</b> · new ${what}`;
+  }
+  if(ret && ret.setPrimary) return `Experiment <b>${esc(S.exp.name.trim()||'untitled')}</b> · new ${what}`;
+  if(ret && ret.pkgDraft) return `Care package <b>${esc(ret.pkgDraft.name||'untitled')}</b> · new ${what}`;
+  if(ret && ret.fromChat) return `Assistant · new ${what}`;
+  return `Library · new ${what}`;
+}
+const focusSaveLabel = () => {
+  const ret = S.focus.returnTo;
+  if(ret && ret.variantId) return 'Save and attach';
+  if(ret && ret.setPrimary) return 'Save and use';
+  if(ret && ret.pkgDraft) return 'Save and add';
+  return 'Save';
+};
+
+function viewCareBuilder(){
+  const f = S.focus, issues = careIssues(f);
+  return gtmShell({
+    crumb: builderCrumb('care product'),
+    title: f.editId ? esc(f.name || 'Care product') : 'New care product',
+    issues, saveLabel: focusSaveLabel(), solo:true,
+    body: `
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        <div class="flab">Name</div>
+        <input class="fld" data-ff="name" data-fid="c-name" value="${esc(f.name)}" placeholder="Sleep coaching call">
+        <div class="flab" style="margin-top:13px">Type</div>
+        <div style="display:flex;gap:6px">
+          ${['Consult','Product','Test'].map(k=>`<button class="chip pick ${f.kind===k?'on':''}"
+            data-act="focus-care-kind" data-k="${k}">${k}</button>`).join('')}
+        </div>
+      </div>
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        <div class="flab">Pricing</div>
+        <div style="display:flex;gap:6px;margin-bottom:11px">
+          <button class="chip pick ${f.mode==='included'?'on':''}" data-act="focus-care-mode" data-m="included">Included in package</button>
+          <button class="chip pick ${f.mode==='addon'?'on':''}" data-act="focus-care-mode" data-m="addon">Priced add-on</button>
+        </div>
+        ${f.mode==='addon' ? `
+          <div style="max-width:150px">
+            <div class="flab">Add-on price</div>
+            <div class="pfx"><span>$</span>
+              <input value="${esc(f.price)}" data-ff="price" data-fid="c-price" placeholder="79" inputmode="numeric"></div>
+          </div>` : `<div class="k">Bundled into the plan price.</div>`}
+      </div>
+      <div class="card" style="padding:15px 16px">
+        <div class="flab">Short description</div>
+        <input class="fld" data-ff="note" data-fid="c-note" value="${esc(f.note)}" placeholder="30 minutes, monthly">
+      </div>`
+  });
+}
+
+function viewGoalBuilder(){
+  const f = S.focus, issues = goalIssues(f);
+  return gtmShell({
+    crumb: builderCrumb('conversion goal'),
+    title: f.editId ? esc(f.name || 'Conversion goal') : 'New conversion goal',
+    issues, saveLabel: focusSaveLabel(), solo:true,
+    body: `
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        <div class="flab">Goal name</div>
+        <input class="fld" data-gdf="name" data-fid="gd-name" value="${esc(f.name)}"
+          placeholder="Landing page to purchase">
+        <div class="k" style="margin-top:7px">A goal is a start point and a goal event. The start point is the denominator,
+          so it also decides how many people per week can be measured.</div>
+      </div>
+      <div class="card" style="padding:15px 16px;margin-bottom:12px">
+        ${goalFields(f, 'gd')}
+      </div>
+      <div class="card" style="padding:15px 16px">
+        <div class="row">
+          <div style="max-width:190px">
+            <div class="flab">Baseline override
+              <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <input class="fld" type="number" min="0.1" max="90" step="0.01" value="${esc(f.baseline)}"
+                data-gdf="baseline" data-fid="gd-base" placeholder="observed">
+              <span class="k">%</span>
+            </div>
+            <div class="k" style="margin-top:6px">Leave empty to keep the observed rate.</div>
+          </div>
+          <div style="flex:1">
+            <div class="flab">Short description</div>
+            <input class="fld" data-gdf="note" data-fid="gd-note" value="${esc(f.note)}"
+              placeholder="When to use this goal">
+          </div>
+        </div>
+      </div>`
+  });
+}
+
+function viewPkgBuilder(){
+  const f = S.focus, issues = pkgIssues();
+  return gtmShell({
+    crumb: builderCrumb('care package'),
+    title: f.editId ? esc(f.name || 'Care package') : 'New care package',
+    issues, saveLabel: focusSaveLabel(),
+    body: `
         <div style="flex:1;min-width:0">
           <div class="card" style="padding:15px 16px;margin-bottom:12px">
             <div class="row" style="margin-bottom:12px">
@@ -1850,13 +2668,12 @@ function viewPkgBuilder(){
             <div style="display:flex;gap:7px;flex-wrap:wrap">
               ${Object.values(CARE).map(c=>`<button class="chip pick ${f.care.includes(c.id)?'on':''}"
                 data-act="care" data-c="${c.id}">${esc(c.name)}</button>`).join('')}
+              <button class="chip out" style="cursor:pointer" data-act="new-care-in-pkg">+ new care product</button>
             </div>
           </div>
         </div>
-        <div class="phone" id="pv">${pkgPreview()}</div>
-      </div></div>
-    </div>
-  </div>`;
+        <div class="phone" id="pv">${pkgPreview()}</div>`
+  });
 }
 
 function planEditor(p, i, f){
@@ -1925,32 +2742,54 @@ function pkgPreview(){
 
 function viewModal(){
   const m = S.modal;
-  if(m.type === 'pkg'){
-    const used = m.variant.packages.filter(Boolean);
+  if(m.type === 'pick'){
+    const v = m.variant, packages = m.tab !== 'care';
+    const usedPkg = v.packages.filter(Boolean);
+    const usedCare = v.care || [];
+    const inherited = pkgCareIds(v);
     return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop>
       <div class="pop-h">
-        <div class="t">Attach a package to ${esc(m.variant.name||m.variant.id)}</div>
-        <div class="k" style="margin-top:3px">Pick from the library, or create a new one.</div>
+        <div class="t">Add to ${esc(v.name||v.id)}</div>
+        <div class="k" style="margin-top:3px">Pick from the library, or create a new one in the full editor.</div>
       </div>
       <div class="pop-b">
-        <div class="scrollist">
-        ${Object.values(library).map(p=>{
-          const dis = used.includes(p.id);
-          return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="attach" data-p="${p.id}"`}>
-            <div><div class="on">${esc(p.name)}</div>
-              <div class="od">${p.plans.map(x=>esc(planLabel(x))).join(' · ')}
-                ${dis?' · already attached':` · used in ${p.uses||0} experiments`}</div></div>
-            ${dis?'<span class="chip out">attached</span>':'<span class="chip">Attach</span>'}
-          </div>`;
-        }).join('')}
+        <div class="tabs">
+          <button class="${packages?'on':''}" data-act="pick-tab" data-t="packages">
+            Care packages ${Object.keys(library).length}</button>
+          <button class="${packages?'':'on'}" data-act="pick-tab" data-t="care">
+            Care products ${Object.keys(CARE).length}</button>
         </div>
-        <div class="opt create" data-act="build-pkg" style="margin-top:8px;margin-bottom:0">
-          <div><div class="on">+ Create a new package</div>
-            <div class="od" style="color:var(--accent)">Opens over the experiment, saves and attaches</div></div>
+        <div class="scrollist">
+        ${packages
+          ? Object.values(library).map(p=>{
+              const dis = usedPkg.includes(p.id);
+              return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="attach" data-p="${p.id}"`}>
+                <div><div class="on">${esc(p.name)}</div>
+                  <div class="od">${p.plans.map(x=>esc(planLabel(x))).join(' · ')}
+                    ${dis?' · already attached':` · used in ${p.uses||0} experiments`}</div></div>
+                ${dis?'<span class="chip out">attached</span>':'<span class="chip">Attach</span>'}
+              </div>`;
+            }).join('')
+          : Object.values(CARE).map(c=>{
+              const dis = usedCare.includes(c.id);
+              const inPkg = !dis && inherited.includes(c.id);
+              return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="attach-care" data-c="${c.id}"`}>
+                <div><div class="on">${esc(c.name)}</div>
+                  <div class="od">${c.kind} · ${c.mode==='included'?'Included':'Add-on '+money(c.price)}
+                    ${dis?' · already attached':(inPkg?' · already comes with a package':'')}</div></div>
+                ${dis?'<span class="chip out">attached</span>':'<span class="chip">Attach</span>'}
+              </div>`;
+            }).join('')}
+        </div>
+        <div class="opt create" data-act="${packages?'build-pkg':'build-care'}" style="margin-top:8px;margin-bottom:0">
+          <div><div class="on">+ Create a new ${packages?'package':'care product'}</div>
+            <div class="od" style="color:var(--accent)">Opens the full page editor, saves and attaches</div></div>
         </div>
       </div>
       <div class="pop-f">
-        <span class="k">${Object.keys(library).length} packages in the library</span>
+        <span class="k">${packages
+          ? Object.keys(library).length + ' packages in the library'
+          : Object.keys(CARE).length + ' care products in the library'}</span>
         <button class="btn sec" data-act="close-modal">Cancel</button>
       </div>
     </div></div>`;
@@ -1971,6 +2810,220 @@ function viewModal(){
     </div></div>`;
   }
   return '';
+}
+
+/* =====================================================================
+   ASSISTANT
+   A chat sidebar that reads a plain request, proposes a record against the
+   library schema, and writes it through the same functions the UI uses.
+   In production each proposal maps to one MCP tool call.
+   ===================================================================== */
+const CHAT_TOOLS = {
+  package:'commerce.createCarePackage',
+  care:'commerce.createCareProduct',
+  goal:'commerce.createConversionGoal'
+};
+const CHAT_QUICK = [
+  'Create an NZ tirzepatide package at $459 monthly and $419 for 3 months',
+  'Add a care product called Sleep coaching call, add-on $69',
+  'New goal from consult submitted to purchase, 14 day window'
+];
+
+function chatLauncher(){
+  return `<button class="chatbtn" data-act="chat-open"><i></i>Assistant</button>`;
+}
+
+function chatGreeting(){
+  return {role:'ag', text:'I can create care packages, care products and conversion goals in the library. '
+    + 'Describe what you need, for example "AU semaglutide premium, $479 monthly, includes dietitian consult". '
+    + 'I show the record first and only write it when you say go.'};
+}
+
+function viewChat(){
+  const c = S.chat;
+  const msgs = c.msgs.length ? c.msgs : [chatGreeting()];
+  return `<div class="chat">
+    <div class="chat-h">
+      <span class="pulse"><i></i>MCP connected</span>
+      <div class="t" style="margin-left:2px">Assistant</div>
+      <button class="btn sec xs" style="margin-left:auto" data-act="chat-reset">Clear</button>
+      <button class="btn sec xs" data-act="chat-close">Close</button>
+    </div>
+    <div class="chat-b" id="chatBody">
+      ${msgs.map(m=> m.role === 'tool'
+        ? `<div class="msg tool">${esc(m.text)}</div>`
+        : `<div class="msg ${m.role}">${esc(m.text)}</div>`).join('')}
+      ${c.pending ? chatProposal(c.pending) : ''}
+    </div>
+    <div class="chat-f">
+      <div class="qk">
+        ${CHAT_QUICK.map((q,i)=>`<button data-act="chat-quick" data-i="${i}">${esc(q.slice(0,34))}…</button>`).join('')}
+      </div>
+      <div class="chat-in">
+        <textarea data-chat data-fid="chat-in" placeholder="Describe a package, care product or goal">${esc(c.input)}</textarea>
+        <button class="btn pri" data-act="chat-send">Send</button>
+      </div>
+      <div class="k" style="margin-top:7px">Writes go through ${Object.values(CHAT_TOOLS).map(t=>`<span class="mono">${t}</span>`).join(', ')}.</div>
+    </div>
+  </div>`;
+}
+
+function chatProposal(p){
+  return `<div class="propose">
+    <div class="pt">${esc(p.title)}</div>
+    ${p.rows.map(r=>`<div class="prow"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join('')}
+    ${p.issues.length
+      ? `<div class="k" style="margin-top:8px;color:var(--hot)">${esc(p.issues.join(' · '))}</div>` : ''}
+    <div class="pacts">
+      <button class="btn pri sm" data-act="chat-apply" ${p.issues.length?'disabled':''}>Create it</button>
+      <button class="btn sec sm" data-act="chat-edit">Open in builder</button>
+      <button class="btn sec sm" data-act="chat-discard">Discard</button>
+    </div>
+  </div>`;
+}
+
+/* --- tiny intent parser: enough to feel real without pretending to be an LLM --- */
+function parseChat(text){
+  const t = text.toLowerCase();
+  const money = [...t.matchAll(/\$\s?(\d[\d,]*)/g)].map(m=>Number(m[1].replace(/,/g,'')));
+  const region = (t.match(/\b(au|nz|my)\b/) || [])[1];
+  const med = t.includes('tirzepatide') ? 'Tirzepatide'
+    : t.includes('contrave') ? 'Contrave'
+    : t.includes('semaglutide') ? 'Semaglutide' : null;
+  const named = (text.match(/called\s+"?([^",.]+)"?/i) || text.match(/"([^"]+)"/) || [])[1];
+
+  const isGoal = /\bgoal\b|conversion rate|detect|start point/.test(t);
+  // a package wins whenever the request names a package, a medication or a plan length
+  const packageSignal = /\bpackage\b|\bplan\b|premium|starter|standard|maintenance/.test(t)
+    || !!med || PLAN_TYPES.some(pt => t.includes(pt.toLowerCase()));
+  const isCare = !packageSignal
+    && /care product|add-?on|consult|coaching|blood|panel|shake|\btest\b/.test(t);
+  const uniqueName = (base, taken) => {
+    const used = taken.map(x => x.toLowerCase());
+    if(!used.includes(base.toLowerCase())) return base;
+    let i = 2;
+    while(used.includes(`${base} ${i}`.toLowerCase())) i++;
+    return `${base} ${i}`;
+  };
+
+  if(isGoal){
+    const step = (needle, fallback) => {
+      const hit = FUNNEL.find(s => t.includes(s.label.toLowerCase()));
+      return hit ? hit.id : fallback;
+    };
+    // find the two funnel steps mentioned, in order of appearance
+    const hits = FUNNEL.map(s=>({id:s.id, at:t.indexOf(s.label.toLowerCase())}))
+      .filter(x=>x.at >= 0).sort((a,b)=>a.at-b.at);
+    const start = hits[0] ? hits[0].id : step(null,'lp_view');
+    let ev = hits[1] ? hits[1].id : 'purchase';
+    if(stepIdx(ev) <= stepIdx(start)) ev = FUNNEL[Math.min(stepIdx(start)+1, FUNNEL.length-1)].id;
+    const win = Number((t.match(/(\d+)\s*day/) || [])[1]) || 14;
+    const draft = Object.assign(blankGoalDraft(), {
+      name: named || uniqueName(`${funnelStep(start).label} to ${funnelStep(ev).label.toLowerCase()}`,
+        Object.values(GOALS).map(g=>g.name)),
+      start, event:ev, window:win, note:'Created from the assistant'
+    });
+    return {
+      kind:'goal', draft,
+      title:'Conversion goal to create',
+      rows:[['name', draft.name], ['start point', funnelStep(start).label],
+        ['goal event', funnelStep(ev).label], ['window', win + ' days'],
+        ['baseline', goalObserved({start, event:ev}) + '% observed']],
+      issues: goalIssues(draft)
+    };
+  }
+
+  if(isCare){
+    const addon = /add-?on|\$/.test(t);
+    const kind = /consult|call|coaching/.test(t) ? 'Consult' : (/test|panel|blood/.test(t) ? 'Test' : 'Product');
+    const draft = Object.assign(blankLibCare(), {
+      name: named || (kind === 'Consult' ? 'New consult' : 'New care product'),
+      kind, mode: addon ? 'addon' : 'included',
+      price: addon && money.length ? String(money[0]) : '',
+      note:'Created from the assistant'
+    });
+    return {
+      kind:'care', draft,
+      title:'Care product to create',
+      rows:[['name', draft.name], ['type', kind],
+        ['pricing', addon ? 'Add-on ' + (money.length?('$'+money[0]):'no price yet') : 'Included in package']],
+      issues: careIssues(draft)
+    };
+  }
+
+  // default: a care package
+  const types = PLAN_TYPES.filter(pt => t.includes(pt.toLowerCase().replace('-',' ')) || t.includes(pt.toLowerCase()));
+  const plans = (types.length ? types : ['Monthly']).map((type,i)=>{
+    const price = money[i] != null ? String(money[i]) : (money[0] != null ? String(money[0]) : '');
+    return {type, mode:'flat', price, tiers:{}};
+  });
+  const reg = (region || S.exp.audience.country || 'AU').toUpperCase();
+  const draft = {
+    builder:'package', returnTo:null, editId:null,
+    name: named || uniqueName(
+      `${reg} ${med || 'Semaglutide'} ${/premium/.test(t)?'Premium':/starter/.test(t)?'Starter':'Standard'}`,
+      Object.values(library).map(P=>P.name)),
+    region: reg, vertical: S.exp.audience.vertical || 'Weight loss',
+    medication: med || 'Semaglutide',
+    plans,
+    care: Object.values(CARE).filter(c => t.includes(c.name.toLowerCase().split(' ')[0])).map(c=>c.id)
+  };
+  return {
+    kind:'package', draft,
+    title:'Care package to create',
+    rows:[['name', draft.name], ['region', draft.region], ['medication', draft.medication],
+      ['plans', plans.map(p=>p.type + (p.price?` $${p.price}`:' unpriced')).join(', ')],
+      ['care products', draft.care.length ? draft.care.map(id=>CARE[id].name).join(', ') : 'none']],
+    issues: pkgIssues(draft)
+  };
+}
+
+function chatSend(){
+  const c = S.chat;
+  const text = c.input.trim();
+  if(!text) return;
+  if(!c.msgs.length) c.msgs.push(chatGreeting());
+  c.msgs.push({role:'me', text});
+  const p = parseChat(text);
+  c.msgs.push({role:'tool', text:`→ ${CHAT_TOOLS[p.kind]}.preview\n${JSON.stringify(chatPayload(p), null, 1)}`});
+  c.msgs.push({role:'ag', text: p.issues.length
+    ? `Here is the record. ${p.issues[0]} before I can write it, or open the builder to finish it.`
+    : 'Here is the record I will write. Check it and tell me to create it.'});
+  c.pending = p;
+  c.input = '';
+  render();
+}
+function chatPayload(p){
+  const d = p.draft;
+  if(p.kind === 'goal') return {name:d.name, start:d.start, event:d.event, window:Number(d.window)};
+  if(p.kind === 'care') return {name:d.name, kind:d.kind, mode:d.mode, price:Number(d.price||0)};
+  return {name:d.name, region:d.region, medication:d.medication,
+    plans:d.plans.map(x=>({type:x.type, price:Number(x.price||0)})), care:d.care};
+}
+function chatApply(){
+  const c = S.chat, p = c.pending;
+  if(!p || p.issues.length) return;
+  let name = '', where = '';
+  if(p.kind === 'goal'){ const {id} = persistGoal(p.draft); name = GOALS[id].name; where = 'Conversion goals'; }
+  else if(p.kind === 'care'){
+    const id = 'care_' + Date.now();
+    CARE[id] = {id, name:p.draft.name.trim(), kind:p.draft.kind, mode:p.draft.mode,
+      price: p.draft.mode === 'addon' ? Number(p.draft.price||0) : 0, note:p.draft.note||'', isNew:true};
+    name = CARE[id].name; where = 'Care products';
+  } else { const {id} = persistPackage(p.draft); name = library[id].name; where = 'Care packages'; }
+  c.msgs.push({role:'tool', text:`→ ${CHAT_TOOLS[p.kind]}\n✓ created`});
+  c.msgs.push({role:'ag', text:`Created ${name}. You will find it under ${where}, and it is selectable on any experiment.`});
+  c.pending = null;
+  save(); render();
+  toast(`${name} created by the assistant.`);
+}
+function chatEdit(){
+  const p = S.chat.pending;
+  if(!p) return;
+  S.chat.open = false; S.chat.pending = null;
+  if(p.kind === 'goal') openGoalBuilder({fromChat:true}, p.draft);
+  else if(p.kind === 'care') openCareBuilder({fromChat:true}, p.draft);
+  else { S.focus = Object.assign({}, p.draft, {returnTo:{fromChat:true}}); render(); }
 }
 
 function ruleMatches(){
@@ -1994,28 +3047,52 @@ function patchTraffic(){
   set('tPct', S.exp.traffic + '%');
   set('tFun', funnelInner());
   S.exp.variants.forEach(v=>{
-    const el = document.getElementById('spv-'+v.id);
-    if(el) el.textContent = splitOf(v.id) + '%';
+    const pct = splitOf(v.id);
+    const wk = document.getElementById('spw-'+v.id);
+    if(wk) wk.textContent = perVariantDaily(v.id).toLocaleString() + ' / day';
+    document.querySelectorAll(`[data-split="${v.id}"], [data-splitn="${v.id}"]`).forEach(inp=>{
+      if(document.activeElement !== inp) inp.value = pct;
+    });
   });
+  // keep the even-split chip label honest without a full re-render
+  const chip = document.querySelector('[data-act="toggle-even"]');
+  if(chip){
+    chip.classList.toggle('on', S.exp.evenSplit);
+    chip.textContent = S.exp.evenSplit ? 'Even split' : 'Rebalance evenly';
+  }
   patchMde();
   patchGate();
 }
 function patchMde(){
-  const d = daysToDetectNum();
+  const e = S.exp, d = daysToDetectNum(), abs = absUplift();
   const set = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
-  set('mdePct', S.exp.mde + '%');
-  set('mdeDays', d===Infinity?'—':String(d));
-  const fit = document.getElementById('mdeFit');
-  if(fit){
-    fit.textContent = d===Infinity?'No':(d<=S.exp.lengthDays?'Fits':'Short');
-    fit.style.color = d!==Infinity && d<=S.exp.lengthDays ? 'var(--accent)' : 'var(--hot)';
+  set('mdeBase', baseCR() + '%');
+  set('mdePct', e.mde + '%');
+  set('mdeAbs', '+' + abs + ' pp');
+  set('mdeAbsHint', 'Desired absolute · ' + baseCR() + '% → ' + (baseCR() + abs).toFixed(2) + '%');
+  set('mdeDays', d===Infinity ? '—' : String(d));
+  const smallest = e.variants.length
+    ? Math.min(...e.variants.map(v => perVariantWeekly(v.id)))
+    : perVariantWeekly();
+  set('mdeSample', d===Infinity ? '—' : smallest.toLocaleString());
+  const mdeRange = document.querySelector('[data-f="mde"]');
+  if(mdeRange && document.activeElement !== mdeRange) mdeRange.value = e.mde;
+}
+function patchNamePreview(){
+  const e = S.exp;
+  const prev = document.getElementById('namePrev');
+  if(!prev) return;
+  const hasDesc = !!String(e.descriptor||'').trim();
+  prev.innerHTML = `<span class="ok">[${esc(expCode(e))}]</span>
+    <span class="dim"> - </span>
+    <span class="${hasDesc?'ok':'dim'}">[${hasDesc?esc(e.descriptor):'Descriptor'}]</span>`;
+  // live title in the top bar while naming
+  const h = document.querySelector('.top h1');
+  if(h && S.activeSection === 'setup'){
+    const status = h.querySelector('.chip');
+    h.innerHTML = (hasDesc ? esc(composeExpName(e)) : 'Untitled experiment')
+      + (status ? ' ' + status.outerHTML : '');
   }
-  document.querySelectorAll('[data-split]').forEach(inp=>{
-    const row = inp.closest('.splitrow');
-    if(!row) return;
-    const k = row.querySelector('.k');
-    if(k) k.textContent = perVariantWeekly(inp.dataset.split).toLocaleString() + ' / wk';
-  });
 }
 function patchGate(){
   document.querySelectorAll('[data-act="next"]').forEach(btn=>{
@@ -2027,17 +3104,21 @@ function patchGate(){
   });
   const rt = document.getElementById('rt-setup');
   if(rt) rt.innerHTML = setupRight();
+  const rg = document.getElementById('rt-goal');
+  if(rg) rg.innerHTML = goalRight();
 }
 function patchBuilderGate(){
   if(S.focus){
-    const is = pkgIssues();
+    const is = focusIssues();
     const w = document.getElementById('pkgReady');
     if(w) w.innerHTML = readyChip(is);
     const b = document.querySelector('[data-act="focus-save"]');
     if(b){ b.disabled = is.length > 0; b.title = is.length ? is.join(' · ') : ''; }
   }
   if(S.libDraft){
-    const is = S.libTab==='packages' ? pkgIssues(S.libDraft) : careIssues(S.libDraft);
+    const is = S.libTab==='packages' ? pkgIssues(S.libDraft)
+             : S.libTab==='goals'    ? goalIssues(S.libDraft)
+             : careIssues(S.libDraft);
     const w = document.getElementById('libReady');
     if(w) w.innerHTML = readyChip(is);
     const b = document.querySelector('[data-act="lib-save"]');
@@ -2064,13 +3145,15 @@ function bind(){
         case 'next': goNext(n.dataset.s); break;
         case 'lib-sel':
           S.libSel = n.dataset.id;
-          S.libDraft = S.libTab==='packages'
-            ? libPkgDraft(library[S.libSel])
+          S.libDraft = S.libTab==='packages' ? libPkgDraft(library[S.libSel])
+            : S.libTab==='goals' ? libGoalDraft(GOALS[S.libSel])
             : libCareDraft(CARE[S.libSel]);
           render(); break;
         case 'lib-new':
           S.libSel = null;
-          S.libDraft = S.libTab==='packages' ? blankLibPkg() : blankLibCare();
+          S.libDraft = S.libTab==='packages' ? blankLibPkg()
+            : S.libTab==='goals' ? blankGoalDraft()
+            : blankLibCare();
           render(); break;
         case 'lib-save': saveLibDetail(); break;
         case 'lib-add-plan': {
@@ -2081,7 +3164,18 @@ function bind(){
         case 'lib-rm-plan': S.libDraft.plans.splice(Number(n.dataset.i),1); render(); break;
         case 'lib-plan-mode': {
           const p = S.libDraft.plans[Number(n.dataset.i)];
-          p.mode = n.dataset.m; render(); break;
+          const mode = n.dataset.m;
+          if(p.mode !== mode){
+            if(mode === 'tiered'){
+              const seed = p.price !== '' && p.price != null ? p.price
+                : (planPrices(p).length ? String(Math.min(...planPrices(p))) : '');
+              doses(S.libDraft.medication).forEach(d=>{
+                if(p.tiers[d] == null || p.tiers[d] === '') p.tiers[d] = seed;
+              });
+            }
+            p.mode = mode;
+          }
+          render(); break;
         }
         case 'lib-care': {
           const c = n.dataset.c, f = S.libDraft;
@@ -2098,12 +3192,24 @@ function bind(){
         case 'rm-variant': removeVariant(V(n.dataset.v)); break;
         case 'toggle-compare': S.compare = !S.compare; render(); break;
         case 'ack-aa': S.exp.aaAcknowledged = true; save(); render(); toast('A/A confirmed as intentional.'); break;
-        case 'pick': openPackagePicker(V(n.dataset.v), Number(n.dataset.i)); break;
+        case 'pick': openPackagePicker(V(n.dataset.v), Number(n.dataset.i), 'packages'); break;
+        case 'pick-care': openPackagePicker(V(n.dataset.v), 0, 'care'); break;
+        case 'pick-tab': S.modal.tab = n.dataset.t; render(); break;
         case 'attach': attachPackage(S.modal.variant, S.modal.slotIndex, n.dataset.p); break;
+        case 'attach-care': attachCare(S.modal.variant, n.dataset.c); break;
+        case 'rm-care': detachCare(n.dataset.v, n.dataset.c); break;
         case 'build-pkg': openPackageBuilder({variantId:S.modal.variant.id, slotIndex:S.modal.slotIndex}); break;
+        case 'build-care': openCareBuilder({variantId:S.modal.variant.id}); break;
+        case 'new-care-in-pkg': openCareBuilder({pkgDraft:S.focus}); break;
         case 'close-modal': S.modal=null; render(); break;
-        case 'focus-cancel': S.focus=null; render(); toast('Discarded.'); break;
-        case 'focus-save': savePackage(); break;
+        case 'focus-cancel': {
+          const ret = S.focus && S.focus.returnTo;
+          S.focus = (ret && ret.pkgDraft) ? ret.pkgDraft : null;
+          render(); toast('Discarded.'); break;
+        }
+        case 'focus-save': saveFocus(); break;
+        case 'focus-care-kind': S.focus.kind = n.dataset.k; render(); break;
+        case 'focus-care-mode': S.focus.mode = n.dataset.m; render(); break;
         case 'care': {
           const c = n.dataset.c, f = S.focus;
           f.care = f.care.includes(c) ? f.care.filter(x=>x!==c) : [...f.care, c];
@@ -2115,8 +3221,11 @@ function bind(){
           save(); render(); toast('Rule layer added.'); break;
         case 'rm-rule': S.exp.audience.extra.splice(Number(n.dataset.i),1); save(); render(); break;
         case 'toggle-even':
-          S.exp.evenSplit = !S.exp.evenSplit;
-          ensureSplits(); save(); render(); break;
+          rebalanceEven(); save(); render(); break;
+        case 'new-goal': openGoalBuilder({setPrimary:true}); break;
+        case 'code':
+          S.exp.code[n.dataset.f] = n.dataset.v;
+          syncExpName(); save(); render(); break;
         case 'env-tog': {
           const e = n.dataset.e;
           if(S.exp.envs.includes(e)) S.exp.envs = S.exp.envs.filter(x=>x!==e);
@@ -2124,9 +3233,31 @@ function bind(){
           save(); render(); break;
         }
         case 'publish': publish(); break;
+        case 'retire': retireExperiment(); break;
+        case 'amp-create': createAmpDashboard(); break;
+        case 'chat-open': S.chat.open = true; render(); break;
+        case 'chat-close': S.chat.open = false; render(); break;
+        case 'chat-reset': S.chat.msgs = []; S.chat.pending = null; S.chat.input = ''; render(); break;
+        case 'chat-quick': S.chat.input = CHAT_QUICK[Number(n.dataset.i)]; chatSend(); break;
+        case 'chat-send': chatSend(); break;
+        case 'chat-apply': chatApply(); break;
+        case 'chat-edit': chatEdit(); break;
+        case 'chat-discard': S.chat.pending = null;
+          S.chat.msgs.push({role:'ag', text:'Dropped it. Tell me what to change and I will draft another one.'});
+          render(); break;
       }
     });
   });
+
+  const ci = document.querySelector('[data-chat]');
+  if(ci){
+    ci.addEventListener('input', ()=>{ S.chat.input = ci.value; });
+    ci.addEventListener('keydown', ev=>{
+      if(ev.key === 'Enter' && !ev.shiftKey){ ev.preventDefault(); S.chat.input = ci.value; chatSend(); }
+    });
+  }
+  const cb = document.getElementById('chatBody');
+  if(cb) cb.scrollTop = cb.scrollHeight;
 
   document.querySelectorAll('[data-ana]').forEach(sel=>{
     sel.addEventListener('change', ()=>{
@@ -2141,18 +3272,25 @@ function bind(){
     if(f === 'traffic' || f === 'mde'){
       inp.addEventListener('input', ()=>{
         S.exp[f] = Number(inp.value);
-        if(f==='traffic') patchTraffic(); else patchMde();
+        if(f === 'traffic') patchTraffic();
+        else patchMde();
         save();
       });
       inp.addEventListener('change', ()=>render());
       return;
     }
+    if(f === 'descriptor'){
+      inp.addEventListener('input', ()=>{
+        S.exp.descriptor = inp.value;
+        syncExpName();
+        patchNamePreview();
+        patchGate();
+        save();
+      });
+      return;
+    }
     inp.addEventListener('input', ()=>{
       S.exp[f] = inp.value;
-      if(f === 'name'){
-        const h = document.querySelector('.top h1');
-        if(h) h.childNodes[0].nodeValue = inp.value.trim() || 'Untitled experiment';
-      }
       patchGate();
       save();
     });
@@ -2160,12 +3298,21 @@ function bind(){
 
   document.querySelectorAll('[data-split]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
-      S.exp.evenSplit = false;
-      S.exp.splits[inp.dataset.split] = Number(inp.value);
+      setSplitLinked(inp.dataset.split, Number(inp.value));
       patchTraffic();
       save();
     });
     inp.addEventListener('change', ()=>render());
+  });
+  document.querySelectorAll('[data-splitn]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      if(inp.value === '') return;
+      setSplitLinked(inp.dataset.splitn, Number(inp.value));
+      patchTraffic();
+      save();
+    });
+    inp.addEventListener('blur', ()=>render());
+    inp.addEventListener('keydown', ev=>{ if(ev.key === 'Enter') inp.blur(); });
   });
 
   document.querySelectorAll('[data-vn]').forEach(inp=>{
@@ -2183,7 +3330,12 @@ function bind(){
   };
 
   document.querySelectorAll('[data-ff]').forEach(inp=>{
-    inp.addEventListener('input', ()=>{ S.focus[inp.dataset.ff] = inp.value; repaintPkg(); });
+    inp.addEventListener('input', ()=>{
+      const f = inp.dataset.ff;
+      if(f === 'price') inp.value = num(inp.value);
+      S.focus[f] = inp.value;
+      repaintPkg();
+    });
   });
   document.querySelectorAll('[data-fp]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
@@ -2250,6 +3402,47 @@ function bind(){
       S.libDraft.plans[Number(sel.dataset.ldpt)].type = sel.value; render();
     });
   });
+  const gsel = document.querySelector('[data-goal]');
+  if(gsel) gsel.addEventListener('change', ()=>{
+    S.exp.goal = gsel.value || null;
+    save(); render();
+    const g = goalOf();
+    if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+  });
+
+  /* goal editor fields, shared by the library detail (ldg) and the full page builder (gd) */
+  const goalDraftFor = pfx => pfx === 'gd' ? S.focus : S.libDraft;
+  ['ldg','gd'].forEach(pfx=>{
+    const st = document.querySelector(`[data-${pfx}s]`);
+    if(st) st.addEventListener('change', ()=>{
+      const f = goalDraftFor(pfx); if(!f) return;
+      f.start = st.value;
+      if(stepIdx(f.event) <= stepIdx(f.start)){
+        const nxt = FUNNEL[stepIdx(f.start)+1];
+        if(nxt) f.event = nxt.id;
+      }
+      render();
+    });
+    const ev = document.querySelector(`[data-${pfx}e]`);
+    if(ev) ev.addEventListener('change', ()=>{
+      const f = goalDraftFor(pfx); if(!f) return;
+      f.event = ev.value; render();
+    });
+      const win = document.querySelector(`[data-${pfx}w]`);
+    if(win) win.addEventListener('input', ()=>{
+      const f = goalDraftFor(pfx); if(!f) return;
+      f.window = win.value;
+      patchBuilderGate();
+    });
+  });
+  document.querySelectorAll('[data-gdf]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      if(!S.focus) return;
+      S.focus[inp.dataset.gdf] = inp.value;
+      patchBuilderGate();
+    });
+  });
+
   const ldm = document.querySelector('[data-ldm]');
   if(ldm) ldm.addEventListener('change', ()=>{ S.libDraft.medication = ldm.value; render(); });
   const ldr = document.querySelector('[data-ldr]');
@@ -2273,6 +3466,8 @@ function bind(){
 
 /* boot */
 S.exp = newExperiment();
+S.exp.key = nextExpKey();
+syncExpName();
 render();
 </script>
 </body>
