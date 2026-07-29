@@ -58,21 +58,24 @@ input,select{font:inherit}
 .btn:hover{background:#eef1f0}
 .btn.pri{background:var(--accent);color:#fff}
 .btn.pri:hover{background:var(--accent-d)}
-.btn.pri:disabled{background:#c8d4cf;color:#f2f6f4;cursor:not-allowed}
+.btn.pri:disabled,.btn.pri.is-off{background:#c8d4cf;color:#f2f6f4;cursor:not-allowed}
 .btn.sec{background:#fff;border-color:var(--line2);color:var(--ink)}
 .btn.sec:hover{background:#f4f7f6;border-color:#b9c4c0}
 .btn.sec:disabled{color:var(--ink3);cursor:not-allowed;background:#f6f8f7}
 .btn.sm{padding:4px 9px;font-size:12px;border-radius:6px}
 .btn.xs{padding:3px 7px;font-size:11px;border-radius:5px}
-.btn.danger{color:var(--hot)} .btn.danger:hover{background:var(--hot-s)}
+.btn.danger{color:#fff;background:var(--hot);border-color:var(--hot)}
+.btn.danger:hover{background:#9a4014;border-color:#9a4014;color:#fff}
+.btn.danger.xs{background:transparent;color:var(--hot);border-color:transparent}
+.btn.danger.xs:hover{background:var(--hot-s);border-color:transparent;color:var(--hot)}
 .btn.pub{background:var(--purple);color:#fff;font-size:15px;font-weight:650;padding:14px 28px;
   border-radius:10px;box-shadow:0 4px 14px rgba(107,63,160,.28)}
 .btn.pub:hover{background:var(--purple-d)}
 .btn.pub:disabled{background:#d4c6e4;color:#f7f2fb;cursor:not-allowed;box-shadow:none}
-.btn.amp{background:var(--blue);color:#fff;font-weight:600}
-.btn.amp:hover{background:#2450a4}
-.btn.ampout{background:var(--blue-s);color:var(--blue);border-color:#c8d8f4;font-weight:600}
-.btn.ampout:hover{background:#e3ecfa}
+.btn.amp{background:#005ff9;color:#fff;font-weight:600;border-color:#005ff9}
+.btn.amp:hover{background:#004fd1}
+.btn.ampout{background:#005ff9;color:#fff;border-color:#005ff9;font-weight:600;text-decoration:none}
+.btn.ampout:hover{background:#004fd1;text-decoration:none}
 
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:4px 10px;border-radius:99px;
   background:#edf1ef;color:var(--ink2);font-weight:550;white-space:nowrap;border:1px solid transparent;
@@ -109,6 +112,8 @@ input,select{font:inherit}
 .fld:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
 .fld::placeholder{color:#a8b2ae}
 .fld.lock{background:#f2f5f4;color:var(--ink2);border-style:dashed}
+.fld.ana-inp{width:52px;padding:4px 6px;font-size:12px;text-align:center;flex-shrink:0}
+.fld.ana-inp:disabled{background:#f2f5f4;color:var(--ink2);cursor:default;opacity:1}
 .fld.inline{border:1px solid transparent;background:transparent;padding:2px 6px;font-weight:650;font-size:13px;
   border-radius:6px;width:auto;min-width:40px;max-width:140px}
 .fld.inline:hover{border-color:var(--line2);background:#fff}
@@ -145,6 +150,132 @@ input,select{font:inherit}
 .railnote{margin-top:12px;padding:0 3px;font-size:11.5px;color:var(--ink3);line-height:1.5}
 .prog{height:4px;background:#e7ecea;border-radius:99px;margin:0 3px 14px;overflow:hidden}
 .prog i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s ease}
+
+/* phase cards in the rail */
+.phcard{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 11px;
+  margin-bottom:8px;background:#fff;cursor:pointer;text-decoration:none;color:inherit;
+  transition:.12s;box-shadow:var(--sh)}
+.phcard:hover{border-color:#b3c8c0}
+.phcard.on{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.08)}
+.phcard.locked{opacity:.45;cursor:not-allowed;background:#fbfcfc;box-shadow:none}
+.phcard.locked:hover{border-color:var(--line)}
+.phcard .phn{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:2px}
+.phcard.on .phn{color:var(--accent)}
+.phcard .pht{font-size:13px;font-weight:650;color:var(--ink)}
+.phcard .phs{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.35}
+.phcard .phlock{font-size:10.5px;color:var(--ink3);margin-top:5px}
+.phsubs{margin:6px 0 2px;padding-left:2px}
+.phsubs a{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;
+  font-size:12.5px;color:var(--ink2);text-decoration:none;margin-bottom:1px;cursor:pointer}
+.phsubs a:hover{background:#ecf0ee}
+.phsubs a.on{background:var(--accent-s);color:var(--accent);font-weight:600}
+.phsubs a .dot{width:6px;height:6px;border-radius:99px;background:#c5cec9;flex-shrink:0}
+.phsubs a.on .dot{background:var(--accent)}
+
+.lockban{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;
+  background:#eef6f3;border:1px solid #c5ddd3;margin-bottom:14px}
+.lockban .bt{font-size:13px;font-weight:650}
+.lockban .bd{font-size:12px;color:var(--ink2);margin-top:2px}
+.setupsum{display:flex;flex-direction:column;gap:10px}
+.setupsum .rowline{display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap}
+.setupsum .lbl{width:74px;flex-shrink:0;font-size:12px;color:var(--ink3);padding-top:3px}
+.stg.editing{border-color:#b3c8c0;box-shadow:0 0 0 3px rgba(15,107,82,.08)}
+
+/* live board */
+.livegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.livestat{background:#fff;border:1px solid var(--line);border-radius:9px;padding:12px 13px}
+.livestat .k{font-size:11px;color:var(--ink3);font-weight:550}
+.livestat .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
+.livestat .s{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.ov-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ov-primary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.ov-primary .ovp{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 14px;box-shadow:var(--sh)}
+.ov-primary .ovp .k{font-size:11.5px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ov-primary .ovp .v{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:6px;line-height:1.1}
+.ov-primary .ovp .s{font-size:12px;color:var(--ink3);margin-top:6px}
+.ov-secondary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+.ov-secondary .ovs{background:#fbfcfc;border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+.ov-secondary .ovs .k{font-size:11px;color:var(--ink3);font-weight:550}
+.ov-secondary .ovs .v{font-size:20px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.ov-secondary .ovs .s{font-size:11px;color:var(--ink3);margin-top:3px}
+.ov-tertiary{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:14px;margin-top:14px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink3);line-height:1.5}
+.ov-tertiary .ovt{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.ov-tertiary .ovt b{color:var(--ink2);font-weight:600;font-size:12.5px}
+@media (max-width:900px){
+  .ov-primary,.ov-secondary{grid-template-columns:1fr}
+}
+.chartbox{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;
+  margin-bottom:13px;box-shadow:var(--sh)}
+.chartbox .ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.chartbox .ct{font-size:13.5px;font-weight:650}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--ink2)}
+.leg i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.chartsvg{width:100%;height:220px;display:block}
+.rangepick{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rangepick button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 11px;
+  font:inherit;font-size:12px;color:var(--ink2);cursor:pointer}
+.rangepick button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.livestatus{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--accent-s);border:1px solid #c5ddd4;border-radius:var(--r);padding:14px 16px;
+  margin-bottom:13px;box-shadow:var(--sh)}
+.livestatus .lhs{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.livestatus .rhs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.livestatus.paused{background:var(--amber-s);border-color:#e2cf93}
+.livestatus.retired{background:#f3f5f4;border-color:var(--line)}
+.reportctrl{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;
+  margin-bottom:16px;box-shadow:var(--sh)}
+.reportctrl .rch{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.reportctrl .rct{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.reportctrl .rcbody{display:flex;flex-direction:column;gap:14px}
+.reportctrl .rcgoal{background:var(--accent-s);border:1px solid #c5ddd4;border-radius:10px;padding:13px 14px}
+.reportctrl .rcgoal .flab{color:var(--accent);font-weight:700}
+.livetool{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;
+  margin-bottom:13px;box-shadow:var(--sh)}
+.livetool .lhs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.livetool .rhs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.datepair{display:flex;align-items:center;gap:6px}
+.datepair input[type=date]{border:1px solid var(--line2);border-radius:8px;padding:5px 8px;
+  font:inherit;font-size:12px;color:var(--ink)}
+.btn.ampsolid{background:#005ff9;color:#fff;font-weight:600;border-color:#005ff9}
+.btn.ampsolid:hover{background:#004fd1}
+.btn.ampsolid .amplogo{width:14px;height:14px;display:inline-block;vertical-align:-2px}
+.livesum{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin-top:14px}
+@media (max-width:900px){.livesum{grid-template-columns:1fr}}
+.livesum .nums{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.livesum .num{background:#fbfcfc;border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+.livesum .num .k{font-size:11px;color:var(--ink3);font-weight:550}
+.livesum .num .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
+.livesum .num .s{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.trafsum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.trafsum .ts{background:#fbfcfc;border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+.trafsum .ts .k{font-size:11px;color:var(--ink3)}
+.trafsum .ts .v{font-size:18px;font-weight:700;margin-top:3px}
+.livetable{width:100%;border-collapse:collapse;font-size:13px;table-layout:auto}
+.livetable th{text-align:left;font-size:11px;color:var(--ink3);font-weight:600;padding:0 10px 8px;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+.livetable td{padding:10px;border-bottom:1px solid #eef1f0;vertical-align:middle;white-space:nowrap}
+.livetable td.ci-cell{white-space:normal;width:100%;padding-right:16px}
+.livetable th.ci-col{width:100%}
+.livetable .ci-cell .ciwrap{padding-top:22px;margin:0}
+.livetable .ci-cell .citrack{width:100%;min-width:160px}
+.livetable tr:last-child td{border-bottom:0}
+.swatch{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px}
+
+/* reporting / share cards */
+.sharegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sharecard{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  box-shadow:var(--sh)}
+.sharecard canvas{width:100%;height:auto;display:block;background:#0f1f1a}
+.sharecard .sa{padding:10px 12px;display:flex;gap:7px;align-items:center;border-top:1px solid var(--line)}
+.slackprev{background:#1a1d21;color:#e8e8e8;border-radius:10px;padding:14px 16px;font-size:13px;
+  line-height:1.55;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.notionmap{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;font-size:13px}
+.notionmap .nk{color:var(--ink3);font-weight:550}
+.notionmap .nv{font-weight:600}
 
 .doc{flex:1;min-width:0}
 .stg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;
@@ -224,6 +355,13 @@ input[type=range]:active{cursor:grabbing}
   letter-spacing:-.01em;padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:#fbfcfc;
   margin-top:12px;line-height:1.45}
 .codeprev .dim{color:var(--ink3);font-weight:500}
+.codewarn{font-size:11.5px;color:var(--amber);margin-top:5px;font-weight:550}
+.fld.codewarn{border-color:#d4b86a;box-shadow:0 0 0 2px rgba(138,106,18,.1)}
+.fld.err,.sel.err{border-color:#c45a3a !important;box-shadow:0 0 0 2px rgba(196,90,58,.14) !important}
+.fielderr{font-size:11.5px;color:#c45a3a;margin-top:5px;font-weight:550}
+.vcard.err{border-color:#c45a3a;box-shadow:0 0 0 2px rgba(196,90,58,.12)}
+.slot.err,.empty.err{border-color:#c45a3a !important;color:#c45a3a}
+.codecustom .k{font-size:11px;white-space:nowrap}
 .codeprev .ok{color:var(--ink)}
 .codegroup{margin-bottom:12px}
 .codegroup .flab{margin-bottom:6px}
@@ -269,10 +407,10 @@ input[type=range]:active{cursor:grabbing}
 .tabs button.on{border-color:var(--accent);color:var(--accent);background:var(--accent-s)}
 
 /* live pulse, brand marks */
-.pulse{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink2);
-  background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 8px;white-space:nowrap}
-.pulse i{width:7px;height:7px;border-radius:99px;background:var(--accent);position:relative;flex-shrink:0}
-.pulse i::after{content:'';position:absolute;inset:-4px;border-radius:99px;border:1.5px solid var(--accent);
+.pulse{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:650;color:var(--accent);
+  background:var(--accent-s);border:1px solid #c5ddd4;border-radius:99px;padding:7px 14px 7px 12px;white-space:nowrap}
+.pulse i{width:9px;height:9px;border-radius:99px;background:var(--accent);position:relative;flex-shrink:0}
+.pulse i::after{content:'';position:absolute;inset:-5px;border-radius:99px;border:1.5px solid var(--accent);
   opacity:.55;animation:ping 1.7s cubic-bezier(.2,.6,.3,1) infinite}
 .pulse.off i{background:var(--ink3)}
 .pulse.off i::after{display:none}
@@ -281,15 +419,20 @@ input[type=range]:active{cursor:grabbing}
   object-fit:contain;padding:2px;flex-shrink:0}
 .bmark.sm{width:22px;height:22px;border-radius:6px}
 
-/* agent chat sidebar */
-.chatbtn{position:fixed;right:18px;bottom:18px;z-index:390;border:0;border-radius:99px;cursor:pointer;
-  background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:600;padding:11px 16px;
-  box-shadow:0 10px 26px rgba(18,33,28,.26);display:flex;align-items:center;gap:8px}
-.chatbtn i{width:8px;height:8px;border-radius:99px;background:#7fd8b8}
-.chat{position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);z-index:400;background:#fff;
-  border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:-14px 0 44px rgba(18,33,28,.18);
-  animation:gin .18s cubic-bezier(.2,.85,.25,1)}
-.chat-h{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+/* AI assistant in the nav */
+.nav .ai{margin-top:10px;margin-bottom:4px;display:flex;align-items:flex-start;gap:8px;
+  padding:10px 11px;border-radius:9px;background:var(--accent);color:#fff;font-size:13px;
+  font-weight:600;cursor:pointer;border:0;width:100%;font:inherit;text-align:left}
+.nav .ai:hover{filter:brightness(1.06)}
+.nav .ai i{width:8px;height:8px;border-radius:99px;background:#7fd8b8;flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(127,216,184,.25)}
+.nav .ai span{flex:1}
+.nav .ai .sub{display:block;font-size:10.5px;font-weight:500;opacity:.8;margin-top:1px}
+
+/* agent chat sidebar — sits beside .stage inside .shell, pushes content left */
+.chat{width:min(400px,34vw);flex-shrink:0;background:#fff;border-left:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden;height:100vh}
+.chat-h{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-shrink:0}
 .chat-h .t{font-size:14px;font-weight:650}
 .chat-b{flex:1;overflow-y:auto;padding:14px 15px;display:flex;flex-direction:column;gap:11px;background:#fbfcfc}
 .msg{max-width:92%;font-size:13px;line-height:1.5;padding:9px 12px;border-radius:11px;white-space:pre-wrap}
@@ -327,11 +470,17 @@ input[type=range]:active{cursor:grabbing}
 .scrollist .opt{margin-bottom:8px}
 .scrollist .opt:last-child{margin-bottom:0}
 
-/* ---------- GTM full page panel: covers the whole stage, like Tag Manager ---------- */
-.gtm{position:absolute;inset:0;z-index:50;display:flex;justify-content:flex-end}
-.gtm-panel{background:var(--bg);height:100%;display:flex;flex-direction:column;width:100%;
-  box-shadow:-12px 0 40px rgba(18,33,28,.2);animation:gin .2s cubic-bezier(.2,.85,.25,1)}
+/* ---------- GTM overlay: dark scrim on the left, panel fills the rest ---------- */
+.gtm{position:absolute;inset:0;z-index:50;display:flex;justify-content:flex-end;
+  background:rgba(18,33,28,.55);animation:gfade .18s ease}
+.gtm.out{animation:gfadeout .18s ease forwards}
+.gtm-panel{background:var(--bg);height:100%;display:flex;flex-direction:column;width:calc(100% - 64px);
+  box-shadow:-12px 0 40px rgba(18,33,28,.28);animation:gin .2s cubic-bezier(.2,.85,.25,1)}
+.gtm.out .gtm-panel{animation:gout .18s cubic-bezier(.2,.85,.25,1) forwards}
 @keyframes gin{from{transform:translateX(48px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes gout{from{transform:none;opacity:1}to{transform:translateX(48px);opacity:.2}}
+@keyframes gfade{from{background:rgba(18,33,28,0)}to{background:rgba(18,33,28,.55)}}
+@keyframes gfadeout{from{background:rgba(18,33,28,.55)}to{background:rgba(18,33,28,0)}}
 .gtm-top{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;
   justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
 .gtm-body{flex:1;overflow-y:auto;padding:20px}
@@ -512,7 +661,7 @@ let library = {
 
 const AUD_GROUPS = [
   {id:'country', label:'Country', opts:['AU','NZ','MY']},
-  {id:'brand',   label:'Brand',   opts:['MOSHY','MOSH']},
+  {id:'brand',   label:'Brand',   opts:['Moshy','Mosh','Mapped']},
   {id:'vertical',label:'Vertical',opts:['Weight loss','Sex','Hair','Skin']},
   {id:'customer',label:'Customer',opts:['New','Returning','Any']}
 ];
@@ -573,10 +722,30 @@ const STAGES = [
 ];
 const stageIdx = id => STAGES.findIndex(s => s.id === id);
 
+const PHASES = [
+  {id:'setup',  label:'Experiment setup',     sub:'Name, goal, audience, variants, traffic'},
+  {id:'live',   label:'Experiment live',      sub:'Reporting controls, overview, conversion'},
+  {id:'report', label:'Experiment reporting', sub:'Analysis, share cards, Notion'}
+];
+const LIVE_SECS = [
+  {id:'controls',     label:'Reporting controls'},
+  {id:'overview',     label:'Overview'},
+  {id:'conversion',   label:'Conversion'}
+];
+const REPORT_SECS = [
+  {id:'analysis', label:'Analysis'},
+  {id:'share',    label:'Share cards'},
+  {id:'slack',    label:'Slack'},
+  {id:'notion',   label:'Notion'}
+];
+const VAR_COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#f59e0b', '#a855f7', '#06b6d4'];
+const phaseUnlocked = id => id === 'setup' || (id === 'live' && S.published) || (id === 'report' && S.retired);
+
 /* shorthand used in the experiment code: [005-MSY-AU-WL-LP] - [Redirect Test] */
 const CODE_BRAND = [
-  {id:'MSH', label:'MOSH', brand:'MOSH'},
-  {id:'MSY', label:'MOSHY', brand:'MOSHY'}
+  {id:'MSY', label:'Moshy', brand:'Moshy'},
+  {id:'MSH', label:'Mosh', brand:'Mosh'},
+  {id:'MPD', label:'Mapped', brand:'Mapped'}
 ];
 const CODE_GEO = [
   {id:'AU', label:'Australia'},
@@ -594,6 +763,49 @@ const CODE_LOC = [
   {id:'QZ', label:'Quiz'},
   {id:'CK', label:'Checkout'}
 ];
+const CODE_PRESETS = {brand: CODE_BRAND, country: CODE_GEO, vertical: CODE_VERT, location: CODE_LOC};
+const CODE_RULES = {
+  brand:    {exact: 3, hint:'Exactly 3 letters'},
+  country:  {exact: 2, hint:'Exactly 2 letters'},
+  vertical: {max: 2,   hint:'Up to 2 letters'},
+  location: {max: 2,   hint:'Up to 2 letters'}
+};
+const CODE_LABELS = {brand:'Brand', country:'Geo', vertical:'Vertical', location:'Location'};
+function codePresetIds(field){ return (CODE_PRESETS[field]||[]).map(o=>o.id); }
+function ensureCodeCustom(){
+  if(!S.exp.codeCustom){
+    S.exp.codeCustom = {brand:false, country:false, vertical:false, location:false};
+  }
+  ['brand','country','vertical','location'].forEach(f=>{
+    if(S.exp.codeCustom[f] == null){
+      S.exp.codeCustom[f] = !codePresetIds(f).includes(S.exp.code[f]);
+    }
+  });
+}
+function sanitizeCode(val, field){
+  const r = CODE_RULES[field];
+  let s = String(val||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const cap = r.exact || r.max || 2;
+  return s.slice(0, cap);
+}
+function codeFieldWarning(field, val){
+  const r = CODE_RULES[field];
+  const v = sanitizeCode(val, field);
+  if(!v) return 'Enter a code';
+  if(r.exact && v.length !== r.exact) return `Must be exactly ${r.exact} characters`;
+  return '';
+}
+function codeSetupIssues(){
+  ensureCodeCustom();
+  const out = [];
+  ['brand','country','vertical','location'].forEach(f=>{
+    if(S.exp.codeCustom[f]){
+      const w = codeFieldWarning(f, S.exp.code[f]);
+      if(w) out.push(`${CODE_LABELS[f]}: ${w}`);
+    }
+  });
+  return out;
+}
 function expCode(e){
   const c = e.code || {};
   return `${e.key}-${c.brand}-${c.country}-${c.vertical}-${c.location}`;
@@ -602,14 +814,85 @@ function composeExpName(e){
   const desc = String(e.descriptor || '').trim();
   return desc ? `[${expCode(e)}] - [${desc}]` : '';
 }
-function syncExpName(){
+function expectedAudienceFromCode(){
+  ensureCodeCustom();
+  const out = {};
+  if(!S.exp.codeCustom.brand){
+    const brand = CODE_BRAND.find(x => x.id === S.exp.code.brand);
+    if(brand && brand.brand) out.brand = brand.brand;
+  }
+  if(!S.exp.codeCustom.country && S.exp.code.country){
+    out.country = S.exp.code.country;
+  }
+  if(!S.exp.codeCustom.vertical){
+    const vert = CODE_VERT.find(x => x.id === S.exp.code.vertical);
+    if(vert) out.vertical = vert.vertical;
+  }
+  return out;
+}
+function audienceMismatches(){
+  const expected = expectedAudienceFromCode();
+  const a = S.exp.audience;
+  return ['country','brand','vertical']
+    .filter(k => expected[k] != null && a[k] !== expected[k])
+    .map(k => ({field:k, current:a[k], expected:expected[k], label:k === 'country' ? 'Country' : (k === 'brand' ? 'Brand' : 'Vertical')}));
+}
+function customCodeAudienceNotes(){
+  ensureCodeCustom();
+  const notes = [];
+  if(S.exp.codeCustom.brand) notes.push('Brand');
+  if(S.exp.codeCustom.country) notes.push('Geo');
+  if(S.exp.codeCustom.vertical) notes.push('Vertical');
+  return notes;
+}
+function codeFieldToAudience(field){
+  if(field === 'brand') return 'brand';
+  if(field === 'country') return 'country';
+  if(field === 'vertical') return 'vertical';
+  return null;
+}
+function applyAudienceFromCode(fields){
+  const expected = expectedAudienceFromCode();
+  (fields || Object.keys(expected)).forEach(k=>{
+    if(expected[k] != null) S.exp.audience[k] = expected[k];
+  });
+}
+function syncExpName(opts){
+  ensureCodeCustom();
   S.exp.name = composeExpName(S.exp);
-  // keep audience in step with the code toggles
-  const brand = CODE_BRAND.find(x => x.id === S.exp.code.brand);
-  const vert = CODE_VERT.find(x => x.id === S.exp.code.vertical);
-  if(brand) S.exp.audience.brand = brand.brand;
-  if(S.exp.code.country) S.exp.audience.country = S.exp.code.country;
-  if(vert) S.exp.audience.vertical = vert.vertical;
+  // sync only the audience field tied to the changed code, if any
+  if(opts && opts.codeField){
+    const aud = codeFieldToAudience(opts.codeField);
+    if(aud) applyAudienceFromCode([aud]);
+  } else if(opts && opts.syncAudience){
+    applyAudienceFromCode();
+  }
+}
+function audienceWarningHtml(){
+  const mismatches = audienceMismatches();
+  const customNotes = customCodeAudienceNotes();
+  let html = '';
+  if(mismatches.length){
+    html += `<div class="banner a" style="margin:12px 0">
+      <div style="flex:1">
+        <div class="bt">Audience differs from the experiment name code</div>
+        <div class="bd">${mismatches.map(m =>
+          `${m.label} is <b>${esc(m.current)}</b>, name code expects <b>${esc(m.expected)}</b>`).join(' · ')}.
+          Allowed, but keep an eye on reporting filters.</div>
+      </div>
+      <button class="btn sec sm" data-act="aud-reset">Reset to name code</button>
+    </div>`;
+  }
+  if(customNotes.length){
+    html += `<div class="banner" style="margin:12px 0;background:#f3f6f5;border:1px solid var(--line)">
+      <div style="flex:1">
+        <div class="bt">Custom name code cannot set audience</div>
+        <div class="bd">${customNotes.join(', ')} ${customNotes.length===1?'is':'are'} custom in the name.
+          Pick a standard audience value separately.</div>
+      </div>
+    </div>`;
+  }
+  return html;
 }
 
 let S = {
@@ -621,6 +904,24 @@ let S = {
   focus:null,                 // package draft, only when creating from experiment
   activeSection:'setup',
   maxStage:0,
+  phase:'setup',              // setup | live | report
+  liveSec:'overview',
+  reportSec:'analysis',
+  paused:false,
+  liveRange:'full',           // 7 | 14 | full | custom
+  liveConvChart:'daily',      // daily | cumulative
+  liveCompareIdx:1,           // stats index for vs-control comparison
+  liveFrom:null,              // day index or ISO date string for custom
+  liveTo:null,
+  trafficEdit:false,
+  trafficSnap:null,
+  setupEdit:null,             // setup section id being edited while published
+  setupSnap:null,             // deep snapshot of exp (+goalPrev) for cancel
+  setupGoalPrev:null,         // previous goal id when starting a goal edit
+  liveAnaEdit:false,
+  liveAnaSnap:null,
+  goalChanges:[],             // {day, from, to} markers on the conversion chart
+  report:{analysis:'', slackChannel:'#cro-experiments', slackPosted:false, notionSynced:null},
   compare:true,
   ruleQuery:'',
   saving:false,
@@ -639,9 +940,10 @@ function newExperiment(){
     key:'005',                // overwritten by nextExpKey() when creating a new draft
     descriptor:'',
     code:{brand:'MSY', country:'AU', vertical:'WL', location:'LP'},
+    codeCustom:{brand:false, country:false, vertical:false, location:false},
     name:'',                  // composed from key + code + descriptor
     variants:[],
-    audience:{country:'AU', brand:'MOSHY', vertical:'Weight loss', customer:'New', extra:[]},
+    audience:{country:'AU', brand:'Moshy', vertical:'Weight loss', customer:'New', extra:[]},
     goal:null,                // set in the Goal stage
     traffic:100,
     evenSplit:true,
@@ -878,8 +1180,8 @@ function daysToDetectNum(mde){
     ? S.exp.variants.map(v => perVariantWeekly(v.id))
     : [perVariantWeekly()]));
   if(!n || !m || !p) return Infinity;
-  const zA = S.conf === 95 ? 1.96 : (S.conf === 90 ? 1.645 : 1.28);
-  const zP = S.power === 90 ? 1.28 : (S.power === 80 ? 0.84 : 0.52);
+  const zA = zConf(S.conf);
+  const zP = zPow(S.power);
   const delta = p * (m/100);
   if(delta <= 0) return Infinity;
   const needed = Math.round(Math.pow(zA+zP,2) * 2 * p * (1-p) / Math.pow(delta,2));
@@ -890,11 +1192,289 @@ function daysToDetect(mde){
   return d === Infinity ? 'not enough traffic' : d + ' days';
 }
 
+/* ---------- live board math (deterministic fake data) ---------- */
+function hashStr(str){
+  let h = 2166136261;
+  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function seeded(seed){
+  let s = seed|0;
+  return () => { s = (Math.imul(s, 1664525) + 1013904223) | 0; return (s >>> 0) / 4294967296; };
+}
+function erfApprox(x){
+  const sign = x < 0 ? -1 : 1;
+  const ax = Math.abs(x);
+  const t = 1 / (1 + 0.3275911 * ax);
+  const y = 1 - (((((1.061405429*t - 1.453152027)*t) + 1.421413741)*t - 0.284496736)*t + 0.254829592)*t * Math.exp(-ax*ax);
+  return sign * y;
+}
+function normalCdf(x){ return 0.5 * (1 + erfApprox(x / Math.SQRT2)); }
+function zInterp(x, pts){
+  x = Math.max(pts[0][0], Math.min(pts[pts.length-1][0], x));
+  for(let i=0;i<pts.length-1;i++){
+    if(x <= pts[i+1][0]){
+      const [x0,y0]=pts[i], [x1,y1]=pts[i+1];
+      return y0 + (y1-y0)*(x-x0)/(x1-x0);
+    }
+  }
+  return pts[pts.length-1][1];
+}
+function zConf(conf){ return zInterp(Number(conf == null ? S.conf : conf), [[80,1.28],[90,1.645],[95,1.96]]); }
+function zPow(pow){ return zInterp(Number(pow == null ? S.power : pow), [[70,0.52],[80,0.84],[90,1.28]]); }
+function zAlpha(){ return zConf(S.conf); }
+function zPower(){ return zPow(S.power); }
+
+function liveDayCount(){
+  const of = S.exp.lengthDays || 21;
+  if(S.retired) return of;
+  // stable "current day" from the key; keep runs long enough that Last 7 ≠ Full
+  const n = Number(S.exp.key) || 5;
+  return Math.max(14, Math.min(of, 10 + ((n * 5) % Math.max(1, of - 9))));
+}
+function liveSeries(){
+  const days = liveDayCount();
+  const base = baseCR() / 100;
+  return S.exp.variants.map((v, i) => {
+    const rng = seeded(hashStr(S.exp.key + ':' + v.id));
+    const trueRel = i === 0 ? 0 : (Number(S.exp.mde) || 10) / 100 * (0.55 + 0.2 * i);
+    const trueP = Math.min(0.9, Math.max(0.001, base * (1 + trueRel)));
+    const dailyN = Math.max(8, perVariantDaily(v.id));
+    const pts = [];
+    for(let d=1; d<=days; d++){
+      const n = Math.max(1, Math.round(dailyN * (0.88 + rng() * 0.24)));
+      const noise = 0.82 + rng() * 0.36;
+      const p = Math.min(0.95, Math.max(0.001, trueP * noise));
+      const sd = Math.sqrt(Math.max(0.25, n * p * (1-p)));
+      const conv = Math.max(0, Math.min(n, Math.round(n * p + (rng() - 0.5) * sd * 2)));
+      pts.push({day:d, n, c:conv, cr: n ? +(conv/n*100).toFixed(3) : 0});
+    }
+    return {id:v.id, name:v.name||v.id, color:VAR_COLORS[i % VAR_COLORS.length], role:v.role, pts};
+  });
+}
+function pad2(n){ return String(n).padStart(2,'0'); }
+function isoDate(d){
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+function parseIso(s){
+  const m = String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return null;
+  return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+}
+function addDays(d, n){
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() + n);
+  return x;
+}
+/* stable fake launch date from the experiment key so custom dates stay consistent */
+function experimentStartDate(){
+  const n = Number(S.exp.key) || 5;
+  return new Date(2026, 5, 1 + ((n * 3) % 20)); // June 2026
+}
+function dayToIso(day){
+  return isoDate(addDays(experimentStartDate(), day - 1));
+}
+function isoToDay(iso, days){
+  const start = experimentStartDate();
+  const d = parseIso(iso);
+  if(!d) return 1;
+  const diff = Math.round((d - start) / 86400000) + 1;
+  return Math.max(1, Math.min(days, diff));
+}
+function liveWindow(){
+  const days = liveDayCount();
+  let start = 1, end = days;
+  if(S.liveRange === '7') start = Math.max(1, days - 6);
+  else if(S.liveRange === '14') start = Math.max(1, days - 13);
+  else if(S.liveRange === 'custom'){
+    if(typeof S.liveFrom === 'string' && S.liveFrom.includes('-')){
+      start = isoToDay(S.liveFrom, days);
+      end = isoToDay(S.liveTo || S.liveFrom, days);
+    } else {
+      start = Math.max(1, Math.min(days, Number(S.liveFrom) || 1));
+      end = Math.max(start, Math.min(days, Number(S.liveTo) || days));
+    }
+    if(end < start){ const t = start; start = end; end = t; }
+  }
+  return {start, end, days, startIso: dayToIso(start), endIso: dayToIso(end),
+    minIso: dayToIso(1), maxIso: dayToIso(days)};
+}
+function liveStats(){
+  const series = liveSeries();
+  const {start, end} = liveWindow();
+  const zCrit = zAlpha();
+  const arms = series.map(s => {
+    const slice = s.pts.filter(p => p.day >= start && p.day <= end);
+    const n = slice.reduce((a,p)=>a+p.n, 0);
+    const c = slice.reduce((a,p)=>a+p.c, 0);
+    return {...s, n, c, cr: n ? +(c/n*100).toFixed(2) : 0, slice};
+  });
+  const ctrl = arms[0] || {n:0, c:0, cr:0};
+  return arms.map((a, i) => {
+    if(i === 0) return {...a, abs:0, rel:0, half:0, lo:0, hi:0, p:1, state:'flat'};
+    const p1 = ctrl.n ? ctrl.c / ctrl.n : 0;
+    const p2 = a.n ? a.c / a.n : 0;
+    const abs = +((p2 - p1) * 100).toFixed(2);
+    const rel = p1 ? +(((p2 - p1) / p1) * 100).toFixed(1) : 0;
+    const pooled = (ctrl.c + a.c) / Math.max(1, ctrl.n + a.n);
+    const se = Math.sqrt(Math.max(1e-12, pooled * (1-pooled) * (1/Math.max(1,ctrl.n) + 1/Math.max(1,a.n))));
+    const z = se > 0 ? (p2 - p1) / se : 0;
+    const p = Math.max(0.0001, Math.min(0.999, 2 * (1 - normalCdf(Math.abs(z)))));
+    const seDiff = Math.sqrt(Math.max(1e-12, p1*(1-p1)/Math.max(1,ctrl.n) + p2*(1-p2)/Math.max(1,a.n)));
+    const half = +(zCrit * seDiff * 100).toFixed(2);
+    const lo = +(abs - half).toFixed(2), hi = +(abs + half).toFixed(2);
+    const crosses = lo < 0 && hi > 0;
+    let state = 'flat';
+    if(ctrl.n + a.n < 400) state = 'early';
+    else if(crosses) state = Math.abs(abs) > half * 0.55 ? 'trend' : 'flat';
+    else state = abs > 0 ? 'win' : 'loss';
+    return {...a, abs, rel, half, lo, hi, p, state};
+  });
+}
+function getLiveCompareIdx(){
+  const stats = liveStats();
+  if(stats.length < 2) return 1;
+  const idx = Number(S.liveCompareIdx);
+  if(!Number.isFinite(idx) || idx < 1 || idx >= stats.length) return 1;
+  return idx;
+}
+function liveCompareArm(){
+  const stats = liveStats();
+  return stats[getLiveCompareIdx()] || stats[1] || null;
+}
+function detectableMdeAt(nPerArm){
+  const p = baseCR() / 100;
+  if(!nPerArm || !p) return Infinity;
+  const delta = Math.sqrt(Math.pow(zAlpha() + zPower(), 2) * 2 * p * (1-p) / nPerArm);
+  return +((delta / p) * 100).toFixed(1);
+}
+function cloneJson(v){ return JSON.parse(JSON.stringify(v)); }
+function setupEditing(id){ return S.published && S.setupEdit === id; }
+function setupSummaryMode(id){ return S.published && S.setupEdit !== id; }
+function setupEditActions(id, editLabel){
+  if(!S.published) return '';
+  if(S.setupEdit === id){
+    return `<button class="btn sec sm" data-act="setup-cancel">Cancel</button>
+      <button class="btn pri sm" data-act="setup-save">Save changes</button>`;
+  }
+  if(S.setupEdit) return '<span class="chip out">finish other edit first</span>';
+  return `<button class="btn sec sm" data-act="setup-edit" data-s="${id}">${editLabel}</button>`;
+}
+function beginSetupEdit(id){
+  if(!S.published) return;
+  if(S.setupEdit && S.setupEdit !== id){
+    toast('Save or cancel the open section first.');
+    return;
+  }
+  S.setupSnap = cloneJson(S.exp);
+  S.setupGoalPrev = S.exp.goal;
+  S.setupEdit = id;
+  S.activeSection = id;
+  S.phase = 'setup';
+  render();
+  const t = document.getElementById('sec-'+id);
+  if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function cancelSetupEdit(){
+  if(S.setupSnap) S.exp = S.setupSnap;
+  S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
+  ensureSplits();
+  syncExpName();
+  save(); render();
+  toast('Changes discarded.');
+}
+function commitSetupEdit(){
+  const id = S.setupEdit;
+  if(!id) return;
+  if(id === 'setup'){
+    const issues = codeSetupIssues();
+    if(!String(S.exp.descriptor||'').trim()) issues.unshift('Add a short descriptor');
+    if(issues.length){ flashStageErrors('setup'); return; }
+    syncExpName();
+  }
+  if(id === 'goal' && !goalOf()){ flashStageErrors('goal'); return; }
+  if(id === 'variants'){
+    const b = stageBlockers('variants');
+    if(b.length){ flashStageErrors('variants'); return; }
+    ensureSplits();
+  }
+  if(id === 'traffic' && !(S.exp.traffic > 0)){ flashStageErrors('traffic'); return; }
+  if(id === 'goal' && S.published && S.setupGoalPrev && S.setupGoalPrev !== S.exp.goal){
+    S.goalChanges = S.goalChanges || [];
+    S.goalChanges.push({day: liveDayCount(), from: S.setupGoalPrev, to: S.exp.goal});
+  }
+  if(id === 'setup') applyAudienceFromCode();
+  S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
+  if(S.report) S.report.analysis = '';
+  save(); render();
+  toast('Saved. Live analysis will use the updated setup.');
+}
+function liveAnaControlsHtml(){
+  const editing = S.liveAnaEdit;
+  const conf = S.conf;
+  const power = S.power;
+  const mde = Number(S.exp.mde) || 10;
+  const dis = editing ? '' : 'disabled';
+  return `<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">Significance</span>
+      <input class="fld ana-inp" type="number" min="50" max="99" step="1"
+        data-live-ana-inp="conf" data-fid="live-conf" value="${conf}" ${dis}>
+      <span class="k">%</span>
+    </div>
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">Power</span>
+      <input class="fld ana-inp" type="number" min="50" max="99" step="1"
+        data-live-ana-inp="power" data-fid="live-power" value="${power}" ${dis}>
+      <span class="k">%</span>
+    </div>
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">MDE</span>
+      <input class="fld ana-inp" type="number" min="1" max="50" step="1"
+        data-live-ana-inp="mde" data-fid="live-mde" value="${mde}" ${dis}>
+      <span class="k">%</span>
+    </div>
+    ${editing
+      ? `<button class="btn sec sm" data-act="live-ana-cancel">Cancel</button>
+         <button class="btn pri sm" data-act="live-ana-save">Save</button>`
+      : `<button class="btn sec sm" data-act="live-ana-edit">Edit</button>`}
+  </div>`;
+}
+function mdeControlsHtml(idPrefix){
+  const mdeOpts = [5,8,10,12,15,20];
+  const curMde = Number(S.exp.mde) || 10;
+  if(!mdeOpts.includes(curMde)) mdeOpts.push(curMde);
+  mdeOpts.sort((a,b)=>a-b);
+  return `<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">Significance</span>
+      <select class="sel sm" data-ana="conf" data-fid="${idPrefix}-conf">
+        ${[95,90,80].map(n=>`<option value="${n}" ${S.conf===n?'selected':''}>${n}%</option>`).join('')}
+      </select>
+    </div>
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">Power</span>
+      <select class="sel sm" data-ana="power" data-fid="${idPrefix}-power">
+        ${[80,90,70].map(n=>`<option value="${n}" ${S.power===n?'selected':''}>${n}%</option>`).join('')}
+      </select>
+    </div>
+    <div class="ag" style="display:flex;align-items:center;gap:6px">
+      <span class="k">MDE</span>
+      <select class="sel sm" data-exp-mde data-fid="${idPrefix}-mde">
+        ${mdeOpts.map(n=>`<option value="${n}" ${curMde===n?'selected':''}>${n}%</option>`).join('')}
+      </select>
+    </div>
+  </div>`;
+}
+
 /* --- stage gating --- */
 function stageBlockers(id){
   const e = S.exp;
   if(id === 'setup'){
-    return String(e.descriptor||'').trim() ? [] : ['Add a short descriptor'];
+    const out = [];
+    if(!String(e.descriptor||'').trim()) out.push('Add a short descriptor');
+    out.push(...codeSetupIssues());
+    return out;
   }
   if(id === 'goal') return goalOf() ? [] : ['Pick a conversion goal'];
   if(id === 'audience') return [];
@@ -1012,9 +1592,81 @@ function goStage(id){
   const t = document.getElementById('sec-'+id);
   if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
 }
+function clearFieldErrors(){
+  document.querySelectorAll('.fld.err, .sel.err, .vcard.err, .empty.err, .slot.err').forEach(el=>{
+    el.classList.remove('err');
+  });
+  document.querySelectorAll('.fielderr').forEach(el=>el.remove());
+}
+function markErr(el, msg){
+  if(!el) return null;
+  el.classList.add('err');
+  if(msg){
+    const tip = document.createElement('div');
+    tip.className = 'fielderr';
+    tip.textContent = msg;
+    el.insertAdjacentElement('afterend', tip);
+  }
+  return el;
+}
+function flashStageErrors(id){
+  clearFieldErrors();
+  const hits = [];
+  if(id === 'setup'){
+    if(!String(S.exp.descriptor||'').trim()){
+      hits.push(markErr(document.querySelector('[data-fid="e-desc"]'), 'Add a short descriptor'));
+    }
+    ensureCodeCustom();
+    ['brand','country','vertical','location'].forEach(f=>{
+      if(!S.exp.codeCustom[f]) return;
+      const w = codeFieldWarning(f, S.exp.code[f]);
+      if(w) hits.push(markErr(document.querySelector(`[data-fid="code-${f}"]`), w));
+    });
+  }
+  if(id === 'goal' && !goalOf()){
+    hits.push(markErr(document.querySelector('#sec-goal [data-goal]'), 'Pick a conversion goal'));
+  }
+  if(id === 'variants'){
+    if(S.exp.variants.length < 2){
+      const empty = document.querySelector('#sec-variants .empty');
+      if(empty){
+        empty.classList.add('err');
+        hits.push(markErr(empty, 'Add at least two variants'));
+      }
+    } else {
+      S.exp.variants.forEach(v=>{
+        if(v.packages.filter(Boolean).length) return;
+        const card = document.querySelector(`[data-vid="${v.id}"]`);
+        if(card){
+          card.classList.add('err');
+          hits.push(card);
+          const slot = card.querySelector('.slot.add') || card.querySelector('.slot');
+          if(slot){
+            slot.classList.add('err');
+            const tip = document.createElement('div');
+            tip.className = 'fielderr';
+            tip.textContent = 'Every variant needs a package';
+            slot.parentElement.insertAdjacentElement('afterend', tip);
+          }
+        }
+      });
+    }
+  }
+  if(id === 'traffic' && !(S.exp.traffic > 0)){
+    hits.push(markErr(document.querySelector('[data-fid="e-traffic"]'), 'Allocate some traffic'));
+  }
+  const first = hits.find(Boolean);
+  if(first){
+    const content = document.querySelector('.content');
+    if(content && first.scrollIntoView){
+      first.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }
+  toast(stageBlockers(id)[0] + '.');
+}
 function goNext(from){
   const i = stageIdx(from), b = stageBlockers(from);
-  if(b.length){ toast(b[0] + '.'); return; }
+  if(b.length){ flashStageErrors(from); return; }
   if(from === 'setup'){
     syncExpName();
     save();
@@ -1321,18 +1973,37 @@ function saveLibDetail(){
 
 function publish(){
   if(!S.exp.envs.length){ toast('Pick at least one destination.'); return; }
-  S.published = true; S.retired = false; S.maxStage = STAGES.length-1; render();
-  toast('Published to ' + S.exp.envs.join(' and ') + '.');
+  S.published = true; S.retired = false; S.paused = false;
+  S.maxStage = STAGES.length-1;
+  S.phase = 'live'; S.liveSec = 'controls';
+  S.goalChanges = [];
+  S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false, notionSynced:null};
+  render();
+  toast('Published to ' + S.exp.envs.join(' and ') + '. Opening the live board.');
 }
 function retireExperiment(){
   if(!S.published) return;
-  S.retired = true; save(); render();
-  toast('Retired. Nobody new is being enrolled.');
+  S.retired = true; S.paused = false;
+  S.phase = 'report'; S.reportSec = 'analysis';
+  S.report.analysis = '';
+  save(); render();
+  toast('Retired. Opening the reporting board.');
+}
+function pauseExperiment(){
+  if(!S.published || S.retired) return;
+  S.paused = !S.paused; save(); render();
+  toast(S.paused ? 'Paused. Nobody new is being enrolled.' : 'Resumed. Enrolment is live again.');
 }
 function createAmpDashboard(){
   S.exp.amp = {created:true, id:'dash_' + S.exp.key};
   save(); render();
   toast(`Amplitude dashboard created with ${ampCharts().length} charts.`);
+}
+function closeGtm(then){
+  const el = document.querySelector('.gtm');
+  if(!el){ then && then(); return; }
+  el.classList.add('out');
+  setTimeout(()=>{ then && then(); }, 180);
 }
 
 /* =====================================================================
@@ -1410,16 +2081,22 @@ function cardStats(d){
 }
 
 function openRun(d){
+  const finished = FINISHED.some(x => x.key === d.key);
   S.exp = newExperiment();
   S.exp.key = d.key;
   S.exp.descriptor = d.t;
   S.exp.code = {
-    brand: (d.bk||'MOSHY') === 'MOSH' ? 'MSH' : 'MSY',
+    brand: String(d.bk||'MOSHY').toUpperCase() === 'MOSH' ? 'MSH' : 'MSY',
     country: d.cc || 'AU',
     vertical: CODE_VERT.find(v => v.vertical === (d.vert||'Weight loss'))?.id || 'WL',
     location: 'CK'
   };
-  S.exp.audience = {country:d.cc||'AU', brand:d.bk||'MOSHY', vertical:d.vert||'Weight loss',
+  S.exp.codeCustom = {
+    brand: false, country: false, vertical: false, location: false
+  };
+  S.exp.audience = {country:d.cc||'AU',
+    brand: String(d.bk||'MOSHY').toLowerCase() === 'mosh' ? 'Mosh' : 'Moshy',
+    vertical:d.vert||'Weight loss',
     customer:'New', extra:[]};
   S.exp.goal = 'goal_lp_purchase';
   S.exp.traffic = d.traffic || 100;
@@ -1433,9 +2110,19 @@ function openRun(d){
   ensureSplits();
   S.maxStage = STAGES.length - 1;
   S.published = true;
-  S.retired = false;
+  S.retired = finished;
+  S.paused = false;
+  S.phase = finished ? 'report' : 'live';
+  S.liveSec = 'controls';
+  S.reportSec = 'analysis';
+  S.liveRange = 'full';
+  S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
+  S.liveAnaEdit = false; S.liveAnaSnap = null;
+  S.goalChanges = [];
+  S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false,
+    notionSynced: finished ? 'Synced just now' : null};
   S.view = 'experiment';
-  S.activeSection = 'variants';
+  S.activeSection = 'launch';
   render();
 }
 function nextExpKey(){
@@ -1448,8 +2135,16 @@ function newExperimentFlow(){
   syncExpName();
   S.published = false;
   S.retired = false;
+  S.paused = false;
+  S.phase = 'setup';
   S.maxStage = 0;
   S.activeSection = 'setup';
+  S.liveSec = 'controls';
+  S.reportSec = 'analysis';
+  S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
+  S.liveAnaEdit = false; S.liveAnaSnap = null;
+  S.goalChanges = [];
+  S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false, notionSynced:null};
   S.view = 'experiment';
   render();
   toast('Start with the name. Later stages unlock as you go.');
@@ -1461,16 +2156,21 @@ function newExperimentFlow(){
 const esc = (s) => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 /* real brand marks rather than a coloured letter */
 function brandMark(brand, cls){
-  const mosh = String(brand||'').toUpperCase() === 'MOSH';
+  const b = String(brand||'').toLowerCase();
+  const mosh = b === 'mosh';
+  const mapped = b === 'mapped';
   return `<img class="bmark ${cls||''}" src="assets/${mosh?'mosh-mark.jpg':'moshy-mark.png'}"
-    alt="${mosh?'MOSH':'MOSHY'}">`;
+    alt="${mapped?'Mapped':(mosh?'Mosh':'Moshy')}">`;
 }
 /* Amplitude is where the analysis lives */
+function ampMark(){
+  return `<svg class="amplogo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2L2.5 20.5h4.2L12 8.8l5.3 11.7h4.2L12 2z"/></svg>`;
+}
 function ampButton(){
   const a = S.exp.amp || {};
   return a.created
-    ? `<a class="btn ampout" href="https://app.amplitude.com" target="_blank" rel="noopener">View in Amplitude</a>`
-    : `<button class="btn amp" data-act="amp-create">Create Amplitude dashboard</button>`;
+    ? `<a class="btn ampout" href="https://app.amplitude.com" target="_blank" rel="noopener">${ampMark()} View in Amplitude</a>`
+    : `<button class="btn amp" data-act="amp-create">${ampMark()} Create Amplitude dashboard</button>`;
 }
 function ampCharts(){
   const g = goalOf();
@@ -1488,6 +2188,8 @@ function render(){
   const fid = a && a.dataset ? a.dataset.fid : null;
   let ss = null, se = null;
   if(fid && typeof a.selectionStart === 'number'){ ss = a.selectionStart; se = a.selectionEnd; }
+  const contentEl = document.querySelector('.content');
+  const scrollTop = contentEl ? contentEl.scrollTop : 0;
 
   const app = document.getElementById('app');
   app.innerHTML = S.view === 'dashboard' ? viewDashboard()
@@ -1499,8 +2201,15 @@ function render(){
     if(stage) stage.insertAdjacentHTML('beforeend', viewBuilder());
   }
   if(S.modal) app.insertAdjacentHTML('beforeend', viewModal());
-  app.insertAdjacentHTML('beforeend', S.chat.open ? viewChat() : chatLauncher());
+  if(S.chat.open){
+    const shell = app.querySelector('.shell');
+    if(shell) shell.insertAdjacentHTML('beforeend', viewChat());
+  }
   bind();
+  if(S.phase === 'report' && S.view === 'experiment') paintShareCards();
+
+  const contentAfter = document.querySelector('.content');
+  if(contentAfter) contentAfter.scrollTop = scrollTop;
 
   if(fid){
     const t = document.querySelector(`[data-fid="${fid}"]`);
@@ -1524,6 +2233,10 @@ function nav(active){
       Care products <span class="count">${Object.keys(CARE).length}</span></a>
     <a data-act="go-lib" data-t="goals" class="${lib&&S.libTab==='goals'?'on':''}">
       Conversion goals <span class="count">${Object.keys(GOALS).length}</span></a>
+    <button class="ai" data-act="chat-open" type="button">
+      <i></i>
+      <span>AI assistant<span class="sub">Create packages, products, goals</span></span>
+    </button>
     <div class="foot"><span class="av">SK</span><span>Sarah K.</span></div>
   </div>`;
 }
@@ -1941,7 +2654,11 @@ function viewExperiment(){
   const e = S.exp;
   const statusChip = S.retired
     ? '<span class="chip">Retired</span>'
-    : (S.published ? `<span class="chip g">Live on ${e.envs.join(' + ')}</span>` : '<span class="chip out">Draft</span>');
+    : (S.paused ? '<span class="chip a">Paused</span>'
+      : (S.published ? `<span class="chip g">Live on ${e.envs.join(' + ')}</span>` : '<span class="chip out">Draft</span>'));
+  const phaseMeta = S.phase === 'setup'
+    ? `setup ${stageIdx(S.activeSection)+1} of ${STAGES.length}`
+    : (S.phase === 'live' ? 'live board' : 'reporting');
   return `<div class="shell">${nav('exp')}
     <div class="stage">
       <div class="top">
@@ -1951,47 +2668,596 @@ function viewExperiment(){
             <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'} ${statusChip}</h1>
             <div class="meta">
               <span class="mono">exp_${e.key}</span>
-              <span>stage ${stageIdx(S.activeSection)+1} of ${STAGES.length}</span>
+              <span>${phaseMeta}</span>
               <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
             </div>
           </div>
         </div>
         <div class="rhs">
-          ${S.published ? ampButton() : ''}
-          ${S.published && !S.retired
-            ? `<button class="btn sec" data-act="retire">Retire</button>` : ''}
           <button class="btn sec" data-act="go-dash">Save and exit</button>
         </div>
       </div>
       <div class="content"><div class="content-inner">
         <div class="doc-wrap">
           ${railView()}
-          <div class="doc">
-            ${STAGES.map((s,i)=> reached(s.id) ? sectionFor(s.id) : lockedSection(s, i)).join('')}
-          </div>
+          ${S.phase === 'live' ? docLive() : S.phase === 'report' ? docReport() : docSetup()}
         </div>
       </div></div>
     </div></div>`;
 }
 
+function docSetup(){
+  return `<div class="doc">
+    ${S.published ? `<div class="lockban">
+      <div style="flex:1">
+        <div class="bt">Saved configuration for a ${S.retired?'retired':'live'} experiment</div>
+        <div class="bd">Sections stay read-only until you use Edit. Changes update analysis across Live and Reporting.</div>
+      </div>
+      <button class="btn pri" data-act="go-phase" data-p="${S.retired?'report':'live'}">
+        ${S.retired?'Open reporting':'Open live board'}</button>
+    </div>` : ''}
+    ${STAGES.map((s,i)=> reached(s.id) ? sectionFor(s.id) : lockedSection(s, i)).join('')}
+  </div>`;
+}
+
+function rangePicker(){
+  const w = liveWindow();
+  return `<div class="rangepick">
+    ${[['7','Last 7'],['14','Last 14'],['full','Full run'],['custom','Custom']].map(([k,l])=>
+      `<button data-act="live-range" data-r="${k}" class="${S.liveRange===k?'on':''}">${l}</button>`).join('')}
+    ${S.liveRange==='custom' ? `<div class="datepair">
+      <input type="date" data-livefrom value="${w.startIso}" min="${w.minIso}" max="${w.maxIso}">
+      <span class="k">to</span>
+      <input type="date" data-liveto value="${w.endIso}" min="${w.minIso}" max="${w.maxIso}">
+    </div>` : ''}
+  </div>`;
+}
+
+function liveStatusBar(){
+  const cls = S.retired ? 'retired' : (S.paused ? 'paused' : '');
+  const status = S.retired ? '<span class="chip">Retired</span>'
+    : (S.paused ? '<span class="chip a">Paused</span>' : '<span class="pulse"><i></i>Live</span>');
+  return `<div class="livestatus ${cls}">
+    <div class="lhs">${status}</div>
+    <div class="rhs">
+      ${!S.retired ? `<button class="btn sec" data-act="pause">${S.paused?'Resume':'Pause'}</button>
+        <button class="btn danger" data-act="retire">Retire</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function liveGoalControlHtml(){
+  const e = S.exp;
+  const g = goalOf();
+  return `<div class="rcgoal">
+    <div class="flab" style="margin-bottom:8px">Conversion goal</div>
+    <select class="sel" data-goal data-fid="live-goal" style="width:100%;max-width:480px;font-size:13px">
+      <option value="" ${!e.goal?'selected':''}>Select a conversion goal</option>
+      ${Object.values(GOALS).map(x=>`<option value="${x.id}" ${e.goal===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}
+    </select>
+    <div class="k" style="margin-top:8px">${g
+      ? `${esc(goalPath(g))} · baseline ${baseCR()}%`
+      : 'Pick the event that defines a conversion for all analysis below.'}</div>
+  </div>`;
+}
+
+function reportingControls(){
+  return `<div class="reportctrl" id="live-reporting">
+    <div class="rch">
+      <div class="rct">Reporting controls</div>
+      <span class="chip g">goal · range · statistics</span>
+    </div>
+    <div class="rcbody">
+      ${liveGoalControlHtml()}
+      <div>
+        <div class="flab" style="margin-bottom:6px">Date range</div>
+        ${rangePicker()}
+      </div>
+      <div>
+        <div class="flab" style="margin-bottom:6px">Significance, power and MDE</div>
+        ${liveAnaControlsHtml()}
+        <div class="k" style="margin-top:6px">Goal and date range update immediately. Statistical settings recalculate only when you save.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function liveOverview(){
+  const stats = liveStats();
+  const {days} = liveWindow();
+  const totalN = stats.reduce((a,s)=>a+s.n,0);
+  const daily = Math.round(stats.reduce((a,s)=>a + (s.slice.reduce((x,p)=>x+p.n,0) / Math.max(1,s.slice.length)), 0));
+  const e = S.exp;
+  const a = e.audience;
+  const ctrl = stats[0];
+  const arm = liveCompareArm();
+  const testVariants = stats.slice(1);
+  const compareIdx = getLiveCompareIdx();
+  const smallest = Math.min(...stats.map(s => Math.round(s.n / Math.max(1, liveWindow().end - liveWindow().start + 1) * 7)));
+  const nArm = Math.min(...stats.map(s => s.n));
+  const curMde = detectableMdeAt(nArm);
+  const daysLeft = daysToDetectNum();
+
+  let body = `<div class="k" style="margin-top:4px">Add a second variant to see observed results and predictions.</div>`;
+  if(arm){
+    const st = STATES[arm.state] || STATES.flat;
+    const chipCls = arm.state==='win'?'g':arm.state==='loss'?'h':arm.state==='early'?'a':'out';
+    body = `
+      ${testVariants.length > 1 ? `<div class="ov-head">
+        <div class="rangepick">${testVariants.map((v,i)=>{
+          const idx = i + 1;
+          return `<button data-act="live-compare" data-i="${idx}" class="${compareIdx===idx?'on':''}">${esc(v.name)} vs ${esc(ctrl.name)}</button>`;
+        }).join('')}</div>
+        <span class="k">${S.conf}% significance · ${S.power}% power · ${S.exp.mde}% target MDE</span>
+      </div>` : `<div class="ov-head"><span class="k">${esc(arm.name)} vs ${esc(ctrl.name)} · ${S.conf}% significance · ${S.power}% power · ${S.exp.mde}% target MDE</span></div>`}
+      <div class="ov-primary">
+        <div class="ovp">
+          <div class="k">Observed relative change</div>
+          <div class="v">${arm.rel>0?'+':''}${arm.rel}%</div>
+          <div class="s">${esc(arm.name)} vs ${esc(ctrl.name)}</div>
+        </div>
+        <div class="ovp">
+          <div class="k">Observed absolute change</div>
+          <div class="v">${arm.abs>0?'+':''}${arm.abs} pp</div>
+          <div class="s">${ctrl.cr.toFixed(2)}% → ${arm.cr.toFixed(2)}%</div>
+        </div>
+        <div class="ovp">
+          <div class="k">Status</div>
+          <div class="v" style="font-size:18px;margin-top:10px"><span class="chip ${chipCls}">${st.label}</span></div>
+          <div class="s">At ${S.conf}% significance and ${S.power}% power</div>
+        </div>
+      </div>
+      <div class="ov-secondary">
+        <div class="ovs">
+          <div class="k">Currently detectable MDE</div>
+          <div class="v">${curMde===Infinity?'—':curMde+'%'}</div>
+          <div class="s">n=${nArm.toLocaleString()} per arm</div>
+        </div>
+        <div class="ovs">
+          <div class="k">Days to hit target MDE</div>
+          <div class="v">${daysLeft===Infinity?'—':daysLeft}</div>
+          <div class="s">Target ${S.exp.mde}% · ~${smallest.toLocaleString()} / week in smallest arm</div>
+        </div>
+        <div class="ovs">
+          <div class="k">Observed p-value</div>
+          <div class="v" style="font-size:22px">${arm.p < 0.001 ? '<0.001' : arm.p.toFixed(3)}</div>
+          <div class="s">${esc(arm.name)} vs ${esc(ctrl.name)}</div>
+        </div>
+      </div>`;
+  }
+
+  return `<div class="stg ${S.liveSec==='overview'?'act':''}" id="live-overview">
+    <div class="sec-h">
+      <span class="nm">Overview</span>
+      <div class="rt"><span class="chip out">Day ${days} of ${e.lengthDays} · ${e.envs.join(' + ')}</span></div>
+    </div>
+    ${body}
+    <div class="ov-tertiary">
+      <span class="ovt"><b>Enrolled in range</b> ${totalN.toLocaleString()} · ~${daily.toLocaleString()} / day</span>
+      <span class="ovt"><b>Traffic enrolled</b> ${e.traffic}% · ${e.evenSplit?'Even':'Custom'} split · ${stats.map(s=>`${s.name} ${splitOf(s.id)}%`).join(' · ')}</span>
+      <span class="ovt"><b>Audience</b> ${esc(a.brand)} · ${esc(a.country)} · ${esc(a.vertical)} · ${esc(a.customer)} customer${a.extra.length?` · ${a.extra.length} rule${a.extra.length===1?'':'s'}`:''}</span>
+    </div>
+  </div>`;
+}
+
+function convSeriesPts(series, mode){
+  const {start, end} = liveWindow();
+  return series.map(s => {
+    const slice = s.pts.filter(p => p.day >= start && p.day <= end);
+    if(mode !== 'cumulative') return {...s, chartPts: slice.map(p => ({day:p.day, v:p.cr}))};
+    let runN = 0, runC = 0;
+    const chartPts = slice.map(p => {
+      runN += p.n;
+      runC += p.c;
+      return {day:p.day, v: runN ? +(runC / runN * 100).toFixed(3) : 0};
+    });
+    return {...s, chartPts};
+  });
+}
+
+function convChartSvg(series, mode){
+  const {start, end} = liveWindow();
+  const chartSeries = convSeriesPts(series, mode);
+  const W = 720, H = 220, pad = {t:16, r:16, b:28, l:40};
+  const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+  const all = chartSeries.flatMap(s => s.chartPts.map(p => p.v));
+  const ymin = Math.max(0, Math.min(...all, baseCR()) * 0.7);
+  const ymax = Math.max(...all, baseCR()) * 1.15 || 10;
+  const x = d => pad.l + ((d - start) / Math.max(1, end - start)) * iw;
+  const y = v => pad.t + ih - ((v - ymin) / Math.max(0.001, ymax - ymin)) * ih;
+  const paths = chartSeries.map(s => {
+    const pts = s.chartPts;
+    if(!pts.length) return '';
+    const d = pts.map((p,i) => `${i?'L':'M'}${x(p.day).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`
+      + pts.map(p => `<circle cx="${x(p.day).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="3" fill="#fff" stroke="${s.color}" stroke-width="2.2"/>`).join('');
+  }).join('');
+  const ySuffix = '%';
+  const markers = (S.goalChanges||[]).filter(g => g.day >= start && g.day <= end).map(g =>
+    `<line x1="${x(g.day).toFixed(1)}" x2="${x(g.day).toFixed(1)}" y1="${pad.t}" y2="${pad.t+ih}"
+      stroke="#c47a1a" stroke-dasharray="3 3" stroke-width="1.2"/>
+     <text x="${x(g.day).toFixed(1)}" y="${pad.t+10}" text-anchor="middle" font-size="9" fill="#c47a1a">goal</text>`
+  ).join('');
+  const yTicks = [ymin, (ymin+ymax)/2, ymax].map(v =>
+    `<text x="${pad.l-6}" y="${y(v)+3}" text-anchor="end" font-size="10" fill="#7a8781">${v.toFixed(1)}${ySuffix}</text>
+     <line x1="${pad.l}" x2="${pad.l+iw}" y1="${y(v)}" y2="${y(v)}" stroke="#eef1f0" stroke-width="1"/>`
+  ).join('');
+  const xTicks = [start, Math.round((start+end)/2), end].map(d =>
+    `<text x="${x(d).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#7a8781">D${d}</text>`
+  ).join('');
+  return `<svg class="chartsvg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${yTicks}${paths}${markers}${xTicks}</svg>`;
+}
+
+function ciPlotScale(stats){
+  const test = stats.filter((_,i)=>i>0);
+  if(!test.length) return null;
+  const span = Math.max(...test.map(s => Math.max(Math.abs(s.abs) + s.half, 1.5)), 2) * 1.35;
+  const dmin = -span, dmax = span;
+  const pos = v => Math.max(0, Math.min(100, ((v - dmin) / (dmax - dmin)) * 100));
+  return {dmin, dmax, pos};
+}
+function ciPlotHtml(s, scale){
+  if(!scale || !s) return '—';
+  const mid = scale.pos(s.abs);
+  const bandL = scale.pos(s.lo), bandR = scale.pos(s.hi);
+  const zero = scale.pos(0);
+  return `<div class="ciwrap">
+    <div class="citrack">
+      <span class="cipt" style="left:${mid.toFixed(1)}%">${s.abs>0?'+':''}${s.abs}</span>
+      <span class="cizl" style="left:${zero.toFixed(1)}%">0</span>
+      <span class="cizero" style="left:${zero.toFixed(1)}%"></span>
+      <span class="ciband" style="left:${bandL.toFixed(1)}%;width:${Math.max(2, bandR-bandL).toFixed(1)}%"></span>
+      <span class="cimark" style="left:${mid.toFixed(1)}%"></span>
+    </div>
+    <div class="ciends"><span>${s.lo.toFixed(2)}</span><span>${s.hi.toFixed(2)} pp</span></div>
+  </div>`;
+}
+
+function liveConversion(){
+  const series = liveSeries();
+  const stats = liveStats();
+  const ciScale = ciPlotScale(stats);
+  const chartMode = S.liveConvChart === 'cumulative' ? 'cumulative' : 'daily';
+  const chartTitle = chartMode === 'cumulative' ? 'Conversion over time' : 'Daily conversion rate';
+  return `<div class="stg ${S.liveSec==='conversion'?'act':''}" id="live-conversion">
+    <div class="sec-h">
+      <span class="nm">Conversion trends</span>
+      <div class="rt">${ampButton()}</div>
+    </div>
+    <div class="chartbox">
+      <div class="ch">
+        <div class="ct">${chartTitle}</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="rangepick">
+            <button data-act="conv-chart" data-m="daily" class="${chartMode==='daily'?'on':''}">Daily conversion rate</button>
+            <button data-act="conv-chart" data-m="cumulative" class="${chartMode==='cumulative'?'on':''}">Conversion over time</button>
+          </div>
+          <div class="leg">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>
+        </div>
+      </div>
+      ${convChartSvg(series, chartMode)}
+      <div class="k" style="margin-top:8px">${chartMode==='daily'
+        ? 'Conversion rate for each day in the selected range.'
+        : 'Running conversion rate from the start of the range through each day.'}</div>
+    </div>
+    <div class="chartbox">
+      <div class="ch"><div class="ct">Totals for selected range</div></div>
+      <table class="livetable">
+        <thead><tr><th>Variant</th><th>Entrants</th><th>Conversions</th><th>CR</th><th>Uplift</th><th>Abs</th><th class="ci-col">CI (${S.conf}%)</th></tr></thead>
+        <tbody>${stats.map((s,i)=>{
+          return `<tr>
+            <td><span class="swatch" style="background:${s.color}"></span><b>${esc(s.name)}</b>${i===0?' · control':''}</td>
+            <td>${s.n.toLocaleString()}</td>
+            <td>${s.c.toLocaleString()}</td>
+            <td>${s.cr.toFixed(2)}%</td>
+            <td>${i===0?'—':(s.rel>0?'+':'')+s.rel+'%'}</td>
+            <td>${i===0?'—':(s.abs>0?'+':'')+s.abs+' pp'}</td>
+            <td class="ci-cell">${i===0?'—':ciPlotHtml(s, ciScale)}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function trafficSummaryHtml(){
+  ensureSplits();
+  const e = S.exp;
+  return `<div class="trafsum">
+    <div class="ts">
+      <div class="k">Total enrolled</div>
+      <div class="v">${e.traffic}%</div>
+    </div>
+    ${e.variants.map(v=>`<div class="ts">
+      <div class="k">Variant ${esc(v.name||v.id)}</div>
+      <div class="v">${splitOf(v.id)}%</div>
+      <div class="k" style="margin-top:4px">${perVariantDaily(v.id).toLocaleString()} / day</div>
+    </div>`).join('')}
+  </div>
+  <div class="k" style="margin-top:10px">${e.evenSplit?'Even split':'Custom split'}.</div>`;
+}
+
+function docLive(){
+  return `<div class="doc">
+    ${liveStatusBar()}
+    ${reportingControls()}
+    ${liveOverview()}
+    ${liveConversion()}
+  </div>`;
+}
+
+function buildAnalysis(){
+  const primary = liveCompareArm();
+  const g = goalOf();
+  const st = primary ? (STATES[primary.state] || STATES.flat) : null;
+  if(!primary){
+    return `Experiment ${S.exp.name || S.exp.key} does not have a comparison arm yet.`;
+  }
+  const verdict = primary.state === 'win'
+    ? `Variant ${primary.name} beat control on ${g?g.name:'the primary goal'}.`
+    : primary.state === 'loss'
+      ? `Control beat variant ${primary.name} on ${g?g.name:'the primary goal'}.`
+      : primary.state === 'early'
+        ? `Too early to call. Sample is still building.`
+        : `No significant difference between ${primary.name} and control at ${S.conf}% significance.`;
+  const move = `Observed absolute effect ${primary.abs>0?'+':''}${primary.abs} pp `
+    + `(${primary.rel>0?'+':''}${primary.rel}% relative), ${S.conf}% CI [${primary.lo}, ${primary.hi}], p=${primary.p.toFixed(3)}.`;
+  const driver = primary.state === 'win'
+    ? 'Likely driver: the variant change set improved conversion along the measured path. Confirm in Amplitude before shipping.'
+    : primary.state === 'loss'
+      ? 'Likely driver: the variant change set reduced conversion. Prefer holding or iterating rather than shipping.'
+      : 'Signal is weak relative to noise. Extend the run or raise traffic if the decision is still open.';
+  const rec = primary.state === 'win' ? 'Recommendation: ship the variant and document the change set.'
+    : primary.state === 'loss' ? 'Recommendation: keep control. Capture the learning in Notion.'
+    : primary.state === 'early' ? 'Recommendation: keep running until the detectable MDE reaches the target.'
+    : 'Recommendation: hold. Do not ship on a flat or trending result.';
+  return `${verdict}\n\n${move}\n\n${driver}\n\n${rec}\n\nStatus: ${st.label}. Enrolled ${stats.reduce((a,s)=>a+s.n,0).toLocaleString()} people over ${liveDayCount()} days.`;
+}
+
+function reportAnalysis(){
+  if(!S.report.analysis) S.report.analysis = buildAnalysis();
+  return `<div class="stg act" id="report-analysis">
+    <div class="sec-h">
+      <span class="nm">Auto-generated analysis</span>
+      <div class="rt"><button class="btn sec" data-act="regen-analysis">Regenerate</button></div>
+    </div>
+    <div class="k" style="margin-bottom:10px">Editable. Regenerating overwrites the text below from the final live stats.</div>
+    <textarea class="fld" rows="12" data-analysis style="width:100%;line-height:1.55">${esc(S.report.analysis)}</textarea>
+  </div>`;
+}
+
+function reportShare(){
+  return `<div class="stg ${S.reportSec==='share'?'act':''}" id="report-share">
+    <div class="sec-h"><span class="nm">Share cards</span>
+      <div class="rt"><span class="chip out">1200 × 630</span></div></div>
+    <div class="k" style="margin-bottom:12px">Strava-style result cards. Copy an image for Slack, or download a PNG.</div>
+    <div class="sharegrid">
+      ${['result','compare','timeline'].map(k=>`<div class="sharecard">
+        <canvas id="share-${k}" width="1200" height="630"></canvas>
+        <div class="sa">
+          <span class="k" style="flex:1;text-transform:capitalize">${k === 'compare' ? 'Variant compare' : k === 'timeline' ? 'Run timeline' : 'Result headline'}</span>
+          <button class="btn sec xs" data-act="share-copy" data-k="${k}">Copy image</button>
+          <button class="btn sec xs" data-act="share-dl" data-k="${k}">Download</button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function slackBody(){
+  const stats = liveStats();
+  const primary = stats[1];
+  const g = goalOf();
+  const st = primary ? (STATES[primary.state]||STATES.flat).label : 'n/a';
+  return `*Experiment result*\n${S.exp.name}\n\n*Verdict:* ${st}\n*Goal:* ${g?g.name:'—'}\n*Effect:* ${primary?`${primary.abs>0?'+':''}${primary.abs} pp (${primary.rel>0?'+':''}${primary.rel}%)`:'—'}\n*CI (${S.conf}%):* ${primary?`[${primary.lo}, ${primary.hi}]`:'—'}\n*Sample:* ${stats.reduce((a,s)=>a+s.n,0).toLocaleString()} enrolled over ${liveDayCount()} days\n\n_${(S.report.analysis||'').split('\n')[0]}_`;
+}
+
+function reportSlack(){
+  return `<div class="stg ${S.reportSec==='slack'?'act':''}" id="report-slack">
+    <div class="sec-h"><span class="nm">Slack</span>
+      <div class="rt">${S.report.slackPosted?'<span class="chip g">Posted</span>':''}</div></div>
+    <div class="row" style="margin-bottom:12px;align-items:center">
+      <div style="flex:1">
+        <div class="flab">Channel</div>
+        <select class="sel" data-slackch>
+          ${['#cro-experiments','#growth','#moshy-au','#mosh-au'].map(c=>
+            `<option value="${c}" ${S.report.slackChannel===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:18px">
+        <button class="btn sec" data-act="slack-copy">Copy for Slack</button>
+        <button class="btn pri" data-act="slack-post" ${S.report.slackPosted?'disabled':''}>
+          ${S.report.slackPosted?'Posted':'Post to Slack'}</button>
+      </div>
+    </div>
+    <div class="slackprev" id="slackPrev">${esc(slackBody())}</div>
+    <div class="k" style="margin-top:8px">Prototype only: Post simulates a send. Copy puts mrkdwn on the clipboard.</div>
+  </div>`;
+}
+
+function reportNotion(){
+  const stats = liveStats();
+  const primary = stats[1];
+  const g = goalOf();
+  const rows = [
+    ['Name', S.exp.name],
+    ['Key', S.exp.key],
+    ['Dates', `Day 1–${liveDayCount()} of ${S.exp.lengthDays}`],
+    ['Variants', S.exp.variants.map(v=>v.name||v.id).join(' / ')],
+    ['Goal', g ? g.name : '—'],
+    ['Result', primary ? (STATES[primary.state]||STATES.flat).label : '—'],
+    ['Uplift', primary ? `${primary.rel>0?'+':''}${primary.rel}% (${primary.abs>0?'+':''}${primary.abs} pp)` : '—'],
+    ['CI', primary ? `${S.conf}% [${primary.lo}, ${primary.hi}]` : '—'],
+    ['Decision', primary?.state==='win'?'Ship':primary?.state==='loss'?'Hold control':'Hold / iterate']
+  ];
+  return `<div class="stg ${S.reportSec==='notion'?'act':''}" id="report-notion">
+    <div class="sec-h"><span class="nm">Notion</span>
+      <div class="rt">
+        ${S.report.notionSynced ? `<span class="chip g">${esc(S.report.notionSynced)}</span>` : ''}
+        <button class="btn pri" data-act="notion-sync">${S.report.notionSynced?'Re-sync':'Sync to Notion'}</button>
+      </div>
+    </div>
+    <div class="k" style="margin-bottom:12px">Field mapping written to the experiment page. Prototype simulates the sync.</div>
+    <div class="chartbox">
+      <div class="notionmap">
+        ${rows.map(([k,v])=>`<div class="nk">${esc(k)}</div><div class="nv">${esc(String(v))}</div>`).join('')}
+      </div>
+    </div>
+    ${S.report.notionSynced ? `<button class="btn sec" data-act="notion-open">Open in Notion</button>` : ''}
+  </div>`;
+}
+
+function docReport(){
+  return `<div class="doc">
+    ${S.reportSec === 'analysis' ? reportAnalysis() + reportShare() : ''}
+    ${S.reportSec === 'share' ? reportShare() : ''}
+    ${S.reportSec === 'slack' ? reportSlack() : ''}
+    ${S.reportSec === 'notion' ? reportNotion() : ''}
+  </div>`;
+}
+
+function paintShareCards(){
+  const stats = liveStats();
+  const primary = stats[1];
+  const g = goalOf();
+  const name = S.exp.name || ('exp_' + S.exp.key);
+  const draw = (id, fn) => {
+    const c = document.getElementById(id);
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    fn(ctx, c.width, c.height);
+  };
+  const bg = (ctx, w, h) => {
+    const grd = ctx.createLinearGradient(0,0,w,h);
+    grd.addColorStop(0, '#0f1f1a'); grd.addColorStop(1, '#16352b');
+    ctx.fillStyle = grd; ctx.fillRect(0,0,w,h);
+  };
+  const brand = (ctx) => {
+    ctx.fillStyle = '#7fd8b8'; ctx.font = '600 22px Inter, system-ui, sans-serif';
+    ctx.fillText('MOSHY · Experiment', 56, 64);
+  };
+  draw('share-result', (ctx,w,h) => {
+    bg(ctx,w,h); brand(ctx);
+    ctx.fillStyle = '#fff'; ctx.font = '700 54px Inter, system-ui, sans-serif';
+    const verdict = !primary ? 'No comparison'
+      : primary.state==='win' ? 'Significant win'
+      : primary.state==='loss' ? 'Control held'
+      : primary.state==='early' ? 'Too early'
+      : 'No clear winner';
+    ctx.fillText(verdict, 56, 160);
+    ctx.fillStyle = '#a9c2b8'; ctx.font = '500 28px Inter, system-ui, sans-serif';
+    ctx.fillText(name.slice(0, 48), 56, 220);
+    ctx.fillStyle = '#fff'; ctx.font = '700 72px Inter, system-ui, sans-serif';
+    ctx.fillText(primary ? `${primary.abs>0?'+':''}${primary.abs} pp` : '—', 56, 340);
+    ctx.fillStyle = '#a9c2b8'; ctx.font = '500 26px Inter, system-ui, sans-serif';
+    ctx.fillText(primary ? `${primary.rel>0?'+':''}${primary.rel}% relative · ${g?g.name:''}` : '', 56, 390);
+    ctx.fillText(`${S.conf}% CI ${primary?`[${primary.lo}, ${primary.hi}]`:''} · p=${primary?primary.p.toFixed(3):'—'}`, 56, 440);
+  });
+  draw('share-compare', (ctx,w,h) => {
+    bg(ctx,w,h); brand(ctx);
+    ctx.fillStyle = '#fff'; ctx.font = '700 40px Inter, system-ui, sans-serif';
+    ctx.fillText('Variant comparison', 56, 140);
+    stats.forEach((s,i) => {
+      const y = 210 + i * 120;
+      ctx.fillStyle = s.color; ctx.beginPath(); ctx.arc(70, y-10, 10, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '650 32px Inter, system-ui, sans-serif';
+      ctx.fillText(`${s.name}${i===0?' (control)':''}`, 100, y);
+      ctx.fillStyle = '#a9c2b8'; ctx.font = '500 24px Inter, system-ui, sans-serif';
+      ctx.fillText(`${s.cr.toFixed(2)}% CR · ${s.n.toLocaleString()} enrolled`
+        + (i?` · ${s.rel>0?'+':''}${s.rel}%` : ''), 100, y+36);
+    });
+  });
+  draw('share-timeline', (ctx,w,h) => {
+    bg(ctx,w,h); brand(ctx);
+    ctx.fillStyle = '#fff'; ctx.font = '700 40px Inter, system-ui, sans-serif';
+    ctx.fillText('Run timeline', 56, 140);
+    const days = liveDayCount();
+    ctx.fillStyle = '#a9c2b8'; ctx.font = '500 26px Inter, system-ui, sans-serif';
+    ctx.fillText(`Day ${days} of ${S.exp.lengthDays} · ${S.exp.traffic}% traffic · ${S.exp.envs.join(' + ')}`, 56, 200);
+    const series = liveSeries();
+    const padL=56, padR=56, padT=260, padB=80;
+    const iw = w-padL-padR, ih = h-padT-padB;
+    const all = series.flatMap(s=>s.pts.map(p=>p.cr));
+    const ymin = Math.min(...all)*0.8, ymax = Math.max(...all)*1.15;
+    series.forEach(s => {
+      ctx.strokeStyle = s.color; ctx.lineWidth = 4; ctx.beginPath();
+      s.pts.forEach((p,i) => {
+        const x = padL + ((p.day-1)/Math.max(1,days-1))*iw;
+        const y = padT + ih - ((p.cr-ymin)/Math.max(0.001,ymax-ymin))*ih;
+        if(i) ctx.lineTo(x,y); else ctx.moveTo(x,y);
+      });
+      ctx.stroke();
+    });
+  });
+}
+
+async function copyShareCanvas(k){
+  const c = document.getElementById('share-'+k);
+  if(!c) return;
+  try{
+    const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+    toast('Image copied.');
+  }catch(err){
+    toast('Could not copy. Use Download instead.');
+  }
+}
+function downloadShareCanvas(k){
+  const c = document.getElementById('share-'+k);
+  if(!c) return;
+  const a = document.createElement('a');
+  a.href = c.toDataURL('image/png');
+  a.download = `exp-${S.exp.key}-${k}.png`;
+  a.click();
+  toast('Download started.');
+}
+
 function railView(){
-  const pct = Math.round((S.maxStage / (STAGES.length-1)) * 100);
   return `<div class="rail">
-    <div class="prog"><i style="width:${pct}%"></i></div>
-    ${STAGES.map((s,i)=>{
-      const isLocked = !reached(s.id);
-      const done = stageDone(s.id);
-      const warn = s.id === 'variants' && aaVariants().length && !S.exp.aaAcknowledged;
-      return `<a data-act="go-stage" data-s="${s.id}"
-        class="${S.activeSection===s.id?'on':''} ${done?'done':''} ${isLocked?'locked':''}">
-        <span class="num">${isLocked ? '' : (done ? '✓' : i+1)}</span>
-        <span class="lbl">${s.label}</span>
-        ${warn ? '<span class="warn">!</span>' : ''}
-      </a>`;
+    ${PHASES.map((p,i)=>{
+      const unlocked = phaseUnlocked(p.id);
+      const on = S.phase === p.id;
+      if(!unlocked){
+        return `<div class="phcard locked">
+          <div class="phn">Phase ${i+1}</div>
+          <div class="pht">${p.label}</div>
+          <div class="phs">${p.sub}</div>
+          <div class="phlock">${p.id==='live'?'Publish to unlock':'Retire to unlock'}</div>
+        </div>`;
+      }
+      let subs = '';
+      if(on && p.id === 'setup'){
+        subs = `<div class="phsubs">${STAGES.map((s,si)=>{
+          const isLocked = !reached(s.id);
+          const done = stageDone(s.id);
+          return `<a data-act="go-stage" data-s="${s.id}"
+            class="${S.activeSection===s.id?'on':''} ${isLocked?'locked':''}">
+            <span class="num" style="width:16px;height:16px;font-size:9px">${isLocked?'':(done?'✓':si+1)}</span>
+            <span class="lbl">${s.label}</span>
+          </a>`;
+        }).join('')}</div>`;
+      } else if(on && p.id === 'live'){
+        subs = `<div class="phsubs">${LIVE_SECS.map(s=>
+          `<a data-act="go-livesec" data-s="${s.id}" class="${S.liveSec===s.id?'on':''}">
+            <span class="dot"></span>${s.label}</a>`).join('')}</div>`;
+      } else if(on && p.id === 'report'){
+        subs = `<div class="phsubs">${REPORT_SECS.map(s=>
+          `<a data-act="go-reportsec" data-s="${s.id}" class="${S.reportSec===s.id?'on':''}">
+            <span class="dot"></span>${s.label}</a>`).join('')}</div>`;
+      }
+      return `<div class="phcard ${on?'on':''}">
+        <div data-act="go-phase" data-p="${p.id}" style="cursor:pointer">
+          <div class="phn">Phase ${i+1}</div>
+          <div class="pht">${p.label}</div>
+          <div class="phs">${p.sub}</div>
+        </div>
+        ${subs}
+      </div>`;
     }).join('')}
-    <div class="railnote">${S.maxStage < STAGES.length-1
-      ? 'Later stages unlock as you complete each one.'
-      : 'Every stage is unlocked. Move between them freely.'}</div>
+    <div class="railnote">${!S.published
+      ? 'Publish from Review to unlock the live board.'
+      : (!S.retired ? 'Retire from the live status bar to unlock reporting.'
+        : 'All phases unlocked. Edit setup sections if needed.')}</div>
   </div>`;
 }
 
@@ -2026,7 +3292,8 @@ function secFoot(id){
   if(!showNext(id)) return '';
   const b = stageBlockers(id);
   return `<div class="sec-f">
-    <button class="btn pri" data-act="next" data-s="${id}" ${b.length?'disabled':''}
+    <button class="btn pri ${b.length?'is-off':''}" data-act="next" data-s="${id}"
+      aria-disabled="${b.length?'true':'false'}"
       title="${b.length?b.join(' · '):''}">${nextLabel(id)}</button>
   </div>`;
 }
@@ -2049,39 +3316,70 @@ const goalRight = () => goalOf()
   : '<span class="chip out">1 required field</span>';
 
 function codeToggleRow(label, opts, field, tip){
+  ensureCodeCustom();
   const cur = S.exp.code[field];
-  return `<div class="codegroup">
+  const customOn = S.exp.codeCustom[field];
+  const rule = CODE_RULES[field];
+  const warn = customOn ? codeFieldWarning(field, cur) : '';
+  const maxLen = rule.exact || rule.max;
+  return `<div class="codegroup" id="codegrp-${field}">
     <div class="flab">${label}${tip?` <span class="info" data-t="${tip}">i</span>`:''}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      ${opts.map(o=>`<button class="chip pick ${cur===o.id?'on':''}"
+      ${opts.map(o=>`<button class="chip pick ${!customOn && cur===o.id?'on':''}"
         data-act="code" data-f="${field}" data-v="${o.id}">${esc(o.label)}
         <span class="k" style="margin-left:2px">${o.id}</span></button>`).join('')}
+      <button class="chip pick ${customOn?'on':''}" data-act="code" data-f="${field}" data-v="__custom__">Custom</button>
     </div>
+    ${customOn ? `<div class="codecustom" style="margin-top:8px">
+      <div style="display:flex;gap:8px;align-items:center;max-width:260px">
+        <input class="fld mono ${warn?'codewarn':''}" data-code-inp="${field}" data-fid="code-${field}"
+          value="${esc(cur)}" placeholder="${'X'.repeat(maxLen)}" maxlength="${maxLen}"
+          autocapitalize="characters" spellcheck="false">
+        <span class="k">${rule.hint}</span>
+      </div>
+      <div class="codewarn" id="codewarn-${field}" ${warn?'':'style="display:none"'}>${esc(warn)}</div>
+    </div>` : ''}
   </div>`;
 }
 
+function nameSummaryHtml(){
+  const e = S.exp;
+  const brand = CODE_BRAND.find(x=>x.id===e.code.brand);
+  const geo = CODE_GEO.find(x=>x.id===e.code.country);
+  const vert = CODE_VERT.find(x=>x.id===e.code.vertical);
+  const loc = CODE_LOC.find(x=>x.id===e.code.location);
+  return `<div class="setupsum">
+    <div class="codeprev"><span class="ok">${esc(composeExpName(e) || expCode(e))}</span></div>
+    <div class="rowline"><span class="lbl">Key</span><span class="chip out mono">${esc(e.key)}</span></div>
+    <div class="rowline"><span class="lbl">Brand</span>
+      <span class="chip">${esc(brand?brand.label:e.code.brand)} <span class="k">${esc(e.code.brand)}</span></span></div>
+    <div class="rowline"><span class="lbl">Geo</span>
+      <span class="chip">${esc(geo?geo.label:e.code.country)} <span class="k">${esc(e.code.country)}</span></span></div>
+    <div class="rowline"><span class="lbl">Vertical</span>
+      <span class="chip">${esc(vert?vert.label:e.code.vertical)} <span class="k">${esc(e.code.vertical)}</span></span></div>
+    <div class="rowline"><span class="lbl">Location</span>
+      <span class="chip">${esc(loc?loc.label:e.code.location)} <span class="k">${esc(e.code.location)}</span></span></div>
+  </div>`;
+}
 function secSetup(){
   const e = S.exp;
-  const preview = composeExpName(e);
   const hasDesc = !!String(e.descriptor||'').trim();
-  return `<div class="stg ${S.activeSection==='setup'?'act':''}" id="sec-setup">
-    ${secHead('setup', setupRight())}
+  const summary = setupSummaryMode('setup');
+  const editing = setupEditing('setup');
+  const right = S.published
+    ? setupEditActions('setup', 'Edit name')
+    : setupRight();
+  return `<div class="stg ${S.activeSection==='setup'?'act':''} ${editing?'editing':''}" id="sec-setup">
+    ${secHead('setup', right)}
+    ${summary ? nameSummaryHtml() : `
     <div class="k" style="margin-bottom:14px">
       The key is issued automatically. Brand, geo, vertical and location build the code.
-      The descriptor is the short human name.</div>
+      Pick a preset or choose Custom for your own shorthand.</div>
 
-    <div class="row" style="margin-bottom:14px">
-      <div style="max-width:110px">
-        <div class="flab">Key
-          <span class="info" data-t="Auto issued, like a Jira ticket number. Used in Amplitude and GrowthBook.">i</span></div>
-        <div class="fld lock mono" style="text-align:center;font-weight:700">${esc(e.key)}</div>
-      </div>
-      <div style="flex:1">
-        <div class="flab">Descriptor
-          <span class="info" data-t="The longhand name. Example: Redirect Test.">i</span></div>
-        <input class="fld" data-f="descriptor" data-fid="e-desc" value="${esc(e.descriptor)}"
-          placeholder="Redirect Test">
-      </div>
+    <div style="max-width:110px;margin-bottom:14px">
+      <div class="flab">Key
+        <span class="info" data-t="Auto issued, like a Jira ticket number. Used in Amplitude and GrowthBook.">i</span></div>
+      <div class="fld lock mono" style="text-align:center;font-weight:700">${esc(e.key)}</div>
     </div>
 
     ${codeToggleRow('Brand', CODE_BRAND, 'brand')}
@@ -2090,33 +3388,36 @@ function secSetup(){
     ${codeToggleRow('Location', CODE_LOC, 'location',
       'Where the experiment runs in the funnel: landing page, quiz, or checkout.')}
 
-    <div class="flab" style="margin-top:4px">Experiment name</div>
+    <div class="flab" style="margin-top:10px">Descriptor
+      <span class="info" data-t="The longhand name. Example: Redirect Test.">i</span></div>
+    <input class="fld" data-f="descriptor" data-fid="e-desc" value="${esc(e.descriptor)}"
+      placeholder="Redirect Test">
+
+    <div class="flab" style="margin-top:14px">Experiment name</div>
     <div class="codeprev" id="namePrev">
       <span class="ok">[${esc(expCode(e))}]</span>
       <span class="dim"> - </span>
       <span class="${hasDesc?'ok':'dim'}">[${hasDesc?esc(e.descriptor):'Descriptor'}]</span>
     </div>
     <div class="k" style="margin-top:7px">This becomes the experiment title when you continue.</div>
-    ${secFoot('setup')}
+    ${secFoot('setup')}`}
   </div>`;
 }
 
 /* the conversion goal defines both ends of the rate: start point and goal event */
-function secGoal(){
+function goalBodyHtml(){
   const e = S.exp, g = goalOf();
-  return `<div class="stg ${S.activeSection==='goal'?'act':''}" id="sec-goal">
-    ${secHead('goal', goalRight())}
+  return `
     <div class="k" style="margin-bottom:13px">
       Pick what a conversion is for this experiment. The start point is the denominator,
       so it also decides how many people per week can be measured.</div>
     <div style="display:flex;gap:8px;align-items:center">
-      <select class="sel" data-goal style="flex:1">
+      <select class="sel" data-goal data-fid="e-goal" style="flex:1">
         <option value="" ${!e.goal?'selected':''}>Select a conversion goal</option>
         ${Object.values(GOALS).map(x=>`<option value="${x.id}" ${e.goal===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}
       </select>
       <button class="btn sec" data-act="new-goal">New goal</button>
     </div>
-
     ${g ? `<div class="goalstrip">
       <div class="gsteps">
         <span class="gs">Start · ${esc(funnelStep(g.start).label)}</span>
@@ -2135,17 +3436,33 @@ function secGoal(){
       <div class="k" style="margin-top:9px">
         Edit the definition in <a data-act="go-lib" data-t="goals" style="cursor:pointer;color:var(--accent);font-weight:600">Conversion goals</a>.
       </div>
-    </div>` : `<div class="k" style="margin-top:10px;color:var(--hot)">Pick a goal so the platform knows what a conversion is.</div>`}
-    ${secFoot('goal')}
+    </div>` : ''}`;
+}
+function goalSummaryHtml(){
+  const g = goalOf();
+  if(!g) return `<div class="k">No conversion goal set.</div>`;
+  return `<div class="setupsum">
+    <div style="font-size:15px;font-weight:650">${esc(g.name)}</div>
+    <div class="k">${esc(goalPath(g))} · baseline ${baseCR()}% · ${g.window}-day window</div>
+    <div class="k">${entrantsWeekly().toLocaleString()} reach the start point each week</div>
+  </div>`;
+}
+function secGoal(){
+  const summary = setupSummaryMode('goal');
+  const editing = setupEditing('goal');
+  const right = S.published ? setupEditActions('goal', 'Edit goal') : goalRight();
+  return `<div class="stg ${S.activeSection==='goal'?'act':''} ${editing?'editing':''}" id="sec-goal">
+    ${secHead('goal', right)}
+    ${summary ? goalSummaryHtml() : `${goalBodyHtml()}${secFoot('goal')}`}
   </div>`;
 }
 
-function secAudience(){
+function audienceEditorHtml(opts){
+  opts = opts || {};
   const a = S.exp.audience;
-  return `<div class="stg ${S.activeSection==='audience'?'act':''}" id="sec-audience">
-    ${secHead('audience')}
-    <div class="k" style="margin-bottom:13px">
-      Set who is eligible before building variants. New packages inherit region and vertical from here.</div>
+  const showRules = opts.showRules !== false;
+  const showMatch = !!opts.showMatch;
+  return `${audienceWarningHtml()}
     <div style="display:flex;flex-direction:column;gap:11px">
       ${AUD_GROUPS.map(g=>`
         <div style="display:flex;gap:9px;align-items:center">
@@ -2156,28 +3473,74 @@ function secAudience(){
           </div>
         </div>`).join('')}
     </div>
-    <div class="sep"></div>
+    ${showRules ? `<div class="sep"></div>
     <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
       <span class="k" style="width:74px;flex-shrink:0">And</span>
       ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
         ${esc(x)} <span class="x">×</span></button>`).join('')}
       <button class="chip out" style="cursor:pointer" data-act="add-rule">
         + add rule from ${EXTRA_PROPS.length} properties</button>
-    </div>
-    <div class="matchbox">
+    </div>` : ''}
+    ${showMatch ? `<div class="matchbox">
       <div>
         <div class="mv">${ELIGIBLE.toLocaleString()}</div>
         <div class="ml">match per week with this audience</div>
       </div>
+    </div>` : ''}`;
+}
+
+function audienceSummaryHtml(){
+  const a = S.exp.audience;
+  return `<div class="setupsum">
+    ${AUD_GROUPS.map(g=>`<div class="rowline"><span class="lbl">${g.label}</span>
+      <span class="chip">${esc(a[g.id])}</span></div>`).join('')}
+    <div class="rowline"><span class="lbl">And</span>
+      ${a.extra.length
+        ? a.extra.map(x=>`<span class="chip out">${esc(x)}</span>`).join('')
+        : '<span class="k">No extra rules</span>'}
     </div>
-    ${secFoot('audience')}
+    <div class="matchbox" style="margin-top:4px">
+      <div><div class="mv">${ELIGIBLE.toLocaleString()}</div>
+        <div class="ml">match per week with this audience</div></div>
+    </div>
+  </div>`;
+}
+function secAudience(){
+  const summary = setupSummaryMode('audience');
+  const editing = setupEditing('audience');
+  const right = S.published ? setupEditActions('audience', 'Edit audience attributes') : '';
+  return `<div class="stg ${S.activeSection==='audience'?'act':''} ${editing?'editing':''}" id="sec-audience">
+    ${secHead('audience', right)}
+    ${summary ? audienceSummaryHtml() : `
+    <div class="k" style="margin-bottom:13px">
+      Starts from the name code. Changing a toggle here is allowed, and a warning appears if it drifts.</div>
+    ${audienceEditorHtml({showRules:true, showMatch:true})}
+    ${secFoot('audience')}`}
   </div>`;
 }
 
+function variantsSummaryHtml(){
+  const e = S.exp;
+  if(!e.variants.length) return `<div class="k">No variants yet.</div>`;
+  return `<div class="setupsum">${e.variants.map(v=>{
+    const pkgs = v.packages.filter(Boolean).map(id => library[id]?.name || id);
+    const care = (v.care||[]).map(id => CARE[id]?.name || id);
+    return `<div class="rowline" style="align-items:flex-start">
+      <span class="lbl">${esc(v.name||v.id)}</span>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span class="chip ${v.role==='control'?'out':''}">${v.role}</span>
+        <div class="k">${pkgs.length ? pkgs.map(esc).join(' · ') : 'No packages'}
+          ${care.length ? ' · ' + care.map(esc).join(', ') : ''}</div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
 function secVariants(){
   const e = S.exp, n = e.variants.length, aa = aaVariants(), dc = diffCount();
   const gridable = n >= 2 && n <= 3;
   const showGrid = S.compare && gridable;
+  const summary = setupSummaryMode('variants');
+  const editing = setupEditing('variants');
 
   let inner;
   if(n === 0){
@@ -2198,15 +3561,22 @@ function secVariants(){
       <button class="btn sec sm" data-act="ack-aa">Intentional A/A</button>
     </div>` : '';
 
-  return `<div class="stg ${S.activeSection==='variants'?'act':''}" id="sec-variants">
-    ${secHead('variants', `
-      ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
-                   : `<span class="chip a">no differences</span>`) : ''}
-      ${gridable ? `<button class="btn sec sm" data-act="toggle-compare">
-          ${showGrid?'Card view':'Compare view'}</button>` : ''}`)}
+  const chips = `${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
+                   : `<span class="chip a">no differences</span>`) : ''}`;
+  const right = S.published
+    ? `${chips}${setupEditActions('variants', 'Edit variants')}`
+    : `${chips}${gridable ? `<button class="btn sec sm" data-act="toggle-compare">
+          ${showGrid?'Card view':'Compare view'}</button>` : ''}`;
+
+  return `<div class="stg ${S.activeSection==='variants'?'act':''} ${editing?'editing':''}" id="sec-variants">
+    ${secHead('variants', right)}
+    ${summary ? variantsSummaryHtml() : `
+    ${!S.published && gridable ? '' : (editing && gridable ? `<div style="margin-bottom:10px">
+      <button class="btn sec sm" data-act="toggle-compare">${showGrid?'Card view':'Compare view'}</button>
+    </div>` : '')}
     ${aaBanner}
     ${inner}
-    ${secFoot('variants')}
+    ${secFoot('variants')}`}
   </div>`;
 }
 
@@ -2214,7 +3584,7 @@ function cardView(v){
   const isCtrl = v.role === 'control';
   const ov = overrideCount(v);
   const aa = !isCtrl && ov === 0 && !S.exp.aaAcknowledged;
-  return `<div class="vcard ${isCtrl?'ctrl':(aa?'aa':(ov?'diff':''))}">
+  return `<div class="vcard ${isCtrl?'ctrl':(aa?'aa':(ov?'diff':''))}" data-vid="${v.id}">
     <div class="vcard-h">
       <div style="display:flex;align-items:center;gap:9px">
         <input class="fld inline" data-vn="${v.id}" data-fid="vn-${v.id}" value="${esc(v.name||v.id)}"
@@ -2315,19 +3685,10 @@ function funnelInner(){
     + (rest>0?`<i class="o" style="flex:${rest*10}">${rest>10?'Not enrolled · '+rest+'%':''}</i>`:'');
 }
 
-function secTraffic(){
-  const e = S.exp, g = goalOf();
+function trafficSplitEditor(){
+  const e = S.exp;
   ensureSplits();
-  const n = Math.max(e.variants.length,1);
-  const d = daysToDetectNum();
-  const abs = absUplift();
-  return `<div class="stg ${S.activeSection==='traffic'?'act':''}" id="sec-traffic">
-    ${secHead('traffic', `<span class="chip out">${e.evenSplit?'even split':'custom split'} · ${n} arm${n===1?'':'s'}</span>`)}
-    <div class="k" style="margin-bottom:12px">
-      ${g ? `Measuring <b style="color:var(--ink)">${esc(g.name)}</b> · ${esc(goalPath(g))} · ${entrantsWeekly().toLocaleString()} reach the start point each week.`
-          : 'No conversion goal set. Go back to Setup.'}
-    </div>
-
+  return `
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px">
       <div style="flex:1">
         <div class="flab">Total enrolled traffic
@@ -2340,7 +3701,6 @@ function secTraffic(){
       </div>
     </div>
     <div class="fun" id="tFun">${funnelInner()}</div>
-
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;margin-bottom:6px">
       <span class="v" style="font-size:13px">Traffic per variant</span>
       <button class="chip pick ${e.evenSplit?'on':''}" data-act="toggle-even">
@@ -2359,17 +3719,32 @@ function secTraffic(){
         </div>
         <span class="k" id="spw-${v.id}" style="width:104px;text-align:right">${perVariantDaily(v.id).toLocaleString()} / day</span>
       </div>`).join('')}
+    </div>`;
+}
+
+function trafficEditorBody(){
+  const e = S.exp, g = goalOf();
+  ensureSplits();
+  const d = daysToDetectNum();
+  const abs = absUplift();
+  return `
+    <div class="k" style="margin-bottom:12px">
+      ${g ? `Measuring <b style="color:var(--ink)">${esc(g.name)}</b> · ${esc(goalPath(g))} · ${entrantsWeekly().toLocaleString()} reach the start point each week.`
+          : 'No conversion goal set. Go back to Goal.'}
     </div>
+    ${trafficSplitEditor()}
 
     <div class="mdebox">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
         <div class="flab" style="margin:0">Minimum detectable effect
           <span class="info" data-t="The smallest lift you want the experiment to be able to detect, given baseline conversion, traffic, significance and power.">i</span></div>
-        <span class="chip out">planning preview</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          ${mdeControlsHtml('mde')}
+          <span class="chip out">planning preview</span>
+        </div>
       </div>
       <div class="k" style="margin:6px 0 0">
-        Nothing in this box is saved to the experiment. It is a sanity check on whether the traffic above can
-        find a lift this size, so you can size the run before you publish.</div>
+        Use this to size the run. Target MDE is saved with the experiment; significance and power are analysis defaults.</div>
 
       <div class="mde-row">
         <div class="mm lock">
@@ -2398,8 +3773,21 @@ function secTraffic(){
           <div class="ml">people / week in the smallest arm</div>
         </div>
       </div>
-    </div>
-    ${secFoot('traffic')}
+    </div>`;
+}
+function secTraffic(){
+  const e = S.exp;
+  ensureSplits();
+  const n = Math.max(e.variants.length,1);
+  const summary = setupSummaryMode('traffic');
+  const editing = setupEditing('traffic');
+  const chip = `<span class="chip out">${e.evenSplit?'even split':'custom split'} · ${n} arm${n===1?'':'s'}</span>`;
+  const right = S.published
+    ? `${chip}${setupEditActions('traffic', 'Edit traffic splitting')}`
+    : chip;
+  return `<div class="stg ${S.activeSection==='traffic'?'act':''} ${editing?'editing':''}" id="sec-traffic">
+    ${secHead('traffic', right)}
+    ${summary ? trafficSummaryHtml() : `${trafficEditorBody()}${secFoot('traffic')}`}
   </div>`;
 }
 
@@ -2409,7 +3797,6 @@ function secLaunch(){
   const outstanding = cks.filter(c=>!c.ok).length;
 
   if(S.published){
-    const a = e.amp || {};
     return `<div class="stg ${S.activeSection==='launch'?'act':''}" id="sec-launch">
       ${secHead('launch', S.retired
         ? '<span class="chip">Retired</span>'
@@ -2420,28 +3807,12 @@ function secLaunch(){
             ? 'Retired, no longer enrolling'
             : 'Published to ' + e.envs.join(' and ')}</div>
           <div class="bd">${S.retired
-            ? 'Assignments stopped. History and the Amplitude dashboard stay available.'
-            : 'Analysis runs in Amplitude against the conversion goal.'}</div>
+            ? 'Open reporting for the write-up and share cards. Edit setup sections if you need to correct the record.'
+            : 'Live is for analysis. Use Edit on each setup section above to change name, goal, audience, variants or traffic.'}</div>
         </div>
-        ${!S.retired ? `<button class="btn sec" data-act="retire">Retire experiment</button>` : ''}
+        <button class="btn pri" data-act="go-phase" data-p="${S.retired?'report':'live'}">
+          ${S.retired?'Open reporting':'Open live board'}</button>
       </div>
-
-      <div style="border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin-bottom:14px;background:#fbfcfc">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px">
-          <div>
-            <div class="h5">Analysis in Amplitude</div>
-            <div class="k" style="margin-top:3px">${a.created
-              ? `Dashboard <span class="mono">${esc(a.id)}</span> is live with ${ampCharts().length} charts.`
-              : 'No dashboard yet. Generate one from the goals and variants on this experiment.'}</div>
-          </div>
-          ${ampButton()}
-        </div>
-        ${a.created ? `<div style="display:flex;flex-direction:column;gap:6px">
-          ${ampCharts().map(c=>`<div style="display:flex;gap:8px;align-items:center;font-size:12.5px">
-            <span class="dot"></span>${esc(c)}</div>`).join('')}
-        </div>` : ''}
-      </div>
-
       <div class="ckl">${cks.map(c=>ckRow(c)).join('')}</div>
     </div>`;
   }
@@ -2508,10 +3879,10 @@ const readyChip = (issues) => issues.length
   ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
   : `<span class="chip g">ready</span>`;
 
-/* one shell, three bodies */
+/* one shell, three bodies — dark scrim strip on the left, panel fills the rest */
 function gtmShell({crumb, title, issues, saveLabel, body, solo}){
-  return `<div class="gtm">
-    <div class="gtm-panel">
+  return `<div class="gtm" data-act="gtm-scrim">
+    <div class="gtm-panel" data-stop>
       <div class="gtm-top">
         <div>
           <div class="crumb">${crumb}</div>
@@ -2809,6 +4180,30 @@ function viewModal(){
         <button class="btn sec" data-act="close-modal">Done</button></div>
     </div></div>`;
   }
+  if(m.type === 'traffic-confirm'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:420px">
+      <div class="pop-h">
+        <div class="t">Update live traffic?</div>
+        <div class="k" style="margin-top:6px">This experiment is live. Changing traffic will alter how new visitors are enrolled from now on. Existing enrolled users stay on their assigned variants.</div>
+      </div>
+      <div class="pop-f">
+        <button class="btn sec" data-act="close-modal">Cancel</button>
+        <button class="btn pri" data-act="setup-save-confirm">Save changes</button>
+      </div>
+    </div></div>`;
+  }
+  if(m.type === 'variants-confirm'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:440px">
+      <div class="pop-h">
+        <div class="t">Edit live variants?</div>
+        <div class="k" style="margin-top:6px">Changing packages or arms on a live experiment can affect allocation and make later analysis harder to compare. Only continue if you intentionally need to correct the change set.</div>
+      </div>
+      <div class="pop-f">
+        <button class="btn sec" data-act="close-modal">Cancel</button>
+        <button class="btn pri" data-act="variants-edit-confirm">Continue editing</button>
+      </div>
+    </div></div>`;
+  }
   return '';
 }
 
@@ -2828,10 +4223,6 @@ const CHAT_QUICK = [
   'Add a care product called Sleep coaching call, add-on $69',
   'New goal from consult submitted to purchase, 14 day window'
 ];
-
-function chatLauncher(){
-  return `<button class="chatbtn" data-act="chat-open"><i></i>Assistant</button>`;
-}
 
 function chatGreeting(){
   return {role:'ag', text:'I can create care packages, care products and conversion goals in the library. '
@@ -3094,11 +4485,30 @@ function patchNamePreview(){
       + (status ? ' ' + status.outerHTML : '');
   }
 }
+function patchCodeWarn(field){
+  const inp = document.querySelector(`[data-code-inp="${field}"]`);
+  const warnEl = document.getElementById('codewarn-' + field);
+  if(!inp || !warnEl) return;
+  const w = codeFieldWarning(field, S.exp.code[field]);
+  warnEl.textContent = w;
+  warnEl.style.display = w ? '' : 'none';
+  inp.classList.toggle('codewarn', !!w);
+  if(!w){
+    inp.classList.remove('err');
+    let tip = inp.parentElement && inp.parentElement.nextElementSibling;
+    if(tip && tip.classList.contains('fielderr')) tip.remove();
+    const sib = inp.nextElementSibling;
+    if(sib && sib.classList.contains('fielderr')) sib.remove();
+  }
+  patchGate();
+  patchNamePreview();
+}
 function patchGate(){
   document.querySelectorAll('[data-act="next"]').forEach(btn=>{
     const id = btn.dataset.s;
     const b = stageBlockers(id);
-    btn.disabled = b.length > 0;
+    btn.classList.toggle('is-off', b.length > 0);
+    btn.setAttribute('aria-disabled', b.length ? 'true' : 'false');
     btn.title = b.length ? b.join(' · ') : '';
     btn.textContent = nextLabel(id);
   });
@@ -3126,12 +4536,37 @@ function patchBuilderGate(){
   }
 }
 
+function setupLocked(){ return S.published && !S.setupEdit; }
+const SETUP_MUTATE = new Set([
+  'next','add-variant','clone','rm-variant','ack-aa','pick','pick-care','attach','attach-care',
+  'rm-care','build-pkg','build-care','aud','aud-reset','add-rule','add-rule-do','rm-rule','toggle-even',
+  'new-goal','code','env-tog','publish','toggle-compare'
+]);
+
 function bind(){
   document.querySelectorAll('[data-stop]').forEach(n=>n.addEventListener('click', ev=>ev.stopPropagation()));
 
   document.querySelectorAll('[data-act]').forEach(n=>{
     n.addEventListener('click', ev=>{
       const a = n.dataset.act;
+      if(setupLocked() && SETUP_MUTATE.has(a)){
+        toast('Setup is locked. Use Edit on a section to make changes.');
+        return;
+      }
+      if(S.published && S.setupEdit && SETUP_MUTATE.has(a)){
+        const sectionActs = {
+          setup: new Set(['code']),
+          goal: new Set(['new-goal']),
+          audience: new Set(['aud','aud-reset','add-rule','add-rule-do','rm-rule']),
+          variants: new Set(['add-variant','clone','rm-variant','ack-aa','pick','pick-care','attach','attach-care','rm-care','build-pkg','build-care','toggle-compare']),
+          traffic: new Set(['toggle-even'])
+        };
+        const allowed = sectionActs[S.setupEdit] || new Set();
+        if(!allowed.has(a) && a !== 'next'){
+          toast('Finish or cancel the open section first.');
+          return;
+        }
+      }
       const V = id => S.exp.variants.find(v=>v.id===id);
       switch(a){
         case 'go-dash': S.view='dashboard'; S.modal=null; S.focus=null; render(); break;
@@ -3203,11 +4638,123 @@ function bind(){
         case 'new-care-in-pkg': openCareBuilder({pkgDraft:S.focus}); break;
         case 'close-modal': S.modal=null; render(); break;
         case 'focus-cancel': {
-          const ret = S.focus && S.focus.returnTo;
-          S.focus = (ret && ret.pkgDraft) ? ret.pkgDraft : null;
-          render(); toast('Discarded.'); break;
+          closeGtm(()=>{
+            const ret = S.focus && S.focus.returnTo;
+            S.focus = (ret && ret.pkgDraft) ? ret.pkgDraft : null;
+            render(); toast('Discarded.');
+          });
+          break;
         }
-        case 'focus-save': saveFocus(); break;
+        case 'focus-save':
+          if(focusIssues().length){ toast(focusIssues()[0] + '.'); break; }
+          closeGtm(()=> saveFocus());
+          break;
+        case 'gtm-scrim':
+          if(ev.target === n) closeGtm(()=>{ S.focus = null; render(); });
+          break;
+        case 'go-phase':
+          if(!phaseUnlocked(n.dataset.p)) break;
+          if(S.setupEdit && n.dataset.p !== 'setup'){
+            if(S.setupSnap) S.exp = S.setupSnap;
+            S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
+            ensureSplits(); syncExpName();
+          }
+          S.phase = n.dataset.p;
+          if(S.phase === 'setup' && !S.activeSection) S.activeSection = 'setup';
+          if(S.phase === 'live'){
+            S.liveSec = (S.liveSec === 'audience' || S.liveSec === 'update' || S.liveSec === 'significance')
+              ? 'controls' : (S.liveSec || 'controls');
+          }
+          if(S.phase === 'report') S.reportSec = S.reportSec || 'analysis';
+          render(); break;
+        case 'go-livesec': {
+          const sid = n.dataset.s;
+          S.liveSec = (sid === 'audience' || sid === 'update' || sid === 'significance') ? 'overview' : sid;
+          render();
+          const map = {controls:'live-reporting', overview:'live-overview', conversion:'live-conversion'};
+          const t = document.getElementById(map[S.liveSec]);
+          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+          break;
+        }
+        case 'setup-edit': {
+          if(n.dataset.s === 'variants'){
+            S.modal = {type:'variants-confirm'}; render(); break;
+          }
+          beginSetupEdit(n.dataset.s);
+          break;
+        }
+        case 'variants-edit-confirm':
+          S.modal = null; beginSetupEdit('variants'); break;
+        case 'setup-cancel': cancelSetupEdit(); break;
+        case 'setup-save':
+          if(S.setupEdit === 'traffic' && S.published){
+            S.modal = {type:'traffic-confirm'}; render(); break;
+          }
+          commitSetupEdit(); break;
+        case 'setup-save-confirm':
+          S.modal = null; commitSetupEdit(); break;
+        case 'go-reportsec': {
+          S.reportSec = n.dataset.s; render();
+          const t = document.getElementById('report-' + S.reportSec);
+          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+          break;
+        }
+        case 'live-range': {
+          if(n.dataset.r === 'custom'){
+            // seed custom from the current selected window before switching mode
+            const w = liveWindow();
+            S.liveFrom = w.startIso;
+            S.liveTo = w.endIso;
+          }
+          S.liveRange = n.dataset.r;
+          render(); break;
+        }
+        case 'conv-chart':
+          S.liveConvChart = n.dataset.m === 'cumulative' ? 'cumulative' : 'daily';
+          render(); break;
+        case 'live-compare':
+          S.liveCompareIdx = Math.max(1, Number(n.dataset.i) || 1);
+          render(); break;
+        case 'live-ana-edit':
+          S.liveAnaSnap = {conf:S.conf, power:S.power, mde:Number(S.exp.mde)||10};
+          S.liveAnaEdit = true; render(); break;
+        case 'live-ana-cancel':
+          if(S.liveAnaSnap){
+            S.conf = S.liveAnaSnap.conf;
+            S.power = S.liveAnaSnap.power;
+            S.exp.mde = S.liveAnaSnap.mde;
+          }
+          S.liveAnaEdit = false; S.liveAnaSnap = null; render(); break;
+        case 'live-ana-save': {
+          const confInp = document.querySelector('[data-live-ana-inp="conf"]');
+          const powInp = document.querySelector('[data-live-ana-inp="power"]');
+          const mdeInp = document.querySelector('[data-live-ana-inp="mde"]');
+          const conf = Math.max(50, Math.min(99, Math.round(Number(confInp && confInp.value) || S.conf)));
+          const power = Math.max(50, Math.min(99, Math.round(Number(powInp && powInp.value) || S.power)));
+          const mde = Math.max(1, Math.min(50, Math.round(Number(mdeInp && mdeInp.value) || S.exp.mde)));
+          S.conf = conf;
+          S.power = power;
+          S.exp.mde = mde;
+          S.liveAnaEdit = false; S.liveAnaSnap = null;
+          save(); render();
+          toast(`Analysis saved: ${conf}% significance, ${power}% power, ${mde}% MDE.`);
+          break;
+        }
+        case 'pause': pauseExperiment(); break;
+        case 'regen-analysis': S.report.analysis = buildAnalysis(); render(); toast('Analysis regenerated.'); break;
+        case 'share-copy': copyShareCanvas(n.dataset.k); break;
+        case 'share-dl': downloadShareCanvas(n.dataset.k); break;
+        case 'slack-copy':
+          navigator.clipboard.writeText(slackBody()).then(()=>toast('Copied for Slack.')).catch(()=>toast('Copy failed.'));
+          break;
+        case 'slack-post':
+          S.report.slackPosted = true; render();
+          toast(`Posted to ${S.report.slackChannel} (simulated).`);
+          break;
+        case 'notion-sync':
+          S.report.notionSynced = 'Synced ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+          render(); toast('Notion page updated (simulated).'); break;
+        case 'notion-open': toast('Would open the Notion experiment page.'); break;
         case 'focus-care-kind': S.focus.kind = n.dataset.k; render(); break;
         case 'focus-care-mode': S.focus.mode = n.dataset.m; render(); break;
         case 'care': {
@@ -3221,11 +4768,26 @@ function bind(){
           save(); render(); toast('Rule layer added.'); break;
         case 'rm-rule': S.exp.audience.extra.splice(Number(n.dataset.i),1); save(); render(); break;
         case 'toggle-even':
+          if(S.published && S.setupEdit !== 'traffic') break;
           rebalanceEven(); save(); render(); break;
         case 'new-goal': openGoalBuilder({setPrimary:true}); break;
-        case 'code':
-          S.exp.code[n.dataset.f] = n.dataset.v;
-          syncExpName(); save(); render(); break;
+        case 'code': {
+          const f = n.dataset.f, v = n.dataset.v;
+          ensureCodeCustom();
+          if(v === '__custom__'){
+            S.exp.codeCustom[f] = true;
+            if(codePresetIds(f).includes(S.exp.code[f])) S.exp.code[f] = '';
+            syncExpName({codeField:f});
+          } else {
+            S.exp.codeCustom[f] = false;
+            S.exp.code[f] = v;
+            syncExpName({codeField:f});
+          }
+          save(); render(); break;
+        }
+        case 'aud-reset':
+          applyAudienceFromCode(); save(); render();
+          toast('Audience reset to the name code.'); break;
         case 'env-tog': {
           const e = n.dataset.e;
           if(S.exp.envs.includes(e)) S.exp.envs = S.exp.envs.filter(x=>x!==e);
@@ -3262,21 +4824,49 @@ function bind(){
   document.querySelectorAll('[data-ana]').forEach(sel=>{
     sel.addEventListener('change', ()=>{
       S[sel.dataset.ana] = Number(sel.value);
-      render();
-      toast(`Analysis defaults: ${S.conf}% significance, ${S.power}% power.`);
+      if(S.phase === 'setup' && S.activeSection === 'traffic'){
+        patchMde();
+        toast(`Planning at ${S.conf}% significance, ${S.power}% power.`);
+      } else {
+        render();
+        toast(`Analysis defaults: ${S.conf}% significance, ${S.power}% power.`);
+      }
+    });
+  });
+  document.querySelectorAll('[data-exp-mde]').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      S.exp.mde = Number(sel.value);
+      save();
+      if(S.phase === 'setup' && S.activeSection === 'traffic'){
+        patchMde();
+        toast(`Target MDE set to ${S.exp.mde}%.`);
+      } else {
+        render();
+        toast(`Target MDE set to ${S.exp.mde}%.`);
+      }
     });
   });
 
   document.querySelectorAll('[data-f]').forEach(inp=>{
     const f = inp.dataset.f;
+    if(setupLocked() && f !== undefined){
+      inp.addEventListener('input', ev=>{ ev.preventDefault(); });
+      return;
+    }
     if(f === 'traffic' || f === 'mde'){
       inp.addEventListener('input', ()=>{
+        if(S.published && S.setupEdit !== 'traffic' && f === 'traffic') return;
+        if(S.published && !S.setupEdit && f === 'mde') return;
         S.exp[f] = Number(inp.value);
         if(f === 'traffic') patchTraffic();
         else patchMde();
         save();
       });
-      inp.addEventListener('change', ()=>render());
+      inp.addEventListener('change', ()=>{
+        if(S.published && S.setupEdit !== 'traffic' && f === 'traffic') return;
+        if(S.published && !S.setupEdit && f === 'mde') return;
+        render();
+      });
       return;
     }
     if(f === 'descriptor'){
@@ -3285,6 +4875,11 @@ function bind(){
         syncExpName();
         patchNamePreview();
         patchGate();
+        if(String(inp.value||'').trim()){
+          inp.classList.remove('err');
+          const tip = inp.nextElementSibling;
+          if(tip && tip.classList.contains('fielderr')) tip.remove();
+        }
         save();
       });
       return;
@@ -3296,32 +4891,57 @@ function bind(){
     });
   });
 
+  const trafficWritable = () => !S.published || S.setupEdit === 'traffic';
   document.querySelectorAll('[data-split]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
+      if(!trafficWritable()) return;
       setSplitLinked(inp.dataset.split, Number(inp.value));
       patchTraffic();
       save();
     });
-    inp.addEventListener('change', ()=>render());
+    inp.addEventListener('change', ()=>{ if(trafficWritable()) render(); });
   });
   document.querySelectorAll('[data-splitn]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
-      if(inp.value === '') return;
+      if(!trafficWritable() || inp.value === '') return;
       setSplitLinked(inp.dataset.splitn, Number(inp.value));
       patchTraffic();
       save();
     });
-    inp.addEventListener('blur', ()=>render());
+    inp.addEventListener('blur', ()=>{ if(trafficWritable()) render(); });
     inp.addEventListener('keydown', ev=>{ if(ev.key === 'Enter') inp.blur(); });
   });
-
   document.querySelectorAll('[data-vn]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
+      if(setupLocked()) return;
       const v = S.exp.variants.find(x=>x.id===inp.dataset.vn);
       if(v){ v.name = inp.value; inp.style.width = Math.max(40, inp.value.length*10) + 'px'; }
       save();
     });
   });
+
+  const liveFrom = document.querySelector('[data-livefrom]');
+  if(liveFrom) liveFrom.addEventListener('change', ()=>{
+    S.liveFrom = liveFrom.value; S.liveRange = 'custom'; render();
+  });
+  const liveTo = document.querySelector('[data-liveto]');
+  if(liveTo) liveTo.addEventListener('change', ()=>{
+    S.liveTo = liveTo.value; S.liveRange = 'custom'; render();
+  });
+  document.querySelectorAll('[data-code-inp]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const f = inp.dataset.codeInp;
+      S.exp.code[f] = sanitizeCode(inp.value, f);
+      if(document.activeElement === inp && inp.value !== S.exp.code[f]) inp.value = S.exp.code[f];
+      syncExpName();
+      patchCodeWarn(f);
+      save();
+    });
+  });
+  const analysis = document.querySelector('[data-analysis]');
+  if(analysis) analysis.addEventListener('input', ()=>{ S.report.analysis = analysis.value; });
+  const slackch = document.querySelector('[data-slackch]');
+  if(slackch) slackch.addEventListener('change', ()=>{ S.report.slackChannel = slackch.value; });
 
   const num = s => String(s).replace(/[^0-9]/g,'');
   const repaintPkg = () => {
@@ -3402,12 +5022,27 @@ function bind(){
       S.libDraft.plans[Number(sel.dataset.ldpt)].type = sel.value; render();
     });
   });
-  const gsel = document.querySelector('[data-goal]');
-  if(gsel) gsel.addEventListener('change', ()=>{
-    S.exp.goal = gsel.value || null;
-    save(); render();
-    const g = goalOf();
-    if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+  document.querySelectorAll('[data-goal]').forEach(gsel=>{
+    gsel.addEventListener('change', ()=>{
+      const onLive = S.phase === 'live' && gsel.dataset.fid === 'live-goal';
+      if(S.published && !onLive && S.setupEdit !== 'goal') return;
+      const prev = S.exp.goal;
+      S.exp.goal = gsel.value || null;
+      if(S.published && S.setupEdit === 'goal' && !onLive){
+        render();
+        const g = goalOf();
+        if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+        return;
+      }
+      if(S.published && onLive && prev && prev !== S.exp.goal){
+        S.goalChanges = S.goalChanges || [];
+        S.goalChanges.push({day: liveDayCount(), from: prev, to: S.exp.goal});
+        if(S.report) S.report.analysis = '';
+      }
+      save(); render();
+      const g = goalOf();
+      if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+    });
   });
 
   /* goal editor fields, shared by the library detail (ldg) and the full page builder (gd) */
