@@ -43,12 +43,6 @@ input,select{font:inherit}
   align-items:center;justify-content:center;font-size:10px;font-weight:700}
 
 .stage{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);position:relative}
-.top{background:var(--panel);border-bottom:1px solid var(--line);padding:13px 22px;
-  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
-.top .lhs{min-width:0}
-.top h1{margin:0;font-size:17px;font-weight:650;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
-.top .meta{font-size:12px;color:var(--ink3);margin-top:2px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.top .rhs{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .content{flex:1;overflow-y:auto;padding:22px;position:relative}
 .content-inner{max-width:1180px;margin:0 auto}
 
@@ -133,6 +127,25 @@ input,select{font:inherit}
 
 /* ---------- document layout ---------- */
 .doc-wrap{display:flex;gap:22px;align-items:flex-start}
+.page-head{max-width:1180px;margin:0 auto 14px;display:flex;justify-content:space-between;
+  align-items:center;gap:16px;padding:14px 17px;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--sh)}
+.page-head .title{display:flex;align-items:flex-start;gap:11px;min-width:0}
+.page-head h1{font-size:18px;margin:0;line-height:1.25;overflow-wrap:anywhere}
+.page-head .meta{font-size:12px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.page-head .actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.lockban{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;
+  background:#eef6f3;border:1px solid #c5ddd3;margin-bottom:14px}
+.lockban .bt{font-size:13px;font-weight:650}
+.lockban .bd{font-size:12px;color:var(--ink2);margin-top:2px}
+.lockban.draftban,.lockban.liveeditban{background:#bfdbfe;border-color:#60a5fa}
+.lockban.draftban .bt,.lockban.liveeditban .bt{color:#1e3a8a}
+.lockban.draftban .btn.pri,.lockban.liveeditban .btn.pri{background:var(--blue);border-color:var(--blue)}
+.lockban.draftban .btn.pri:hover,.lockban.liveeditban .btn.pri:hover{background:#254fa8;border-color:#254fa8}
+.changelog{display:flex;flex-direction:column;gap:9px;margin-top:13px}
+.changeitem{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fbfcfc}
+.changeitem .ct{font-size:12.5px;font-weight:650}
+.changeitem .cd{font-size:11.5px;color:var(--ink3);margin-top:4px;line-height:1.5}
 .rail{width:206px;flex-shrink:0;position:sticky;top:0}
 .rail a{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:7px;
   font-size:13px;color:var(--ink2);text-decoration:none;margin-bottom:2px;cursor:pointer}
@@ -173,10 +186,6 @@ input,select{font:inherit}
 .phsubs a .dot{width:6px;height:6px;border-radius:99px;background:#c5cec9;flex-shrink:0}
 .phsubs a.on .dot{background:var(--accent)}
 
-.lockban{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;
-  background:#eef6f3;border:1px solid #c5ddd3;margin-bottom:14px}
-.lockban .bt{font-size:13px;font-weight:650}
-.lockban .bd{font-size:12px;color:var(--ink2);margin-top:2px}
 .setupsum{display:flex;flex-direction:column;gap:10px}
 .setupsum .rowline{display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap}
 .setupsum .lbl{width:74px;flex-shrink:0;font-size:12px;color:var(--ink3);padding-top:3px}
@@ -189,7 +198,8 @@ input,select{font:inherit}
 .livestat .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
 .livestat .s{font-size:11.5px;color:var(--ink3);margin-top:2px}
 .ov-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.ov-primary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.ov-primary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+@media (max-width:1100px){.ov-primary{grid-template-columns:repeat(2,1fr)}}
 .ov-primary .ovp{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 14px;box-shadow:var(--sh)}
 .ov-primary .ovp .k{font-size:11.5px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
 .ov-primary .ovp .v{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:6px;line-height:1.1}
@@ -429,7 +439,7 @@ input[type=range]:active{cursor:grabbing}
 .nav .ai span{flex:1}
 .nav .ai .sub{display:block;font-size:10.5px;font-weight:500;opacity:.8;margin-top:1px}
 
-/* agent chat sidebar — sits beside .stage inside .shell, pushes content left */
+/* agent chat sidebar, sits beside .stage inside .shell and pushes content left */
 .chat{width:min(400px,34vw);flex-shrink:0;background:#fff;border-left:1px solid var(--line);
   display:flex;flex-direction:column;overflow:hidden;height:100vh}
 .chat-h{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -696,17 +706,21 @@ const funnelStep = id => FUNNEL[stepIdx(id)] || FUNNEL[0];
 
 let GOALS = {
   goal_lp_purchase:{id:'goal_lp_purchase', name:'Landing page to purchase',
-    start:'lp_view', event:'purchase', window:14, baseline:null, uses:6,
+    kind:'binary', start:'lp_view', event:'purchase', window:14, baseline:null, uses:6,
     note:'Default acquisition goal for landing page and quiz entry tests'},
   goal_lp_plan:{id:'goal_lp_plan', name:'Landing page to plan assigned',
-    start:'lp_view', event:'plan_view', window:7, baseline:null, uses:4,
+    kind:'binary', start:'lp_view', event:'plan_view', window:7, baseline:null, uses:4,
     note:'Faster read, stops short of revenue'},
   goal_quiz:{id:'goal_quiz', name:'Consult start to submitted',
-    start:'quiz_start', event:'quiz_done', window:3, baseline:null, uses:3,
+    kind:'binary', start:'quiz_start', event:'quiz_done', window:3, baseline:null, uses:3,
     note:'Screener completion only'},
   goal_plan_purchase:{id:'goal_plan_purchase', name:'Plan assigned to purchase',
-    start:'plan_view', event:'purchase', window:14, baseline:null, uses:2,
-    note:'For tests that only change the plan page'}
+    kind:'binary', start:'plan_view', event:'purchase', window:14, baseline:null, uses:2,
+    note:'For tests that only change the plan page'},
+  goal_aov:{id:'goal_aov', name:'Average order value',
+    kind:'continuous', aggregation:'mean', event:'purchase', population:'purchase',
+    unit:'AUD', baselineMean:349, baselineSd:118, weeklyObservations:980, uses:2,
+    note:'Mean purchase value in AUD'}
 };
 
 /* =====================================================================
@@ -714,7 +728,7 @@ let GOALS = {
    ===================================================================== */
 const STAGES = [
   {id:'setup',    label:'Name'},
-  {id:'goal',     label:'Goal'},
+  {id:'goal',     label:'Metric'},
   {id:'audience', label:'Audience'},
   {id:'variants', label:'Variants'},
   {id:'traffic',  label:'Traffic'},
@@ -723,14 +737,14 @@ const STAGES = [
 const stageIdx = id => STAGES.findIndex(s => s.id === id);
 
 const PHASES = [
-  {id:'setup',  label:'Experiment setup',     sub:'Name, goal, audience, variants, traffic'},
-  {id:'live',   label:'Experiment live',      sub:'Reporting controls, overview, conversion'},
+  {id:'setup',  label:'Experiment setup',     sub:'Name, metric, audience, variants, traffic'},
+  {id:'live',   label:'Experiment live',      sub:'Reporting controls, overview, metric trends'},
   {id:'report', label:'Experiment reporting', sub:'Analysis, share cards, Notion'}
 ];
 const LIVE_SECS = [
   {id:'controls',     label:'Reporting controls'},
   {id:'overview',     label:'Overview'},
-  {id:'conversion',   label:'Conversion'}
+  {id:'conversion',   label:'Metric trends'}
 ];
 const REPORT_SECS = [
   {id:'analysis', label:'Analysis'},
@@ -916,8 +930,11 @@ let S = {
   trafficEdit:false,
   trafficSnap:null,
   setupEdit:null,             // setup section id being edited while published
-  setupSnap:null,             // deep snapshot of exp (+goalPrev) for cancel
+  setupSnap:null,             // full live setup snapshot for cancel
   setupGoalPrev:null,         // previous goal id when starting a goal edit
+  sessionDraft:null,          // one in-memory draft slot, never persisted
+  hasDraft:false,
+  changelog:[],
   liveAnaEdit:false,
   liveAnaSnap:null,
   goalChanges:[],             // {day, from, to} markers on the conversion chart
@@ -1037,20 +1054,55 @@ const ELIGIBLE = 16700;
 
 /* --- conversion goals --- */
 function goalOf(id){ return GOALS[id || S.exp.goal] || null; }
+function metricOf(id){ return goalOf(id); }
+function metricKind(g){ return (g && g.kind) || 'binary'; }
+function currencySymbol(unit){
+  const u = String(unit||'').toUpperCase();
+  if(u === 'AUD' || u === 'USD' || u === 'NZD' || u === '$') return '$';
+  if(u === 'EUR') return '€';
+  if(u === 'GBP') return '£';
+  return '';
+}
+function formatContinuousNumber(v, metric){
+  const n = Number(v);
+  const sym = currencySymbol(metric && metric.unit);
+  if(sym) return sym + n.toFixed(2);
+  const unit = metric && metric.unit ? String(metric.unit) : '';
+  return unit ? n.toFixed(2) + ' ' + unit : n.toFixed(2);
+}
+function formatMetricValue(v, metric){
+  if(v == null || !Number.isFinite(Number(v))) return 'n/a';
+  if(metricKind(metric) === 'continuous') return formatContinuousNumber(v, metric);
+  return Number(v).toFixed(2) + '%';
+}
+function formatAbsEffect(v, metric){
+  if(v == null || !Number.isFinite(Number(v))) return 'n/a';
+  const sign = Number(v) > 0 ? '+' : '';
+  return metricKind(metric) === 'continuous'
+    ? sign + formatContinuousNumber(v, metric)
+    : sign + Number(v).toFixed(2) + ' pp';
+}
+function formatRelEffect(v){
+  if(v == null || !Number.isFinite(Number(v))) return 'n/a';
+  return (Number(v) > 0 ? '+' : '') + Number(v).toFixed(1) + '%';
+}
 /* observed rate for a goal: volume at the goal event over volume at the start point */
 function goalObserved(g){
   if(!g) return 0;
+  if(metricKind(g) === 'continuous') return Number(g.baselineMean) || 0;
   const s = funnelStep(g.start), t = funnelStep(g.event);
   if(!s.wk) return 0;
   return +((t.wk / s.wk) * 100).toFixed(2);
 }
 function goalBaseline(g){
   if(!g) return 0;
+  if(metricKind(g) === 'continuous') return Number(g.baselineMean) || 0;
   const o = Number(g.baseline);
   return g.baseline != null && Number.isFinite(o) && o > 0 ? o : goalObserved(g);
 }
 function goalPath(g){
   if(!g) return 'No goal set';
+  if(metricKind(g) === 'continuous') return `${g.aggregation || 'mean'} of ${funnelStep(g.event).label} · ${g.unit || 'value'}`;
   return `${funnelStep(g.start).label} → ${funnelStep(g.event).label}`;
 }
 /* baseline used by the maths: the goal's baseline unless this experiment overrides it */
@@ -1063,6 +1115,7 @@ const baseOverridden = () => S.exp.baselineCR != null;
 /* people entering the goal's start point each week, scaled by the audience */
 function entrantsWeekly(){
   const g = goalOf();
+  if(g && metricKind(g) === 'continuous') return Number(g.weeklyObservations) || funnelStep(g.event).wk || ELIGIBLE;
   const start = g ? funnelStep(g.start) : FUNNEL[0];
   return Math.round(ELIGIBLE * (start.wk / FUNNEL[0].wk));
 }
@@ -1070,28 +1123,44 @@ function goalIssues(f){
   f = f || S.libDraft;
   const out = [];
   if(!String(f.name||'').trim()) out.push('Name the goal');
-  if(stepIdx(f.event) <= stepIdx(f.start)) out.push('The goal event must come after the start point');
-  if(!(Number(f.window) > 0)) out.push('Set a conversion window in days');
+  if((f.kind||'binary') === 'binary'){
+    if(stepIdx(f.event) <= stepIdx(f.start)) out.push('The goal event must come after the start point');
+    if(!(Number(f.window) > 0)) out.push('Set a conversion window in days');
+  } else {
+    if(!f.event) out.push('Choose an observation event');
+    if(!(Number(f.baselineMean) > 0)) out.push('Set a baseline mean');
+    if(!(Number(f.baselineSd) > 0)) out.push('Set a baseline standard deviation');
+    if(!(Number(f.weeklyObservations) > 0)) out.push('Set weekly observations');
+  }
   const names = Object.values(GOALS).filter(g => g.id !== f.editId).map(g => g.name.toLowerCase());
   if(String(f.name||'').trim() && names.includes(f.name.trim().toLowerCase()))
     out.push('A goal already has this name');
   return out;
 }
 function blankGoalDraft(){
-  return {editId:null, name:'', start:'lp_view', event:'purchase', window:14, baseline:'', note:''};
+  return {editId:null, name:'', kind:'binary', start:'lp_view', event:'purchase', window:14,
+    baseline:'', aggregation:'mean', population:'purchase', unit:'AUD',
+    baselineMean:'', baselineSd:'', weeklyObservations:'', note:''};
 }
 function libGoalDraft(g){
-  return {editId:g.id, name:g.name, start:g.start, event:g.event,
-    window:g.window, baseline:g.baseline == null ? '' : String(g.baseline), note:g.note||''};
+  return {editId:g.id, name:g.name, kind:g.kind||'binary', start:g.start||'lp_view', event:g.event,
+    window:g.window||14, baseline:g.baseline == null ? '' : String(g.baseline),
+    aggregation:g.aggregation||'mean', population:g.population||g.event||'purchase', unit:g.unit||'AUD',
+    baselineMean:g.baselineMean==null?'':String(g.baselineMean),
+    baselineSd:g.baselineSd==null?'':String(g.baselineSd),
+    weeklyObservations:g.weeklyObservations==null?'':String(g.weeklyObservations), note:g.note||''};
 }
 function persistGoal(f){
   const id = f.editId || ('goal_' + Date.now());
   const prev = GOALS[id];
   const ov = Number(f.baseline);
   GOALS[id] = {
-    id, name:f.name.trim(), start:f.start, event:f.event,
+    id, name:f.name.trim(), kind:f.kind||'binary', start:f.start, event:f.event,
     window:Number(f.window) || 14,
     baseline: String(f.baseline||'').trim() !== '' && Number.isFinite(ov) && ov > 0 ? +ov.toFixed(2) : null,
+    aggregation:f.aggregation||'mean', population:f.population||f.event, unit:f.unit||'AUD',
+    baselineMean:Number(f.baselineMean)||null, baselineSd:Number(f.baselineSd)||null,
+    weeklyObservations:Number(f.weeklyObservations)||null,
     note:f.note||'',
     uses: prev ? prev.uses : 0,
     isNew: prev ? prev.isNew : true
@@ -1164,7 +1233,7 @@ function splitOf(id){ return S.exp.splits[id] ?? 0; }
 function splitSum(){ return Object.values(S.exp.splits).reduce((a,b)=>a+Number(b||0),0); }
 function absUplift(){
   const m = Number(S.exp.mde);
-  return +((baseCR() * (Number.isFinite(m) ? m : 0) / 100).toFixed(2));
+  return +((goalBaseline(metricOf()) * (Number.isFinite(m) ? m : 0) / 100).toFixed(2));
 }
 
 function perVariantWeekly(id){
@@ -1175,13 +1244,23 @@ const perVariantDaily = id => Math.round(perVariantWeekly(id) / 7);
 /* days to detect the desired relative uplift at current traffic, for the smallest arm */
 function daysToDetectNum(mde){
   const m = mde == null ? S.exp.mde : mde;
-  const p = baseCR() / 100;
+  const metric = metricOf();
   const n = Math.min(...(S.exp.variants.length
     ? S.exp.variants.map(v => perVariantWeekly(v.id))
     : [perVariantWeekly()]));
-  if(!n || !m || !p) return Infinity;
+  if(!n || !m) return Infinity;
   const zA = zConf(S.conf);
   const zP = zPow(S.power);
+  if(metricKind(metric) === 'continuous'){
+    const mean = Number(metric.baselineMean) || 0;
+    const sd = Number(metric.baselineSd) || 0;
+    const delta = mean * (m/100);
+    if(!mean || !sd || delta <= 0) return Infinity;
+    const needed = Math.ceil(2 * Math.pow(zA+zP,2) * Math.pow(sd,2) / Math.pow(delta,2));
+    return Math.max(1, Math.ceil(needed / n * 7));
+  }
+  const p = baseCR() / 100;
+  if(!p) return Infinity;
   const delta = p * (m/100);
   if(delta <= 0) return Infinity;
   const needed = Math.round(Math.pow(zA+zP,2) * 2 * p * (1-p) / Math.pow(delta,2));
@@ -1234,20 +1313,29 @@ function liveDayCount(){
 }
 function liveSeries(){
   const days = liveDayCount();
-  const base = baseCR() / 100;
+  const metric = metricOf();
+  const continuous = metricKind(metric) === 'continuous';
+  const base = continuous ? Number(metric.baselineMean)||0 : baseCR() / 100;
   return S.exp.variants.map((v, i) => {
     const rng = seeded(hashStr(S.exp.key + ':' + v.id));
     const trueRel = i === 0 ? 0 : (Number(S.exp.mde) || 10) / 100 * (0.55 + 0.2 * i);
-    const trueP = Math.min(0.9, Math.max(0.001, base * (1 + trueRel)));
+    const trueP = continuous ? base * (1 + trueRel) : Math.min(0.9, Math.max(0.001, base * (1 + trueRel)));
     const dailyN = Math.max(8, perVariantDaily(v.id));
     const pts = [];
     for(let d=1; d<=days; d++){
       const n = Math.max(1, Math.round(dailyN * (0.88 + rng() * 0.24)));
-      const noise = 0.82 + rng() * 0.36;
-      const p = Math.min(0.95, Math.max(0.001, trueP * noise));
-      const sd = Math.sqrt(Math.max(0.25, n * p * (1-p)));
-      const conv = Math.max(0, Math.min(n, Math.round(n * p + (rng() - 0.5) * sd * 2)));
-      pts.push({day:d, n, c:conv, cr: n ? +(conv/n*100).toFixed(3) : 0});
+      if(continuous){
+        const popSd = Number(metric.baselineSd)||1;
+        const mean = trueP + (rng()-0.5) * popSd / Math.sqrt(n) * 2.2;
+        const sd = popSd * (0.9 + rng()*0.2);
+        pts.push({day:d, n, mean:+mean.toFixed(3), sd:+sd.toFixed(3), sum:+(mean*n).toFixed(2)});
+      } else {
+        const noise = 0.82 + rng() * 0.36;
+        const p = Math.min(0.95, Math.max(0.001, trueP * noise));
+        const sd = Math.sqrt(Math.max(0.25, n * p * (1-p)));
+        const conv = Math.max(0, Math.min(n, Math.round(n * p + (rng() - 0.5) * sd * 2)));
+        pts.push({day:d, n, c:conv, cr: n ? +(conv/n*100).toFixed(3) : 0});
+      }
     }
     return {id:v.id, name:v.name||v.id, color:VAR_COLORS[i % VAR_COLORS.length], role:v.role, pts};
   });
@@ -1301,17 +1389,37 @@ function liveWindow(){
 }
 function liveStats(){
   const series = liveSeries();
+  const metric = metricOf();
+  const continuous = metricKind(metric) === 'continuous';
   const {start, end} = liveWindow();
   const zCrit = zAlpha();
   const arms = series.map(s => {
     const slice = s.pts.filter(p => p.day >= start && p.day <= end);
     const n = slice.reduce((a,p)=>a+p.n, 0);
+    if(continuous){
+      const mean = n ? slice.reduce((a,p)=>a+(p.mean*p.n),0)/n : 0;
+      const ss = slice.reduce((a,p)=>a + Math.max(0,p.n-1)*p.sd*p.sd + p.n*Math.pow(p.mean-mean,2),0);
+      const sd = n>1 ? Math.sqrt(ss/(n-1)) : 0;
+      return {...s, n, mean:+mean.toFixed(2), sd:+sd.toFixed(2), value:+mean.toFixed(2), slice};
+    }
     const c = slice.reduce((a,p)=>a+p.c, 0);
-    return {...s, n, c, cr: n ? +(c/n*100).toFixed(2) : 0, slice};
+    return {...s, n, c, cr: n ? +(c/n*100).toFixed(2) : 0, value:n ? +(c/n*100).toFixed(2) : 0, slice};
   });
   const ctrl = arms[0] || {n:0, c:0, cr:0};
   return arms.map((a, i) => {
     if(i === 0) return {...a, abs:0, rel:0, half:0, lo:0, hi:0, p:1, state:'flat'};
+    if(continuous){
+      const abs = +(a.mean-ctrl.mean).toFixed(2);
+      const rel = ctrl.mean ? +(abs/ctrl.mean*100).toFixed(1) : 0;
+      const se = Math.sqrt(ctrl.sd*ctrl.sd/Math.max(1,ctrl.n) + a.sd*a.sd/Math.max(1,a.n));
+      const t = se ? abs/se : 0;
+      const p = Math.max(0.0001, Math.min(0.999, 2*(1-normalCdf(Math.abs(t)))));
+      const half = +(zCrit*se).toFixed(2);
+      const lo = +(abs-half).toFixed(2), hi = +(abs+half).toFixed(2);
+      const crosses = lo < 0 && hi > 0;
+      let state = ctrl.n+a.n < 120 ? 'early' : crosses ? (Math.abs(abs)>half*.55?'trend':'flat') : abs>0?'win':'loss';
+      return {...a, abs, rel, half, lo, hi, p, state};
+    }
     const p1 = ctrl.n ? ctrl.c / ctrl.n : 0;
     const p2 = a.n ? a.c / a.n : 0;
     const abs = +((p2 - p1) * 100).toFixed(2);
@@ -1343,40 +1451,37 @@ function liveCompareArm(){
   return stats[getLiveCompareIdx()] || stats[1] || null;
 }
 function detectableMdeAt(nPerArm){
+  const metric = metricOf();
+  if(metricKind(metric) === 'continuous'){
+    const mean = Number(metric.baselineMean)||0, sd = Number(metric.baselineSd)||0;
+    if(!nPerArm || !mean || !sd) return Infinity;
+    const delta = (zAlpha()+zPower()) * sd * Math.sqrt(2/nPerArm);
+    return +(delta/mean*100).toFixed(1);
+  }
   const p = baseCR() / 100;
   if(!nPerArm || !p) return Infinity;
   const delta = Math.sqrt(Math.pow(zAlpha() + zPower(), 2) * 2 * p * (1-p) / nPerArm);
   return +((delta / p) * 100).toFixed(1);
 }
 function cloneJson(v){ return JSON.parse(JSON.stringify(v)); }
-function setupEditing(id){ return S.published && S.setupEdit === id; }
-function setupSummaryMode(id){ return S.published && S.setupEdit !== id; }
+function setupEditing(){ return S.published && S.setupEdit === 'all'; }
+function setupSummaryMode(){ return S.published && S.setupEdit !== 'all'; }
 function setupEditActions(id, editLabel){
-  if(!S.published) return '';
-  if(S.setupEdit === id){
-    return `<button class="btn sec sm" data-act="setup-cancel">Cancel</button>
-      <button class="btn pri sm" data-act="setup-save">Save changes</button>`;
-  }
-  if(S.setupEdit) return '<span class="chip out">finish other edit first</span>';
-  return `<button class="btn sec sm" data-act="setup-edit" data-s="${id}">${editLabel}</button>`;
+  return '';
 }
-function beginSetupEdit(id){
+function beginSetupEdit(){
   if(!S.published) return;
-  if(S.setupEdit && S.setupEdit !== id){
-    toast('Save or cancel the open section first.');
-    return;
-  }
-  S.setupSnap = cloneJson(S.exp);
+  S.setupSnap = {exp:cloneJson(S.exp), goalChanges:cloneJson(S.goalChanges||[]), conf:S.conf, power:S.power};
   S.setupGoalPrev = S.exp.goal;
-  S.setupEdit = id;
-  S.activeSection = id;
+  S.setupEdit = 'all';
   S.phase = 'setup';
   render();
-  const t = document.getElementById('sec-'+id);
-  if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
 }
 function cancelSetupEdit(){
-  if(S.setupSnap) S.exp = S.setupSnap;
+  if(S.setupSnap){
+    S.exp = S.setupSnap.exp; S.goalChanges = S.setupSnap.goalChanges;
+    S.conf = S.setupSnap.conf; S.power = S.setupSnap.power;
+  }
   S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
   ensureSplits();
   syncExpName();
@@ -1384,30 +1489,33 @@ function cancelSetupEdit(){
   toast('Changes discarded.');
 }
 function commitSetupEdit(){
-  const id = S.setupEdit;
-  if(!id) return;
-  if(id === 'setup'){
-    const issues = codeSetupIssues();
-    if(!String(S.exp.descriptor||'').trim()) issues.unshift('Add a short descriptor');
-    if(issues.length){ flashStageErrors('setup'); return; }
-    syncExpName();
+  if(S.setupEdit !== 'all') return;
+  for(const id of ['setup','goal','variants','traffic']){
+    if(stageBlockers(id).length){ S.activeSection=id; render(); flashStageErrors(id); return; }
   }
-  if(id === 'goal' && !goalOf()){ flashStageErrors('goal'); return; }
-  if(id === 'variants'){
-    const b = stageBlockers('variants');
-    if(b.length){ flashStageErrors('variants'); return; }
-    ensureSplits();
-  }
-  if(id === 'traffic' && !(S.exp.traffic > 0)){ flashStageErrors('traffic'); return; }
-  if(id === 'goal' && S.published && S.setupGoalPrev && S.setupGoalPrev !== S.exp.goal){
+  syncExpName(); ensureSplits(); applyAudienceFromCode();
+  if(S.setupGoalPrev && S.setupGoalPrev !== S.exp.goal){
     S.goalChanges = S.goalChanges || [];
     S.goalChanges.push({day: liveDayCount(), from: S.setupGoalPrev, to: S.exp.goal});
   }
-  if(id === 'setup') applyAudienceFromCode();
+  const before = S.setupSnap && S.setupSnap.exp;
+  const details = setupChangeDetails(before, S.exp);
+  S.changelog = S.changelog || [];
+  S.changelog.unshift({at:new Date().toLocaleString(), summary:details.length ? `${details.length} setup change${details.length===1?'':'s'}` : 'Setup reviewed', details});
   S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
   if(S.report) S.report.analysis = '';
   save(); render();
-  toast('Saved. Live analysis will use the updated setup.');
+  toast('Experiment updated. Live analysis now uses the new setup.');
+}
+function setupChangeDetails(before, after){
+  if(!before) return [];
+  const out = [];
+  if(before.name !== after.name) out.push(`Name: ${before.name||'Untitled'} to ${after.name||'Untitled'}`);
+  if(before.goal !== after.goal) out.push(`Primary metric: ${goalOf(before.goal)?.name||'None'} to ${goalOf(after.goal)?.name||'None'}`);
+  if(JSON.stringify(before.audience)!==JSON.stringify(after.audience)) out.push('Audience rules changed');
+  if(JSON.stringify(before.variants)!==JSON.stringify(after.variants)) out.push('Variants changed');
+  if(before.traffic!==after.traffic || JSON.stringify(before.splits)!==JSON.stringify(after.splits)) out.push('Traffic allocation changed');
+  return out;
 }
 function liveAnaControlsHtml(){
   const editing = S.liveAnaEdit;
@@ -1476,7 +1584,7 @@ function stageBlockers(id){
     out.push(...codeSetupIssues());
     return out;
   }
-  if(id === 'goal') return goalOf() ? [] : ['Pick a conversion goal'];
+  if(id === 'goal') return goalOf() ? [] : ['Pick a primary metric'];
   if(id === 'audience') return [];
   if(id === 'variants'){
     const out = [];
@@ -1508,10 +1616,10 @@ function checklist(){
 
   const g = goalOf();
   out.push({ok: !!g, block:true, jump:'goal',
-    t:'Conversion goal set',
+    t:'Primary metric set',
     d: g
-      ? `${g.name} · ${goalPath(g)} · ${g.window} day conversion window · baseline ${baseCR()}%`
-      : 'Without a goal there is no conversion rate to move'});
+      ? `${g.name} · ${goalPath(g)} · baseline ${formatMetricValue(goalBaseline(g),g)}${metricKind(g)==='binary'?' · '+g.window+' day conversion window':''}`
+      : 'Without a primary metric there is no outcome to analyse'});
 
   out.push({ok:true, block:false, jump:'audience',
     t:'Audience defined',
@@ -1554,7 +1662,7 @@ function checklist(){
     t:`Days needed to detect a ${e.mde}% lift`,
     d: d === Infinity
       ? 'Not enough traffic to detect anything'
-      : `${d} days at current traffic · baseline ${baseCR()}% CR · +${absUplift()}pp absolute`});
+      : `${d} days at current traffic · baseline ${formatMetricValue(goalBaseline(g),g)} · ${formatAbsEffect(absUplift(),g)} absolute`});
 
   out.push({ok: e.envs.length > 0, block:true, jump:'launch',
     t:'Publish destination chosen',
@@ -1624,7 +1732,7 @@ function flashStageErrors(id){
     });
   }
   if(id === 'goal' && !goalOf()){
-    hits.push(markErr(document.querySelector('#sec-goal [data-goal]'), 'Pick a conversion goal'));
+    hits.push(markErr(document.querySelector('#sec-goal [data-goal]'), 'Pick a primary metric'));
   }
   if(id === 'variants'){
     if(S.exp.variants.length < 2){
@@ -1977,6 +2085,8 @@ function publish(){
   S.maxStage = STAGES.length-1;
   S.phase = 'live'; S.liveSec = 'controls';
   S.goalChanges = [];
+  S.sessionDraft = null; S.hasDraft = false;
+  S.changelog = [{at:new Date().toLocaleString(), summary:'Experiment published', details:[`Published to ${S.exp.envs.join(' and ')}`]}];
   S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false, notionSynced:null};
   render();
   toast('Published to ' + S.exp.envs.join(' and ') + '. Opening the live board.');
@@ -2119,6 +2229,7 @@ function openRun(d){
   S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
   S.liveAnaEdit = false; S.liveAnaSnap = null;
   S.goalChanges = [];
+  S.changelog = [{at:'Earlier', summary:'Experiment published', details:[`Published to ${S.exp.envs.join(' and ')}`]}];
   S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false,
     notionSynced: finished ? 'Synced just now' : null};
   S.view = 'experiment';
@@ -2130,6 +2241,12 @@ function nextExpKey(){
   return String(Math.max(4, ...nums) + 1).padStart(3, '0');
 }
 function newExperimentFlow(){
+  if(S.sessionDraft){
+    S.modal = {type:'replace-draft'}; render(); return;
+  }
+  startNewExperiment();
+}
+function startNewExperiment(){
   S.exp = newExperiment();
   S.exp.key = nextExpKey();
   syncExpName();
@@ -2144,10 +2261,33 @@ function newExperimentFlow(){
   S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
   S.liveAnaEdit = false; S.liveAnaSnap = null;
   S.goalChanges = [];
+  S.changelog = [];
+  S.hasDraft = true;
   S.report = {analysis:'', slackChannel:'#cro-experiments', slackPosted:false, notionSynced:null};
   S.view = 'experiment';
   render();
   toast('Start with the name. Later stages unlock as you go.');
+}
+function draftSnapshot(){
+  return {
+    exp:cloneJson(S.exp), maxStage:S.maxStage, activeSection:S.activeSection, phase:'setup',
+    published:false, retired:false, paused:false, conf:S.conf, power:S.power,
+    goalChanges:cloneJson(S.goalChanges||[]), changelog:cloneJson(S.changelog||[]),
+    report:cloneJson(S.report), setupEdit:null, setupSnap:null, setupGoalPrev:null
+  };
+}
+function saveDraftAndExit(){
+  S.sessionDraft = draftSnapshot(); S.hasDraft = true; S.view='dashboard';
+  S.modal=null; S.focus=null; S.dashTab='draft'; render(); toast('Draft saved for this session.');
+}
+function resumeDraft(){
+  const d = S.sessionDraft; if(!d) return;
+  Object.keys(d).forEach(k=>{ S[k]=cloneJson(d[k]); });
+  S.view='experiment'; S.hasDraft=true; render(); toast('Draft resumed.');
+}
+function abandonDraft(){
+  S.sessionDraft=null; S.hasDraft=false; S.exp=null; S.modal=null; S.focus=null;
+  S.view='dashboard'; S.dashTab='running'; render(); toast('Draft abandoned.');
 }
 
 /* =====================================================================
@@ -2175,8 +2315,10 @@ function ampButton(){
 function ampCharts(){
   const g = goalOf();
   return [
-    g ? `${g.name} conversion by variant` : 'Primary goal conversion by variant',
-    'Funnel from ' + (g ? funnelStep(g.start).label.toLowerCase() : 'entry') + ' to purchase',
+    g ? `${g.name} by variant` : 'Primary metric by variant',
+    metricKind(g)==='binary'
+      ? 'Funnel from ' + (g ? funnelStep(g.start).label.toLowerCase() : 'entry') + ' to purchase'
+      : 'Observation volume by variant',
     'Enrolment per day by variant',
     'Revenue per enrolled user'
   ];
@@ -2232,7 +2374,7 @@ function nav(active){
     <a data-act="go-lib" data-t="products" class="${lib&&S.libTab==='products'?'on':''}">
       Care products <span class="count">${Object.keys(CARE).length}</span></a>
     <a data-act="go-lib" data-t="goals" class="${lib&&S.libTab==='goals'?'on':''}">
-      Conversion goals <span class="count">${Object.keys(GOALS).length}</span></a>
+      Primary metrics <span class="count">${Object.keys(GOALS).length}</span></a>
     <button class="ai" data-act="chat-open" type="button">
       <i></i>
       <span>AI assistant<span class="sub">Create packages, products, goals</span></span>
@@ -2321,9 +2463,10 @@ function newCard(){
 }
 
 function viewDashboard(){
+  const draftCount = S.sessionDraft ? 1 : 0;
   const tabs = [
     {id:'running',  label:'Running',  n:RUNS.length},
-    {id:'draft',    label:'Draft',    n:1},
+    {id:'draft',    label:'Draft',    n:draftCount},
     {id:'finished', label:'Finished', n:12},
     {id:'archived', label:'Archived', n:0}
   ];
@@ -2331,19 +2474,20 @@ function viewDashboard(){
   if(S.dashTab === 'running'){
     body = `<div class="dgrid">${RUNS.map((d,i)=>resultCard(d,i,'run')).join('')}${newCard()}</div>`;
   } else if(S.dashTab === 'draft'){
-    body = `<div class="dgrid">
-      <div class="dc" data-act="new">
+    const d = S.sessionDraft;
+    body = d ? `<div class="dgrid">
+      <div class="dc" data-act="resume-draft">
         <div class="dc-h">
-          ${brandMark('MOSHY')}
+          ${brandMark(d.exp.audience.brand)}
           <div style="min-width:0;flex:1">
-            <div class="dct">Untitled experiment</div>
-            <div class="k" style="margin-top:2px">Draft · created today · exp_005</div>
+            <div class="dct">${esc(d.exp.name||'Untitled experiment')}</div>
+            <div class="k" style="margin-top:2px">Draft · this session · exp_${esc(d.exp.key)}</div>
           </div>
         </div>
-        <div class="statbar s-early">2 checks outstanding</div>
-        <div class="dcf"><span class="k">No traffic yet</span><span class="k">Stage 3 of 5</span></div>
+        <div class="statbar s-early">${checklistForDraft(d).length} checks outstanding</div>
+        <div class="dcf"><span class="k">No traffic yet</span><span class="k">Stage ${Math.min(d.maxStage+1,STAGES.length)} of ${STAGES.length}</span></div>
       </div>
-      ${newCard()}</div>`;
+      ${newCard()}</div>` : `<div class="card blank">No drafts in this session. Create a new experiment to get started.</div>`;
   } else if(S.dashTab === 'finished'){
     body = `<div class="dgrid">${FINISHED.map((d,i)=>resultCard(d,i,'fin')).join('')}</div>
       <div class="k" style="margin-top:14px;text-align:center">Showing 3 of 12 finished experiments.</div>`;
@@ -2353,14 +2497,18 @@ function viewDashboard(){
 
   return `<div class="shell">${nav('exp')}
     <div class="stage">
-      <div class="top">
-        <div class="lhs"><h1>Experiments</h1>
-          <div class="meta">${RUNS.length} running · 1 draft · 12 finished</div></div>
-        <div class="rhs">
-          <button class="btn pri" data-act="new">New experiment</button>
-        </div>
-      </div>
       <div class="content"><div class="content-inner">
+        <div class="page-head">
+          <div class="title">
+            <div>
+              <h1>Experiments</h1>
+              <div class="meta">${RUNS.length} running · ${draftCount} draft · 12 finished</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn pri" data-act="new">New experiment</button>
+          </div>
+        </div>
         ${anaBar()}
         <div style="display:flex;gap:7px;margin-bottom:16px">
           ${tabs.map(t=>`<button class="chip pick ${S.dashTab===t.id?'on':''}"
@@ -2369,6 +2517,13 @@ function viewDashboard(){
         ${body}
       </div></div>
     </div></div>`;
+}
+function checklistForDraft(d){
+  const oldExp=S.exp, oldMax=S.maxStage;
+  S.exp=d.exp; S.maxStage=d.maxStage;
+  const out=checklist().filter(c=>!c.ok);
+  S.exp=oldExp; S.maxStage=oldMax;
+  return out;
 }
 
 /* ---------- library master-detail ---------- */
@@ -2383,24 +2538,28 @@ function viewLibrary(){
     else if(goals) S.libDraft = S.libSel ? libGoalDraft(GOALS[S.libSel]) : blankGoalDraft();
     else S.libDraft = S.libSel ? libCareDraft(CARE[S.libSel]) : blankLibCare();
   }
-  const title = packages ? 'Care packages' : (goals ? 'Conversion goals' : 'Care products');
+  const title = packages ? 'Care packages' : (goals ? 'Primary metrics' : 'Care products');
   const meta = packages
     ? 'Click a row to edit it. Changes save to every experiment that references it.'
     : goals
-      ? 'A goal is a start point and a goal event. Every experiment picks one as its primary measure.'
+      ? 'Define binary conversion or continuous mean metrics. Every experiment picks one primary measure.'
       : 'Click a row to edit it. A product can appear in many packages.';
   const newLabel = packages ? 'New package' : (goals ? 'New goal' : 'New care product');
   const listLabel = packages ? 'Packages' : (goals ? 'Goals' : 'Products');
   return `<div class="shell">${nav('lib')}
     <div class="stage">
-      <div class="top">
-        <div class="lhs"><h1>${title}</h1>
-          <div class="meta">${meta}</div></div>
-        <div class="rhs">
-          <button class="btn pri" data-act="lib-new">${newLabel}</button>
-        </div>
-      </div>
       <div class="content"><div class="content-inner">
+        <div class="page-head">
+          <div class="title">
+            <div>
+              <h1>${title}</h1>
+              <div class="meta">${meta}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn pri" data-act="lib-new">${newLabel}</button>
+          </div>
+        </div>
         <div class="lib-split">
           <div class="lib-list">
             <div class="lib-list-h">
@@ -2418,7 +2577,7 @@ function viewLibrary(){
                 ? Object.values(GOALS).map(g=>`<div class="lib-row ${S.libSel===g.id?'on':''}"
                     data-act="lib-sel" data-id="${g.id}">
                     <div class="rn">${esc(g.name)} ${g.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
-                    <div class="rm">${esc(goalPath(g))} · ${goalBaseline(g)}% · ${g.uses||0} experiments</div>
+                    <div class="rm">${esc(goalPath(g))} · ${formatMetricValue(goalBaseline(g),g)} · ${g.uses||0} experiments</div>
                   </div>`).join('')
                 : Object.values(CARE).map(c=>`<div class="lib-row ${S.libSel===c.id?'on':''}"
                     data-act="lib-sel" data-id="${c.id}">
@@ -2443,7 +2602,13 @@ function goalFields(f, pfx){
   const observed = stepIdx(f.event) > stepIdx(f.start) && startWk
     ? +((evWk / startWk) * 100).toFixed(2) : null;
   const scaled = Math.round(ELIGIBLE * (startWk / FUNNEL[0].wk));
+  const binary = (f.kind||'binary') === 'binary';
   return `
+    <div style="display:flex;gap:7px;margin-bottom:14px">
+      <button class="chip pick ${binary?'on':''}" data-act="metric-kind" data-pfx="${pfx}" data-k="binary">Binary conversion</button>
+      <button class="chip pick ${binary?'':'on'}" data-act="metric-kind" data-pfx="${pfx}" data-k="continuous">Continuous mean</button>
+    </div>
+    ${binary ? `
     <div class="row" style="margin-bottom:12px">
       <div style="flex:1">
         <div class="flab">Start point
@@ -2477,14 +2642,34 @@ function goalFields(f, pfx){
       <div class="gfacts">
         <div class="gf"><div class="mv">${scaled.toLocaleString()}</div>
           <div class="ml">reach the start point each week</div></div>
-        <div class="gf"><div class="mv">${observed===null?'—':observed+'%'}</div>
+        <div class="gf"><div class="mv">${observed===null?'n/a':observed+'%'}</div>
           <div class="ml">observed CR, last 28 days</div></div>
         <div class="gf"><div class="mv">${String(f.baseline||'').trim()!=='' ? f.baseline+'%' : 'observed'}</div>
           <div class="ml">baseline used for planning</div></div>
       </div>
       ${observed===null?`<div class="k" style="margin-top:9px;color:var(--hot)">
         The goal event needs to sit after the start point in the funnel.</div>`:''}
-    </div>`;
+    </div>` : `
+    <div class="row" style="margin-bottom:12px">
+      <div style="flex:1"><div class="flab">Observation event</div>
+        <select class="sel" data-${pfx}e style="width:100%">
+          ${FUNNEL.map(s=>`<option value="${s.id}" ${f.event===s.id?'selected':''}>${esc(s.label)}</option>`).join('')}
+        </select></div>
+      <div><div class="flab">Aggregation</div><div class="fld lock">Mean</div></div>
+      <div><div class="flab">Unit</div><input class="fld" data-metric-field="unit" data-pfx="${pfx}" value="${esc(f.unit||'AUD')}"></div>
+    </div>
+    <div class="row">
+      <div><div class="flab">Baseline mean</div><input class="fld" type="number" min="0.01" step="0.01" data-metric-field="baselineMean" data-pfx="${pfx}" value="${esc(f.baselineMean)}"></div>
+      <div><div class="flab">Baseline standard deviation</div><input class="fld" type="number" min="0.01" step="0.01" data-metric-field="baselineSd" data-pfx="${pfx}" value="${esc(f.baselineSd)}"></div>
+      <div><div class="flab">Weekly observations</div><input class="fld" type="number" min="1" step="1" data-metric-field="weeklyObservations" data-pfx="${pfx}" value="${esc(f.weeklyObservations)}"></div>
+    </div>
+    <div class="goalstrip"><div class="gsteps"><span class="gs on">Mean · ${esc(funnelStep(f.event).label)}</span></div>
+      <div class="gfacts">
+        <div class="gf"><div class="mv">${f.baselineMean||'n/a'}</div><div class="ml">baseline mean</div></div>
+        <div class="gf"><div class="mv">${f.baselineSd||'n/a'}</div><div class="ml">baseline SD</div></div>
+        <div class="gf"><div class="mv">${f.weeklyObservations||'n/a'}</div><div class="ml">observations per week</div></div>
+      </div>
+    </div>`}`;
 }
 
 function libGoalDetail(){
@@ -2493,8 +2678,8 @@ function libGoalDetail(){
   return `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
       <div>
-        <div class="k">${f.editId ? 'Editing goal' : 'New goal'}</div>
-        <div style="font-size:16px;font-weight:650;margin-top:2px">${esc(f.name)||'Untitled goal'}</div>
+        <div class="k">${f.editId ? 'Editing metric' : 'New metric'}</div>
+        <div style="font-size:16px;font-weight:650;margin-top:2px">${esc(f.name)||'Untitled metric'}</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         ${refs > 1 ? `<span class="chip a">used by ${refs} experiments</span>` : ''}
@@ -2503,7 +2688,7 @@ function libGoalDetail(){
       </div>
     </div>
     <div class="card" style="padding:15px 16px;margin-bottom:12px">
-      <div class="flab">Goal name</div>
+      <div class="flab">Metric name</div>
       <input class="fld" data-ld="name" data-fid="ld-gname" value="${esc(f.name)}"
         placeholder="Landing page to purchase">
     </div>
@@ -2511,14 +2696,14 @@ function libGoalDetail(){
       ${goalFields(f, 'ldg')}
     </div>
     <div class="card" style="padding:15px 16px">
-      <div class="flab">Baseline override
+      ${(f.kind||'binary')==='binary' ? `<div class="flab">Baseline override
         <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
       <div style="display:flex;align-items:center;gap:6px;max-width:170px">
         <input class="fld" type="number" min="0.1" max="90" step="0.01" value="${esc(f.baseline)}"
           data-ld="baseline" data-fid="ld-gbase" placeholder="observed">
         <span class="k">%</span>
       </div>
-      <div class="k" style="margin-top:6px">Leave empty to keep using the observed rate.</div>
+      <div class="k" style="margin-top:6px">Leave empty to keep using the observed rate.</div>` : ''}
       <div class="flab" style="margin-top:13px">Short description</div>
       <input class="fld" data-ld="note" data-fid="ld-gnote" value="${esc(f.note)}"
         placeholder="When to use this goal">
@@ -2656,28 +2841,18 @@ function viewExperiment(){
     ? '<span class="chip">Retired</span>'
     : (S.paused ? '<span class="chip a">Paused</span>'
       : (S.published ? `<span class="chip g">Live on ${e.envs.join(' + ')}</span>` : '<span class="chip out">Draft</span>'));
-  const phaseMeta = S.phase === 'setup'
-    ? `setup ${stageIdx(S.activeSection)+1} of ${STAGES.length}`
-    : (S.phase === 'live' ? 'live board' : 'reporting');
   return `<div class="shell">${nav('exp')}
     <div class="stage">
-      <div class="top">
-        <div class="lhs" style="display:flex;gap:11px;align-items:flex-start">
+      <div class="content"><div class="content-inner">
+        <div class="page-head">
+          <div class="title">
           ${brandMark(e.audience.brand)}
           <div>
-            <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'} ${statusChip}</h1>
-            <div class="meta">
-              <span class="mono">exp_${e.key}</span>
-              <span>${phaseMeta}</span>
-              <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
-            </div>
+            <h1>${e.name.trim() ? esc(e.name) : 'Untitled experiment'}</h1>
           </div>
+          </div>
+          ${statusChip}
         </div>
-        <div class="rhs">
-          <button class="btn sec" data-act="go-dash">Save and exit</button>
-        </div>
-      </div>
-      <div class="content"><div class="content-inner">
         <div class="doc-wrap">
           ${railView()}
           ${S.phase === 'live' ? docLive() : S.phase === 'report' ? docReport() : docSetup()}
@@ -2688,14 +2863,27 @@ function viewExperiment(){
 
 function docSetup(){
   return `<div class="doc">
-    ${S.published ? `<div class="lockban">
+    ${!S.published ? `<div class="lockban draftban">
       <div style="flex:1">
-        <div class="bt">Saved configuration for a ${S.retired?'retired':'live'} experiment</div>
-        <div class="bd">Sections stay read-only until you use Edit. Changes update analysis across Live and Reporting.</div>
+        <div class="bt">Draft in progress</div>
+        <div class="bd">${Math.min(S.maxStage+1,STAGES.length)} of ${STAGES.length} setup stages reached. Save for this session or abandon the draft.</div>
       </div>
-      <button class="btn pri" data-act="go-phase" data-p="${S.retired?'report':'live'}">
-        ${S.retired?'Open reporting':'Open live board'}</button>
-    </div>` : ''}
+      <button class="btn sec" data-act="draft-abandon">Abandon draft</button>
+      <button class="btn pri" data-act="draft-save-exit">Save and exit</button>
+    </div>` : (S.setupEdit === 'all' ? `<div class="lockban liveeditban">
+      <div style="flex:1">
+        <div class="bt">You're editing a live experiment</div>
+        <div class="bd">Name, primary metric, audience, variants and traffic are unlocked together.</div>
+      </div>
+      <button class="btn sec" data-act="setup-cancel">Cancel changes</button>
+      <button class="btn pri" data-act="setup-save">Update experiment</button>
+    </div>` : `<div class="lockban">
+      <div style="flex:1">
+        <div class="bt">Need to make changes to this experiment?</div>
+        <div class="bd">Edit the complete setup in one session, then update the live experiment once.</div>
+      </div>
+      <button class="btn pri" data-act="setup-edit">Edit experiment</button>
+    </div>`)}
     ${STAGES.map((s,i)=> reached(s.id) ? sectionFor(s.id) : lockedSection(s, i)).join('')}
   </div>`;
 }
@@ -2730,14 +2918,14 @@ function liveGoalControlHtml(){
   const e = S.exp;
   const g = goalOf();
   return `<div class="rcgoal">
-    <div class="flab" style="margin-bottom:8px">Conversion goal</div>
+    <div class="flab" style="margin-bottom:8px">Primary metric</div>
     <select class="sel" data-goal data-fid="live-goal" style="width:100%;max-width:480px;font-size:13px">
-      <option value="" ${!e.goal?'selected':''}>Select a conversion goal</option>
+      <option value="" ${!e.goal?'selected':''}>Select a primary metric</option>
       ${Object.values(GOALS).map(x=>`<option value="${x.id}" ${e.goal===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}
     </select>
     <div class="k" style="margin-top:8px">${g
-      ? `${esc(goalPath(g))} · baseline ${baseCR()}%`
-      : 'Pick the event that defines a conversion for all analysis below.'}</div>
+      ? `${esc(goalPath(g))} · baseline ${formatMetricValue(goalBaseline(g),g)}`
+      : 'Pick the metric used for all analysis below.'}</div>
   </div>`;
 }
 
@@ -2756,7 +2944,7 @@ function reportingControls(){
       <div>
         <div class="flab" style="margin-bottom:6px">Significance, power and MDE</div>
         ${liveAnaControlsHtml()}
-        <div class="k" style="margin-top:6px">Goal and date range update immediately. Statistical settings recalculate only when you save.</div>
+        <div class="k" style="margin-top:6px">Primary metric and date range update immediately. Statistical settings recalculate only when you save.</div>
       </div>
     </div>
   </div>`;
@@ -2768,6 +2956,7 @@ function liveOverview(){
   const totalN = stats.reduce((a,s)=>a+s.n,0);
   const daily = Math.round(stats.reduce((a,s)=>a + (s.slice.reduce((x,p)=>x+p.n,0) / Math.max(1,s.slice.length)), 0));
   const e = S.exp;
+  const metric = metricOf();
   const a = e.audience;
   const ctrl = stats[0];
   const arm = liveCompareArm();
@@ -2792,14 +2981,19 @@ function liveOverview(){
       </div>` : `<div class="ov-head"><span class="k">${esc(arm.name)} vs ${esc(ctrl.name)} · ${S.conf}% significance · ${S.power}% power · ${S.exp.mde}% target MDE</span></div>`}
       <div class="ov-primary">
         <div class="ovp">
+          <div class="k">${metricKind(metric)==='continuous' ? (esc(metric.name)||'Observed mean') : 'Observed conversion rate'}</div>
+          <div class="v">${formatMetricValue(arm.value,metric)}</div>
+          <div class="s">Control ${formatMetricValue(ctrl.value,metric)}</div>
+        </div>
+        <div class="ovp">
           <div class="k">Observed relative change</div>
-          <div class="v">${arm.rel>0?'+':''}${arm.rel}%</div>
+          <div class="v">${formatRelEffect(arm.rel)}</div>
           <div class="s">${esc(arm.name)} vs ${esc(ctrl.name)}</div>
         </div>
         <div class="ovp">
           <div class="k">Observed absolute change</div>
-          <div class="v">${arm.abs>0?'+':''}${arm.abs} pp</div>
-          <div class="s">${ctrl.cr.toFixed(2)}% → ${arm.cr.toFixed(2)}%</div>
+          <div class="v">${formatAbsEffect(arm.abs,metric)}</div>
+          <div class="s">${formatMetricValue(ctrl.value,metric)} → ${formatMetricValue(arm.value,metric)}</div>
         </div>
         <div class="ovp">
           <div class="k">Status</div>
@@ -2810,12 +3004,12 @@ function liveOverview(){
       <div class="ov-secondary">
         <div class="ovs">
           <div class="k">Currently detectable MDE</div>
-          <div class="v">${curMde===Infinity?'—':curMde+'%'}</div>
+          <div class="v">${curMde===Infinity?'n/a':curMde+'%'}</div>
           <div class="s">n=${nArm.toLocaleString()} per arm</div>
         </div>
         <div class="ovs">
           <div class="k">Days to hit target MDE</div>
-          <div class="v">${daysLeft===Infinity?'—':daysLeft}</div>
+          <div class="v">${daysLeft===Infinity?'n/a':daysLeft}</div>
           <div class="s">Target ${S.exp.mde}% · ~${smallest.toLocaleString()} / week in smallest arm</div>
         </div>
         <div class="ovs">
@@ -2841,10 +3035,15 @@ function liveOverview(){
 }
 
 function convSeriesPts(series, mode){
+  const continuous = metricKind(metricOf()) === 'continuous';
   const {start, end} = liveWindow();
   return series.map(s => {
     const slice = s.pts.filter(p => p.day >= start && p.day <= end);
-    if(mode !== 'cumulative') return {...s, chartPts: slice.map(p => ({day:p.day, v:p.cr}))};
+    if(mode !== 'cumulative') return {...s, chartPts: slice.map(p => ({day:p.day, v:continuous?p.mean:p.cr}))};
+    if(continuous){
+      let runN=0, runSum=0;
+      return {...s, chartPts:slice.map(p=>{ runN+=p.n; runSum+=p.mean*p.n; return {day:p.day,v:runN?runSum/runN:0}; })};
+    }
     let runN = 0, runC = 0;
     const chartPts = slice.map(p => {
       runN += p.n;
@@ -2856,13 +3055,15 @@ function convSeriesPts(series, mode){
 }
 
 function convChartSvg(series, mode){
+  const metric = metricOf();
   const {start, end} = liveWindow();
   const chartSeries = convSeriesPts(series, mode);
   const W = 720, H = 220, pad = {t:16, r:16, b:28, l:40};
   const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
   const all = chartSeries.flatMap(s => s.chartPts.map(p => p.v));
-  const ymin = Math.max(0, Math.min(...all, baseCR()) * 0.7);
-  const ymax = Math.max(...all, baseCR()) * 1.15 || 10;
+  const baseline = goalBaseline(metric);
+  const ymin = Math.max(0, Math.min(...all, baseline) * 0.7);
+  const ymax = Math.max(...all, baseline) * 1.15 || 10;
   const x = d => pad.l + ((d - start) / Math.max(1, end - start)) * iw;
   const y = v => pad.t + ih - ((v - ymin) / Math.max(0.001, ymax - ymin)) * ih;
   const paths = chartSeries.map(s => {
@@ -2872,7 +3073,7 @@ function convChartSvg(series, mode){
     return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`
       + pts.map(p => `<circle cx="${x(p.day).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="3" fill="#fff" stroke="${s.color}" stroke-width="2.2"/>`).join('');
   }).join('');
-  const ySuffix = '%';
+  const ySuffix = metricKind(metric)==='binary' ? '%' : (metric.unit==='AUD'?' AUD':'');
   const markers = (S.goalChanges||[]).filter(g => g.day >= start && g.day <= end).map(g =>
     `<line x1="${x(g.day).toFixed(1)}" x2="${x(g.day).toFixed(1)}" y1="${pad.t}" y2="${pad.t+ih}"
       stroke="#c47a1a" stroke-dasharray="3 3" stroke-width="1.2"/>
@@ -2897,19 +3098,19 @@ function ciPlotScale(stats){
   return {dmin, dmax, pos};
 }
 function ciPlotHtml(s, scale){
-  if(!scale || !s) return '—';
+  if(!scale || !s) return 'n/a';
   const mid = scale.pos(s.abs);
   const bandL = scale.pos(s.lo), bandR = scale.pos(s.hi);
   const zero = scale.pos(0);
   return `<div class="ciwrap">
     <div class="citrack">
-      <span class="cipt" style="left:${mid.toFixed(1)}%">${s.abs>0?'+':''}${s.abs}</span>
+      <span class="cipt" style="left:${mid.toFixed(1)}%">${formatAbsEffect(s.abs,metricOf())}</span>
       <span class="cizl" style="left:${zero.toFixed(1)}%">0</span>
       <span class="cizero" style="left:${zero.toFixed(1)}%"></span>
       <span class="ciband" style="left:${bandL.toFixed(1)}%;width:${Math.max(2, bandR-bandL).toFixed(1)}%"></span>
       <span class="cimark" style="left:${mid.toFixed(1)}%"></span>
     </div>
-    <div class="ciends"><span>${s.lo.toFixed(2)}</span><span>${s.hi.toFixed(2)} pp</span></div>
+    <div class="ciends"><span>${formatAbsEffect(s.lo,metricOf())}</span><span>${formatAbsEffect(s.hi,metricOf())}</span></div>
   </div>`;
 }
 
@@ -2918,10 +3119,11 @@ function liveConversion(){
   const stats = liveStats();
   const ciScale = ciPlotScale(stats);
   const chartMode = S.liveConvChart === 'cumulative' ? 'cumulative' : 'daily';
-  const chartTitle = chartMode === 'cumulative' ? 'Conversion over time' : 'Daily conversion rate';
+  const metric = metricOf(), continuous = metricKind(metric)==='continuous';
+  const chartTitle = chartMode === 'cumulative' ? 'Metric over time' : (continuous?'Daily mean':'Daily conversion rate');
   return `<div class="stg ${S.liveSec==='conversion'?'act':''}" id="live-conversion">
     <div class="sec-h">
-      <span class="nm">Conversion trends</span>
+      <span class="nm">Metric trends</span>
       <div class="rt">${ampButton()}</div>
     </div>
     <div class="chartbox">
@@ -2929,30 +3131,29 @@ function liveConversion(){
         <div class="ct">${chartTitle}</div>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <div class="rangepick">
-            <button data-act="conv-chart" data-m="daily" class="${chartMode==='daily'?'on':''}">Daily conversion rate</button>
-            <button data-act="conv-chart" data-m="cumulative" class="${chartMode==='cumulative'?'on':''}">Conversion over time</button>
+            <button data-act="conv-chart" data-m="daily" class="${chartMode==='daily'?'on':''}">${continuous?'Daily mean':'Daily conversion rate'}</button>
+            <button data-act="conv-chart" data-m="cumulative" class="${chartMode==='cumulative'?'on':''}">Metric over time</button>
           </div>
           <div class="leg">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>
         </div>
       </div>
       ${convChartSvg(series, chartMode)}
       <div class="k" style="margin-top:8px">${chartMode==='daily'
-        ? 'Conversion rate for each day in the selected range.'
-        : 'Running conversion rate from the start of the range through each day.'}</div>
+        ? `${continuous?'Mean value':'Conversion rate'} for each day in the selected range.`
+        : 'Running metric value from the start of the range through each day.'}</div>
     </div>
     <div class="chartbox">
       <div class="ch"><div class="ct">Totals for selected range</div></div>
       <table class="livetable">
-        <thead><tr><th>Variant</th><th>Entrants</th><th>Conversions</th><th>CR</th><th>Uplift</th><th>Abs</th><th class="ci-col">CI (${S.conf}%)</th></tr></thead>
+        <thead><tr><th>Variant</th><th>Observations</th>${continuous?'<th>Mean</th><th>SD</th>':'<th>Conversions</th><th>CR</th>'}<th>Uplift</th><th>Abs</th><th class="ci-col">CI (${S.conf}%)</th></tr></thead>
         <tbody>${stats.map((s,i)=>{
           return `<tr>
             <td><span class="swatch" style="background:${s.color}"></span><b>${esc(s.name)}</b>${i===0?' · control':''}</td>
             <td>${s.n.toLocaleString()}</td>
-            <td>${s.c.toLocaleString()}</td>
-            <td>${s.cr.toFixed(2)}%</td>
-            <td>${i===0?'—':(s.rel>0?'+':'')+s.rel+'%'}</td>
-            <td>${i===0?'—':(s.abs>0?'+':'')+s.abs+' pp'}</td>
-            <td class="ci-cell">${i===0?'—':ciPlotHtml(s, ciScale)}</td>
+            ${continuous?`<td>${formatMetricValue(s.mean,metric)}</td><td>${s.sd.toFixed(2)}</td>`:`<td>${s.c.toLocaleString()}</td><td>${formatMetricValue(s.cr,metric)}</td>`}
+            <td>${i===0?'n/a':formatRelEffect(s.rel)}</td>
+            <td>${i===0?'n/a':formatAbsEffect(s.abs,metric)}</td>
+            <td class="ci-cell">${i===0?'n/a':ciPlotHtml(s, ciScale)}</td>
           </tr>`;
         }).join('')}</tbody>
       </table>
@@ -2987,6 +3188,7 @@ function docLive(){
 }
 
 function buildAnalysis(){
+  const stats = liveStats();
   const primary = liveCompareArm();
   const g = goalOf();
   const st = primary ? (STATES[primary.state] || STATES.flat) : null;
@@ -3000,8 +3202,8 @@ function buildAnalysis(){
       : primary.state === 'early'
         ? `Too early to call. Sample is still building.`
         : `No significant difference between ${primary.name} and control at ${S.conf}% significance.`;
-  const move = `Observed absolute effect ${primary.abs>0?'+':''}${primary.abs} pp `
-    + `(${primary.rel>0?'+':''}${primary.rel}% relative), ${S.conf}% CI [${primary.lo}, ${primary.hi}], p=${primary.p.toFixed(3)}.`;
+  const move = `Observed absolute effect ${formatAbsEffect(primary.abs,g)} `
+    + `(${formatRelEffect(primary.rel)} relative), ${S.conf}% CI [${formatAbsEffect(primary.lo,g)}, ${formatAbsEffect(primary.hi,g)}], p=${primary.p.toFixed(3)}.`;
   const driver = primary.state === 'win'
     ? 'Likely driver: the variant change set improved conversion along the measured path. Confirm in Amplitude before shipping.'
     : primary.state === 'loss'
@@ -3049,7 +3251,7 @@ function slackBody(){
   const primary = stats[1];
   const g = goalOf();
   const st = primary ? (STATES[primary.state]||STATES.flat).label : 'n/a';
-  return `*Experiment result*\n${S.exp.name}\n\n*Verdict:* ${st}\n*Goal:* ${g?g.name:'—'}\n*Effect:* ${primary?`${primary.abs>0?'+':''}${primary.abs} pp (${primary.rel>0?'+':''}${primary.rel}%)`:'—'}\n*CI (${S.conf}%):* ${primary?`[${primary.lo}, ${primary.hi}]`:'—'}\n*Sample:* ${stats.reduce((a,s)=>a+s.n,0).toLocaleString()} enrolled over ${liveDayCount()} days\n\n_${(S.report.analysis||'').split('\n')[0]}_`;
+  return `*Experiment result*\n${S.exp.name}\n\n*Verdict:* ${st}\n*Primary metric:* ${g?g.name:'n/a'}\n*Effect:* ${primary?`${formatAbsEffect(primary.abs,g)} (${formatRelEffect(primary.rel)})`:'n/a'}\n*CI (${S.conf}%):* ${primary?`[${formatAbsEffect(primary.lo,g)}, ${formatAbsEffect(primary.hi,g)}]`:'n/a'}\n*Sample:* ${stats.reduce((a,s)=>a+s.n,0).toLocaleString()} observations over ${liveDayCount()} days\n\n_${(S.report.analysis||'').split('\n')[0]}_`;
 }
 
 function reportSlack(){
@@ -3084,10 +3286,11 @@ function reportNotion(){
     ['Key', S.exp.key],
     ['Dates', `Day 1–${liveDayCount()} of ${S.exp.lengthDays}`],
     ['Variants', S.exp.variants.map(v=>v.name||v.id).join(' / ')],
-    ['Goal', g ? g.name : '—'],
-    ['Result', primary ? (STATES[primary.state]||STATES.flat).label : '—'],
-    ['Uplift', primary ? `${primary.rel>0?'+':''}${primary.rel}% (${primary.abs>0?'+':''}${primary.abs} pp)` : '—'],
-    ['CI', primary ? `${S.conf}% [${primary.lo}, ${primary.hi}]` : '—'],
+    ['Primary metric', g ? g.name : 'n/a'],
+    ['Metric values', primary ? `${formatMetricValue(stats[0].value,g)} control, ${formatMetricValue(primary.value,g)} variant` : 'n/a'],
+    ['Result', primary ? (STATES[primary.state]||STATES.flat).label : 'n/a'],
+    ['Uplift', primary ? `${formatRelEffect(primary.rel)} (${formatAbsEffect(primary.abs,g)})` : 'n/a'],
+    ['CI', primary ? `${S.conf}% [${formatAbsEffect(primary.lo,g)}, ${formatAbsEffect(primary.hi,g)}]` : 'n/a'],
     ['Decision', primary?.state==='win'?'Ship':primary?.state==='loss'?'Hold control':'Hold / iterate']
   ];
   return `<div class="stg ${S.reportSec==='notion'?'act':''}" id="report-notion">
@@ -3148,10 +3351,10 @@ function paintShareCards(){
     ctx.fillStyle = '#a9c2b8'; ctx.font = '500 28px Inter, system-ui, sans-serif';
     ctx.fillText(name.slice(0, 48), 56, 220);
     ctx.fillStyle = '#fff'; ctx.font = '700 72px Inter, system-ui, sans-serif';
-    ctx.fillText(primary ? `${primary.abs>0?'+':''}${primary.abs} pp` : '—', 56, 340);
+    ctx.fillText(primary ? formatAbsEffect(primary.abs,g) : 'n/a', 56, 340);
     ctx.fillStyle = '#a9c2b8'; ctx.font = '500 26px Inter, system-ui, sans-serif';
-    ctx.fillText(primary ? `${primary.rel>0?'+':''}${primary.rel}% relative · ${g?g.name:''}` : '', 56, 390);
-    ctx.fillText(`${S.conf}% CI ${primary?`[${primary.lo}, ${primary.hi}]`:''} · p=${primary?primary.p.toFixed(3):'—'}`, 56, 440);
+    ctx.fillText(primary ? `${formatRelEffect(primary.rel)} relative · ${g?g.name:''}` : '', 56, 390);
+    ctx.fillText(`${S.conf}% CI ${primary?`[${formatAbsEffect(primary.lo,g)}, ${formatAbsEffect(primary.hi,g)}]`:''} · p=${primary?primary.p.toFixed(3):'n/a'}`, 56, 440);
   });
   draw('share-compare', (ctx,w,h) => {
     bg(ctx,w,h); brand(ctx);
@@ -3163,8 +3366,8 @@ function paintShareCards(){
       ctx.fillStyle = '#fff'; ctx.font = '650 32px Inter, system-ui, sans-serif';
       ctx.fillText(`${s.name}${i===0?' (control)':''}`, 100, y);
       ctx.fillStyle = '#a9c2b8'; ctx.font = '500 24px Inter, system-ui, sans-serif';
-      ctx.fillText(`${s.cr.toFixed(2)}% CR · ${s.n.toLocaleString()} enrolled`
-        + (i?` · ${s.rel>0?'+':''}${s.rel}%` : ''), 100, y+36);
+      ctx.fillText(`${formatMetricValue(s.value,g)} · ${s.n.toLocaleString()} observations`
+        + (i?` · ${formatRelEffect(s.rel)}` : ''), 100, y+36);
     });
   });
   draw('share-timeline', (ctx,w,h) => {
@@ -3177,13 +3380,15 @@ function paintShareCards(){
     const series = liveSeries();
     const padL=56, padR=56, padT=260, padB=80;
     const iw = w-padL-padR, ih = h-padT-padB;
-    const all = series.flatMap(s=>s.pts.map(p=>p.cr));
+    const continuous = metricKind(g)==='continuous';
+    const all = series.flatMap(s=>s.pts.map(p=>continuous?p.mean:p.cr));
     const ymin = Math.min(...all)*0.8, ymax = Math.max(...all)*1.15;
     series.forEach(s => {
       ctx.strokeStyle = s.color; ctx.lineWidth = 4; ctx.beginPath();
       s.pts.forEach((p,i) => {
         const x = padL + ((p.day-1)/Math.max(1,days-1))*iw;
-        const y = padT + ih - ((p.cr-ymin)/Math.max(0.001,ymax-ymin))*ih;
+        const val = continuous?p.mean:p.cr;
+        const y = padT + ih - ((val-ymin)/Math.max(0.001,ymax-ymin))*ih;
         if(i) ctx.lineTo(x,y); else ctx.moveTo(x,y);
       });
       ctx.stroke();
@@ -3409,16 +3614,15 @@ function goalBodyHtml(){
   const e = S.exp, g = goalOf();
   return `
     <div class="k" style="margin-bottom:13px">
-      Pick what a conversion is for this experiment. The start point is the denominator,
-      so it also decides how many people per week can be measured.</div>
+      Pick the primary measure for this experiment. Metrics can be binary conversions or continuous means.</div>
     <div style="display:flex;gap:8px;align-items:center">
       <select class="sel" data-goal data-fid="e-goal" style="flex:1">
-        <option value="" ${!e.goal?'selected':''}>Select a conversion goal</option>
+        <option value="" ${!e.goal?'selected':''}>Select a primary metric</option>
         ${Object.values(GOALS).map(x=>`<option value="${x.id}" ${e.goal===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}
       </select>
-      <button class="btn sec" data-act="new-goal">New goal</button>
+      <button class="btn sec" data-act="new-goal">New metric</button>
     </div>
-    ${g ? `<div class="goalstrip">
+    ${g && metricKind(g)==='binary' ? `<div class="goalstrip">
       <div class="gsteps">
         <span class="gs">Start · ${esc(funnelStep(g.start).label)}</span>
         <span class="garr">→</span>
@@ -3434,17 +3638,25 @@ function goalBodyHtml(){
       </div>
       ${g.note ? `<div class="k" style="margin-top:9px">${esc(g.note)}</div>` : ''}
       <div class="k" style="margin-top:9px">
-        Edit the definition in <a data-act="go-lib" data-t="goals" style="cursor:pointer;color:var(--accent);font-weight:600">Conversion goals</a>.
+        Edit the definition in <a data-act="go-lib" data-t="goals" style="cursor:pointer;color:var(--accent);font-weight:600">Primary metrics</a>.
       </div>
+    </div>` : g ? `<div class="goalstrip">
+      <div class="gsteps"><span class="gs on">Mean · ${esc(funnelStep(g.event).label)}</span></div>
+      <div class="gfacts">
+        <div class="gf"><div class="mv">${formatMetricValue(g.baselineMean,g)}</div><div class="ml">baseline mean</div></div>
+        <div class="gf"><div class="mv">${Number(g.baselineSd).toFixed(2)}</div><div class="ml">baseline SD</div></div>
+        <div class="gf"><div class="mv">${Number(g.weeklyObservations).toLocaleString()}</div><div class="ml">observations per week</div></div>
+      </div>
+      ${g.note?`<div class="k" style="margin-top:9px">${esc(g.note)}</div>`:''}
     </div>` : ''}`;
 }
 function goalSummaryHtml(){
   const g = goalOf();
-  if(!g) return `<div class="k">No conversion goal set.</div>`;
+  if(!g) return `<div class="k">No primary metric set.</div>`;
   return `<div class="setupsum">
     <div style="font-size:15px;font-weight:650">${esc(g.name)}</div>
-    <div class="k">${esc(goalPath(g))} · baseline ${baseCR()}% · ${g.window}-day window</div>
-    <div class="k">${entrantsWeekly().toLocaleString()} reach the start point each week</div>
+    <div class="k">${esc(goalPath(g))} · baseline ${formatMetricValue(goalBaseline(g),g)}${metricKind(g)==='binary'?' · '+g.window+'-day window':''}</div>
+    <div class="k">${entrantsWeekly().toLocaleString()} ${metricKind(g)==='binary'?'reach the start point':'observations'} each week</div>
   </div>`;
 }
 function secGoal(){
@@ -3729,8 +3941,8 @@ function trafficEditorBody(){
   const abs = absUplift();
   return `
     <div class="k" style="margin-bottom:12px">
-      ${g ? `Measuring <b style="color:var(--ink)">${esc(g.name)}</b> · ${esc(goalPath(g))} · ${entrantsWeekly().toLocaleString()} reach the start point each week.`
-          : 'No conversion goal set. Go back to Goal.'}
+      ${g ? `Measuring <b style="color:var(--ink)">${esc(g.name)}</b> · ${esc(goalPath(g))} · ${entrantsWeekly().toLocaleString()} observations each week.`
+          : 'No primary metric set. Go back to Goal.'}
     </div>
     ${trafficSplitEditor()}
 
@@ -3748,28 +3960,28 @@ function trafficEditorBody(){
 
       <div class="mde-row">
         <div class="mm lock">
-          <div class="mv" id="mdeBase">${baseCR()}%</div>
-          <div class="ml">Baseline CR
-            <span class="info" data-t="${g ? 'Locked to the observed rate for '+g.name+', last 28 days.' : 'Set a conversion goal first.'}">i</span></div>
+          <div class="mv" id="mdeBase">${formatMetricValue(goalBaseline(g),g)}</div>
+          <div class="ml">Baseline ${metricKind(g)==='binary'?'CR':'mean'}
+            <span class="info" data-t="${g ? 'Locked to the observed baseline for '+g.name+', last 28 days.' : 'Set a primary metric first.'}">i</span></div>
         </div>
         <div class="mm want">
           <div class="mv" id="mdePct">${e.mde}%</div>
           <div class="ml">Desired relative uplift</div>
         </div>
         <div class="mm want">
-          <div class="mv" id="mdeAbs">+${abs} pp</div>
-          <div class="ml" id="mdeAbsHint">Desired absolute · ${baseCR()}% → ${(baseCR() + abs).toFixed(2)}%</div>
+          <div class="mv" id="mdeAbs">${formatAbsEffect(abs,g)}</div>
+          <div class="ml" id="mdeAbsHint">Desired absolute · ${formatMetricValue(goalBaseline(g),g)} to ${formatMetricValue(goalBaseline(g)+abs,g)}</div>
         </div>
       </div>
       <input type="range" min="1" max="20" step="1" value="${e.mde}" data-f="mde" data-fid="e-mde">
 
       <div class="mdeout">
         <div class="mo">
-          <div class="mv" id="mdeDays">${d===Infinity?'—':d}</div>
+          <div class="mv" id="mdeDays">${d===Infinity?'n/a':d}</div>
           <div class="ml">days needed to detect</div>
         </div>
         <div class="mo">
-          <div class="mv" id="mdeSample">${d===Infinity?'—':Math.min(...(e.variants.length?e.variants.map(v=>perVariantWeekly(v.id)):[perVariantWeekly()])).toLocaleString()}</div>
+          <div class="mv" id="mdeSample">${d===Infinity?'n/a':Math.min(...(e.variants.length?e.variants.map(v=>perVariantWeekly(v.id)):[perVariantWeekly()])).toLocaleString()}</div>
           <div class="ml">people / week in the smallest arm</div>
         </div>
       </div>
@@ -3801,19 +4013,12 @@ function secLaunch(){
       ${secHead('launch', S.retired
         ? '<span class="chip">Retired</span>'
         : `<span class="chip g">Live on ${e.envs.join(' + ')}</span>`)}
-      <div class="banner ${S.retired?'a':'g'}">
-        <div style="flex:1">
-          <div class="bt">${S.retired
-            ? 'Retired, no longer enrolling'
-            : 'Published to ' + e.envs.join(' and ')}</div>
-          <div class="bd">${S.retired
-            ? 'Open reporting for the write-up and share cards. Edit setup sections if you need to correct the record.'
-            : 'Live is for analysis. Use Edit on each setup section above to change name, goal, audience, variants or traffic.'}</div>
-        </div>
-        <button class="btn pri" data-act="go-phase" data-p="${S.retired?'report':'live'}">
-          ${S.retired?'Open reporting':'Open live board'}</button>
-      </div>
       <div class="ckl">${cks.map(c=>ckRow(c)).join('')}</div>
+      <div class="h5">Changelog</div>
+      <div class="changelog">${(S.changelog||[]).length ? S.changelog.map(x=>`<div class="changeitem">
+        <div class="ct">${esc(x.summary)} <span class="k">· ${esc(x.at)}</span></div>
+        <div class="cd">${x.details.length?x.details.map(esc).join(' · '):'No setup fields changed.'}</div>
+      </div>`).join('') : '<div class="k">No live setup updates yet.</div>'}</div>
     </div>`;
   }
 
@@ -3879,7 +4084,7 @@ const readyChip = (issues) => issues.length
   ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
   : `<span class="chip g">ready</span>`;
 
-/* one shell, three bodies — dark scrim strip on the left, panel fills the rest */
+/* one shell, three bodies. Dark scrim strip on the left, panel fills the rest */
 function gtmShell({crumb, title, issues, saveLabel, body, solo}){
   return `<div class="gtm" data-act="gtm-scrim">
     <div class="gtm-panel" data-stop>
@@ -3965,23 +4170,22 @@ function viewCareBuilder(){
 function viewGoalBuilder(){
   const f = S.focus, issues = goalIssues(f);
   return gtmShell({
-    crumb: builderCrumb('conversion goal'),
-    title: f.editId ? esc(f.name || 'Conversion goal') : 'New conversion goal',
+    crumb: builderCrumb('primary metric'),
+    title: f.editId ? esc(f.name || 'Primary metric') : 'New primary metric',
     issues, saveLabel: focusSaveLabel(), solo:true,
     body: `
       <div class="card" style="padding:15px 16px;margin-bottom:12px">
-        <div class="flab">Goal name</div>
+        <div class="flab">Metric name</div>
         <input class="fld" data-gdf="name" data-fid="gd-name" value="${esc(f.name)}"
           placeholder="Landing page to purchase">
-        <div class="k" style="margin-top:7px">A goal is a start point and a goal event. The start point is the denominator,
-          so it also decides how many people per week can be measured.</div>
+        <div class="k" style="margin-top:7px">Choose a binary conversion or continuous mean, then define its measurement fields.</div>
       </div>
       <div class="card" style="padding:15px 16px;margin-bottom:12px">
         ${goalFields(f, 'gd')}
       </div>
       <div class="card" style="padding:15px 16px">
         <div class="row">
-          <div style="max-width:190px">
+          <div style="max-width:190px;${(f.kind||'binary')==='binary'?'':'display:none'}">
             <div class="flab">Baseline override
               <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
             <div style="display:flex;align-items:center;gap:6px">
@@ -4180,6 +4384,30 @@ function viewModal(){
         <button class="btn sec" data-act="close-modal">Done</button></div>
     </div></div>`;
   }
+  if(m.type === 'abandon-draft'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:420px">
+      <div class="pop-h"><div class="t">Abandon this draft?</div>
+        <div class="k" style="margin-top:6px">This clears the in-memory draft. It cannot be recovered after this session action.</div></div>
+      <div class="pop-f"><button class="btn sec" data-act="close-modal">Keep draft</button>
+        <button class="btn danger" data-act="draft-abandon-confirm">Abandon draft</button></div>
+    </div></div>`;
+  }
+  if(m.type === 'replace-draft'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:420px">
+      <div class="pop-h"><div class="t">Replace the current draft?</div>
+        <div class="k" style="margin-top:6px">Only one in-memory draft can be held. Starting a new experiment will abandon the current draft.</div></div>
+      <div class="pop-f"><button class="btn sec" data-act="close-modal">Cancel</button>
+        <button class="btn danger" data-act="replace-draft-confirm">Replace draft</button></div>
+    </div></div>`;
+  }
+  if(m.type === 'live-update-confirm'){
+    return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:440px">
+      <div class="pop-h"><div class="t">Update live allocation?</div>
+        <div class="k" style="margin-top:6px">Variants or traffic changed. New visitors will use the updated allocation, while existing enrolments keep their assignment.</div></div>
+      <div class="pop-f"><button class="btn sec" data-act="close-modal">Review changes</button>
+        <button class="btn pri" data-act="setup-save-confirm">Update experiment</button></div>
+    </div></div>`;
+  }
   if(m.type === 'traffic-confirm'){
     return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop style="max-width:420px">
       <div class="pop-h">
@@ -4225,7 +4453,7 @@ const CHAT_QUICK = [
 ];
 
 function chatGreeting(){
-  return {role:'ag', text:'I can create care packages, care products and conversion goals in the library. '
+  return {role:'ag', text:'I can create care packages, care products and primary metrics in the library. '
     + 'Describe what you need, for example "AU semaglutide premium, $479 monthly, includes dietitian consult". '
     + 'I show the record first and only write it when you say go.'};
 }
@@ -4316,7 +4544,7 @@ function parseChat(text){
     });
     return {
       kind:'goal', draft,
-      title:'Conversion goal to create',
+      title:'Primary metric to create',
       rows:[['name', draft.name], ['start point', funnelStep(start).label],
         ['goal event', funnelStep(ev).label], ['window', win + ' days'],
         ['baseline', goalObserved({start, event:ev}) + '% observed']],
@@ -4395,7 +4623,7 @@ function chatApply(){
   const c = S.chat, p = c.pending;
   if(!p || p.issues.length) return;
   let name = '', where = '';
-  if(p.kind === 'goal'){ const {id} = persistGoal(p.draft); name = GOALS[id].name; where = 'Conversion goals'; }
+  if(p.kind === 'goal'){ const {id} = persistGoal(p.draft); name = GOALS[id].name; where = 'Primary metrics'; }
   else if(p.kind === 'care'){
     const id = 'care_' + Date.now();
     CARE[id] = {id, name:p.draft.name.trim(), kind:p.draft.kind, mode:p.draft.mode,
@@ -4455,17 +4683,17 @@ function patchTraffic(){
   patchGate();
 }
 function patchMde(){
-  const e = S.exp, d = daysToDetectNum(), abs = absUplift();
+  const e = S.exp, d = daysToDetectNum(), abs = absUplift(), g=metricOf();
   const set = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
-  set('mdeBase', baseCR() + '%');
+  set('mdeBase', formatMetricValue(goalBaseline(g),g));
   set('mdePct', e.mde + '%');
-  set('mdeAbs', '+' + abs + ' pp');
-  set('mdeAbsHint', 'Desired absolute · ' + baseCR() + '% → ' + (baseCR() + abs).toFixed(2) + '%');
-  set('mdeDays', d===Infinity ? '—' : String(d));
+  set('mdeAbs', formatAbsEffect(abs,g));
+  set('mdeAbsHint', 'Desired absolute · ' + formatMetricValue(goalBaseline(g),g) + ' to ' + formatMetricValue(goalBaseline(g)+abs,g));
+  set('mdeDays', d===Infinity ? 'n/a' : String(d));
   const smallest = e.variants.length
     ? Math.min(...e.variants.map(v => perVariantWeekly(v.id)))
     : perVariantWeekly();
-  set('mdeSample', d===Infinity ? '—' : smallest.toLocaleString());
+  set('mdeSample', d===Infinity ? 'n/a' : smallest.toLocaleString());
   const mdeRange = document.querySelector('[data-f="mde"]');
   if(mdeRange && document.activeElement !== mdeRange) mdeRange.value = e.mde;
 }
@@ -4477,12 +4705,10 @@ function patchNamePreview(){
   prev.innerHTML = `<span class="ok">[${esc(expCode(e))}]</span>
     <span class="dim"> - </span>
     <span class="${hasDesc?'ok':'dim'}">[${hasDesc?esc(e.descriptor):'Descriptor'}]</span>`;
-  // live title in the top bar while naming
-  const h = document.querySelector('.top h1');
+  // live title in the page header while naming
+  const h = document.querySelector('.page-head h1');
   if(h && S.activeSection === 'setup'){
-    const status = h.querySelector('.chip');
-    h.innerHTML = (hasDesc ? esc(composeExpName(e)) : 'Untitled experiment')
-      + (status ? ' ' + status.outerHTML : '');
+    h.textContent = hasDesc ? composeExpName(e) : 'Untitled experiment';
   }
 }
 function patchCodeWarn(field){
@@ -4536,7 +4762,7 @@ function patchBuilderGate(){
   }
 }
 
-function setupLocked(){ return S.published && !S.setupEdit; }
+function setupLocked(){ return S.published && S.setupEdit !== 'all'; }
 const SETUP_MUTATE = new Set([
   'next','add-variant','clone','rm-variant','ack-aa','pick','pick-care','attach','attach-care',
   'rm-care','build-pkg','build-care','aud','aud-reset','add-rule','add-rule-do','rm-rule','toggle-even',
@@ -4550,26 +4776,18 @@ function bind(){
     n.addEventListener('click', ev=>{
       const a = n.dataset.act;
       if(setupLocked() && SETUP_MUTATE.has(a)){
-        toast('Setup is locked. Use Edit on a section to make changes.');
+        toast('Setup is locked. Use Edit experiment to make changes.');
         return;
-      }
-      if(S.published && S.setupEdit && SETUP_MUTATE.has(a)){
-        const sectionActs = {
-          setup: new Set(['code']),
-          goal: new Set(['new-goal']),
-          audience: new Set(['aud','aud-reset','add-rule','add-rule-do','rm-rule']),
-          variants: new Set(['add-variant','clone','rm-variant','ack-aa','pick','pick-care','attach','attach-care','rm-care','build-pkg','build-care','toggle-compare']),
-          traffic: new Set(['toggle-even'])
-        };
-        const allowed = sectionActs[S.setupEdit] || new Set();
-        if(!allowed.has(a) && a !== 'next'){
-          toast('Finish or cancel the open section first.');
-          return;
-        }
       }
       const V = id => S.exp.variants.find(v=>v.id===id);
       switch(a){
         case 'go-dash': S.view='dashboard'; S.modal=null; S.focus=null; render(); break;
+        case 'draft-save-exit': saveDraftAndExit(); break;
+        case 'resume-draft': resumeDraft(); break;
+        case 'draft-abandon': S.modal={type:'abandon-draft'}; render(); break;
+        case 'draft-abandon-confirm': abandonDraft(); break;
+        case 'replace-draft-confirm':
+          S.sessionDraft=null; S.hasDraft=false; S.modal=null; startNewExperiment(); break;
         case 'go-lib':
           S.view='library'; S.libTab=n.dataset.t||'packages';
           S.libSel=null; S.libDraft=null; S.modal=null; S.focus=null; render(); break;
@@ -4618,6 +4836,11 @@ function bind(){
           render(); break;
         }
         case 'lib-kind': S.libDraft.kind = n.dataset.k; render(); break;
+        case 'metric-kind': {
+          const f=n.dataset.pfx==='gd'?S.focus:S.libDraft;
+          if(f){ f.kind=n.dataset.k; if(f.kind==='continuous'&&!f.event) f.event='purchase'; render(); }
+          break;
+        }
         case 'lib-mode': S.libDraft.mode = n.dataset.m; render(); break;
         case 'add-plan': addPlan(); break;
         case 'rm-plan': removePlan(Number(n.dataset.i)); break;
@@ -4655,9 +4878,8 @@ function bind(){
         case 'go-phase':
           if(!phaseUnlocked(n.dataset.p)) break;
           if(S.setupEdit && n.dataset.p !== 'setup'){
-            if(S.setupSnap) S.exp = S.setupSnap;
-            S.setupEdit = null; S.setupSnap = null; S.setupGoalPrev = null;
-            ensureSplits(); syncExpName();
+            toast('Update the experiment or cancel changes before leaving setup.');
+            break;
           }
           S.phase = n.dataset.p;
           if(S.phase === 'setup' && !S.activeSection) S.activeSection = 'setup';
@@ -4676,21 +4898,17 @@ function bind(){
           if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
           break;
         }
-        case 'setup-edit': {
-          if(n.dataset.s === 'variants'){
-            S.modal = {type:'variants-confirm'}; render(); break;
-          }
-          beginSetupEdit(n.dataset.s);
-          break;
-        }
+        case 'setup-edit': beginSetupEdit(); break;
         case 'variants-edit-confirm':
           S.modal = null; beginSetupEdit('variants'); break;
         case 'setup-cancel': cancelSetupEdit(); break;
-        case 'setup-save':
-          if(S.setupEdit === 'traffic' && S.published){
-            S.modal = {type:'traffic-confirm'}; render(); break;
-          }
+        case 'setup-save': {
+          const before=S.setupSnap&&S.setupSnap.exp;
+          const risky=before&&(JSON.stringify(before.variants)!==JSON.stringify(S.exp.variants)
+            || before.traffic!==S.exp.traffic || JSON.stringify(before.splits)!==JSON.stringify(S.exp.splits));
+          if(risky){ S.modal={type:'live-update-confirm'}; render(); break; }
           commitSetupEdit(); break;
+        }
         case 'setup-save-confirm':
           S.modal = null; commitSetupEdit(); break;
         case 'go-reportsec': {
@@ -4768,7 +4986,7 @@ function bind(){
           save(); render(); toast('Rule layer added.'); break;
         case 'rm-rule': S.exp.audience.extra.splice(Number(n.dataset.i),1); save(); render(); break;
         case 'toggle-even':
-          if(S.published && S.setupEdit !== 'traffic') break;
+          if(S.published && S.setupEdit !== 'all') break;
           rebalanceEven(); save(); render(); break;
         case 'new-goal': openGoalBuilder({setPrimary:true}); break;
         case 'code': {
@@ -4855,7 +5073,7 @@ function bind(){
     }
     if(f === 'traffic' || f === 'mde'){
       inp.addEventListener('input', ()=>{
-        if(S.published && S.setupEdit !== 'traffic' && f === 'traffic') return;
+        if(S.published && S.setupEdit !== 'all' && f === 'traffic') return;
         if(S.published && !S.setupEdit && f === 'mde') return;
         S.exp[f] = Number(inp.value);
         if(f === 'traffic') patchTraffic();
@@ -4863,7 +5081,7 @@ function bind(){
         save();
       });
       inp.addEventListener('change', ()=>{
-        if(S.published && S.setupEdit !== 'traffic' && f === 'traffic') return;
+        if(S.published && S.setupEdit !== 'all' && f === 'traffic') return;
         if(S.published && !S.setupEdit && f === 'mde') return;
         render();
       });
@@ -4891,7 +5109,7 @@ function bind(){
     });
   });
 
-  const trafficWritable = () => !S.published || S.setupEdit === 'traffic';
+  const trafficWritable = () => !S.published || S.setupEdit === 'all';
   document.querySelectorAll('[data-split]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
       if(!trafficWritable()) return;
@@ -5025,13 +5243,13 @@ function bind(){
   document.querySelectorAll('[data-goal]').forEach(gsel=>{
     gsel.addEventListener('change', ()=>{
       const onLive = S.phase === 'live' && gsel.dataset.fid === 'live-goal';
-      if(S.published && !onLive && S.setupEdit !== 'goal') return;
+      if(S.published && !onLive && S.setupEdit !== 'all') return;
       const prev = S.exp.goal;
       S.exp.goal = gsel.value || null;
-      if(S.published && S.setupEdit === 'goal' && !onLive){
+      if(S.published && S.setupEdit === 'all' && !onLive){
         render();
         const g = goalOf();
-        if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+        if(g) toast(`Measuring ${g.name}. Baseline ${formatMetricValue(goalBaseline(g),g)}.`);
         return;
       }
       if(S.published && onLive && prev && prev !== S.exp.goal){
@@ -5041,7 +5259,7 @@ function bind(){
       }
       save(); render();
       const g = goalOf();
-      if(g) toast(`Measuring ${g.name}. Baseline ${baseCR()}%.`);
+      if(g) toast(`Measuring ${g.name}. Baseline ${formatMetricValue(goalBaseline(g),g)}.`);
     });
   });
 
@@ -5067,6 +5285,14 @@ function bind(){
     if(win) win.addEventListener('input', ()=>{
       const f = goalDraftFor(pfx); if(!f) return;
       f.window = win.value;
+      patchBuilderGate();
+    });
+  });
+  document.querySelectorAll('[data-metric-field]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const f=inp.dataset.pfx==='gd'?S.focus:S.libDraft;
+      if(!f) return;
+      f[inp.dataset.metricField]=inp.value;
       patchBuilderGate();
     });
   });
