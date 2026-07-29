@@ -12,6 +12,7 @@
   --accent:#0f6b52; --accent-d:#0b543f; --accent-s:#e4f0ec;
   --hot:#b8501c; --hot-s:#fdf1e8;
   --amber:#8a6a12; --amber-s:#fbf3dc;
+  --blue:#2f62c4; --blue-s:#eef3fc;
   --nav:#12211c;
   --r:10px;
   --sh:0 1px 2px rgba(18,33,28,.05);
@@ -30,7 +31,7 @@ input,select{font:inherit}
 .nav .logo{color:#fff;font-weight:650;font-size:14px;margin-bottom:20px;padding:0 8px;display:flex;align-items:center;gap:8px}
 .nav .logo i{width:20px;height:20px;border-radius:6px;background:var(--accent);display:block}
 .nav a{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:7px;
-  color:#9ab5aa;text-decoration:none;margin-bottom:2px;font-size:13px}
+  color:#9ab5aa;text-decoration:none;margin-bottom:2px;font-size:13px;cursor:pointer}
 .nav a:hover{background:#1a2f28;color:#d3e3dc}
 .nav a.on{background:#1e3830;color:#fff;font-weight:550}
 .nav .grp{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#5d786e;margin:16px 0 6px;padding:0 9px;font-weight:700}
@@ -55,9 +56,10 @@ input,select{font:inherit}
 .btn:hover{background:#eef1f0}
 .btn.pri{background:var(--accent);color:#fff}
 .btn.pri:hover{background:var(--accent-d)}
-.btn.pri:disabled{background:#c3d2cc;cursor:not-allowed}
+.btn.pri:disabled{background:#c8d4cf;color:#f2f6f4;cursor:not-allowed}
 .btn.sec{background:#fff;border-color:var(--line2);color:var(--ink)}
 .btn.sec:hover{background:#f4f7f6;border-color:#b9c4c0}
+.btn.sec:disabled{color:var(--ink3);cursor:not-allowed;background:#f6f8f7}
 .btn.sm{padding:4px 9px;font-size:12px;border-radius:6px}
 .btn.xs{padding:3px 7px;font-size:11px;border-radius:5px}
 .btn.danger{color:var(--hot)} .btn.danger:hover{background:var(--hot-s)}
@@ -68,6 +70,7 @@ input,select{font:inherit}
 .chip.g{background:var(--accent-s);color:var(--accent)}
 .chip.h{background:var(--hot-s);color:var(--hot)}
 .chip.a{background:var(--amber-s);color:var(--amber)}
+.chip.b{background:var(--blue-s);color:var(--blue)}
 .chip.out{background:transparent;border:1px dashed var(--line2);color:var(--ink3)}
 .chip.pick{cursor:pointer;transition:.12s;border:1px solid var(--line2);background:#fff;color:var(--ink2)}
 .chip.pick:hover{border-color:var(--ink3);background:#f4f7f6}
@@ -100,28 +103,40 @@ input,select{font:inherit}
 
 /* ---------- document layout ---------- */
 .doc-wrap{display:flex;gap:22px;align-items:flex-start}
-.rail{width:196px;flex-shrink:0;position:sticky;top:0}
-.rail a{display:flex;justify-content:space-between;align-items:center;padding:7px 11px;border-radius:7px;
-  font-size:13px;color:var(--ink2);text-decoration:none;margin-bottom:1px;cursor:pointer}
+.rail{width:206px;flex-shrink:0;position:sticky;top:0}
+.rail a{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:7px;
+  font-size:13px;color:var(--ink2);text-decoration:none;margin-bottom:2px;cursor:pointer}
 .rail a:hover{background:#ecf0ee}
 .rail a.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:var(--sh);border:1px solid var(--line)}
-.rail .tick{color:var(--accent);font-weight:700;font-size:12px}
-.rail .warn{color:var(--amber);font-weight:700;font-size:12px}
-.ready{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;box-shadow:var(--sh)}
-.ready.ok{border-color:#c6ddd4;background:#f7fcfa}
-.ready ul{margin:9px 0 0;padding:0;list-style:none}
-.ready li{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink2);margin-bottom:7px;line-height:1.4}
-.ready li:last-child{margin-bottom:0}
-.ready .g{color:var(--accent);font-weight:700;line-height:1.2}
-.ready .w{color:var(--amber);font-weight:700;line-height:1.2}
+.rail a.locked{color:#b6bfbb;cursor:not-allowed}
+.rail a.locked:hover{background:transparent}
+.rail a .num{width:19px;height:19px;border-radius:99px;background:#e7ecea;color:var(--ink3);font-size:10px;
+  font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.rail a.on .num{background:var(--accent);color:#fff}
+.rail a.done .num{background:var(--accent-s);color:var(--accent)}
+.rail a.locked .num{background:#f0f3f2;color:#c3ccc8}
+.rail a .lbl{flex:1}
+.rail a .tick{color:var(--accent);font-weight:700;font-size:12px}
+.rail a .warn{color:var(--amber);font-weight:700;font-size:12px}
+.railnote{margin-top:12px;padding:0 3px;font-size:11.5px;color:var(--ink3);line-height:1.5}
+.prog{height:4px;background:#e7ecea;border-radius:99px;margin:0 3px 14px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s ease}
 
 .doc{flex:1;min-width:0}
-.sec{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;
+.stg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;
   margin-bottom:13px;box-shadow:var(--sh);scroll-margin-top:12px}
-.sec.act{border-color:#b3c8c0;box-shadow:0 0 0 3px rgba(15,107,82,.055)}
+.stg.act{border-color:#b3c8c0;box-shadow:0 0 0 3px rgba(15,107,82,.055)}
+.stg.locked{background:#fbfcfc;border-style:dashed;box-shadow:none;padding:14px 19px}
+.stg.locked .nm{color:var(--ink3);font-weight:600}
 .sec-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
-.sec-h .nm{font-size:15px;font-weight:650}
+.stg.locked .sec-h{margin-bottom:0}
+.sec-h .nm{font-size:15px;font-weight:650;display:flex;align-items:center;gap:8px}
+.sec-h .nm .sn{width:20px;height:20px;border-radius:99px;background:var(--accent-s);color:var(--accent);
+  font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.stg.locked .sec-h .nm .sn{background:#f0f3f2;color:#c3ccc8}
 .sec-h .rt{display:flex;gap:7px;align-items:center}
+.sec-f{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;
+  padding-top:14px;border-top:1px solid var(--line)}
 
 /* ---------- variant cards ---------- */
 .vcard{border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:9px;background:#fff}
@@ -157,59 +172,157 @@ input,select{font:inherit}
 .fun i{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-style:normal;
   color:#fff;font-weight:600;transition:flex .25s ease;min-width:0;overflow:hidden;white-space:nowrap}
 .fun .o{background:#e3e8e6;color:var(--ink3)}
-input[type=range]{width:100%;accent-color:var(--accent)}
+/* a taller track is easier to grab and drag the whole way */
+input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:grab;margin:0}
+input[type=range]:active{cursor:grabbing}
+input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* ---------- launch checklist ---------- */
+.ckl{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:13px}
+.ck{display:flex;gap:11px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);background:#fff}
+.ck:last-child{border-bottom:0}
+.ck.no{background:#fffdf7}
+.cki{width:20px;height:20px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0}
+.ck.ok .cki{background:var(--accent-s);color:var(--accent)}
+.ck.no .cki,.ck.warn .cki{background:var(--amber-s);color:var(--amber)}
+.ckb{flex:1;min-width:0}
+.ckt{font-size:13px;font-weight:550}
+.ckd{font-size:11.5px;color:var(--ink3);margin-top:1px;line-height:1.45}
 
 /* ---------- popover ---------- */
 .pop-bg{position:fixed;inset:0;background:rgba(18,33,28,.28);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px}
-.pop{background:#fff;border-radius:14px;width:min(520px,100%);max-height:80vh;display:flex;flex-direction:column;
+.pop{background:#fff;border-radius:14px;width:min(520px,100%);max-height:84vh;display:flex;flex-direction:column;
   box-shadow:0 18px 50px rgba(18,33,28,.28);overflow:hidden}
-.pop-h{padding:15px 18px;border-bottom:1px solid var(--line)}
+.pop-h{padding:15px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
 .pop-h .t{font-size:15px;font-weight:650}
-.pop-b{padding:14px 18px;overflow-y:auto;flex:1}
+.pop-b{padding:14px 18px;overflow-y:auto;flex:1;min-height:0}
 .pop-f{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
-  align-items:center;background:#fafbfb}
+  align-items:center;background:#fafbfb;flex-shrink:0}
 .opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);
   border-radius:9px;margin-bottom:8px;cursor:pointer;transition:.12s;background:#fff}
 .opt:hover{border-color:var(--ink3);background:#f7f9f8}
-.opt.dis{opacity:.45;cursor:not-allowed}
+.opt.dis{opacity:.5;cursor:not-allowed}
 .opt .on{font-size:13.5px;font-weight:600}
 .opt .od{font-size:11.5px;color:var(--ink3);margin-top:2px}
 .opt.create{border-style:dashed;border-color:var(--accent);color:var(--accent);background:var(--accent-s)}
 .opt.create .on{color:var(--accent)}
+/* the long-tail property list scrolls on its own, so the modal never grows */
+.scrollist{max-height:404px;overflow-y:auto;padding-right:5px;margin-right:-5px}
+.scrollist .opt{margin-bottom:8px}
+.scrollist .opt:last-child{margin-bottom:0}
 
-/* ---------- focus mode ---------- */
-.focus{position:fixed;inset:0;background:var(--bg);z-index:400;display:flex;flex-direction:column}
-.focus-top{background:#fff;border-bottom:1px solid var(--line);padding:12px 22px;display:flex;
-  justify-content:space-between;align-items:center;gap:16px}
+/* ---------- GTM style slide over ---------- */
+.gtm{position:fixed;inset:0;z-index:400;background:rgba(18,33,28,.3);display:flex;justify-content:flex-end}
+.gtm.l2{z-index:500;background:rgba(18,33,28,.22)}
+.gtm-panel{background:var(--bg);height:100%;display:flex;flex-direction:column;width:calc(100% - 80px);
+  box-shadow:-16px 0 48px rgba(18,33,28,.22);animation:gin .22s cubic-bezier(.2,.85,.25,1)}
+.gtm.l2 .gtm-panel{width:calc(100% - 160px)}
+@keyframes gin{from{transform:translateX(46px);opacity:.6}to{transform:none;opacity:1}}
+.gtm-top{background:#fff;border-bottom:1px solid var(--line);padding:12px 22px;display:flex;
+  justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
+.gtm-body{flex:1;overflow-y:auto;padding:22px}
+.gtm-inner{max-width:1060px;margin:0 auto;display:flex;gap:22px;align-items:flex-start}
 .crumb{font-size:11.5px;color:var(--ink3);display:flex;gap:6px;align-items:center;margin-bottom:3px}
-.focus-body{flex:1;overflow-y:auto;padding:22px}
-.focus-inner{max-width:1100px;margin:0 auto;display:flex;gap:22px;align-items:flex-start}
+.crumb b{color:var(--ink2);font-weight:600}
+.backtab{position:absolute;left:0;top:0;bottom:0;width:80px;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em}
+.backtab span{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.85}
+.backtab:hover span{opacity:1}
+
 .phone{width:250px;flex-shrink:0;background:#fff;border:1px solid var(--line2);border-radius:22px;
   padding:16px 14px 18px;box-shadow:0 6px 22px rgba(18,33,28,.08);position:sticky;top:0}
 .phone .nub{width:52px;height:4px;background:#e0e5e3;border-radius:9px;margin:0 auto 14px}
 .pl{border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:9px;transition:.15s}
 .pl.on{border-color:var(--accent);background:var(--accent-s);box-shadow:0 0 0 2px rgba(15,107,82,.08)}
-.pl .pt{font-size:12.5px;font-weight:650;display:flex;justify-content:space-between;align-items:center}
+.pl .pt{font-size:12.5px;font-weight:650;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .pl .pp{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
 .pl .pp span{font-size:11.5px;font-weight:500;color:var(--ink3)}
 .pl .pm{font-size:11px;color:var(--ink3);margin-top:4px;line-height:1.4}
 
-/* ---------- dashboard ---------- */
-.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px}
-.dc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--sh);
-  cursor:pointer;transition:.14s}
-.dc:hover{border-color:#b9c4c0;box-shadow:0 3px 12px rgba(18,33,28,.07);transform:translateY(-1px)}
-.brand{width:22px;height:22px;border-radius:7px;color:#fff;font-size:10px;display:inline-flex;
+/* ---------- plan editor ---------- */
+.plan{border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:9px;background:#fff}
+.plan-h{display:flex;gap:9px;align-items:center;margin-bottom:11px;flex-wrap:wrap}
+.sel{background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;font-size:13px;
+  color:var(--ink);outline:none}
+.sel:focus{border-color:var(--accent)}
+.doses{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px}
+.dose .dl{font-size:11px;color:var(--ink3);margin-bottom:4px}
+.dose input{width:100%;background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;
+  font-size:13px;outline:none;text-align:right}
+.dose input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
+.pfx{position:relative}
+.pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px}
+.pfx input{padding-left:22px;text-align:left}
+.seg{display:inline-flex;background:#eef1f0;border-radius:8px;padding:2px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--ink3);font-size:12px;font-weight:600;
+  padding:5px 11px;border-radius:6px;transition:.12s}
+.seg button:hover{color:var(--ink2)}
+.seg button.on{background:#fff;color:var(--accent);
+  box-shadow:0 1px 2px rgba(18,33,28,.12),0 0 0 1px rgba(18,33,28,.07)}
+
+/* ---------- tables ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+  font-weight:700;padding:0 12px 9px;border-bottom:1px solid var(--line)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.rw:hover td{background:#f7f9f8}
+.tbl .nmc{font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+
+/* ---------- dashboard result cards ---------- */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(332px,1fr));gap:14px}
+.dc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 17px;box-shadow:var(--sh);
+  cursor:pointer;transition:.14s;display:flex;flex-direction:column}
+.dc:hover{border-color:#b9c4c0;box-shadow:0 4px 14px rgba(18,33,28,.07);transform:translateY(-1px)}
+.brand{width:24px;height:24px;border-radius:7px;color:#fff;font-size:10px;display:inline-flex;
   align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
-.metric{display:flex;align-items:baseline;gap:7px;margin:11px 0 4px}
-.metric .big{font-size:25px;font-weight:700;letter-spacing:-.025em}
-.up{color:var(--accent)} .dn{color:var(--hot)} .fl{color:var(--ink3)}
-.ci{height:6px;background:#eef2f0;border-radius:9px;position:relative;margin:8px 0 5px}
-.ci .band{position:absolute;top:0;bottom:0;background:#b3d2c6;border-radius:9px}
-.ci .zero{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:var(--ink3)}
+.dc-h{display:flex;gap:10px;align-items:flex-start;margin-bottom:13px}
+.dct{font-size:14px;font-weight:650;line-height:1.3;letter-spacing:-.005em}
+
+.sumbox{background:#f5f8f7;border-radius:9px;padding:11px 12px;margin-bottom:12px}
+.sumbox .sl{font-size:12px;font-weight:700;margin-bottom:3px}
+.sumbox .st{font-size:12px;color:var(--ink2);line-height:1.5}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:15px}
+.tile{border-radius:9px;padding:13px 10px;text-align:center}
+.tile .tv{font-size:23px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
+.tile .tl{font-size:11px;color:var(--ink3);margin-top:4px}
+.t-win{background:var(--accent-s)}   .t-win .tv{color:var(--accent)}
+.t-loss{background:var(--hot-s)}     .t-loss .tv{color:var(--hot)}
+.t-flat{background:var(--blue-s)}    .t-flat .tv{color:var(--blue)}
+.t-early{background:var(--amber-s)}  .t-early .tv{color:var(--amber)}
+
+.cih{font-size:11.5px;font-weight:650;display:flex;align-items:center;gap:5px;color:var(--ink)}
+.ciwrap{padding-top:36px}
+.citrack{height:14px;background:#f0f3f2;border-radius:99px;position:relative;margin-bottom:6px}
+.ciband{position:absolute;top:0;bottom:0;border:1.5px solid var(--line2);border-radius:99px;background:#fff}
+.cimark{position:absolute;top:-3px;bottom:-3px;width:5px;border-radius:3px;background:#9aa5a1;transform:translateX(-50%)}
+.cizero{position:absolute;top:-6px;height:calc(100% + 9px);width:1px;background:#c2ccc8}
+.cizl{position:absolute;top:-18px;font-size:10px;color:var(--ink3);transform:translateX(-50%);white-space:nowrap}
+.cipt{position:absolute;top:-34px;font-size:11px;font-weight:650;color:var(--ink2);transform:translateX(-50%);white-space:nowrap}
+.ciends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink3)}
+
+.statbar{border-radius:9px;padding:11px;text-align:center;font-size:12.5px;font-weight:600;margin-top:14px}
+.s-win{background:var(--accent-s);color:var(--accent)}
+.s-loss{background:var(--hot-s);color:var(--hot)}
+.s-flat{background:#f0f3f2;color:var(--ink3)}
+.s-early{background:var(--amber-s);color:var(--amber)}
+.dcf{display:flex;justify-content:space-between;align-items:center;margin-top:12px;
+  padding-top:11px;border-top:1px solid var(--line)}
+
+/* the outlined create card sits in the same grid as the results */
+.dc.newx{border:1.5px dashed var(--line2);background:transparent;box-shadow:none;align-items:center;
+  justify-content:center;gap:6px;min-height:280px;text-align:center;padding:26px}
+.dc.newx:hover{border-color:var(--accent);background:#fbfdfc;transform:none;box-shadow:none}
+.dc.newx .plus{width:38px;height:38px;border-radius:99px;background:var(--accent-s);color:var(--accent);
+  font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.dc.newx .nt{font-size:14px;font-weight:650}
+.dc.newx .nd{font-size:12px;color:var(--ink3);line-height:1.5;max-width:230px;margin-bottom:6px}
 
 /* ---------- toast + misc ---------- */
-.toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:600;display:flex;
+.toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:700;display:flex;
   flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{background:var(--nav);color:#e2ece8;padding:10px 16px;border-radius:9px;font-size:13px;
   box-shadow:0 8px 24px rgba(18,33,28,.26);animation:tin .22s ease}
@@ -231,60 +344,8 @@ pre.spec .kk{color:#82d3b3} pre.spec .vv{color:#e0b482} pre.spec .cc{color:#7b90
 .empty{display:block;width:100%;text-align:center;padding:22px;border:1px dashed var(--line2);border-radius:9px;
   color:var(--ink3);font-size:13px;cursor:pointer;transition:.12s;background:transparent;font-family:inherit}
 .empty:hover{border-color:var(--ink3);background:#f7f9f8;color:var(--ink2)}
+.blank{text-align:center;padding:56px 22px;color:var(--ink3);font-size:13px;line-height:1.6}
 .hide{display:none !important}
-
-/* ---------- spine switch ---------- */
-.seg{display:inline-flex;background:#eef1f0;border-radius:8px;padding:2px;gap:2px}
-.seg button{border:0;background:transparent;color:var(--ink3);font-size:12px;font-weight:600;
-  padding:5px 11px;border-radius:6px;transition:.12s}
-.seg button:hover{color:var(--ink2)}
-.seg button.on{background:#fff;color:var(--accent);
-  box-shadow:0 1px 2px rgba(18,33,28,.12),0 0 0 1px rgba(18,33,28,.07)}
-
-/* ---------- grid spine ---------- */
-.band{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:11px 15px;
-  margin-bottom:11px;box-shadow:var(--sh);display:flex;align-items:center;gap:13px;flex-wrap:wrap}
-.band .bl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
-  font-weight:700;width:64px;flex-shrink:0}
-.band .br{margin-left:auto;display:flex;gap:8px;align-items:center;flex-shrink:0}
-.bench-main{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
-  padding:15px 17px;margin-bottom:11px;box-shadow:var(--sh)}
-.scrollnote{font-size:11.5px;color:var(--amber);background:var(--amber-s);border-radius:6px;padding:2px 8px;font-weight:550}
-
-/* ---------- plan editor ---------- */
-.plan{border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:9px;background:#fff}
-.plan-h{display:flex;gap:9px;align-items:center;margin-bottom:11px;flex-wrap:wrap}
-.sel{background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;font-size:13px;
-  color:var(--ink);outline:none}
-.sel:focus{border-color:var(--accent)}
-.doses{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px}
-.dose .dl{font-size:11px;color:var(--ink3);margin-bottom:4px}
-.dose input{width:100%;background:#fff;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;
-  font-size:13px;outline:none;text-align:right}
-.dose input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,107,82,.09)}
-.pfx{position:relative}
-.pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px}
-.pfx input{padding-left:22px;text-align:left}
-
-/* ---------- stacked layer ---------- */
-.layer{position:fixed;inset:0;z-index:500;background:rgba(18,33,28,.32);display:flex;justify-content:flex-end}
-.layer-panel{width:min(440px,100%);background:var(--bg);height:100%;display:flex;flex-direction:column;
-  box-shadow:-10px 0 34px rgba(18,33,28,.24);animation:sl .18s ease}
-@keyframes sl{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
-.layer-top{background:#fff;border-bottom:1px solid var(--line);padding:13px 18px}
-.layer-body{flex:1;overflow-y:auto;padding:18px}
-.layer-foot{background:#fff;border-top:1px solid var(--line);padding:12px 18px;display:flex;
-  justify-content:space-between;align-items:center;gap:10px}
-
-/* ---------- tables ---------- */
-.tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
-  font-weight:700;padding:0 12px 9px;border-bottom:1px solid var(--line)}
-.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
-.tbl tr:last-child td{border-bottom:0}
-.tbl tr.rw:hover td{background:#f7f9f8}
-.tbl .nmc{font-weight:600}
-.tabs{display:flex;gap:6px;margin-bottom:16px}
 </style>
 </head>
 <body>
@@ -294,7 +355,7 @@ pre.spec .kk{color:#82d3b3} pre.spec .vv{color:#e0b482} pre.spec .cc{color:#7b90
 
 <script>
 /* =====================================================================
-   STATE
+   REFERENCE DATA
    ===================================================================== */
 let CARE = {
   dietitian:{id:'dietitian', name:'Dietitian consult', kind:'Consult', mode:'included', price:0,
@@ -321,27 +382,56 @@ let library = {
   pkg_maint:{id:'pkg_maint', name:'AU Semaglutide Maintenance', region:'AU', vertical:'Weight loss',
     medication:'Semaglutide', plans:[flat('3-month',289), flat('Monthly',329)], care:['dietitian'], uses:2},
   pkg_contrave:{id:'pkg_contrave', name:'AU Contrave Standard', region:'AU', vertical:'Weight loss',
-    medication:'Contrave', plans:[flat('3-month',219), flat('Monthly',249)], care:[], uses:3}
+    medication:'Contrave', plans:[flat('3-month',219), flat('Monthly',249)], care:[], uses:3},
+  pkg_nz:{id:'pkg_nz', name:'NZ Semaglutide Standard', region:'NZ', vertical:'Weight loss',
+    medication:'Semaglutide', plans:[flat('3-month',379), flat('Monthly',419)], care:['bloods'], uses:2},
+  pkg_my:{id:'pkg_my', name:'MY Semaglutide Starter', region:'MY', vertical:'Weight loss',
+    medication:'Semaglutide', plans:[flat('Monthly',289)], care:[], uses:1}
 };
 
 const AUD_GROUPS = [
-  {id:'country', label:'Country', opts:['AU','NZ']},
+  {id:'country', label:'Country', opts:['AU','NZ','MY']},
   {id:'brand',   label:'Brand',   opts:['MOSHY','MOSH']},
   {id:'vertical',label:'Vertical',opts:['Weight loss','Sex','Hair','Skin']},
   {id:'customer',label:'Customer',opts:['New','Returning','Any']}
 ];
-const EXTRA_PROPS = ['Device is iOS','Device is Android','Session count > 1','Referrer is paid',
-  'Has abandoned cart','Age band 25-34','State is VIC','Landed on pricing page'];
+
+/* the long tail of customer properties, 42 of them */
+const EXTRA_PROPS = [
+  'Device is iOS','Device is Android','Device is desktop','Browser is Safari','Browser is Chrome',
+  'Session count is 1','Session count > 1','Session count > 5',
+  'Referrer is paid search','Referrer is paid social','Referrer is organic','Referrer is email','Referrer is direct',
+  'Has abandoned cart','Has started quiz','Has completed quiz','Quiz outcome is eligible','Quiz outcome is ineligible',
+  'Age band 18-24','Age band 25-34','Age band 35-44','Age band 45-54','Age band 55 plus',
+  'State is VIC','State is NSW','State is QLD','State is WA','State is SA',
+  'Landed on pricing page','Landed on homepage','Landed on product page','Viewed practitioner page',
+  'BMI band 25 to 30','BMI band 30 to 35','BMI band 35 plus',
+  'Has active subscription','Previously cancelled','Previously paused',
+  'Lifetime orders > 3','Lifetime value > $1000','Opted into marketing','Has referral code'
+];
+
+/* =====================================================================
+   STAGES
+   ===================================================================== */
+const STAGES = [
+  {id:'setup',    label:'Setup'},
+  {id:'audience', label:'Audience'},
+  {id:'variants', label:'Variants'},
+  {id:'traffic',  label:'Traffic'},
+  {id:'launch',   label:'Launch'}
+];
+const stageIdx = id => STAGES.findIndex(s => s.id === id);
 
 let S = {
   view:'dashboard',           // dashboard | library | experiment
-  spine:'doc',                // doc | grid   <- the structural question, switchable live
+  dashTab:'running',
   libTab:'packages',          // packages | products
-  focus:null,                 // package draft when the package builder is open
-  focus2:null,                // care product draft stacked over the package builder
+  focus:null,                 // package draft
+  focus2:null,                // care product draft
   activeSection:'setup',
-  compare:true,               // variants rendering inside the document spine
-  reviewOnly:false,           // grid spine: show only rows that differ
+  maxStage:0,                 // furthest stage unlocked
+  compare:true,               // comparison grid vs cards inside Variants
+  ruleQuery:'',
   saving:false,
   modal:null,
   exp:null,
@@ -353,8 +443,8 @@ function newExperiment(){
     key:'005', name:'', hypothesis:'',
     variants:[],
     audience:{country:'AU', brand:'MOSHY', vertical:'Weight loss', customer:'New', extra:[]},
-    audienceTouched:false,
     traffic:25,
+    lengthDays:21,
     env:'staging',
     aaAcknowledged:false
   };
@@ -381,7 +471,6 @@ function planLabel(p){
   const lo = Math.min(...ps), hi = Math.max(...ps);
   return p.type + ' ' + (lo === hi ? money(lo) : money(lo)+' to '+money(hi));
 }
-function pkgFrom(P){ const ps = pkgPrices(P); return ps.length ? Math.min(...ps) : null; }
 
 function priceRange(v){
   const ps = v.packages.filter(Boolean).flatMap(id => pkgPrices(pkg(id)));
@@ -400,8 +489,7 @@ function careList(v){
 function pricingShape(v){
   const ps = v.packages.filter(Boolean).map(pkg).filter(Boolean);
   if(!ps.length) return null;
-  const tiered = ps.some(P => P.plans.some(p => p.mode === 'tiered'));
-  return tiered ? 'Per dose' : 'One price per plan';
+  return ps.some(P => P.plans.some(p => p.mode === 'tiered')) ? 'Per dose' : 'One price per plan';
 }
 const ATTRS = [
   {id:'pkg1',  label:'Package 1',     get:v=> v.packages[0] ? pkg(v.packages[0]).name : null},
@@ -419,8 +507,7 @@ function diffRows(){
   return ATTRS.map(a => {
     const base = a.get(ctrl);
     const vals = vs.map(v => a.get(v));
-    const differs = vals.some(x => x !== base);
-    return {attr:a, base, vals, differs};
+    return {attr:a, base, vals, differs: vals.some(x => x !== base)};
   });
 }
 function overrideCount(v){
@@ -429,50 +516,115 @@ function overrideCount(v){
   return ATTRS.filter(a => a.get(v) !== a.get(ctrl)).length;
 }
 function diffCount(){ return diffRows().filter(r=>r.differs).length; }
-function aaVariants(){
-  return S.exp.variants.slice(1).filter(v => overrideCount(v) === 0);
-}
-function unresolved(){
-  return S.exp.variants.some(v => v.packages.some(p => p && !library[p]));
-}
-
-function readiness(){
-  const e = S.exp, out = [];
-  out.push({ok: !!e.name.trim(), t: e.name.trim() ? 'Named and keyed' : 'Name the experiment', block:true});
-  out.push({ok: e.variants.length >= 2, t: e.variants.length >= 2
-    ? `${e.variants.length} variants` : 'Add at least two variants', block:true});
-  const hasPkg = e.variants.length>0 && e.variants.every(v=>v.packages.filter(Boolean).length>0);
-  out.push({ok: hasPkg, t: hasPkg ? 'Every variant has a package' : 'A variant has no package', block:true});
-  out.push({ok: e.traffic > 0, t: e.traffic>0 ? 'Traffic allocated' : 'Set traffic', block:true});
-  const aa = aaVariants();
-  if(aa.length && !e.aaAcknowledged){
-    out.push({ok:false, warn:true, block:false,
-      t:`${aa.map(v=>v.id).join(', ')} identical to ${e.variants[0].id}`});
-  } else if(aa.length && e.aaAcknowledged){
-    out.push({ok:true, block:false, t:'A/A confirmed intentional'});
-  }
-  return out;
-}
-function canPublish(){ return readiness().filter(r=>r.block).every(r=>r.ok); }
+function aaVariants(){ return S.exp.variants.slice(1).filter(v => overrideCount(v) === 0); }
 
 const ELIGIBLE = 16700;
 function perVariantWeekly(){
   const n = Math.max(S.exp.variants.length,1);
   return Math.round(ELIGIBLE * (S.exp.traffic/100) / n);
 }
-function daysToDetect(){
+function daysToDetectNum(){
   const n = perVariantWeekly();
-  if(!n) return 'not enough traffic';
-  return Math.max(3, Math.round(2600 / n * 7)) + ' days';
+  if(!n) return Infinity;
+  return Math.max(3, Math.round(2600 / n * 7));
 }
+function daysToDetect(){
+  const d = daysToDetectNum();
+  return d === Infinity ? 'not enough traffic' : d + ' days';
+}
+
+/* --- stage gating --- */
+function stageBlockers(id){
+  const e = S.exp;
+  if(id === 'setup')    return e.name.trim() ? [] : ['Give the experiment a name'];
+  if(id === 'audience') return [];
+  if(id === 'variants'){
+    const out = [];
+    if(e.variants.length < 2) out.push('Add at least two variants');
+    else if(e.variants.some(v => !v.packages.filter(Boolean).length)) out.push('Every variant needs a package');
+    return out;
+  }
+  if(id === 'traffic')  return e.traffic > 0 ? [] : ['Allocate some traffic'];
+  return [];
+}
+function stageDone(id){
+  if(id === 'launch') return S.published;
+  return stageBlockers(id).length === 0 && stageIdx(id) < S.maxStage;
+}
+const reached = id => stageIdx(id) <= S.maxStage;
+
+/* the launch checklist, and what blocks publishing */
+function checklist(){
+  const e = S.exp, out = [];
+  const aud = [e.audience.country, e.audience.brand, e.audience.vertical,
+    e.audience.customer + ' customer', ...e.audience.extra].join(' · ');
+
+  out.push({ok: !!e.name.trim(), block:true, jump:'setup',
+    t:'Named and keyed',
+    d: e.name.trim() ? `${e.name.trim()} · exp_${e.key}` : 'The name is still empty'});
+
+  out.push({ok:true, block:false, jump:'audience',
+    t:'Audience defined',
+    d: `${aud} · ${ELIGIBLE.toLocaleString()} match per week`});
+
+  out.push({ok: e.variants.length >= 2, block:true, jump:'variants',
+    t:'At least two variants',
+    d: e.variants.length >= 2
+      ? `${e.variants.map(v=>v.id).join(', ')} · ${e.variants.length} arms`
+      : 'A test needs a control and at least one variant'});
+
+  const hasPkg = e.variants.length > 0 && e.variants.every(v => v.packages.filter(Boolean).length > 0);
+  out.push({ok: hasPkg, block:true, jump:'variants',
+    t:'Every variant has a package',
+    d: hasPkg
+      ? e.variants.map(v => `${v.id} has ${v.packages.filter(Boolean).length}`).join(', ')
+      : 'A variant has no package attached'});
+
+  const aa = aaVariants(), dc = diffCount();
+  if(aa.length && !e.aaAcknowledged){
+    out.push({ok:false, warn:true, block:false, jump:'variants',
+      t:'Variants are identical',
+      d:`${aa.map(v=>v.id).join(', ')} matches ${e.variants[0].id}. Valid as an A/A test, confirm if intended.`});
+  } else {
+    out.push({ok:true, block:false, jump:'variants',
+      t: aa.length ? 'A/A confirmed intentional' : 'Variants differ',
+      d: aa.length
+        ? 'Measuring noise rather than a change'
+        : `${dc} of ${ATTRS.length} attributes diverge from the control`});
+  }
+
+  out.push({ok: e.traffic > 0, block:true, jump:'traffic',
+    t:'Traffic allocated',
+    d: e.traffic > 0
+      ? `${e.traffic}% enrolled · ${perVariantWeekly().toLocaleString()} per variant weekly`
+      : 'Nobody is enrolled, so nothing will be measured'});
+
+  const d = daysToDetectNum(), fits = d <= e.lengthDays;
+  out.push({ok: fits, warn: !fits, block:false, jump:'traffic',
+    t:'Detectable within the run',
+    d: d === Infinity
+      ? 'Not enough traffic to detect anything'
+      : `About ${d} days to detect a 5% lift, against a ${e.lengthDays} day run`});
+
+  return out;
+}
+function canPublish(){ return checklist().filter(c=>c.block).every(c=>c.ok); }
 
 /* =====================================================================
    ACTIONS
    ===================================================================== */
+/* Autosave paints its own indicator. It must never re-render, or typing
+   and dragging would be interrupted on every keystroke. */
+function paintSaving(){
+  document.querySelectorAll('.saving').forEach(el=>{
+    el.className = 'saving' + (S.saving ? ' busy' : '');
+    el.innerHTML = '<i></i>' + (S.saving ? 'Saving' : 'Saved');
+  });
+}
 function save(){
-  S.saving = true; render();
+  S.saving = true; paintSaving();
   clearTimeout(save._t);
-  save._t = setTimeout(()=>{ S.saving=false; render(); }, 550);
+  save._t = setTimeout(()=>{ S.saving = false; paintSaving(); }, 550);
 }
 function toast(msg){
   const el = document.createElement('div');
@@ -481,6 +633,25 @@ function toast(msg){
   setTimeout(()=>el.remove(), 2600);
 }
 const nextLetter = () => String.fromCharCode(65 + S.exp.variants.length);
+
+function goStage(id){
+  if(!reached(id)){ toast('Finish the earlier stages first.'); return; }
+  S.activeSection = id; render();
+  const t = document.getElementById('sec-'+id);
+  if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function goNext(from){
+  const i = stageIdx(from), b = stageBlockers(from);
+  if(b.length){ toast(b[0] + '.'); return; }
+  const nx = STAGES[i+1];
+  if(!nx) return;
+  S.maxStage = Math.max(S.maxStage, i+1);
+  S.activeSection = nx.id;
+  render();
+  const t = document.getElementById('sec-'+nx.id);
+  if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  toast(`${nx.label} unlocked.`);
+}
 
 function addVariant(){
   S.exp.variants.push({id:nextLetter(), role:S.exp.variants.length?'test':'control', packages:[], inherits:null});
@@ -499,35 +670,25 @@ function removeVariant(v){
   S.exp.variants.forEach((x,i)=>{ x.id = String.fromCharCode(65+i); x.role = i?'test':'control'; });
   save(); render(); toast('Variant removed.');
 }
-function deriveAudience(){
-  if(S.exp.audienceTouched) return;
-  const ps = S.exp.variants.flatMap(v=>v.packages).filter(Boolean).map(pkg).filter(Boolean);
-  if(!ps.length) return;
-  S.exp.audience.country = ps[0].region;
-  S.exp.audience.vertical = ps[0].vertical;
-}
 
 /* --- modals --- */
-function openPackagePicker(variant, slotIndex){
-  S.modal = {type:'pkg', variant, slotIndex}; render();
-}
+function openPackagePicker(variant, slotIndex){ S.modal = {type:'pkg', variant, slotIndex}; render(); }
 function attachPackage(variant, slotIndex, id){
   if(slotIndex >= variant.packages.length) variant.packages.push(id);
   else variant.packages[slotIndex] = id;
   library[id].uses = (library[id].uses||0)+1;
   S.exp.aaAcknowledged = false;
-  S.modal = null; deriveAudience(); save(); render();
+  S.modal = null; save(); render();
   toast(`${library[id].name} attached to variant ${variant.id}.`);
 }
-function openRulePicker(){ S.modal = {type:'rule'}; render(); }
+function openRulePicker(){ S.modal = {type:'rule'}; S.ruleQuery=''; render(); }
 function openSpec(){ S.modal = {type:'spec'}; render(); }
 
 /* =====================================================================
-   PACKAGE BUILDER  (same surface whether opened from an experiment or the library)
+   PACKAGE BUILDER  (same surface from an experiment or from the library)
    ===================================================================== */
 function blankPlan(type){ return {type, mode:'flat', price:'', tiers:{}}; }
 
-/* returnTo is either {variantId, slotIndex} or {view:'library'} */
 function openPackageBuilder(returnTo, existing){
   S.modal = null;
   if(existing){
@@ -541,8 +702,7 @@ function openPackageBuilder(returnTo, existing){
   } else {
     const inExp = returnTo && returnTo.variantId;
     S.focus = {
-      returnTo, editId:null,
-      name:'',
+      returnTo, editId:null, name:'',
       region: inExp ? S.exp.audience.country : 'AU',
       vertical: inExp ? S.exp.audience.vertical : 'Weight loss',
       medication:'Semaglutide',
@@ -556,12 +716,12 @@ function openPackageBuilder(returnTo, existing){
 function pkgIssues(){
   const f = S.focus, out = [];
   if(!f.name.trim()) out.push('Name the package');
-  const priced = f.plans.filter(p => planPrices(p).length);
-  if(!priced.length) out.push('Price at least one plan');
+  if(!f.plans.filter(p => planPrices(p).length).length) out.push('Price at least one plan');
   f.plans.forEach(p=>{
     if(p.mode === 'tiered'){
-      const missing = doses(f.medication).filter(d => !p.tiers[d] && p.tiers[d] !== 0);
-      if(missing.length && missing.length < doses(f.medication).length){
+      const ds = doses(f.medication);
+      const missing = ds.filter(d => !p.tiers[d] && p.tiers[d] !== 0);
+      if(missing.length && missing.length < ds.length){
         out.push(`${p.type}: ${missing.length} dose${missing.length===1?'':'s'} unpriced`);
       }
     }
@@ -599,28 +759,25 @@ function savePackage(){
     library[id].uses = Math.max(library[id].uses, 1);
     S.exp.aaAcknowledged = false;
     S.activeSection = 'variants';
-    deriveAudience(); save(); render();
+    save(); render();
     toast(`Saved to Care packages and attached to variant ${v.id}.`);
     return;
   }
-  S.view = 'library'; render();
+  S.view = 'library'; S.libTab = 'packages'; render();
   toast(wasEdit
     ? `${library[id].name} updated. ${library[id].uses} experiment${library[id].uses===1?'':'s'} reference it.`
     : `${library[id].name} added to the library.`);
 }
 
-/* --- plan editing --- */
 function addPlan(){
   const used = S.focus.plans.map(p=>p.type);
-  const next = PLAN_TYPES.find(t => !used.includes(t)) || 'Monthly';
-  S.focus.plans.push(blankPlan(next)); render();
+  S.focus.plans.push(blankPlan(PLAN_TYPES.find(t => !used.includes(t)) || 'Monthly')); render();
 }
 function removePlan(i){ S.focus.plans.splice(i,1); render(); }
 function setPlanMode(i, mode){
   const p = S.focus.plans[i];
   if(p.mode === mode) return;
   if(mode === 'tiered' && p.price !== ''){
-    // carry the flat price across every dose so the switch is not destructive
     doses(S.focus.medication).forEach(d => p.tiers[d] = p.price);
   }
   if(mode === 'flat'){
@@ -630,51 +787,162 @@ function setPlanMode(i, mode){
   p.mode = mode; render();
 }
 
-/* --- care product layer, stacked over the package builder --- */
-function openCareProduct(){
-  S.focus2 = {name:'', kind:'Consult', mode:'included', price:'', note:''};
+/* =====================================================================
+   CARE PRODUCT BUILDER  (same treatment as packages, one layer deeper)
+   ===================================================================== */
+function openCareProduct(returnTo, existing){
+  if(existing){
+    S.focus2 = {returnTo, editId:existing.id, name:existing.name, kind:existing.kind,
+      mode:existing.mode, price:existing.price || '', note:existing.note || ''};
+  } else {
+    S.focus2 = {returnTo, editId:null, name:'', kind:'Consult', mode:'included', price:'', note:''};
+  }
   render();
 }
+function careIssues(){
+  const f = S.focus2, out = [];
+  if(!f.name.trim()) out.push('Name the care product');
+  if(f.mode === 'addon' && (f.price === '' || Number(f.price) <= 0)) out.push('Give the add-on a price');
+  const names = Object.values(CARE).filter(c => c.id !== f.editId).map(c => c.name.toLowerCase());
+  if(f.name.trim() && names.includes(f.name.trim().toLowerCase())) out.push('A care product already has this name');
+  return out;
+}
 function saveCareProduct(){
-  const f = S.focus2;
-  if(!f.name.trim()){ toast('Name the care product first.'); return; }
-  const id = 'care_' + Date.now();
+  const f = S.focus2, issues = careIssues();
+  if(issues.length){ toast(issues[0] + '.'); return; }
+  const id = f.editId || ('care_' + Date.now());
+  const wasEdit = !!f.editId;
   CARE[id] = {id, name:f.name.trim(), kind:f.kind, mode:f.mode,
-    price: f.mode === 'addon' ? Number(f.price||0) : 0, note:f.note.trim(), isNew:true};
-  if(S.focus) S.focus.care = [...S.focus.care, id];
-  S.focus2 = null; render();
-  toast(`${CARE[id].name} created and selected.`);
+    price: f.mode === 'addon' ? Number(f.price||0) : 0, note:f.note.trim(),
+    isNew: wasEdit ? CARE[id].isNew : true};
+
+  const intoPackage = !!S.focus && !wasEdit;
+  if(intoPackage) S.focus.care = [...S.focus.care, id];
+  S.focus2 = null;
+  if(!S.focus){ S.view = 'library'; S.libTab = 'products'; }
+  render();
+  toast(wasEdit ? `${CARE[id].name} updated.`
+    : intoPackage ? `${CARE[id].name} created and selected.`
+    : `${CARE[id].name} added to the library.`);
 }
 
 function publish(){
-  S.published = true; render();
+  S.published = true; S.maxStage = STAGES.length-1; render();
   toast('Published to ' + S.exp.env + '. Amplitude schema emitted.');
 }
 
-function loadSample(){
+/* =====================================================================
+   DASHBOARD DATA
+   ===================================================================== */
+const STATES = {
+  win:  {tile:'t-win',   bar:'s-win',   label:'Significant improvement'},
+  loss: {tile:'t-loss',  bar:'s-loss',  label:'Control winning'},
+  flat: {tile:'t-flat',  bar:'s-flat',  label:'No significant difference'},
+  early:{tile:'t-early', bar:'s-early', label:'Too early to read'},
+  trend:{tile:'t-flat',  bar:'s-flat',  label:'Approaching significance'}
+};
+
+const RUNS = [
+  {key:'004', t:'Semaglutide tiered checkout', b:'MOSHY AU', bg:'#0f6b52', cc:'AU', bk:'MOSHY',
+   vert:'Weight loss', day:12, of:21, traffic:25, a:'pkg_basic', v:'pkg_maint',
+   metric:'checkout conversion', rel:8.4, abs:1.92, p:0.004, lo:1.2, hi:15.1, state:'win', weekly:4180,
+   sum:'Significant improvement detected (p = 0.004) using g-test. The interval sits entirely above zero, so the variant can ship.'},
+
+  {key:'006', t:'Sex upsell flow', b:'MOSH AU', bg:'#2d4a63', cc:'AU', bk:'MOSH',
+   vert:'Sex', day:3, of:28, traffic:20, a:'pkg_basic', v:'pkg_maint',
+   metric:'order value', rel:2.1, abs:0.31, p:0.612, lo:-9.4, hi:8.1, state:'early', weekly:1940,
+   sum:'Too early to read (p = 0.612). The interval is still very wide. About 19 more days at current traffic.'},
+
+  {key:'007', t:'Contrave pricing', b:'MOSHY NZ', bg:'#5a3d6b', cc:'NZ', bk:'MOSHY',
+   vert:'Weight loss', day:19, of:21, traffic:30, a:'pkg_nz', v:'pkg_contrave',
+   metric:'checkout conversion', rel:-4.1, abs:-1.06, p:0.031, lo:-7.8, hi:-0.4, state:'loss', weekly:2610,
+   sum:'Control is significantly better (p = 0.031) using g-test. The interval sits entirely below zero. Do not ship the variant.'},
+
+  {key:'008', t:'Hair plan bundling', b:'MOSHY AU', bg:'#0f6b52', cc:'AU', bk:'MOSHY',
+   vert:'Hair', day:16 , of:21, traffic:25, a:'pkg_basic', v:'pkg_maint',
+   metric:'plan attach rate', rel:9.1, abs:0.47, p:0.465, lo:-0.79, hi:1.73, state:'flat', weekly:3420,
+   sum:'No statistically significant difference detected (p = 0.465) using g-test. Consider increasing sample size or running the test longer.'},
+
+  {key:'009', t:'Skin quiz entry point', b:'MOSHY AU', bg:'#0f6b52', cc:'AU', bk:'MOSHY',
+   vert:'Skin', day:9, of:21, traffic:40, a:'pkg_basic', v:'pkg_maint',
+   metric:'quiz completion', rel:5.2, abs:2.14, p:0.089, lo:-0.8, hi:11.2, state:'trend', weekly:5900,
+   sum:'Trending positive but not yet significant (p = 0.089). The interval only just crosses zero. About 6 more days to resolve.'},
+
+  {key:'010', t:'Malaysia launch pricing', b:'MOSHY MY', bg:'#8a5a1e', cc:'MY', bk:'MOSHY',
+   vert:'Weight loss', day:2, of:28, traffic:50, a:'pkg_my', v:'pkg_basic',
+   metric:'checkout conversion', rel:-1.4, abs:-0.22, p:0.781, lo:-11.6, hi:9.3, state:'early', weekly:820,
+   sum:'Too early to read (p = 0.781). New market with low volume, so this needs the full 28 days before it says anything.'}
+];
+
+const FINISHED = [
+  {key:'001', t:'Practitioner photo on plan page', b:'MOSHY AU', bg:'#0f6b52', day:21, of:21,
+   metric:'plan selection', rel:12.6, abs:3.04, p:0.001, lo:5.4, hi:20.2, state:'win', weekly:4100,
+   sum:'Shipped. Significant improvement (p = 0.001) held across the full run and both dosage cohorts.'},
+  {key:'002', t:'Single price vs per dose', b:'MOSHY AU', bg:'#0f6b52', day:28, of:28,
+   metric:'checkout conversion', rel:0.4, abs:0.09, p:0.902, lo:-2.1, hi:2.3, state:'flat', weekly:4400,
+   sum:'No difference (p = 0.902). Per dose pricing did not change conversion, so the simpler model stayed.'},
+  {key:'003', t:'Shorter intake form', b:'MOSH AU', bg:'#2d4a63', day:21, of:21,
+   metric:'intake completion', rel:-6.8, abs:-2.41, p:0.012, lo:-11.9, hi:-1.7, state:'loss', weekly:2200,
+   sum:'Reverted. The shorter form significantly reduced completion (p = 0.012), against expectation.'}
+];
+
+function openRun(d){
   S.exp = newExperiment();
-  S.exp.key = '004';
-  S.exp.name = 'AU Moshy: semaglutide tiered checkout';
-  S.exp.variants = [{id:'A', role:'control', packages:['pkg_basic'], inherits:null}];
-  S.activeSection='variants'; save(); render();
-  toast('Sample scenario loaded. Clone A to start.');
+  S.exp.key = d.key;
+  S.exp.name = `${d.cc||'AU'} ${d.bk==='MOSH'?'Mosh':'Moshy'}: ${d.t.toLowerCase()}`;
+  S.exp.audience = {country:d.cc||'AU', brand:d.bk||'MOSHY', vertical:d.vert||'Weight loss',
+    customer:'New', extra:[]};
+  S.exp.traffic = d.traffic || 25;
+  S.exp.lengthDays = d.of;
+  S.exp.variants = [
+    {id:'A', role:'control', packages:[d.a||'pkg_basic'], inherits:null},
+    {id:'B', role:'test',    packages:[d.v||'pkg_maint'], inherits:'A'}
+  ];
+  S.maxStage = STAGES.length - 1;
+  S.published = true;
+  S.view = 'experiment';
+  S.activeSection = 'variants';
+  render();
+}
+function newExperimentFlow(){
+  S.exp = newExperiment();
+  S.published = false;
+  S.maxStage = 0;
+  S.activeSection = 'setup';
+  S.view = 'experiment';
+  render();
+  toast('Start with Setup. Later stages unlock as you go.');
 }
 
 /* =====================================================================
    RENDER
    ===================================================================== */
-const el = (h) => h;
 const esc = (s) => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+/* Every input carries data-fid. Render restores focus and caret to that
+   field afterwards, so a re-render can never interrupt typing. */
 function render(){
+  const a = document.activeElement;
+  const fid = a && a.dataset ? a.dataset.fid : null;
+  let ss = null, se = null;
+  if(fid && typeof a.selectionStart === 'number'){ ss = a.selectionStart; se = a.selectionEnd; }
+
   const app = document.getElementById('app');
   app.innerHTML = S.view === 'dashboard' ? viewDashboard()
                 : S.view === 'library'   ? viewLibrary()
                 :                          viewExperiment();
-  if(S.focus)  app.insertAdjacentHTML('beforeend', viewFocus());
-  if(S.focus2) app.insertAdjacentHTML('beforeend', viewCareLayer());
+  if(S.focus)  app.insertAdjacentHTML('beforeend', viewPkgBuilder());
+  if(S.focus2) app.insertAdjacentHTML('beforeend', viewCareBuilder());
   if(S.modal)  app.insertAdjacentHTML('beforeend', viewModal());
   bind();
+
+  if(fid){
+    const t = document.querySelector(`[data-fid="${fid}"]`);
+    if(t){
+      t.focus();
+      if(ss !== null && t.setSelectionRange){ try{ t.setSelectionRange(ss, se); }catch(e){} }
+    }
+  }
 }
 
 /* ---------- nav ---------- */
@@ -682,17 +950,131 @@ function nav(active){
   const lib = S.view === 'library';
   return `<div class="nav">
     <div class="logo"><i></i>Commerce</div>
-    <a data-act="go-dash" class="${active==='exp'?'on':''}">Experiments <span class="count">4</span></a>
+    <a data-act="go-dash" class="${active==='exp'?'on':''}">Experiments <span class="count">${RUNS.length}</span></a>
     <div class="grp">Library</div>
     <a data-act="go-lib" data-t="packages" class="${lib&&S.libTab==='packages'?'on':''}">
       Care packages <span class="count">${Object.keys(library).length}</span></a>
     <a data-act="go-lib" data-t="products" class="${lib&&S.libTab==='products'?'on':''}">
       Care products <span class="count">${Object.keys(CARE).length}</span></a>
-    <a>Customer properties <span class="count">42</span></a>
+    <a>Customer properties <span class="count">${EXTRA_PROPS.length}</span></a>
     <div class="grp">Analyse</div>
     <a>Results</a>
     <div class="foot"><span class="av">SK</span><span>Sarah K.</span></div>
   </div>`;
+}
+
+/* ---------- dashboard ---------- */
+const pc = (n, dp) => (n > 0 ? '+' : '') + Number(n).toFixed(dp === undefined ? 1 : dp) + '%';
+
+function resultCard(d, i, kind){
+  const st = STATES[d.state];
+  const lo = Math.min(d.lo, 0), hi = Math.max(d.hi, 0);
+  const pad = ((hi - lo) || 1) * 0.14;
+  const dmin = lo - pad, dmax = hi + pad;
+  const pos = v => ((v - dmin) / (dmax - dmin)) * 100;
+  return `<div class="dc" data-act="open-run" data-k="${kind}" data-i="${i}">
+    <div class="dc-h">
+      <span class="brand" style="background:${d.bg}">M</span>
+      <div style="min-width:0;flex:1">
+        <div class="dct">${esc(d.t)}</div>
+        <div class="k" style="margin-top:2px">${d.b} · day ${d.day} of ${d.of} · ${d.metric}</div>
+      </div>
+    </div>
+
+    <div class="sumbox">
+      <div class="sl">Summary:</div>
+      <div class="st">${esc(d.sum)}</div>
+    </div>
+
+    <div class="tiles">
+      <div class="tile ${st.tile}"><div class="tv">${pc(d.rel)}</div><div class="tl">relative change</div></div>
+      <div class="tile ${st.tile}"><div class="tv">${pc(d.abs,2)}</div><div class="tl">absolute change</div></div>
+    </div>
+
+    <div class="cih">95% Confidence Interval
+      <span class="info" data-t="The range the true effect most likely sits in. If the range crosses zero, the result is not significant yet.">i</span>
+    </div>
+    <div class="ciwrap">
+      <div class="citrack">
+        <span class="cipt" style="left:${pos(d.abs)}%">${pc(d.abs,2)}</span>
+        <span class="cizl" style="left:${pos(0)}%">0%</span>
+        <span class="cizero" style="left:${pos(0)}%"></span>
+        <span class="ciband" style="left:${pos(d.lo)}%;right:${(100-pos(d.hi)).toFixed(2)}%"></span>
+        <span class="cimark" style="left:${pos(d.abs)}%"></span>
+      </div>
+      <div class="ciends"><span>${pc(d.lo,2)}</span><span>${pc(d.hi,2)}</span></div>
+    </div>
+
+    <div class="statbar ${st.bar}">${st.label}</div>
+    <div class="dcf">
+      <span class="k">${d.weekly.toLocaleString()} / week</span>
+      <span class="k mono">p = ${d.p}</span>
+    </div>
+  </div>`;
+}
+
+function newCard(){
+  return `<div class="dc newx" data-act="new">
+    <div class="plus">+</div>
+    <div class="nt">New experiment</div>
+    <div class="nd">Setup, audience, variants, traffic, then launch. Each stage unlocks the next.</div>
+    <button class="btn pri" data-act="new">New experiment</button>
+  </div>`;
+}
+
+function viewDashboard(){
+  const tabs = [
+    {id:'running',  label:'Running',  n:RUNS.length},
+    {id:'draft',    label:'Draft',    n:1},
+    {id:'finished', label:'Finished', n:12},
+    {id:'archived', label:'Archived', n:0}
+  ];
+  let body;
+  if(S.dashTab === 'running'){
+    body = `<div class="dgrid">${RUNS.map((d,i)=>resultCard(d,i,'run')).join('')}${newCard()}</div>`;
+  } else if(S.dashTab === 'draft'){
+    body = `<div class="dgrid">
+      <div class="dc" data-act="new">
+        <div class="dc-h">
+          <span class="brand" style="background:#8b9691">M</span>
+          <div style="min-width:0;flex:1">
+            <div class="dct">Untitled experiment</div>
+            <div class="k" style="margin-top:2px">Draft · created today · exp_005</div>
+          </div>
+        </div>
+        <div class="sumbox">
+          <div class="sl">Summary:</div>
+          <div class="st">Not launched. Setup is complete, variants still need a second arm before this can publish.</div>
+        </div>
+        <div class="statbar s-early">2 checks outstanding</div>
+        <div class="dcf"><span class="k">No traffic yet</span><span class="k">Stage 3 of 5</span></div>
+      </div>
+      ${newCard()}</div>`;
+  } else if(S.dashTab === 'finished'){
+    body = `<div class="dgrid">${FINISHED.map((d,i)=>resultCard(d,i,'fin')).join('')}</div>
+      <div class="k" style="margin-top:14px;text-align:center">Showing 3 of 12 finished experiments.</div>`;
+  } else {
+    body = `<div class="card blank">Nothing archived yet.<br>
+      Finished experiments stay in Finished until you archive them.</div>`;
+  }
+
+  return `<div class="shell">${nav('exp')}
+    <div class="stage">
+      <div class="top">
+        <div class="lhs"><h1>Experiments</h1>
+          <div class="meta">${RUNS.length} running · 1 draft · 12 finished</div></div>
+        <div class="rhs">
+          <button class="btn pri" data-act="new">New experiment</button>
+        </div>
+      </div>
+      <div class="content"><div class="content-inner">
+        <div style="display:flex;gap:7px;margin-bottom:16px">
+          ${tabs.map(t=>`<button class="chip pick ${S.dashTab===t.id?'on':''}"
+            data-act="dash-tab" data-t="${t.id}">${t.label} ${t.n}</button>`).join('')}
+        </div>
+        ${body}
+      </div></div>
+    </div></div>`;
 }
 
 /* ---------- library ---------- */
@@ -704,7 +1086,7 @@ function viewLibrary(){
         <div class="lhs"><h1>${packages?'Care packages':'Care products'}</h1>
           <div class="meta">${packages
             ? 'Built once, referenced by any experiment. Editing here changes every experiment that references it.'
-            : 'Attached to packages. A product can appear in many packages.'}</div></div>
+            : 'Attached to packages. One product can appear in many packages.'}</div></div>
         <div class="rhs">
           ${packages
             ? `<button class="btn pri" data-act="new-pkg-lib">New package</button>`
@@ -724,7 +1106,7 @@ function viewLibrary(){
         <div class="k" style="margin-top:12px;padding:0 3px;line-height:1.55">
           ${packages
             ? 'This is the same editor an experiment opens in place. Nothing about a package depends on the experiment that created it.'
-            : 'Care products carry their own pricing mode. A package decides which products it includes.'}
+            : 'Care products carry their own pricing mode. A package decides which products it holds.'}
         </div>
       </div></div>
     </div></div>`;
@@ -750,10 +1132,11 @@ function pkgTable(){
     </tbody></table>`;
 }
 
+const careUsedBy = id => Object.values(library).filter(P=>P.care.includes(id)).length;
+
 function careTable(){
-  const usedBy = id => Object.values(library).filter(P=>P.care.includes(id)).length;
   return `<table class="tbl">
-    <thead><tr><th>Care product</th><th>Type</th><th>Pricing</th><th>In packages</th></tr></thead>
+    <thead><tr><th>Care product</th><th>Type</th><th>Pricing</th><th>In packages</th><th></th></tr></thead>
     <tbody>
       ${Object.values(CARE).map(c=>`<tr class="rw">
         <td><div class="nmc">${esc(c.name)} ${c.isNew?'<span class="chip g" style="margin-left:4px">new</span>':''}</div>
@@ -762,67 +1145,17 @@ function careTable(){
         <td>${c.mode==='included'
           ? '<span class="chip g">Included</span>'
           : `<span class="chip">Add-on ${money(c.price)}</span>`}</td>
-        <td><span class="chip ${usedBy(c.id)?'':'out'}">${usedBy(c.id)}</span></td>
+        <td><span class="chip ${careUsedBy(c.id)?'':'out'}">${careUsedBy(c.id)}</span></td>
+        <td style="text-align:right"><button class="btn sec sm" data-act="edit-care" data-c="${c.id}">Edit</button></td>
       </tr>`).join('')}
     </tbody></table>`;
 }
 
-/* ---------- dashboard ---------- */
-function viewDashboard(){
-  const cards = [
-    {b:'M', bg:'#0f6b52', t:'Semaglutide tiered checkout', s:'MOSHY AU · day 12 of 21',
-     m:'+8.4%', cls:'up', lab:'checkout conversion', ci:'95% CI +1.2% to +15.1%',
-     band:'left:38%;right:14%', zero:'left:34%', tr:'4,180 / week', st:'significant in ~4 days', stc:'g'},
-    {b:'M', bg:'#2d4a63', t:'Sex upsell flow', s:'MOSH AU · day 3 of 28',
-     m:'−0.6%', cls:'fl', lab:'order value', ci:'95% CI −9.4% to +8.1%',
-     band:'left:22%;right:26%', zero:'left:52%', tr:'1,940 / week', st:'too early to read', stc:'a'},
-    {b:'M', bg:'#5a3d6b', t:'Contrave pricing', s:'MOSHY NZ · day 19 of 21',
-     m:'−4.1%', cls:'dn', lab:'checkout conversion', ci:'95% CI −7.8% to −0.4%',
-     band:'left:12%;right:58%', zero:'left:44%', tr:'2,610 / week', st:'control winning', stc:'h'}
-  ];
-  return `<div class="shell">${nav('exp')}
-    <div class="stage">
-      <div class="top">
-        <div class="lhs"><h1>Experiments</h1><div class="meta">3 running · 1 draft · 12 finished</div></div>
-        <div class="rhs">
-          <button class="btn sec" data-act="sample">Load sample scenario</button>
-          <button class="btn pri" data-act="new">New experiment</button>
-        </div>
-      </div>
-      <div class="content"><div class="content-inner">
-        <div style="display:flex;gap:7px;margin-bottom:16px">
-          <button class="chip pick on">Running 3</button><button class="chip pick">Draft 1</button>
-          <button class="chip pick">Finished 12</button><button class="chip pick">Archived</button>
-        </div>
-        <div class="dgrid">
-          ${cards.map(c=>`
-            <div class="dc" data-act="sample">
-              <div style="display:flex;gap:9px;align-items:flex-start">
-                <span class="brand" style="background:${c.bg}">${c.b}</span>
-                <div style="min-width:0">
-                  <div style="font-size:14px;font-weight:650;line-height:1.3">${c.t}</div>
-                  <div class="k" style="margin-top:2px">${c.s}</div>
-                </div>
-              </div>
-              <div class="metric"><span class="big ${c.cls}">${c.m}</span><span class="k">${c.lab}</span></div>
-              <div class="ci"><span class="band" style="${c.band}"></span><span class="zero" style="${c.zero}"></span></div>
-              <div class="k">${c.ci}</div>
-              <div class="sep"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <span class="k">${c.tr}</span><span class="chip ${c.stc}">${c.st}</span>
-              </div>
-            </div>`).join('')}
-        </div>
-        <button class="empty" style="margin-top:14px" data-act="new">
-          Setup detail lives inside each record. Drafts and finished experiments below.
-        </button>
-      </div></div>
-    </div></div>`;
-}
-
-/* ---------- experiment ---------- */
+/* ---------- experiment record ---------- */
 function viewExperiment(){
-  const e = S.exp, allOk = canPublish();
+  const e = S.exp;
+  // the shortcut only makes sense once Launch is actually reachable
+  const allOk = canPublish() && reached('launch');
   return `<div class="shell">${nav('exp')}
     <div class="stage">
       <div class="top">
@@ -831,189 +1164,143 @@ function viewExperiment(){
             ${S.published ? `<span class="chip g">Live on ${e.env}</span>` : `<span class="chip out">Draft</span>`}</h1>
           <div class="meta">
             <span class="mono">exp_${e.key}</span>
+            <span>stage ${stageIdx(S.activeSection)+1} of ${STAGES.length}</span>
             <span class="saving ${S.saving?'busy':''}"><i></i>${S.saving?'Saving':'Saved'}</span>
           </div>
         </div>
         <div class="rhs">
-          <div class="seg" title="Two candidate page structures over the same record">
-            <button class="${S.spine==='doc'?'on':''}" data-act="spine" data-v="doc">Document</button>
-            <button class="${S.spine==='grid'?'on':''}" data-act="spine" data-v="grid">Grid</button>
-          </div>
-          <span class="info down" data-t="Document: the record is a stack of sections and the grid is one view inside Variants. Grid: the comparison table is the whole page, with audience and traffic as bands.">i</span>
           <button class="btn sec" data-act="spec">View as data</button>
           <button class="btn sec" data-act="go-dash">Close</button>
-          <button class="btn pri" data-act="jump" data-s="launch" ${allOk?'':'disabled'}
-            title="${allOk?'':'Readiness checks outstanding'}">
-            ${S.published?'Published':'Publish'}</button>
+          <button class="btn pri" data-act="go-stage" data-s="launch" ${allOk?'':'disabled'}
+            title="${allOk?'':'Checks outstanding'}">${S.published?'Published':'Publish'}</button>
         </div>
       </div>
       <div class="content"><div class="content-inner">
-        ${S.spine === 'doc' ? spineDoc() : spineGrid()}
+        <div class="doc-wrap">
+          ${railView()}
+          <div class="doc">
+            ${STAGES.map((s,i)=> reached(s.id) ? sectionFor(s.id) : lockedSection(s, i)).join('')}
+          </div>
+        </div>
       </div></div>
     </div></div>`;
 }
 
-/* ---------- spine A: document ---------- */
-function spineDoc(){
-  const e = S.exp, r = readiness(), allOk = canPublish();
-  const secs = [
-    {id:'setup', label:'Setup', done: !!e.name.trim()},
-    {id:'variants', label:'Variants', done: e.variants.length>=2 && !unresolved(),
-      warn: aaVariants().length>0 && !e.aaAcknowledged},
-    {id:'audience', label:'Audience', done: true},
-    {id:'traffic', label:'Traffic', done: e.traffic>0},
-    {id:'launch', label:'Launch', done: allOk}
-  ];
-  return `<div class="doc-wrap">
-    <div class="rail">
-      ${secs.map(s=>`<a data-act="jump" data-s="${s.id}" class="${S.activeSection===s.id?'on':''}">
-        <span>${s.label}</span>
-        ${s.warn?'<span class="warn">!</span>':(s.done?'<span class="tick">✓</span>':'')}</a>`).join('')}
-      <div class="ready ${allOk?'ok':''}">
-        <div class="h5">Readiness</div>
-        <ul>${r.map(x=>`<li>
-          ${x.ok?'<span class="g">✓</span>':(x.warn?'<span class="w">!</span>':'<span class="dot" style="margin-top:5px"></span>')}
-          <span>${x.t}</span></li>`).join('')}</ul>
-      </div>
-      <div class="k" style="margin-top:11px;padding:0 3px;line-height:1.5">
-        Nothing is locked. Move between areas freely.
-      </div>
-    </div>
-    <div class="doc">
-      ${secSetup()}
-      ${secVariants()}
-      ${secAudience()}
-      ${secTraffic()}
-      ${secLaunch()}
-    </div>
+function railView(){
+  const pct = Math.round((S.maxStage / (STAGES.length-1)) * 100);
+  return `<div class="rail">
+    <div class="prog"><i style="width:${pct}%"></i></div>
+    ${STAGES.map((s,i)=>{
+      const isLocked = !reached(s.id);
+      const done = stageDone(s.id);
+      const warn = s.id === 'variants' && aaVariants().length && !S.exp.aaAcknowledged;
+      return `<a data-act="go-stage" data-s="${s.id}"
+        class="${S.activeSection===s.id?'on':''} ${done?'done':''} ${isLocked?'locked':''}">
+        <span class="num">${isLocked ? '' : (done ? '✓' : i+1)}</span>
+        <span class="lbl">${s.label}</span>
+        ${warn ? '<span class="warn">!</span>' : ''}
+      </a>`;
+    }).join('')}
+    <div class="railnote">${S.maxStage < STAGES.length-1
+      ? 'Later stages unlock as you complete each one. Anything already unlocked stays editable.'
+      : 'Every stage is unlocked. Move between them freely.'}</div>
   </div>`;
 }
 
-function funnelInner(each, rest, shades){
-  return S.exp.variants.map((v,i)=>`<i style="flex:${each*10};background:${shades[i%4]}">
-      ${each>=8?`${v.id} ${each.toFixed(each%1?1:0)}%`:''}</i>`).join('')
-    + (rest>0?`<i class="o" style="flex:${rest*10}">${rest>14?'Not enrolled '+rest+'%':''}</i>`:'');
-}
-
-/* ---------- spine B: grid is the page ---------- */
-function spineGrid(){
-  const e = S.exp, a = e.audience, n = e.variants.length;
-  const allOk = canPublish(), dc = diffCount(), aa = aaVariants();
-  const each = n ? e.traffic / n : 0;
-  const shades = ['#0f6b52','#3d8a72','#6aa993','#97c8b5'];
-  const rest = 100 - e.traffic;
-  const blockers = readiness().filter(r=>r.block && !r.ok);
-
-  return `
-  <div class="band">
-    <span class="bl">Setup</span>
-    <input class="fld" data-f="name" value="${esc(e.name)}" style="flex:1;min-width:220px"
-      placeholder="Region Brand: what is being tested">
-    <input class="fld mono" data-f="key" value="${esc(e.key)}" style="max-width:96px">
-    <div class="br">
-      <button class="btn sec sm" data-act="add-variant">+ Variant</button>
-    </div>
-  </div>
-
-  <div class="band">
-    <span class="bl">Audience</span>
-    ${AUD_GROUPS.map(g=>`<div style="display:flex;gap:5px">
-      ${g.opts.filter(o=>o===a[g.id]).map(o=>`<button class="chip pick on" data-act="aud-cycle" data-g="${g.id}"
-        title="Click to cycle ${g.label.toLowerCase()}">${o}</button>`).join('')}
-    </div>`).join('')}
-    ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
-      ${esc(x)} <span class="x">×</span></button>`).join('')}
-    <button class="chip out" style="cursor:pointer" data-act="add-rule">+ rule</button>
-    <div class="br"><span class="k">${ELIGIBLE.toLocaleString()} match weekly</span></div>
-  </div>
-
-  <div class="bench-main">
+function lockedSection(s, i){
+  const prev = STAGES[i-1];
+  return `<div class="stg locked" id="sec-${s.id}">
     <div class="sec-h">
-      <span class="nm">Variants</span>
-      <div class="rt">
-        ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
-                     : `<span class="chip a">no differences</span>`) : ''}
-        ${n>3 ? `<span class="scrollnote">${n} columns, scrolls sideways</span>` : ''}
-        ${n>=2 ? `<button class="btn sec sm" data-act="review-only">
-          ${S.reviewOnly?'Show all attributes':'Changes only'}</button>` : ''}
-      </div>
+      <span class="nm"><span class="sn">${i+1}</span>${s.label}</span>
+      <span class="chip out">complete ${prev.label} first</span>
     </div>
-    ${(aa.length && !e.aaAcknowledged) ? `
-      <div class="banner a">
-        <div style="flex:1">
-          <div class="bt">Variant ${aa.map(v=>v.id).join(' and ')} ${aa.length>1?'are':'is'} identical to ${e.variants[0].id}</div>
-          <div class="bd">A valid A/A test for measuring noise. Confirm if intended, or add an override.</div>
-        </div>
-        <button class="btn sec sm" data-act="ack-aa">Intentional A/A</button>
-      </div>` : ''}
-    ${n === 0
-      ? `<button class="empty" data-act="add-variant">+ Add the first variant</button>`
-      : (n === 1
-        ? `<button class="empty" data-act="clone" data-v="${e.variants[0].id}">
-             Variant A only. Clone it to get a column to compare against.</button>` + gridView(true)
-        : gridView(true))}
-  </div>
-
-  <div class="band">
-    <span class="bl">Traffic</span>
-    <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic"
-      style="flex:1;min-width:150px;max-width:240px">
-    <span class="v" id="tPct" style="width:42px">${e.traffic}%</span>
-    <div class="fun" id="tFun" style="flex:1;min-width:180px">${funnelInner(each, rest, shades)}</div>
-    <div class="br"><span class="k" id="tPer">${perVariantWeekly().toLocaleString()} per variant weekly</span>
-      <span class="chip a" id="tDays">${daysToDetect()} to detect 5%</span></div>
-  </div>
-
-  ${S.published ? `
-    <div class="band" style="border-color:#c6ddd4;background:#f7fbf9">
-      <span class="bl">Live</span>
-      <div style="flex:1"><span class="v">Published to ${e.env}.</span>
-        <span class="k">Amplitude schema emitted.</span></div>
-      <div class="br"><button class="btn sec sm" data-act="spec">View payload</button></div>
-    </div>` : `
-    <div class="band" style="border-color:${allOk?'#c6ddd4':'var(--line)'};background:${allOk?'#f7fbf9':'#fff'}">
-      <span class="bl">Launch</span>
-      <div style="flex:1;min-width:200px">
-        ${allOk
-          ? `<span class="k">${dc} attribute${dc===1?'':'s'} change across ${n} variants. ${e.traffic}% enrolled.</span>`
-          : `<span class="k">${blockers.map(b=>b.t).join(' · ')}</span>`}
-      </div>
-      <div class="br">
-        <button class="chip pick ${e.env==='staging'?'on':''}" data-act="env" data-e="staging">Staging</button>
-        <button class="chip pick ${e.env==='production'?'on':''}" data-act="env" data-e="production">Production</button>
-        <button class="btn pri" data-act="publish" ${allOk?'':'disabled'}>Publish</button>
-      </div>
-    </div>`}
-
-  <div class="k" style="margin-top:4px;padding:0 3px;line-height:1.55">
-    Same record, no sections. Everything that is not a variant comparison is compressed into a band.
-    Try adding a fourth variant to see where this structure strains.
   </div>`;
 }
+
+function sectionFor(id){
+  if(id === 'setup')    return secSetup();
+  if(id === 'audience') return secAudience();
+  if(id === 'variants') return secVariants();
+  if(id === 'traffic')  return secTraffic();
+  return secLaunch();
+}
+
+/* the Next control at the foot of each stage */
+function secFoot(id){
+  const i = stageIdx(id), nx = STAGES[i+1];
+  if(!nx) return '';
+  const b = stageBlockers(id);
+  const unlocked = S.maxStage > i;
+  return `<div class="sec-f">
+    <span class="k">${b.length ? b.join(' · ')
+      : unlocked ? `${nx.label} is already unlocked` : 'Everything needed on this stage is done'}</span>
+    <button class="btn pri" data-act="next" data-s="${id}" ${b.length?'disabled':''}
+      title="${b.length?b.join(' · '):''}">${unlocked ? `Go to ${nx.label}` : `Next: ${nx.label}`}</button>
+  </div>`;
+}
+function secHead(id, right){
+  const i = stageIdx(id), s = STAGES[i];
+  return `<div class="sec-h">
+    <span class="nm"><span class="sn">${stageDone(id)?'✓':i+1}</span>${s.label}</span>
+    <div class="rt" id="rt-${id}">${right||''}</div>
+  </div>`;
+}
+
+const setupRight = () => S.exp.name.trim()
+  ? '<span class="chip g">named</span>'
+  : '<span class="chip out">1 required field</span>';
 
 function secSetup(){
   const e = S.exp;
-  return `<div class="sec ${S.activeSection==='setup'?'act':''}" id="sec-setup">
-    <div class="sec-h"><span class="nm">Setup</span>
-      <div class="rt"><span class="chip out">1 required field</span></div></div>
+  return `<div class="stg ${S.activeSection==='setup'?'act':''}" id="sec-setup">
+    ${secHead('setup', setupRight())}
     <div class="row" style="margin-bottom:13px">
       <div style="flex:2">
         <div class="flab">Experiment name</div>
-        <input class="fld" data-f="name" value="${esc(e.name)}"
+        <input class="fld" data-f="name" data-fid="e-name" value="${esc(e.name)}"
           placeholder="Region Brand: what is being tested">
         <div class="k" style="margin-top:5px">Convention is enforced here, not on the key.</div>
       </div>
       <div style="max-width:130px">
         <div class="flab">Key <span class="info" data-t="A stable ID used in Amplitude and GrowthBook. Autogenerated, editable until the experiment goes live, immutable after.">i</span></div>
-        <input class="fld mono" data-f="key" value="${esc(e.key)}">
+        <input class="fld mono" data-f="key" data-fid="e-key" value="${esc(e.key)}">
       </div>
     </div>
     <div>
       <div class="flab">Hypothesis <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
-      <input class="fld" data-f="hypothesis" value="${esc(e.hypothesis)}"
-        placeholder="Paste a Notion link, or leave empty">
+      <input class="fld" data-f="hypothesis" data-fid="e-hyp" value="${esc(e.hypothesis)}"
+        placeholder="Paste a Notion link, or describe what you expect">
       <div class="k" style="margin-top:5px">The record of record is Notion. This field never blocks publish.</div>
     </div>
+    ${secFoot('setup')}
+  </div>`;
+}
+
+function secAudience(){
+  const a = S.exp.audience;
+  return `<div class="stg ${S.activeSection==='audience'?'act':''}" id="sec-audience">
+    ${secHead('audience', `<span class="chip b">${ELIGIBLE.toLocaleString()} match per week</span>`)}
+    <div class="k" style="margin-bottom:13px">
+      Set who is eligible before building variants. New packages inherit region and vertical from here.</div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      ${AUD_GROUPS.map(g=>`
+        <div style="display:flex;gap:9px;align-items:center">
+          <span class="k" style="width:74px;flex-shrink:0">${g.label}</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${g.opts.map(o=>`<button class="chip pick ${a[g.id]===o?'on':''}"
+              data-act="aud" data-g="${g.id}" data-o="${esc(o)}">${o}</button>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="sep"></div>
+    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+      <span class="k" style="width:74px;flex-shrink:0">And</span>
+      ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
+        ${esc(x)} <span class="x">×</span></button>`).join('')}
+      <button class="chip out" style="cursor:pointer" data-act="add-rule">
+        + add rule from ${EXTRA_PROPS.length} properties</button>
+    </div>
+    ${secFoot('audience')}
   </div>`;
 }
 
@@ -1041,17 +1328,16 @@ function secVariants(){
       <button class="btn sec sm" data-act="ack-aa">Intentional A/A</button>
     </div>` : '';
 
-  return `<div class="sec ${S.activeSection==='variants'?'act':''}" id="sec-variants">
-    <div class="sec-h"><span class="nm">Variants</span>
-      <div class="rt">
-        ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
-                     : `<span class="chip a">no differences</span>`) : ''}
-        ${gridable ? `<button class="btn sec sm" data-act="toggle-compare">
-            ${showGrid?'Card view':'Compare view'}</button>` : ''}
-        ${n>3 ? `<span class="chip out">card view · ${n} variants</span>` : ''}
-      </div></div>
+  return `<div class="stg ${S.activeSection==='variants'?'act':''}" id="sec-variants">
+    ${secHead('variants', `
+      ${n>=2 ? (dc ? `<span class="chip h">${dc} of ${ATTRS.length} attributes differ</span>`
+                   : `<span class="chip a">no differences</span>`) : ''}
+      ${gridable ? `<button class="btn sec sm" data-act="toggle-compare">
+          ${showGrid?'Card view':'Compare view'}</button>` : ''}
+      ${n>3 ? `<span class="chip out">card view · ${n} variants</span>` : ''}`)}
     ${aaBanner}
     ${inner}
+    ${secFoot('variants')}
   </div>`;
 }
 
@@ -1076,7 +1362,7 @@ function cardView(v){
         const P = library[p];
         return `<button class="slot ${P&&P.isNew?'new':''}" data-act="pick" data-v="${v.id}" data-i="${i}">
           ${P?esc(P.name):'empty slot'}
-          <span class="pm">${P?P.plans.map(x=>'$'+x.price).join(' / '):''}</span>
+          <span class="pm">${P?P.plans.map(x=>{const ps=planPrices(x);return ps.length?money(Math.min(...ps)):'';}).filter(Boolean).join(' / '):''}</span>
           ${P&&P.isNew?'<span class="dot"></span>':''}</button>`;
       }).join('')}
       <button class="slot add" data-act="pick" data-v="${v.id}" data-i="${v.packages.length}">+ add package</button>
@@ -1084,16 +1370,11 @@ function cardView(v){
   </div>`;
 }
 
-function gridView(bench){
+function gridView(){
   const vs = S.exp.variants;
-  let rows = diffRows();
-  const hidden = bench && S.reviewOnly ? rows.filter(r=>!r.differs).length : 0;
-  if(bench && S.reviewOnly && rows.some(r=>r.differs)) rows = rows.filter(r=>r.differs);
-
-  const canAdd = bench ? vs.length < 4 : vs.length < 3;
-  const wide = vs.length > 3;
-  const colW = wide ? '200px' : 'minmax(180px,1fr)';
-  const cols = `152px repeat(${vs.length}, ${colW})` + (canAdd ? ' 116px' : '');
+  const rows = diffRows();
+  const canAdd = vs.length < 3;
+  const cols = `152px repeat(${vs.length}, minmax(180px,1fr))` + (canAdd ? ' 116px' : '');
   const bodyH = rows.length * 54;
   return `<div class="grid" style="grid-template-columns:${cols}">
     <div><div class="gh">Attribute</div>
@@ -1128,72 +1409,50 @@ function gridView(bench){
       <button class="empty" style="height:${bodyH - 8}px;width:100%;display:flex;align-items:center;justify-content:center"
         data-act="add-variant">+ variant</button></div>`:''}
   </div>
-  <div class="k" style="margin-top:6px">Dashed cells are identical to the control. Marked cells diverge.
-    ${hidden?`<b style="color:var(--ink)">${hidden} identical attribute${hidden===1?'':'s'} hidden.</b>`:''}</div>`;
+  <div class="k" style="margin-top:6px">Dashed cells are identical to the control. Marked cells diverge.</div>`;
 }
 
-function secAudience(){
-  const a = S.exp.audience;
-  return `<div class="sec ${S.activeSection==='audience'?'act':''}" id="sec-audience">
-    <div class="sec-h"><span class="nm">Audience</span>
-      <div class="rt"><span class="chip g">${S.exp.audienceTouched?'edited':'derived from variants'}</span></div></div>
-    <div style="display:flex;flex-direction:column;gap:11px">
-      ${AUD_GROUPS.map(g=>`
-        <div style="display:flex;gap:9px;align-items:center">
-          <span class="k" style="width:74px;flex-shrink:0">${g.label}</span>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${g.opts.map(o=>`<button class="chip pick ${a[g.id]===o?'on':''}"
-              data-act="aud" data-g="${g.id}" data-o="${esc(o)}">${o}</button>`).join('')}
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="sep"></div>
-    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-      <span class="k" style="width:74px;flex-shrink:0">And</span>
-      ${a.extra.map((x,i)=>`<button class="chip rm" data-act="rm-rule" data-i="${i}">
-        ${esc(x)} <span class="x">×</span></button>`).join('')}
-      <button class="chip out" style="cursor:pointer" data-act="add-rule">+ add rule from 42 properties</button>
-      <span class="k" style="margin-left:auto">${ELIGIBLE.toLocaleString()} match per week</span>
-    </div>
-  </div>`;
+function funnelInner(){
+  const e = S.exp, n = Math.max(e.variants.length,1);
+  const each = e.variants.length ? e.traffic / n : 0;
+  const rest = 100 - e.traffic;
+  const shades = ['#0f6b52','#3d8a72','#6aa993','#97c8b5'];
+  return e.variants.map((v,i)=>`<i style="flex:${each*10};background:${shades[i%4]}">
+      ${each>=6?`${v.id} · ${each.toFixed(each%1?1:0)}%`:''}</i>`).join('')
+    + (rest>0?`<i class="o" style="flex:${rest*10}">${rest>10?'Not enrolled · '+rest+'%':''}</i>`:'');
 }
 
 function secTraffic(){
   const e = S.exp, n = Math.max(e.variants.length,1);
-  const each = e.traffic / n;
-  const rest = 100 - e.traffic;
-  const shades = ['#0f6b52','#3d8a72','#6aa993','#97c8b5'];
-  return `<div class="sec ${S.activeSection==='traffic'?'act':''}" id="sec-traffic">
-    <div class="sec-h"><span class="nm">Traffic</span>
-      <div class="rt"><span class="chip out">split evenly across ${n} variant${n===1?'':'s'}</span></div></div>
+  return `<div class="stg ${S.activeSection==='traffic'?'act':''}" id="sec-traffic">
+    ${secHead('traffic', `<span class="chip out">split evenly across ${n} variant${n===1?'':'s'}</span>`)}
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">
       <div style="flex:1">
         <div class="flab">Enrol <span class="info" data-t="The share of eligible traffic that enters the experiment at all. The remainder never sees a variant.">i</span></div>
-        <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic">
+        <input type="range" min="0" max="100" step="5" value="${e.traffic}" data-f="traffic" data-fid="e-traffic">
       </div>
       <div style="width:96px">
         <div class="flab">&nbsp;</div>
-        <div class="fld lock" style="text-align:center;font-weight:650">${e.traffic}%</div>
+        <div class="fld lock" id="tPct" style="text-align:center;font-weight:650">${e.traffic}%</div>
       </div>
     </div>
-    <div class="fun">
-      ${e.variants.map((v,i)=>`<i style="flex:${each*10};background:${shades[i%4]}">
-        ${each>=6?`${v.id} · ${each.toFixed(each%1?1:0)}%`:''}</i>`).join('')}
-      ${rest>0?`<i class="o" style="flex:${rest*10}">Not enrolled · ${rest}%</i>`:''}
-    </div>
+    <div class="fun" id="tFun">${funnelInner()}</div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px">
-      <span class="k">${perVariantWeekly().toLocaleString()} people per variant per week</span>
-      <span class="chip a">about ${daysToDetect()} to detect a 5% lift</span>
+      <span class="k" id="tPer">${perVariantWeekly().toLocaleString()} people per variant per week</span>
+      <span class="chip a" id="tDays">about ${daysToDetect()} to detect a 5% lift</span>
     </div>
+    ${secFoot('traffic')}
   </div>`;
 }
 
 function secLaunch(){
-  const e = S.exp, ok = canPublish(), rows = diffRows().filter(r=>r.differs);
-  const same = ATTRS.length - rows.length;
+  const e = S.exp, cks = checklist(), ok = canPublish();
+  const rows = diffRows().filter(r=>r.differs);
+  const outstanding = cks.filter(c=>!c.ok).length;
+
   if(S.published){
-    return `<div class="sec act" id="sec-launch">
-      <div class="sec-h"><span class="nm">Launch</span><span class="chip g">Live on ${e.env}</span></div>
+    return `<div class="stg ${S.activeSection==='launch'?'act':''}" id="sec-launch">
+      ${secHead('launch', `<span class="chip g">Live on ${e.env}</span>`)}
       <div class="banner g">
         <div style="flex:1">
           <div class="bt">Published to ${e.env}</div>
@@ -1204,44 +1463,37 @@ function secLaunch(){
         </div>
         <button class="btn sec sm" data-act="spec">View payload</button>
       </div>
+      <div class="ckl">${cks.map(c=>ckRow(c)).join('')}</div>
     </div>`;
   }
-  return `<div class="sec ${S.activeSection==='launch'?'act':''}" id="sec-launch">
-    <div class="sec-h"><span class="nm">Launch</span>
-      <div class="rt">${ok?'<span class="chip g">all checks pass</span>':'<span class="chip out">checks outstanding</span>'}</div></div>
 
-    <div style="border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:12px;background:#fbfcfc">
+  return `<div class="stg ${S.activeSection==='launch'?'act':''}" id="sec-launch">
+    ${secHead('launch', ok
+      ? '<span class="chip g">all checks pass</span>'
+      : `<span class="chip a">${outstanding} outstanding</span>`)}
+
+    <div class="k" style="margin-bottom:11px">
+      Every check below is derived from the stages above. Nothing here is a separate form to fill in.</div>
+    <div class="ckl">${cks.map(c=>ckRow(c)).join('')}</div>
+
+    <div style="border:1px solid var(--line);border-radius:9px;padding:13px 14px;margin-bottom:13px;background:#fbfcfc">
       <div class="h5" style="margin-bottom:9px">Change set</div>
       ${e.variants.length<2 ? `<div class="k">Add a second variant to see a change set.</div>` :
-        (rows.length ? rows.map(r=>{
-          const parts = e.variants.slice(1).map((v,i)=>{
+        (rows.length ? rows.map(r=>
+          e.variants.slice(1).map((v,i)=>{
             const val = r.vals[i+1];
-            return val === r.base ? null : `<div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            return val === r.base ? '' : `<div style="display:flex;gap:8px;align-items:center;margin-top:6px">
               <span class="dot"></span>
               <span class="mono" style="font-size:11.5px;color:var(--ink)">variants.${v.id}.${r.attr.id}</span>
               <span class="k">${r.base===null?'none':esc(r.base)} → <b style="color:var(--ink)">${val===null?'none':esc(val)}</b></span>
-              <button class="btn sec xs" style="margin-left:auto" data-act="jump" data-s="variants">Edit here</button>
+              <button class="btn sec xs" style="margin-left:auto" data-act="go-stage" data-s="variants">Edit</button>
             </div>`;
-          }).filter(Boolean).join('');
-          return parts;
-        }).join('') : `<div class="k">No differences. This is an A/A test.</div>`)}
-      ${e.variants.length>=2?`<div class="k" style="margin-top:10px">${same} of ${ATTRS.length} attributes identical across all variants.</div>`:''}
+          }).join('')
+        ).join('') : `<div class="k">No differences. This is an A/A test.</div>`)}
     </div>
 
-    <div class="row" style="margin-bottom:12px">
-      <div style="border:1px solid var(--line);border-radius:9px;padding:11px 13px">
-        <div class="h5">Audience</div>
-        <div class="k" style="margin-top:5px">${[e.audience.country,e.audience.brand,e.audience.vertical,
-          e.audience.customer+' customer',...e.audience.extra].join(' · ')}</div>
-      </div>
-      <div style="border:1px solid var(--line);border-radius:9px;padding:11px 13px">
-        <div class="h5">Traffic</div>
-        <div class="k" style="margin-top:5px">${e.traffic}% enrolled · ${perVariantWeekly().toLocaleString()} per variant weekly</div>
-      </div>
-    </div>
-
-    <div style="border:1px solid #c6ddd4;background:#f7fbf9;border-radius:9px;padding:13px 15px;
-      display:flex;justify-content:space-between;align-items:center;gap:14px">
+    <div style="border:1px solid ${ok?'#c6ddd4':'var(--line)'};background:${ok?'#f7fbf9':'#fff'};border-radius:9px;
+      padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:14px">
       <div>
         <div style="display:flex;gap:7px;align-items:center;margin-bottom:5px">
           <span class="v">Publish to</span>
@@ -1258,96 +1510,133 @@ function secLaunch(){
   </div>`;
 }
 
-/* ---------- package builder ---------- */
-function viewFocus(){
+function ckRow(c){
+  const cls = c.ok ? 'ok' : (c.warn ? 'warn' : 'no');
+  return `<div class="ck ${cls}">
+    <span class="cki">${c.ok ? '✓' : '!'}</span>
+    <div class="ckb">
+      <div class="ckt">${c.t}</div>
+      <div class="ckd">${esc(c.d)}</div>
+    </div>
+    ${c.ok ? '' : `<button class="btn sec xs" data-act="go-stage" data-s="${c.jump}">Fix</button>`}
+  </div>`;
+}
+
+/* =====================================================================
+   PACKAGE BUILDER VIEW  (GTM style slide over, level 1)
+   ===================================================================== */
+const readyChip = (issues) => issues.length
+  ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
+  : `<span class="chip g">ready</span>`;
+
+/* Builder save buttons ungrey while typing, same reason as the stage gates */
+function patchBuilderGate(){
+  if(S.focus){
+    const is = pkgIssues();
+    const w = document.getElementById('pkgReady');
+    if(w) w.innerHTML = readyChip(is);
+    const b = document.querySelector('[data-act="focus-save"]');
+    if(b){ b.disabled = is.length > 0; b.title = is.length ? is.join(' · ') : ''; }
+  }
+  if(S.focus2){
+    const is = careIssues();
+    const w = document.getElementById('careReady');
+    if(w) w.innerHTML = readyChip(is);
+    const b = document.querySelector('[data-act="care-save"]');
+    if(b){ b.disabled = is.length > 0; b.title = is.length ? is.join(' · ') : ''; }
+  }
+}
+
+function viewPkgBuilder(){
   const f = S.focus, ret = f.returnTo, issues = pkgIssues();
   const inExp = ret && ret.variantId;
   const crumb = inExp
-    ? `← Experiment ${S.exp.key} · Variant ${ret.variantId} · package slot ${ret.slotIndex+1}`
-    : `← Care packages library`;
+    ? `Experiments <b>exp_${S.exp.key}</b> · Variant <b>${ret.variantId}</b> · package slot ${ret.slotIndex+1}`
+    : `Library <b>Care packages</b>`;
   const title = f.editId ? esc(f.name || 'Care package') : 'New care package';
   const saveLabel = inExp ? `Save and return to variant ${ret.variantId}` : 'Save to library';
   const refs = f.editId ? (library[f.editId].uses || 0) : 0;
 
-  return `<div class="focus">
-    <div class="focus-top">
-      <div>
-        <div class="crumb">${crumb}</div>
-        <h1 style="margin:0;font-size:17px;font-weight:650;display:flex;align-items:center;gap:9px">${title}
-          ${issues.length
-            ? `<span class="chip a">${issues.length} thing${issues.length===1?'':'s'} to finish</span>`
-            : `<span class="chip g">ready</span>`}</h1>
+  return `<div class="gtm" data-act="focus-cancel">
+    <div class="backtab" data-act="focus-cancel"><span>Close</span></div>
+    <div class="gtm-panel" data-stop>
+      <div class="gtm-top">
+        <div>
+          <div class="crumb">${crumb}</div>
+          <h1 style="margin:0;font-size:17px;font-weight:650;display:flex;align-items:center;gap:9px">${title}
+            <span id="pkgReady">${readyChip(issues)}</span></h1>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          ${refs > 1 ? `<span class="chip a">edits reach ${refs} experiments</span>` : ''}
+          <button class="btn sec" data-act="focus-cancel">Cancel</button>
+          <button class="btn pri" data-act="focus-save" ${issues.length?'disabled':''}
+            title="${issues.length?issues.join(' · '):''}">${saveLabel}</button>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        ${refs > 1 ? `<span class="chip a">edits reach ${refs} experiments</span>` : ''}
-        <button class="btn sec" data-act="focus-cancel">Cancel</button>
-        <button class="btn pri" data-act="focus-save" ${issues.length?'disabled':''}
-          title="${issues.length?issues.join(' · '):''}">${saveLabel}</button>
-      </div>
+      <div class="gtm-body"><div class="gtm-inner">
+        <div style="flex:1;min-width:0">
+
+          <div class="card" style="padding:17px 19px;margin-bottom:13px">
+            <div class="row" style="margin-bottom:13px">
+              <div style="flex:2">
+                <div class="flab">Package name</div>
+                <input class="fld" data-ff="name" data-fid="p-name" value="${esc(f.name)}"
+                  placeholder="AU Semaglutide Premium">
+              </div>
+              <div style="max-width:150px">
+                <div class="flab">Medication
+                  <span class="info" data-t="Medication decides the dosage tiers available to price against.">i</span></div>
+                <select class="sel" data-fm style="width:100%">
+                  ${Object.keys(DOSES).map(m=>`<option ${f.medication===m?'selected':''}>${m}</option>`).join('')}
+                </select>
+              </div>
+              <div style="max-width:90px"><div class="flab">Region</div><div class="fld lock">${f.region}</div></div>
+            </div>
+            <div class="k">${inExp
+              ? `Region ${f.region} and vertical ${f.vertical.toLowerCase()} are inherited from the experiment audience.`
+              : `Region ${f.region}, vertical ${f.vertical.toLowerCase()}. Built outside an experiment, so nothing is inherited.`}
+              ${doses(f.medication).length} dosage tier${doses(f.medication).length===1?'':'s'} available:
+              ${doses(f.medication).join(', ')}.</div>
+          </div>
+
+          <div class="card" style="padding:17px 19px;margin-bottom:13px">
+            <div class="sec-h" style="margin-bottom:4px">
+              <span class="nm" style="font-size:14px">Plans</span>
+              <button class="btn sec sm" data-act="add-plan"
+                ${f.plans.length >= PLAN_TYPES.length?'disabled':''}>+ Add plan</button>
+            </div>
+            <div class="k" style="margin-bottom:13px">
+              A plan is a commitment duration, not a different product. Price it once, or once per dose.</div>
+            ${f.plans.map((p,i)=>planEditor(p,i,f)).join('')}
+            ${f.plans.length === 0
+              ? `<button class="empty" data-act="add-plan">+ Add the first plan</button>` : ''}
+          </div>
+
+          <div class="card" style="padding:17px 19px">
+            <div class="h5" style="margin-bottom:4px">Care products</div>
+            <div class="k" style="margin-bottom:13px">
+              Picked from the library. Create one here if it does not exist yet.</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              ${Object.values(CARE).map(c=>`<button class="chip pick ${f.care.includes(c.id)?'on':''}"
+                data-act="care" data-c="${c.id}"
+                title="${c.kind} · ${c.mode==='included'?'included':'add-on '+money(c.price)}">
+                ${esc(c.name)}${c.mode==='addon'?' '+money(c.price):''}</button>`).join('')}
+              <button class="chip out" style="cursor:pointer;border-color:var(--accent);color:var(--accent)"
+                data-act="new-care">+ New care product</button>
+            </div>
+          </div>
+
+          <div class="k" style="margin-top:13px;padding:0 3px;line-height:1.55">
+            Saves to <b style="color:var(--ink)">Care packages</b>.
+            ${f.editId
+              ? 'This package already exists, so saving updates every experiment that references it.'
+              : 'Reusable in future experiments without rebuilding.'}
+          </div>
+        </div>
+
+        <div class="phone" id="pv">${pkgPreview()}</div>
+      </div></div>
     </div>
-    <div class="focus-body"><div class="focus-inner">
-      <div style="flex:1;min-width:0">
-
-        <div class="card" style="padding:17px 19px;margin-bottom:13px">
-          <div class="row" style="margin-bottom:13px">
-            <div style="flex:2">
-              <div class="flab">Package name</div>
-              <input class="fld" data-ff="name" value="${esc(f.name)}"
-                placeholder="AU Semaglutide Premium" ${f.editId?'':'autofocus'}>
-            </div>
-            <div style="max-width:150px">
-              <div class="flab">Medication
-                <span class="info" data-t="Medication decides the dosage tiers available to price against.">i</span></div>
-              <select class="sel" data-fm style="width:100%">
-                ${Object.keys(DOSES).map(m=>`<option ${f.medication===m?'selected':''}>${m}</option>`).join('')}
-              </select>
-            </div>
-            <div style="max-width:90px"><div class="flab">Region</div><div class="fld lock">${f.region}</div></div>
-          </div>
-          <div class="k">${inExp
-            ? `Region ${f.region} and vertical ${f.vertical.toLowerCase()} are inherited from the experiment audience.`
-            : `Region ${f.region}, vertical ${f.vertical.toLowerCase()}. Built outside an experiment, so nothing is inherited.`}
-            ${doses(f.medication).length} dosage tier${doses(f.medication).length===1?'':'s'} available:
-            ${doses(f.medication).join(', ')}.</div>
-        </div>
-
-        <div class="card" style="padding:17px 19px;margin-bottom:13px">
-          <div class="sec-h" style="margin-bottom:4px">
-            <span class="nm" style="font-size:14px">Plans</span>
-            <button class="btn sec sm" data-act="add-plan"
-              ${f.plans.length >= PLAN_TYPES.length?'disabled':''}>+ Add plan</button>
-          </div>
-          <div class="k" style="margin-bottom:13px">
-            A plan is a commitment duration, not a different product. Price it once, or once per dose.</div>
-          ${f.plans.map((p,i)=>planEditor(p,i,f)).join('')}
-          ${f.plans.length === 0
-            ? `<button class="empty" data-act="add-plan">+ Add the first plan</button>` : ''}
-        </div>
-
-        <div class="card" style="padding:17px 19px">
-          <div class="h5" style="margin-bottom:4px">Care products</div>
-          <div class="k" style="margin-bottom:13px">
-            Picked from the library. Create one here if it does not exist yet.</div>
-          <div style="display:flex;gap:7px;flex-wrap:wrap">
-            ${Object.values(CARE).map(c=>`<button class="chip pick ${f.care.includes(c.id)?'on':''}"
-              data-act="care" data-c="${c.id}"
-              title="${c.kind} · ${c.mode==='included'?'included':'add-on '+money(c.price)}">
-              ${esc(c.name)}${c.mode==='addon'?' '+money(c.price):''}</button>`).join('')}
-            <button class="chip out" style="cursor:pointer;border-color:var(--accent);color:var(--accent)"
-              data-act="new-care">+ New care product</button>
-          </div>
-        </div>
-
-        <div class="k" style="margin-top:13px;padding:0 3px;line-height:1.55">
-          Saves to <b style="color:var(--ink)">Care packages</b>.
-          ${f.editId
-            ? 'This package already exists, so saving updates every experiment that references it.'
-            : 'Reusable in future experiments without rebuilding.'}
-        </div>
-      </div>
-
-      <div class="phone" id="pv">${previewInner()}</div>
-    </div></div>
   </div>`;
 }
 
@@ -1374,6 +1663,7 @@ function planEditor(p, i, f){
         ${ds.map(d=>`<div class="dose">
           <div class="dl">${d}</div>
           <input value="${esc(p.tiers[d] ?? '')}" data-fd="${i}" data-d="${esc(d)}"
+            data-fid="p-dose-${i}-${esc(d).replace(/\s/g,'_')}"
             placeholder="0" inputmode="numeric" aria-label="Price at ${esc(d)}">
         </div>`).join('')}
       </div>
@@ -1382,13 +1672,14 @@ function planEditor(p, i, f){
       <div style="max-width:170px">
         <div class="flab">Price per month</div>
         <div class="pfx"><span>$</span>
-          <input value="${esc(p.price)}" data-fp="${i}" placeholder="429" inputmode="numeric"></div>
+          <input value="${esc(p.price)}" data-fp="${i}" data-fid="p-price-${i}"
+            placeholder="429" inputmode="numeric"></div>
       </div>
     `}
   </div>`;
 }
 
-function previewInner(){
+function pkgPreview(){
   const f = S.focus;
   const priced = f.plans.filter(p => planPrices(p).length);
   const inc = f.care.map(id=>CARE[id]).filter(c=>c && c.mode==='included');
@@ -1401,7 +1692,7 @@ function previewInner(){
       const ps = planPrices(p), lo = Math.min(...ps), hi = Math.max(...ps);
       const best = p === cheapest;
       return `<div class="pl ${best?'on':''}">
-        <div class="pt">${p.type}${best&&priced.length>1?'<span class="chip g" style="font-size:9.5px">best value</span>':''}</div>
+        <div class="pt"><span>${p.type}</span>${best&&priced.length>1?'<span class="chip g" style="font-size:9.5px">best value</span>':''}</div>
         <div class="pp">${money(lo)}<span>/mo</span></div>
         <div class="pm">${p.mode==='tiered'
           ? (lo===hi ? 'Same at every dose' : 'From ' + money(lo) + ' to ' + money(hi) + ' by dose')
@@ -1419,56 +1710,136 @@ function previewInner(){
     <div class="k" style="margin-top:9px;text-align:center;font-size:11px">Updates as you type</div>`;
 }
 
-/* ---------- care product layer, stacked over the builder ---------- */
-function viewCareLayer(){
-  const f = S.focus2;
-  return `<div class="layer" data-act="care-cancel"><div class="layer-panel" data-stop>
-    <div class="layer-top">
-      <div class="crumb">← ${S.focus ? (S.focus.editId ? esc(S.focus.name||'Care package') : 'New care package') : 'Care products'}</div>
-      <div style="font-size:16px;font-weight:650">New care product</div>
-      <div class="k" style="margin-top:3px">Saving returns you to the package with this selected.</div>
-    </div>
-    <div class="layer-body">
-      <div class="card" style="padding:15px 16px;margin-bottom:12px">
-        <div class="flab">Name</div>
-        <input class="fld" data-fc="name" value="${esc(f.name)}" placeholder="Sleep coaching call" autofocus>
-        <div class="flab" style="margin-top:13px">Type</div>
-        <div style="display:flex;gap:6px">
-          ${['Consult','Product','Test'].map(k=>`<button class="chip pick ${f.kind===k?'on':''}"
-            data-act="care-kind" data-k="${k}">${k}</button>`).join('')}
+/* =====================================================================
+   CARE PRODUCT BUILDER VIEW  (same treatment, stacks as level 2)
+   ===================================================================== */
+function viewCareBuilder(){
+  const f = S.focus2, issues = careIssues();
+  const nested = !!S.focus;
+  const crumb = nested
+    ? `Library <b>Care packages</b> · ${S.focus.editId ? esc(S.focus.name||'Care package') : 'New care package'} · care products`
+    : `Library <b>Care products</b>`;
+  const title = f.editId ? esc(f.name || 'Care product') : 'New care product';
+  const saveLabel = nested && !f.editId ? 'Save and select' : 'Save to library';
+  const used = f.editId ? careUsedBy(f.editId) : 0;
+
+  return `<div class="gtm ${nested?'l2':''}" data-act="care-cancel">
+    <div class="backtab" data-act="care-cancel"><span>Close</span></div>
+    <div class="gtm-panel" data-stop>
+      <div class="gtm-top">
+        <div>
+          <div class="crumb">${crumb}</div>
+          <h1 style="margin:0;font-size:17px;font-weight:650;display:flex;align-items:center;gap:9px">${title}
+            <span id="careReady">${readyChip(issues)}</span></h1>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          ${used > 1 ? `<span class="chip a">edits reach ${used} packages</span>` : ''}
+          <button class="btn sec" data-act="care-cancel">Cancel</button>
+          <button class="btn pri" data-act="care-save" ${issues.length?'disabled':''}
+            title="${issues.length?issues.join(' · '):''}">${saveLabel}</button>
         </div>
       </div>
-      <div class="card" style="padding:15px 16px;margin-bottom:12px">
-        <div class="flab">Pricing</div>
-        <div style="display:flex;gap:6px;margin-bottom:11px">
-          <button class="chip pick ${f.mode==='included'?'on':''}" data-act="care-mode" data-m="included">
-            Included in package</button>
-          <button class="chip pick ${f.mode==='addon'?'on':''}" data-act="care-mode" data-m="addon">
-            Priced add-on</button>
+      <div class="gtm-body"><div class="gtm-inner">
+        <div style="flex:1;min-width:0">
+
+          <div class="card" style="padding:17px 19px;margin-bottom:13px">
+            <div class="row">
+              <div style="flex:2">
+                <div class="flab">Care product name</div>
+                <input class="fld" data-fc="name" data-fid="c-name" value="${esc(f.name)}"
+                  placeholder="Sleep coaching call">
+              </div>
+              <div>
+                <div class="flab">Type</div>
+                <div style="display:flex;gap:6px">
+                  ${['Consult','Product','Test'].map(k=>`<button class="chip pick ${f.kind===k?'on':''}"
+                    data-act="care-kind" data-k="${k}">${k}</button>`).join('')}
+                </div>
+              </div>
+            </div>
+            <div class="k" style="margin-top:13px">
+              A consult is practitioner time, a product ships to the customer, a test is pathology.</div>
+          </div>
+
+          <div class="card" style="padding:17px 19px;margin-bottom:13px">
+            <div class="h5" style="margin-bottom:4px">Pricing</div>
+            <div class="k" style="margin-bottom:13px">
+              The product decides how it is charged. A package then decides whether to hold it.</div>
+            <div style="display:flex;gap:6px;margin-bottom:13px">
+              <button class="chip pick ${f.mode==='included'?'on':''}" data-act="care-mode" data-m="included">
+                Included in package</button>
+              <button class="chip pick ${f.mode==='addon'?'on':''}" data-act="care-mode" data-m="addon">
+                Priced add-on</button>
+            </div>
+            ${f.mode==='addon' ? `
+              <div style="max-width:170px">
+                <div class="flab">Add-on price per month</div>
+                <div class="pfx"><span>$</span>
+                  <input value="${esc(f.price)}" data-fc="price" data-fid="c-price"
+                    placeholder="79" inputmode="numeric"></div>
+              </div>`
+              : `<div class="k">Bundled into the plan price. Nothing extra appears at checkout.</div>`}
+          </div>
+
+          <div class="card" style="padding:17px 19px">
+            <div class="flab">Short description
+              <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
+            <input class="fld" data-fc="note" data-fid="c-note" value="${esc(f.note)}"
+              placeholder="30 minutes, monthly">
+            <div class="k" style="margin-top:5px">Shown under the name at checkout and in the library.</div>
+          </div>
+
+          <div class="k" style="margin-top:13px;padding:0 3px;line-height:1.55">
+            ${f.editId
+              ? `Held by ${used} package${used===1?'':'s'}. Saving updates all of them.`
+              : nested
+                ? 'Saves to Care products and selects it on the package you came from.'
+                : 'Saves to Care products, ready for any package to hold.'}
+          </div>
         </div>
-        ${f.mode==='addon' ? `
-          <div style="max-width:150px">
-            <div class="flab">Add-on price</div>
-            <div class="pfx"><span>$</span>
-              <input value="${esc(f.price)}" data-fc="price" placeholder="79" inputmode="numeric"></div>
-          </div>` : `<div class="k">Bundled into the plan price. Nothing extra at checkout.</div>`}
-      </div>
-      <div class="card" style="padding:15px 16px">
-        <div class="flab">Short description <span class="chip out" style="font-size:10px;padding:1px 7px">optional</span></div>
-        <input class="fld" data-fc="note" value="${esc(f.note)}" placeholder="30 minutes, monthly">
-      </div>
-      <div class="k" style="margin-top:12px;line-height:1.55">
-        Two levels deep is the limit. This layer creates one object and hands it straight back.
-      </div>
+
+        <div class="phone" id="cv">${carePreview()}</div>
+      </div></div>
     </div>
-    <div class="layer-foot">
-      <button class="btn sec" data-act="care-cancel">Cancel</button>
-      <button class="btn pri" data-act="care-save">Save and select</button>
-    </div>
-  </div></div>`;
+  </div>`;
 }
 
-/* ---------- modals ---------- */
+function carePreview(){
+  const f = S.focus2;
+  const nm = f.name.trim() || 'Untitled care product';
+  return `<div class="nub"></div>
+    <div class="k" style="margin-bottom:11px">Checkout preview</div>
+    <div class="pl on">
+      <div class="pt"><span>Your plan</span></div>
+      <div class="pp">${money(349)}<span>/mo</span></div>
+      <div class="pm">3-month plan, for context</div>
+    </div>
+    ${f.mode === 'included' ? `
+      <div class="k" style="margin:13px 0 5px">Included</div>
+      <div style="font-size:12px;display:flex;gap:6px;align-items:flex-start">
+        <span style="color:var(--accent);font-weight:700">✓</span>
+        <span>${esc(nm)}${f.note?`<span class="k" style="display:block">${esc(f.note)}</span>`:''}</span>
+      </div>
+      <div class="k" style="margin-top:12px;font-size:11px;line-height:1.5">
+        Included products raise perceived value without changing the price shown.</div>
+    ` : `
+      <div class="k" style="margin:13px 0 5px">Add to your plan</div>
+      <div style="border:1px solid var(--line);border-radius:9px;padding:10px 11px;display:flex;
+        justify-content:space-between;align-items:flex-start;gap:8px">
+        <span style="font-size:12px">${esc(nm)}
+          ${f.note?`<span class="k" style="display:block">${esc(f.note)}</span>`:''}</span>
+        <span class="v" style="white-space:nowrap">+${money(f.price||0)}</span>
+      </div>
+      <div class="k" style="margin-top:12px;font-size:11px;line-height:1.5">
+        Add-ons appear as a separate line and can be declined.</div>
+    `}
+    <button class="btn pri" style="width:100%;justify-content:center;margin-top:13px">Continue</button>
+    <div class="k" style="margin-top:9px;text-align:center;font-size:11px">Updates as you type</div>`;
+}
+
+/* =====================================================================
+   MODALS
+   ===================================================================== */
 function viewModal(){
   const m = S.modal;
   if(m.type === 'pkg'){
@@ -1479,6 +1850,7 @@ function viewModal(){
         <div class="k" style="margin-top:3px">Packages live in the Care packages library and are reusable.</div>
       </div>
       <div class="pop-b">
+        <div class="scrollist">
         ${Object.values(library).map(p=>{
           const dis = used.includes(p.id);
           return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="attach" data-p="${p.id}"`}>
@@ -1489,9 +1861,10 @@ function viewModal(){
             ${dis?'<span class="chip out">attached</span>':'<span class="chip">Attach</span>'}
           </div>`;
         }).join('')}
-        <div class="opt create" data-act="build-pkg">
+        </div>
+        <div class="opt create" data-act="build-pkg" style="margin-top:8px;margin-bottom:0">
           <div><div class="on">+ Create a new package</div>
-            <div class="od" style="color:var(--accent)">Opens a full-width editor, returns you here</div></div>
+            <div class="od" style="color:var(--accent)">Opens the package editor, returns you here</div></div>
         </div>
       </div>
       <div class="pop-f">
@@ -1500,22 +1873,23 @@ function viewModal(){
       </div>
     </div></div>`;
   }
+
   if(m.type === 'rule'){
-    const cur = S.exp.audience.extra;
     return `<div class="pop-bg" data-act="close-modal"><div class="pop" data-stop>
       <div class="pop-h"><div class="t">Add a rule layer</div>
-        <div class="k" style="margin-top:3px">The four common properties are toggles. Everything else lives here.</div></div>
-      <div class="pop-b">
-        ${EXTRA_PROPS.map(p=>{
-          const dis = cur.includes(p);
-          return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="add-rule-do" data-r="${esc(p)}"`}>
-            <div class="on">${p}</div>${dis?'<span class="chip out">added</span>':'<span class="chip">Add</span>'}</div>`;
-        }).join('')}
+        <div class="k" style="margin-top:3px">The four common properties are toggles on the stage.
+          All ${EXTRA_PROPS.length} properties live here.</div>
+        <input class="fld" data-rq data-fid="q-rule" value="${esc(S.ruleQuery)}"
+          placeholder="Filter properties" style="margin-top:11px">
       </div>
-      <div class="pop-f"><span class="k">42 properties available</span>
+      <div class="pop-b" style="overflow:hidden">
+        <div class="scrollist" id="ruleList">${ruleListInner()}</div>
+      </div>
+      <div class="pop-f"><span class="k" id="ruleCount">${ruleMatches().length} of ${EXTRA_PROPS.length} shown</span>
         <button class="btn sec" data-act="close-modal">Done</button></div>
     </div></div>`;
   }
+
   if(m.type === 'spec'){
     return `<div class="pop-bg" data-act="close-modal"><div class="pop" style="width:min(660px,100%)" data-stop>
       <div class="pop-h"><div class="t">Experiment as data</div>
@@ -1528,6 +1902,22 @@ function viewModal(){
   return '';
 }
 
+function ruleMatches(){
+  const q = S.ruleQuery.trim().toLowerCase();
+  return q ? EXTRA_PROPS.filter(p => p.toLowerCase().includes(q)) : EXTRA_PROPS;
+}
+function ruleListInner(){
+  const cur = S.exp.audience.extra;
+  const list = ruleMatches();
+  if(!list.length) return `<div class="blank" style="padding:34px 10px">No property matches that.</div>`;
+  return list.map(p=>{
+    const dis = cur.includes(p);
+    return `<div class="opt ${dis?'dis':''}" ${dis?'':`data-act="add-rule-do" data-r="${esc(p)}"`}>
+      <div class="on">${esc(p)}</div>
+      ${dis?'<span class="chip out">added</span>':'<span class="chip">Add</span>'}</div>`;
+  }).join('');
+}
+
 function specText(){
   const e = S.exp;
   const q = s => `<span class="vv">${esc(s)}</span>`;
@@ -1536,20 +1926,20 @@ function specText(){
   ${k('key')}:        ${q(e.key)}
   ${k('name')}:       ${e.name ? q(e.name) : '<span class="cc">null</span>'}
   ${k('hypothesis')}: ${e.hypothesis ? q(e.hypothesis) : '<span class="cc">null</span>'}
-  ${k('variants')}:
+  ${k('stage')}:      ${q(STAGES[S.maxStage].id)}   <span class="cc"># furthest unlocked</span>
+  ${k('audience')}:
+    ${k('country')}:  ${q(e.audience.country)}
+    ${k('brand')}:    ${q(e.audience.brand)}
+    ${k('vertical')}: ${q(e.audience.vertical)}
+    ${k('customer')}: ${q(e.audience.customer)}
+${e.audience.extra.map(x=>`    ${k('rule')}:     ${q(x)}`).join('\n')}${e.audience.extra.length?'\n':''}  ${k('variants')}:
 `;
   e.variants.forEach(v=>{
     out += `    - ${k('id')}: ${q(v.id)}  ${k('role')}: ${q(v.role)}\n`;
     if(v.inherits) out += `      ${k('inherits')}: ${q(v.inherits)}   <span class="cc"># ${overrideCount(v)} override(s)</span>\n`;
     out += `      ${k('packages')}: [${v.packages.filter(Boolean).map(p=>q(library[p].name)).join(', ')||'<span class="cc">empty</span>'}]\n`;
   });
-  const a = e.audience;
-  out += `  ${k('audience')}:
-    ${k('country')}:  ${q(a.country)}
-    ${k('brand')}:    ${q(a.brand)}
-    ${k('vertical')}: ${q(a.vertical)}
-    ${k('customer')}: ${q(a.customer)}
-${a.extra.map(x=>`    ${k('rule')}:     ${q(x)}`).join('\n')}${a.extra.length?'\n':''}  ${k('traffic')}:
+  out += `  ${k('traffic')}:
     ${k('enrolled_pct')}: ${q(e.traffic)}
     ${k('split')}:        <span class="cc">even across ${e.variants.length||1}</span>
   ${k('publish')}:
@@ -1561,20 +1951,34 @@ ${a.extra.map(x=>`    ${k('rule')}:     ${q(x)}`).join('\n')}${a.extra.length?'\
 /* =====================================================================
    BINDING
    ===================================================================== */
-/* the traffic slider must survive a drag, so patch around it rather than re-render */
+/* The traffic slider must survive a whole drag, so patch the readouts
+   around it rather than replacing the input. */
 function patchTraffic(){
-  if(S.spine === 'doc'){
-    const sec = document.getElementById('sec-traffic');
-    if(sec){ sec.outerHTML = secTraffic(); bind(); }
-    return;
-  }
-  const e = S.exp, n = Math.max(e.variants.length,1);
-  const each = e.variants.length ? e.traffic / n : 0, rest = 100 - e.traffic;
   const set = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
-  set('tPct', e.traffic + '%');
-  set('tFun', funnelInner(each, rest, ['#0f6b52','#3d8a72','#6aa993','#97c8b5']));
-  set('tPer', perVariantWeekly().toLocaleString() + ' per variant weekly');
-  set('tDays', daysToDetect() + ' to detect 5%');
+  set('tPct', S.exp.traffic + '%');
+  set('tFun', funnelInner());
+  set('tPer', perVariantWeekly().toLocaleString() + ' people per variant per week');
+  set('tDays', 'about ' + daysToDetect() + ' to detect a 5% lift');
+  patchGate();
+}
+
+/* Next buttons ungrey the moment the stage is satisfied, without a
+   re-render that would interrupt typing or dragging. */
+function patchGate(){
+  document.querySelectorAll('[data-act="next"]').forEach(btn=>{
+    const id = btn.dataset.s, i = stageIdx(id), nx = STAGES[i+1];
+    const b = stageBlockers(id);
+    btn.disabled = b.length > 0;
+    btn.title = b.length ? b.join(' · ') : '';
+    btn.textContent = S.maxStage > i ? `Go to ${nx.label}` : `Next: ${nx.label}`;
+    const hint = btn.parentElement.querySelector('.k');
+    if(hint) hint.textContent = b.length ? b.join(' · ')
+      : (S.maxStage > i ? `${nx.label} is already unlocked` : 'Everything needed on this stage is done');
+  });
+  const rt = document.getElementById('rt-setup');
+  if(rt) rt.innerHTML = setupRight();
+  const pub = document.querySelector('.top [data-act="go-stage"][data-s="launch"]');
+  if(pub) pub.disabled = !(canPublish() && reached('launch'));
 }
 
 function bind(){
@@ -1587,41 +1991,27 @@ function bind(){
       switch(a){
         case 'go-dash': S.view='dashboard'; S.modal=null; render(); break;
         case 'go-lib': S.view='library'; S.libTab=n.dataset.t||'packages'; S.modal=null; render(); break;
-        case 'new': S.exp=newExperiment(); S.published=false; S.view='experiment'; S.activeSection='setup'; render(); break;
-        case 'sample': loadSample(); S.view='experiment'; S.published=false; render(); break;
-        case 'spine': S.spine = n.dataset.v; render();
-          toast(n.dataset.v==='doc'
-            ? 'Document spine. Variants is one section of five.'
-            : 'Grid spine. The comparison table is the page.'); break;
-        case 'review-only': S.reviewOnly = !S.reviewOnly; render(); break;
+        case 'dash-tab': S.dashTab = n.dataset.t; render(); break;
+        case 'new': newExperimentFlow(); break;
+        case 'open-run': openRun((n.dataset.k==='fin'?FINISHED:RUNS)[Number(n.dataset.i)]); break;
+
+        case 'go-stage': goStage(n.dataset.s); break;
+        case 'next': goNext(n.dataset.s); break;
+
         case 'new-pkg-lib': openPackageBuilder({view:'library'}); break;
         case 'edit-pkg': openPackageBuilder({view:'library'}, library[n.dataset.p]); break;
-        case 'new-care-lib': openCareProduct(); break;
+        case 'new-care-lib': openCareProduct({view:'library'}); break;
+        case 'edit-care': openCareProduct({view:'library'}, CARE[n.dataset.c]); break;
         case 'new-care': openCareProduct(); break;
         case 'care-cancel': S.focus2=null; render(); break;
         case 'care-save': saveCareProduct(); break;
         case 'care-kind': S.focus2.kind = n.dataset.k; render(); break;
         case 'care-mode': S.focus2.mode = n.dataset.m; render(); break;
+
         case 'add-plan': addPlan(); break;
         case 'rm-plan': removePlan(Number(n.dataset.i)); break;
         case 'plan-mode': setPlanMode(Number(n.dataset.i), n.dataset.m); break;
-        case 'aud-cycle': {
-          const g = AUD_GROUPS.find(x=>x.id===n.dataset.g);
-          const cur = g.opts.indexOf(S.exp.audience[g.id]);
-          S.exp.audience[g.id] = g.opts[(cur+1) % g.opts.length];
-          S.exp.audienceTouched = true; save(); render(); break;
-        }
-        case 'jump': {
-          S.activeSection = n.dataset.s; render();
-          const t = document.getElementById('sec-'+n.dataset.s);
-          if(t){ t.scrollIntoView({behavior:'smooth', block:'start'}); }
-          else {
-            // grid spine has no sections, so launch lives at the bottom of the page
-            const c = document.querySelector('.content');
-            if(c) c.scrollTo({top:c.scrollHeight, behavior:'smooth'});
-          }
-          break;
-        }
+
         case 'add-variant': addVariant(); break;
         case 'clone': cloneVariant(V(n.dataset.v)); break;
         case 'rm-variant': removeVariant(V(n.dataset.v)); break;
@@ -1638,10 +2028,10 @@ function bind(){
           f.care = f.care.includes(c) ? f.care.filter(x=>x!==c) : [...f.care, c];
           render(); break;
         }
-        case 'aud': S.exp.audience[n.dataset.g] = n.dataset.o; S.exp.audienceTouched=true; save(); render(); break;
+        case 'aud': S.exp.audience[n.dataset.g] = n.dataset.o; save(); render(); break;
         case 'add-rule': openRulePicker(); break;
-        case 'add-rule-do': S.exp.audience.extra.push(n.dataset.r); S.exp.audienceTouched=true;
-          S.modal=null; save(); render(); toast('Rule layer added.'); break;
+        case 'add-rule-do': S.exp.audience.extra.push(n.dataset.r);
+          save(); render(); toast('Rule layer added.'); break;
         case 'rm-rule': S.exp.audience.extra.splice(Number(n.dataset.i),1); save(); render(); break;
         case 'env': S.exp.env = n.dataset.e; save(); render(); break;
         case 'publish': publish(); break;
@@ -1650,43 +2040,47 @@ function bind(){
     });
   });
 
-  // text fields on the experiment record
+  /* ----- experiment record fields ----- */
   document.querySelectorAll('[data-f]').forEach(inp=>{
     const f = inp.dataset.f;
     if(f === 'traffic'){
+      // input fires continuously through the drag, so only patch readouts
       inp.addEventListener('input', ()=>{ S.exp.traffic = Number(inp.value); patchTraffic(); save(); });
-      // the launch summary also reads traffic, so settle the whole page once the drag ends
+      // once the drag ends, settle the checklist and Next state
       inp.addEventListener('change', ()=>render());
       return;
     }
     inp.addEventListener('input', ()=>{
       S.exp[f] = inp.value;
-      // live-update chrome without losing caret
-      const h = document.querySelector('.top h1');
-      if(f==='name' && h) h.childNodes[0].nodeValue = inp.value.trim() || 'Untitled experiment';
-      save._quiet = true; save();
+      if(f === 'name'){
+        const h = document.querySelector('.top h1');
+        if(h) h.childNodes[0].nodeValue = inp.value.trim() || 'Untitled experiment';
+      }
+      patchGate();
+      save();
     });
-    inp.addEventListener('blur', ()=>render());
   });
 
   /* ----- package builder fields -----
-     Inputs patch state and repaint only the preview, so the caret never moves.
-     Blur triggers a full render to refresh validation and plan labels. */
-  const repaint = () => {
-    const pv = document.getElementById('pv');
-    if(pv) pv.innerHTML = previewInner();
-  };
+     Patch state and repaint only the preview so the caret never moves. */
   const num = s => s.replace(/[^0-9]/g,'');
+  const repaintPkg = () => {
+    const p = document.getElementById('pv'); if(p) p.innerHTML = pkgPreview();
+    patchBuilderGate();
+  };
+  const repaintCare = () => {
+    const c = document.getElementById('cv'); if(c) c.innerHTML = carePreview();
+    patchBuilderGate();
+  };
 
   document.querySelectorAll('[data-ff]').forEach(inp=>{
-    inp.addEventListener('input', ()=>{ S.focus[inp.dataset.ff] = inp.value; repaint(); });
-    inp.addEventListener('blur', ()=>render());
+    inp.addEventListener('input', ()=>{ S.focus[inp.dataset.ff] = inp.value; repaintPkg(); });
   });
   document.querySelectorAll('[data-fp]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
       inp.value = num(inp.value);
       S.focus.plans[Number(inp.dataset.fp)].price = inp.value;
-      repaint();
+      repaintPkg();
     });
     inp.addEventListener('blur', ()=>render());
   });
@@ -1696,7 +2090,7 @@ function bind(){
       const p = S.focus.plans[Number(inp.dataset.fd)];
       if(inp.value === '') delete p.tiers[inp.dataset.d];
       else p.tiers[inp.dataset.d] = inp.value;
-      repaint();
+      repaintPkg();
     });
     inp.addEventListener('blur', ()=>render());
   });
@@ -1710,7 +2104,6 @@ function bind(){
     S.focus.medication = med.value;
     const valid = doses(med.value);
     S.focus.plans.forEach(p=>{
-      // carry a price forward before dropping tiers that no longer have a dose
       const carried = planPrices(p);
       Object.keys(p.tiers).forEach(d=>{ if(!valid.includes(d)) delete p.tiers[d]; });
       if(valid.length === 1){
@@ -1724,21 +2117,33 @@ function bind(){
       : `Dosage tiers switched to ${med.value}.`);
   });
 
-  /* ----- care product layer fields ----- */
+  /* ----- care product fields ----- */
   document.querySelectorAll('[data-fc]').forEach(inp=>{
     inp.addEventListener('input', ()=>{
       const f = inp.dataset.fc;
-      S.focus2[f] = f === 'price' ? num(inp.value) : inp.value;
-      if(f === 'price') inp.value = S.focus2.price;
+      if(f === 'price'){ inp.value = num(inp.value); S.focus2.price = inp.value; }
+      else S.focus2[f] = inp.value;
+      repaintCare();
     });
+    inp.addEventListener('blur', ()=>render());
   });
 
-  // keep focus on the field the user was typing in
-  if(bind._focusId){
-    const r = document.querySelector(`[data-f="${bind._focusId}"]`);
-    if(r){ r.focus(); r.setSelectionRange(r.value.length, r.value.length); }
-    bind._focusId = null;
-  }
+  /* ----- property filter, patches only the list ----- */
+  const rq = document.querySelector('[data-rq]');
+  if(rq) rq.addEventListener('input', ()=>{
+    S.ruleQuery = rq.value;
+    const list = document.getElementById('ruleList');
+    if(list){ list.innerHTML = ruleListInner(); }
+    const c = document.getElementById('ruleCount');
+    if(c) c.textContent = `${ruleMatches().length} of ${EXTRA_PROPS.length} shown`;
+    // the freshly written rows need their own click handlers
+    if(list) list.querySelectorAll('[data-act="add-rule-do"]').forEach(rowNode=>{
+      rowNode.addEventListener('click', ()=>{
+        S.exp.audience.extra.push(rowNode.dataset.r);
+        save(); render(); toast('Rule layer added.');
+      });
+    });
+  });
 }
 
 /* boot */
