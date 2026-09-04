@@ -1,0 +1,19 @@
+<div class="phone phone--hifi">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      <div class="content-block">
+        {{> numeric-input-dock}}
+      </div>
+    </div>
+  </div>
+  {{#if showNumpad}}<div class="numpad-dock" aria-hidden="true"><div class="numpad-grid"><key>1</key><key>2</key><key>3</key><key>4</key><key>5</key><key>6</key><key>7</key><key>8</key><key>9</key><key class="action">.</key><key>0</key><key class="action">⌫</key></div></div>{{/if}}
+</div>

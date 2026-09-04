@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Stat reveal + 300g reframe · Side by side</title>
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --accent: #4d41f0;
+      --border: #e2e0e8;
+      --phone-w: 390px;
+      --phone-h: 844px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: #e8e6ee;
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    header {
+      max-width: calc(var(--phone-w) * 2 + 48px);
+      margin: 0 auto 20px;
+    }
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    header p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    header a { color: var(--accent); }
+    .pair {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: calc(var(--phone-w) * 2 + 48px);
+      margin: 0 auto;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: var(--phone-w);
+    }
+    .panel-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .panel-label .step {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .panel-label b {
+      font-size: 15px;
+    }
+    .panel-label .meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .panel-label .meta a { color: var(--accent); }
+    .phone-shell {
+      width: var(--phone-w);
+      height: var(--phone-h);
+      border: 2px solid var(--ink);
+      border-radius: 24px;
+      overflow: hidden;
+      background: #fcfcfc;
+      box-shadow: 0 12px 40px rgba(49, 44, 98, 0.12);
+    }
+    .phone-shell iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Stat reveal + 300g reframe</h1>
+    <p>
+      Hi-fi templates for Framer build · s-39 (Layout E) and s-310 (Layout F) ·
+      <a href="reveal-split-play.html">Split play</a> ·
+      <a href="../frames/gallery.html#stat-reveal">stat-reveal</a> ·
+      <a href="../frames/gallery.html#reframe">reframe</a>
+    </p>
+  </header>
+
+  <div class="pair">
+    <section class="panel">
+      <div class="panel-label">
+        <span class="step">3.9 · tpl-stat-reveal</span>
+        <b>Weight loss reveal</b>
+        <span class="meta">
+          s-39 · Layout E · Trustpilot ·
+          <a href="../frames/built/s-39.html" target="_blank">Open frame</a>
+        </span>
+      </div>
+      <div class="phone-shell">
+        <iframe src="../frames/built/s-39.html" title="Stat reveal · s-39" scrolling="no"></iframe>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-label">
+        <span class="step">3.10 · tpl-reframe</span>
+        <b>300g reframe</b>
+        <span class="meta">
+          s-310 · Layout F · No Trustpilot ·
+          <a href="../frames/built/s-310.html" target="_blank">Open frame</a>
+        </span>
+      </div>
+      <div class="phone-shell">
+        <iframe src="../frames/built/s-310.html" title="300g reframe · s-310" scrolling="no"></iframe>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

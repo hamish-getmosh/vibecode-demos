@@ -1,0 +1,24 @@
+<div class="phone phone--hifi">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      <div class="content-block">
+        <div class="opts">
+          {{#each options}}<div class="opt{{selectedClass}}">{{iconBlock}}{{label}}</div>{{/each}}
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <div class="spacing-block" data-gap="content-footer"></div>
+      {{footerTrustLegal}}
+    </div>
+  </div>
+</div>

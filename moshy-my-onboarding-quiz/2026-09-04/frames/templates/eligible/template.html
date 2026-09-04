@@ -1,0 +1,26 @@
+<div class="phone phone--hifi phone--eligible has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      <div class="content-block">
+        {{> elig-hero}}
+        <div class="spacing-block" data-gap="subhead-content"></div>
+        {{> elig-checklist}}
+        <div class="spacing-block" data-gap="headline-content"></div>
+        {{> elig-next}}
+      </div>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <button class="input-cta input-cta--eligible" type="button">{{ctaLabel}}</button>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>

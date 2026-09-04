@@ -1,0 +1,44 @@
+/**
+ * Component gallery preview iframes — same hi-fi stack as frames/built/*.html,
+ * with relaxed height so atoms are not clipped inside short iframe cards.
+ */
+html.frame-preview.component-lab,
+html.frame-preview.component-lab body {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+html.frame-preview.component-lab .phone.phone--hifi,
+html.frame-preview.component-lab .phone--hifi {
+  width: 390px;
+  height: fit-content !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  display: flow-root;
+}
+
+html.frame-preview.component-lab .quiz-scroll {
+  flex: none;
+  min-height: 0;
+  overflow: visible;
+  display: block;
+  padding: 0 var(--nav-pad-x, 20px);
+}
+
+html.frame-preview.component-lab .quiz-main {
+  padding: 0;
+}
+
+html.frame-preview.component-lab .page-footer {
+  padding: 0 0 var(--space-md, 16px);
+  margin-top: 0;
+}
+
+html.frame-preview.component-lab .opts .opt {
+  cursor: pointer;
+}
+
+html.frame-preview.component-lab .is-hidden {
+  display: none !important;
+}

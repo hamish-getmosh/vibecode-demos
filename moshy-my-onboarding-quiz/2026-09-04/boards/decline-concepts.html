@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Decline concepts · Mixboard</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <link rel="stylesheet" href="../frames/components/elig-checklist/component.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --border: #e2e0e8;
+      --side-w: 220px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --fail-soft: #fce8ec;
+      --fail-ink: #9a0239;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); margin-top: 8px; }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 36px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    .chapter-head h2 { margin: 0 0 4px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); max-width: 72ch; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; scroll-margin-top: 80px; }
+    .art-label { margin-bottom: 8px; min-height: 88px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .art-label .route { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 3px 6px; margin-top: 6px; display: inline-block; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+
+    /* Decline phone shell */
+    .decline-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .decline-phone .nav-shell { padding: 12px 32px 0; flex-shrink: 0; }
+    .decline-phone .nav-row { display: flex; align-items: center; gap: 12px; min-height: 24px; }
+    .decline-phone .back-min {
+      background: none; border: 0; font-size: 28px; line-height: 1; color: var(--ink);
+      padding: 0; cursor: default; width: 24px;
+    }
+    .decline-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .decline-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .decline-phone .prog-pills i.done { background: var(--accent); }
+    .decline-phone .prog-pills i.on { background: var(--accent); opacity: 0.35; }
+
+    .decline-phone .quiz-scroll {
+      flex: 1;
+      overflow: hidden;
+      padding: 32px 32px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .decline-phone .quiz-main { flex: 1; display: flex; flex-direction: column; }
+
+    .decline-phone .q-head {
+      font-family: var(--display);
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 12px;
+    }
+    .decline-phone .q-sub {
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+    .decline-phone .q-body {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+    .decline-phone .q-body strong { font-weight: 600; }
+
+    .decline-phone .decline-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: var(--warn-soft);
+      color: var(--warn);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 20px;
+      box-shadow: 0 8px 24px rgba(180, 83, 9, 0.12);
+    }
+    .decline-phone .decline-mark--neutral {
+      background: var(--surface);
+      color: var(--muted);
+      box-shadow: none;
+      font-size: 20px;
+    }
+
+    .decline-phone .reason-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 0 0 20px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .decline-phone .reason-card__label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+
+    .decline-phone .what-next {
+      margin: 0 0 16px;
+    }
+    .decline-phone .what-next__label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: rgba(49, 44, 98, 0.62);
+      margin: 0 0 8px;
+    }
+    .decline-phone .what-next ul {
+      margin: 0;
+      padding: 0 0 0 18px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .decline-phone .what-next li { margin-bottom: 6px; }
+
+    .decline-phone .elig-card__status--failed {
+      background: var(--fail-soft);
+      color: var(--fail-ink);
+    }
+    .decline-phone .elig-card__status--passed {
+      background: rgb(232, 245, 233);
+      color: rgb(46, 125, 50);
+    }
+
+    .decline-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 16px 32px 20px;
+      background: var(--ground);
+    }
+    .decline-phone .input-cta {
+      border-radius: 999px;
+      background: rgb(154, 2, 57);
+      color: #fcfcfc;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.2;
+      padding: 18px 28px;
+      box-shadow: 0 8px 24px rgba(154, 2, 57, 0.28);
+      border: 0;
+      width: 100%;
+      cursor: default;
+    }
+    .decline-phone .input-cta--secondary {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      margin-top: 10px;
+    }
+    .decline-phone .text-link {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .decline-phone .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .decline-phone .trust-row__stars { color: #00b67a; letter-spacing: 1px; font-size: 11px; }
+    .decline-phone .trust-row strong { color: var(--ink); font-weight: 600; }
+
+    .decline-phone--warm {
+      background: linear-gradient(165deg, #faf5ff 0%, #fdf2f8 48%, #f5f3ff 100%);
+    }
+    .decline-phone--warm .nav-shell,
+    .decline-phone--warm .quiz-scroll,
+    .decline-phone--warm .footer-dock { background: transparent; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Decline concepts</h1>
+      <p class="meta">002 onboarding · s-fail<br/>Female gate · BMI &lt; 23</p>
+      <a href="#layouts">Layout directions</a>
+      <a href="#routes">Route hydrations</a>
+      <a href="mixboard.html#s-fail">Main mixboard</a>
+      <a href="../frames/built/s-32.html">BMI passed (mirror)</a>
+      <p class="note"><strong>Mobbin refs:</strong> Hers ineligible (A), Hims info box (C), Clue pregnancy card (D/F). Copy is provisional exploration only. Clinic review required before ship.</p>
+    </aside>
+    <main>
+      <section class="chapter" id="layouts">
+        <div class="chapter-head">
+          <h2>Layout directions · s-fail</h2>
+          <p>Six concepts for the ineligible exit. Sympathetic tone, doctor-led, one primary exit. Trustpilot stays on all variants per screens.json.</p>
+        </div>
+        <div class="board" id="layout-board"></div>
+      </section>
+
+      <section class="chapter" id="routes">
+        <div class="chapter-head">
+          <h2>Route hydrations · Concept C</h2>
+          <p>Same template, two fail reasons. v1 can ship as one screen with route-aware copy.</p>
+        </div>
+        <div class="board" id="route-board"></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      function navHtml() {
+        return (
+          '<div class="nav-shell">' +
+            '<div class="nav-row">' +
+              '<button class="back-min" type="button" aria-label="Back">‹</button>' +
+              '<div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function footerHtml(primary, secondary, link) {
+        var html = '<div class="footer-dock">';
+        html += '<button class="input-cta" type="button">' + primary + '</button>';
+        if (secondary) {
+          html += '<button class="input-cta input-cta--secondary" type="button">' + secondary + '</button>';
+        }
+        if (link) {
+          html += '<span class="text-link">' + link + '</span>';
+        }
+        html += '<div class="trust-row"><span class="trust-row__stars" aria-hidden="true">★★★★★</span>';
+        html += '<span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span></div>';
+        html += '</div>';
+        return html;
+      }
+
+      function checklistHtml(rows) {
+        var items = rows.map(function (row) {
+          return (
+            '<li class="elig-card__row">' +
+              '<span class="elig-card__name">' + row.label + '</span>' +
+              '<span class="elig-card__status elig-card__status--' + row.status + '">' + row.text + '</span>' +
+            '</li>'
+          );
+        }).join('');
+        return (
+          '<div class="elig-checks">' +
+            '<p class="elig-section-label">What we checked</p>' +
+            '<div class="elig-card"><ul class="elig-card__list">' + items + '</ul></div>' +
+          '</div>'
+        );
+      }
+
+      function phoneWrap(className, body, footer) {
+        return (
+          '<div class="decline-phone' + (className ? ' ' + className : '') + '">' +
+            navHtml() +
+            '<div class="quiz-scroll"><div class="quiz-main">' + body + '</div></div>' +
+            footer +
+          '</div>'
+        );
+      }
+
+      function viewport(concept) {
+        return (
+          '<div class="hifi-viewport"><div class="hifi-viewport__inner">' +
+            concept.render() +
+          '</div></div>'
+        );
+      }
+
+      function art(concept) {
+        return (
+          '<article class="art" id="' + concept.id + '">' +
+            '<div class="art-label">' +
+              '<span class="tag">' + concept.tag + '</span>' +
+              '<b>' + concept.title + '</b>' +
+              '<div class="job">' + concept.job + '</div>' +
+              (concept.route ? '<span class="route">' + concept.route + '</span>' : '') +
+              (concept.psych ? '<span class="psych">' + concept.psych + '</span>' : '') +
+            '</div>' +
+            viewport(concept) +
+          '</article>'
+        );
+      }
+
+      var LAYOUTS = [
+        {
+          id: 'concept-a',
+          tag: 'A · Safety letter',
+          title: 'Hers mirror',
+          job: 'Headline + 2 paragraphs + exit. No icon, no checklist. Fastest to ship.',
+          route: 'Generic · both routes',
+          psych: 'Safety-first · dignity',
+          render: function () {
+            var body =
+              '<h2 class="q-head">Your safety comes first</h2>' +
+              '<p class="q-body">Based on your answers, a GLP-1 weight loss programme is not suitable through MOSHY right now. Our partner clinic sets medical criteria for virtual care.</p>' +
+              '<p class="q-body">We recommend speaking to your GP in person so you get the most appropriate support for your situation.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'concept-b',
+          tag: 'B · Inverted checklist',
+          title: 'Mirror of BMI passed',
+          job: 'Same skeleton as s-32. Neutral mark + pass/fail rows. Transparent result.',
+          route: 'BMI fail shown',
+          psych: 'Transparency · paired win/fail',
+          render: function () {
+            var body =
+              '<div class="decline-mark decline-mark--neutral" aria-hidden="true">—</div>' +
+              '<h2 class="q-head">This programme may not be right for you</h2>' +
+              '<p class="q-sub">Based on what you told us, we cannot continue with GLP-1 assessment online.</p>' +
+              checklistHtml([
+                { label: 'Height & weight', status: 'failed', text: 'Not passed' },
+                { label: 'Health conditions', status: 'passed', text: 'Passed' },
+                { label: 'Clinical eligibility', status: 'failed', text: 'Not passed' }
+              ]) +
+              '<p class="q-sub" style="margin-top:16px">Speak to your GP for in-person guidance.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'concept-c',
+          tag: 'C · Reason card',
+          title: 'Hims info box',
+          job: 'Sympathetic headline + soft gray card with the specific reason.',
+          route: 'BMI fail shown',
+          psych: 'Clarity · calm tone',
+          render: function () {
+            var body =
+              '<h2 class="q-head">This programme may not be right for you</h2>' +
+              '<p class="q-sub">That is okay. It means a GLP-1 programme through MOSHY is not the right fit today.</p>' +
+              '<div class="reason-card">' +
+                '<p class="reason-card__label">Why</p>' +
+                'Your BMI is below the range for this programme (minimum 23). A doctor can advise whether other options are right for you.' +
+              '</div>' +
+              '<p class="q-body">We recommend an in-person visit with your GP for personalised guidance.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'concept-d',
+          tag: 'D · Women\'s health',
+          title: 'Clue-adjacent warmth',
+          job: 'Warmer headline for female gate. Doctor-led subhead, no alarmist icon.',
+          route: 'Female gate shown',
+          psych: 'Empathy · MY women\'s health',
+          render: function () {
+            var body =
+              '<h2 class="q-head">Your body has different priorities right now</h2>' +
+              '<p class="q-sub">That is okay. A GLP-1 weight loss programme through MOSHY is not suitable during pregnancy, breastfeeding, or while planning pregnancy.</p>' +
+              '<div class="reason-card">' +
+                '<p class="reason-card__label">What we recommend</p>' +
+                'Speak to your GP or women\'s health clinic. They can guide you on safe options for this stage of life.' +
+              '</div>';
+            return phoneWrap('decline-phone--warm', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'concept-e',
+          tag: 'E · Dual action',
+          title: 'Exit with dignity',
+          job: 'Primary exit + secondary text link. Only if a real destination exists.',
+          route: 'Generic · both routes',
+          psych: 'Agency · no hard sell',
+          render: function () {
+            var body =
+              '<h2 class="q-head">Your safety comes first</h2>' +
+              '<p class="q-body">Based on your answers, a GLP-1 weight loss programme is not suitable through MOSHY right now.</p>' +
+              '<p class="q-body">We recommend speaking to your GP in person for the most appropriate care.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy', null, 'Explore general health on Moshy'));
+          }
+        },
+        {
+          id: 'concept-f',
+          tag: 'F · Not now',
+          title: 'Temporal framing',
+          job: 'Female gate only. "Not right now" vs rejection. Optional return path.',
+          route: 'Female gate shown',
+          psych: 'Reassurance · timing',
+          render: function () {
+            var body =
+              '<div class="decline-mark" aria-hidden="true">♡</div>' +
+              '<h2 class="q-head">Not right now, and that is okay</h2>' +
+              '<p class="q-sub">When you are no longer pregnant, breastfeeding, or planning pregnancy, you can check again.</p>' +
+              '<p class="q-body">For now, your GP or obstetrician is the best person to talk to about safe weight and health options.</p>';
+            return phoneWrap('decline-phone--warm', body, footerHtml('Back to Moshy'));
+          }
+        }
+      ];
+
+      var ROUTES = [
+        {
+          id: 'route-bmi',
+          tag: 'C · BMI',
+          title: 'Below threshold',
+          job: 'BMI &lt; 23 after height/weight check.',
+          route: 's-32 routeOnFail',
+          render: function () {
+            var body =
+              '<h2 class="q-head">This programme may not be right for you</h2>' +
+              '<p class="q-sub">That is okay. It means a GLP-1 programme through MOSHY is not the right fit today.</p>' +
+              '<div class="reason-card">' +
+                '<p class="reason-card__label">Why</p>' +
+                'Your BMI is below the range for this programme (minimum 23). A doctor can advise whether other options are right for you.' +
+              '</div>' +
+              '<p class="q-body">We recommend an in-person visit with your GP for personalised guidance.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'route-female',
+          tag: 'C · Female gate',
+          title: 'Pregnancy / BF / planning',
+          job: 'Any female gate option except "None of these".',
+          route: 's-22b routeOnFail',
+          render: function () {
+            var body =
+              '<h2 class="q-head">This programme may not be right for you</h2>' +
+              '<p class="q-sub">That is okay. It means a GLP-1 programme through MOSHY is not the right fit today.</p>' +
+              '<div class="reason-card">' +
+                '<p class="reason-card__label">Why</p>' +
+                'GLP-1 weight loss treatment is not suitable during pregnancy, while breastfeeding, or if you are planning pregnancy.' +
+              '</div>' +
+              '<p class="q-body">Your GP or women\'s health clinic can guide you on safe options for this stage of life.</p>';
+            return phoneWrap('decline-phone--warm', body, footerHtml('Back to Moshy'));
+          }
+        },
+        {
+          id: 'route-health',
+          tag: 'Future · Act 3',
+          title: 'Health conditions',
+          job: 'Placeholder for sympathetic exit if risk options selected in Act 3.',
+          route: 'Deferred · act-3 map',
+          render: function () {
+            var body =
+              '<h2 class="q-head">We need to pause here</h2>' +
+              '<p class="q-sub">Some of the conditions you selected need in-person assessment before GLP-1 treatment can be considered.</p>' +
+              '<div class="reason-card">' +
+                '<p class="reason-card__label">Why</p>' +
+                'Your safety comes first. A doctor needs to review your health history face to face.' +
+              '</div>' +
+              '<p class="q-body">Please speak to your GP. They can refer you to appropriate specialist care if needed.</p>';
+            return phoneWrap('', body, footerHtml('Back to Moshy'));
+          }
+        }
+      ];
+
+      document.getElementById('layout-board').innerHTML = LAYOUTS.map(art).join('');
+      document.getElementById('route-board').innerHTML = ROUTES.map(art).join('');
+    })();
+  </script>
+</body>
+</html>

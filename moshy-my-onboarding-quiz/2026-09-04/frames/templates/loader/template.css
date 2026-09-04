@@ -1,0 +1,48 @@
+/* Loader template · layout only; row chrome from components/loader-step */
+
+html.frame-preview .phone--loader {
+  height: 100%;
+}
+
+html.frame-preview .phone--loader .quiz-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 var(--nav-pad-x, 32px) var(--space-lg, 24px);
+}
+
+html.frame-preview .quiz-main--loader {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+html.frame-preview .quiz-main--loader .content-block {
+  width: 100%;
+}
+
+.loader-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.loader-zone .question-block {
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.loader-zone .q-head,
+.loader-zone .q-sub {
+  text-align: center;
+}
+
+.loader-zone .spacing-block[data-gap="subhead-content"] {
+  width: 100%;
+}

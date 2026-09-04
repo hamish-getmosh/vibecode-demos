@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Entry hook 1.1 · Concepts</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --tp-green: #00b67a;
+      --side-w: 252px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+    .side .note strong { color: var(--ink); }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); max-width: 80ch; }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; }
+    .art-label { margin-bottom: 8px; min-height: 118px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+    .mobbin-ref { font-size: 9px; color: #6a6488; margin-top: 4px; line-height: 1.45; }
+    .mobbin-ref a { color: var(--accent); text-decoration: none; }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+
+    .hook-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .hook-phone .brand-shell { padding: 16px 32px 0; flex-shrink: 0; }
+    .hook-phone .brand-bar { display: flex; align-items: center; justify-content: space-between; min-height: 28px; }
+    .hook-phone .brand-bar .logo { font-family: var(--display); font-weight: 700; font-size: 20px; }
+    .hook-phone .brand-bar .lang {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border);
+    }
+    .hook-phone .quiz-scroll {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 0 32px;
+    }
+    .hook-phone .hook-main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .hook-phone .q-head {
+      font-family: var(--display);
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin: 0 0 8px;
+    }
+    .hook-phone .q-sub {
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0;
+      max-width: 32ch;
+    }
+    .hook-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 12px 32px 20px;
+      background: var(--ground);
+    }
+    .hook-phone .input-cta {
+      border-radius: 999px;
+      background: var(--ruby);
+      color: #fcfcfc;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 16px 28px;
+      box-shadow: 0 8px 24px rgba(154, 2, 57, 0.22);
+      border: 0;
+      width: 100%;
+      cursor: default;
+    }
+    .hook-phone .tp-compact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .hook-phone .tp-compact__stars { color: var(--tp-green); letter-spacing: 1px; }
+
+    /* A · Konvo lift (light) */
+    .hook-phone--a .hero-zone {
+      flex: 1;
+      margin: 0 -32px;
+      padding: 8px 32px 0;
+      background: linear-gradient(180deg, #f0edff 0%, #fcfcfc 72%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 0;
+    }
+    .hook-phone--a .device-float {
+      width: 220px;
+      margin-bottom: -18px;
+      position: relative;
+      filter: drop-shadow(0 24px 40px rgba(49, 44, 98, 0.18));
+    }
+    .hook-phone--a .device {
+      width: 220px;
+      border-radius: 28px;
+      border: 3px solid #1a1830;
+      background: #1a1830;
+      padding: 8px 6px 10px;
+      position: relative;
+    }
+    .hook-phone--a .device-notch {
+      width: 72px; height: 18px; border-radius: 0 0 12px 12px;
+      background: #1a1830; margin: -2px auto 6px;
+    }
+    .hook-phone--a .device-screen {
+      border-radius: 20px;
+      background: #fff;
+      padding: 12px 10px;
+      min-height: 280px;
+      font-size: 9px;
+    }
+    .hook-phone--a .mock-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 6px; border-radius: 10px; margin-bottom: 6px;
+      background: var(--surface);
+    }
+    .hook-phone--a .mock-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, #c9c4e8, #8b86b0);
+      flex-shrink: 0;
+    }
+    .hook-phone--a .mock-av--doc { background: linear-gradient(135deg, #6e7fe8, #4d41f0); }
+    .hook-phone--a .mock-line { height: 6px; border-radius: 3px; background: #ddd9ea; }
+    .hook-phone--a .mock-line.w60 { width: 60%; }
+    .hook-phone--a .mock-line.w40 { width: 40%; }
+    .hook-phone--a .mock-pill {
+      display: inline-block; margin-top: 4px;
+      padding: 3px 8px; border-radius: 999px;
+      background: #e8f5ee; color: #0a7a4e; font-weight: 600; font-size: 8px;
+    }
+    .hook-phone--a .copy-block { padding-top: 28px; padding-bottom: 8px; }
+
+    /* B · Full-bleed hero */
+    .hook-phone--b .quiz-scroll { padding: 0; }
+    .hook-phone--b .hero-bleed {
+      height: 380px;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 20%, rgba(110, 127, 232, 0.35) 0%, transparent 70%),
+        linear-gradient(165deg, #ece9ff 0%, #f8f7fc 45%, #fcfcfc 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 32px 24px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .hook-phone--b .hero-fig {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: linear-gradient(145deg, #fff 0%, #e8e4ff 100%);
+      border: 1px solid rgba(77, 65, 240, 0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; line-height: 1;
+      box-shadow: 0 16px 48px rgba(77, 65, 240, 0.12);
+    }
+    .hook-phone--b .copy-block { padding: 24px 32px 8px; flex: 1; }
+
+    /* C · Giant type */
+    .hook-phone--c .quiz-scroll { justify-content: flex-end; padding-bottom: 8px; }
+    .hook-phone--c .q-head { font-size: 36px; line-height: 1.05; letter-spacing: -0.04em; }
+    .hook-phone--c .accent-line {
+      width: 48px; height: 4px; border-radius: 2px;
+      background: var(--accent); margin-bottom: 20px;
+    }
+    .hook-phone--c .tease-card {
+      margin-top: 24px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 8px 24px rgba(49, 44, 98, 0.06);
+    }
+    .hook-phone--c .tease-num {
+      font-family: var(--display);
+      font-size: 28px; font-weight: 700; color: var(--accent);
+      line-height: 1; letter-spacing: -0.03em;
+    }
+    .hook-phone--c .tease-lbl { font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+    /* D · Trust chips */
+    .hook-phone--d .visual-card {
+      border-radius: 20px;
+      background: linear-gradient(145deg, #fff, #f4f3f6);
+      border: 1px solid var(--border);
+      min-height: 200px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hook-phone--d .visual-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(77, 65, 240, 0.08), transparent 55%);
+    }
+    .hook-phone--d .visual-icon {
+      font-size: 72px; position: relative; z-index: 1;
+    }
+    .hook-phone--d .chip-row {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;
+    }
+    .hook-phone--d .chip {
+      font-size: 10px; font-weight: 600;
+      padding: 6px 10px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--ink);
+      border: 1px solid rgba(77, 65, 240, 0.1);
+    }
+
+    /* E · Konvo subtraction */
+    .hook-phone--e .split-visual {
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .hook-phone--e .split-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .hook-phone--e .split-row:last-child { border-bottom: 0; }
+    .hook-phone--e .split-row .ico {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center; font-size: 14px;
+      background: #fff; flex-shrink: 0;
+    }
+    .hook-phone--e .split-row.muted { opacity: 0.35; text-decoration: line-through; }
+    .hook-phone--e .split-row.on { font-weight: 600; }
+    .hook-phone--e .split-row.on .ico { background: #e8f5ee; }
+
+    /* F · Social proof hero */
+    .hook-phone--f .stat-hero {
+      text-align: center;
+      padding: 28px 0 20px;
+    }
+    .hook-phone--f .stat-hero__num {
+      font-family: var(--display);
+      font-size: 72px; font-weight: 700;
+      line-height: 1; letter-spacing: -0.04em;
+      color: var(--accent);
+    }
+    .hook-phone--f .stat-hero__lbl {
+      font-size: 14px; color: var(--muted); margin-top: 4px;
+    }
+    .hook-phone--f .stat-hero__stars {
+      color: var(--tp-green); letter-spacing: 2px; font-size: 14px; margin-top: 8px;
+    }
+    .hook-phone--f .copy-block { text-align: center; }
+    .hook-phone--f .q-sub { margin: 0 auto; }
+
+    .konvo-ref {
+      margin: 0 16px 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #1a1830;
+      color: #c8c4e0;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .konvo-ref strong { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Entry hook 1.1</h1>
+      <p class="meta">002 onboarding · s-11 · Act 1<br/>Hero landing · brand bar only</p>
+      <a href="#concepts">Six concepts</a>
+      <a href="#konvo">Konvo read</a>
+      <a href="#mobbin">Mobbin refs</a>
+      <a href="mixboard.html#s-11">Main mixboard</a>
+      <div class="konvo-ref">
+        <strong>Konvo pattern:</strong> device proof → punchy headline → clarifier sub → single CTA. We adapt structure, not dark mode.
+      </div>
+      <p class="note">
+        <strong>Job:</strong> Arrive, orient, start. No nav pills. No back. Trustpilot in footer dock.<br/><br/>
+        <strong>Psychology:</strong> Give before ask — promise clarity (eligibility + estimate) before questions.<br/><br/>
+        <strong>Light mode lock:</strong> White ground, lavender accents OK. No dark theatre.<br/><br/>
+        <strong>Current mixboard:</strong> Generic doctor visual + "GLP-1 weight loss medication, prescribed online".
+      </p>
+    </aside>
+    <main>
+      <section class="chapter" id="concepts">
+        <div class="chapter-head">
+          <h2>Entry hook concepts · A–F</h2>
+          <p>Six lofi directions for screen 1.1. Same chrome + CTA pattern. Pick a visual spine, then tune copy.</p>
+        </div>
+        <div class="board" id="concept-board"></div>
+      </section>
+
+      <section class="chapter" id="konvo">
+        <div class="chapter-head">
+          <h2>Konvo → Moshy translation</h2>
+          <p>What we steal from the competitor hook you shared. What we do not copy.</p>
+        </div>
+        <ul style="font-size:12px;color:var(--muted);max-width:72ch;line-height:1.55;padding-left:18px;">
+          <li><strong>Steal:</strong> One hero visual that proves the product exists · headline that names the category minus the noise · sub that clarifies what you still get · single primary CTA · minimal chrome</li>
+          <li><strong>Adapt:</strong> Light ground (locked) · medical tone not consumer-app cheek · Trustpilot row · "Get started" not "Sign up"</li>
+          <li><strong>Moshy subtraction line:</strong> "Without the diet-app guesswork" / "Without another DIY plan" (Konvo's "without Feed, Reels, Explore" structure)</li>
+          <li><strong>Device screen content:</strong> Show eligibility check or doctor consult preview, not social feed metaphor</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="mobbin">
+        <div class="chapter-head">
+          <h2>Mobbin research notes</h2>
+          <p>Health onboarding entry screens and hero patterns.</p>
+        </div>
+        <ul style="font-size:12px;color:var(--muted);max-width:72ch;line-height: 1.55;padding-left:18px;">
+          <li><strong>A · Device hero:</strong> <a href="https://mobbin.com/flows/061e04f8-11e2-49c9-99ba-409a707e5f25">Hers</a> treatment questionnaire opener · <a href="https://mobbin.com/flows/7154e10b-ba9f-48a2-b2a4-19e7b438978e">Noom</a> profile intro with illustration</li>
+          <li><strong>B · Full-bleed visual:</strong> <a href="https://mobbin.com/screens/d906ade6-540e-4f08-ab77-e4ce3f8f27a8">Hers</a> weight loss landing · wellness app gradient heroes</li>
+          <li><strong>C · Giant headline:</strong> <a href="https://mobbin.com/screens/b7d200ff-36e2-43c3-a83d-16b7e4c389bd">Noom</a> big type intro · <a href="https://mobbin.com/screens/f0246ea5-34c7-43ef-be2e-a948e8d038fc">Ahead</a></li>
+          <li><strong>D · Trust chips:</strong> <a href="https://mobbin.com/screens/e680983f-8a34-4368-b4ac-4dae8400d65e">Liven</a> laurel stats · <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a> credential rows</li>
+          <li><strong>E · Subtraction list:</strong> Konvo (operator ref) · <a href="https://mobbin.com/screens/5565661d-accc-422b-a9da-4f94e34161eb">QUITTR</a> benefit contrast cards</li>
+          <li><strong>F · Social proof hero:</strong> <a href="https://mobbin.com/screens/08113bd6-f84a-41ca-9372-ec8fd2f8575d">Alma</a> 200k stat · <a href="https://mobbin.com/screens/f1b987b2-5724-4e00-9280-1a44525bda32">Noom</a> member count</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      var CTA = "Get started";
+      var TP = '<div class="tp-compact" data-layer="trust block">' +
+        '<span class="tp-compact__stars" aria-hidden="true">★★★★★</span>' +
+        '<span><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</span></div>';
+
+      function brandHtml() {
+        return (
+          '<div class="brand-shell"><div class="brand-bar">' +
+            '<div class="logo">moshy</div><div class="lang">EN</div>' +
+          '</div></div>'
+        );
+      }
+
+      function footerHtml() {
+        return (
+          '<div class="footer-dock">' +
+            '<button class="input-cta" type="button">' + CTA + '</button>' + TP +
+          '</div>'
+        );
+      }
+
+      function deviceMock() {
+        return (
+          '<div class="device-float"><div class="device">' +
+            '<div class="device-notch"></div>' +
+            '<div class="device-screen">' +
+              '<div style="font-weight:700;font-size:10px;margin-bottom:8px;color:var(--ink)">Your check-in</div>' +
+              '<div class="mock-row"><div class="mock-av mock-av--doc"></div><div style="flex:1">' +
+                '<div class="mock-line w60" style="margin-bottom:4px"></div>' +
+                '<div class="mock-line w40"></div>' +
+                '<div class="mock-pill">Eligible · pending doctor</div>' +
+              '</div></div>' +
+              '<div class="mock-row"><div class="mock-av"></div><div style="flex:1">' +
+                '<div class="mock-line w60" style="margin-bottom:4px"></div>' +
+                '<div class="mock-line w40"></div>' +
+              '</div></div>' +
+              '<div class="mock-row"><div class="mock-av"></div><div style="flex:1">' +
+                '<div class="mock-line w60" style="margin-bottom:4px"></div>' +
+                '<div class="mock-line w40"></div>' +
+              '</div></div>' +
+            '</div></div></div>'
+        );
+      }
+
+      var CONCEPTS = [
+        {
+          id: "a",
+          tag: "A · Konvo lift (light)",
+          title: "Device proof",
+          job: "Closest Konvo parallel. Phone shows eligibility journey, not social feed. Lavender wash behind device.",
+          psych: "Show, don't tell — product exists before first question",
+          mobbin: 'Konvo (operator ref) · <a href="https://mobbin.com/flows/061e04f8-11e2-49c9-99ba-409a707e5f25">Hers</a> opener',
+          head: "Doctor-prescribed GLP-1 — without the diet-app guesswork",
+          sub: "Check your eligibility in under 2 minutes. A doctor confirms what's right for you.",
+          body: function () {
+            return (
+              '<div class="hero-zone">' + deviceMock() + '</div>' +
+              '<div class="copy-block">' +
+                '<h1 class="q-head">' + this.head + '</h1>' +
+                '<p class="q-sub">' + this.sub + '</p>' +
+              '</div>'
+            );
+          }
+        },
+        {
+          id: "b",
+          tag: "B · Full-bleed hero",
+          title: "Gradient + figure",
+          job: "Hers-style wellness landing. Big visual zone, copy anchored below. Photography replaces emoji in hi-fi.",
+          psych: "Emotional arrival — calm, medical, premium",
+          mobbin: '<a href="https://mobbin.com/screens/d906ade6-540e-4f08-ab77-e4ce3f7e8f27a8">Hers</a> weight loss intro',
+          head: "Weight loss medication, prescribed for you",
+          sub: "A doctor-led medical programme for adults who want lasting results — not another diet.",
+          body: function () {
+            return (
+              '<div class="hero-bleed"><div class="hero-fig" aria-hidden="true">🩺</div></div>' +
+              '<div class="copy-block">' +
+                '<h1 class="q-head">' + this.head + '</h1>' +
+                '<p class="q-sub">' + this.sub + '</p>' +
+              '</div>'
+            );
+          }
+        },
+        {
+          id: "c",
+          tag: "C · Giant type + tease",
+          title: "Editorial headline",
+          job: "Headline dominates. Tease card hints at personalised estimate (Act 2 payoff) without overpromising.",
+          psych: "Dream outcome named early · low effort so far",
+          mobbin: '<a href="https://mobbin.com/screens/b7d200ff-36e2-43c3-a83d-16b7e4c389bd">Noom</a> big type',
+          head: "See what doctor-led weight loss could look like for you",
+          sub: "A few quick questions. Your personalised 12-month estimate — before you commit to anything.",
+          body: function () {
+            return (
+              '<div class="accent-line"></div>' +
+              '<h1 class="q-head">' + this.head + '</h1>' +
+              '<p class="q-sub">' + this.sub + '</p>' +
+              '<div class="tease-card">' +
+                '<div class="tease-num">~14<span style="font-size:16px">kg</span></div>' +
+                '<div class="tease-lbl">Example estimate<br/>after your check-in</div>' +
+              '</div>'
+            );
+          }
+        },
+        {
+          id: "d",
+          tag: "D · Trust chips",
+          title: "Credential stack",
+          job: "Clinical trust upfront. Chips replace vague hero visual. Good if photography is not ready.",
+          psych: "Safe hands before personal data",
+          mobbin: '<a href="https://mobbin.com/screens/e680983f-8a34-4368-b4ac-4dae8400d65e">Liven</a> · <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a>',
+          head: "GLP-1 weight loss, handled properly",
+          sub: "Online assessment. Doctor review. Ongoing care — only if you're eligible.",
+          body: function () {
+            return (
+              '<div class="visual-card"><span class="visual-icon" aria-hidden="true">💊</span></div>' +
+              '<div class="chip-row">' +
+                '<span class="chip">Licensed doctors</span>' +
+                '<span class="chip">HopeVision partner</span>' +
+                '<span class="chip">Discreet delivery</span>' +
+              '</div>' +
+              '<h1 class="q-head">' + this.head + '</h1>' +
+              '<p class="q-sub">' + this.sub + '</p>'
+            );
+          }
+        },
+        {
+          id: "e",
+          tag: "E · Konvo subtraction",
+          title: "Without the noise",
+          job: "Literal Konvo structure: strikethrough what we are not, highlight what you get. No device required.",
+          psych: "Category clarity — medical programme, not diet app",
+          mobbin: 'Konvo (operator ref) · <a href="https://mobbin.com/screens/5565661d-accc-422b-a9da-4f94e34161eb">QUITTR</a>',
+          head: "Weight loss support without the DIY diet app",
+          sub: "Medication, doctor reviews, and delivery — when a programme is right for you.",
+          body: function () {
+            return (
+              '<div class="split-visual">' +
+                '<div class="split-row muted"><span class="ico">✕</span> Calorie counting alone</div>' +
+                '<div class="split-row muted"><span class="ico">✕</span> Generic meal plans</div>' +
+                '<div class="split-row on"><span class="ico">✓</span> Doctor-prescribed GLP-1</div>' +
+                '<div class="split-row on"><span class="ico">✓</span> Reviews + ongoing care</div>' +
+              '</div>' +
+              '<h1 class="q-head">' + this.head + '</h1>' +
+              '<p class="q-sub">' + this.sub + '</p>'
+            );
+          }
+        },
+        {
+          id: "f",
+          tag: "F · Social proof hero",
+          title: "Number first",
+          job: "Alma-style stat as visual anchor. Headline secondary. Risk: trust before give — use if brand is known.",
+          psych: "Social proof · perceived likelihood",
+          mobbin: '<a href="https://mobbin.com/screens/08113bd6-f84a-41ca-9372-ec8fd2f8575d">Alma</a> 200k+ · Trustpilot row reinforces',
+          head: "Doctor-led weight loss, built for lasting results",
+          sub: "Find out if GLP-1 is right for you in about 2 minutes.",
+          body: function () {
+            return (
+              '<div class="stat-hero">' +
+                '<div class="stat-hero__num">4.8</div>' +
+                '<div class="stat-hero__lbl">on Trustpilot · 1,200+ reviews</div>' +
+                '<div class="stat-hero__stars">★★★★★</div>' +
+              '</div>' +
+              '<div class="copy-block">' +
+                '<h1 class="q-head">' + this.head + '</h1>' +
+                '<p class="q-sub">' + this.sub + '</p>' +
+              '</div>'
+            );
+          }
+        }
+      ];
+
+      function phoneHtml(c) {
+        return (
+          '<div class="hook-phone hook-phone--' + c.id + '">' +
+            brandHtml() +
+            '<div class="quiz-scroll"><div class="hook-main">' + c.body.call(c) + '</div></div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      function artHtml(c) {
+        return (
+          '<article class="art" id="hook-' + c.id + '">' +
+            '<div class="art-label">' +
+              '<span class="tag">' + c.tag + '</span>' +
+              '<b>' + c.title + '</b>' +
+              '<div class="job">' + c.job + '</div>' +
+              '<span class="psych">' + c.psych + '</span>' +
+              '<div class="mobbin-ref">' + c.mobbin + '</div>' +
+            '</div>' +
+            '<div class="hifi-viewport"><div class="hifi-viewport__inner">' + phoneHtml(c) + '</div></div>' +
+          '</article>'
+        );
+      }
+
+      var board = document.getElementById("concept-board");
+      board.innerHTML = CONCEPTS.map(artHtml).join("");
+    })();
+  </script>
+</body>
+</html>

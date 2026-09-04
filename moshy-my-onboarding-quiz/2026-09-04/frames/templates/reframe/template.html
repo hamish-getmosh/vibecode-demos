@@ -1,0 +1,32 @@
+<div class="phone phone--hifi phone--reframe has-footer-dock" data-reveal-motion data-variant="{{motionVariant}}">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+      <span class="nav-row__spacer" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--reframe">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      <div class="mnode bridge-wrap" data-k="bridge">
+        <p class="reframe-bridge">{{bridgeHeadline}}</p>
+        <p class="reframe-bridge-sub">{{bridgeSub}}</p>
+      </div>
+      <div class="spacing-block" data-gap="bridge-pill"></div>
+      <div class="mnode pill-wrap" data-k="pill">
+        {{> pace-pills}}
+      </div>
+      <div class="spacing-block" data-gap="pill-body"></div>
+      <p class="reframe-body mnode" data-k="reframe">{{bodyCopy}}</p>
+      <div class="spacing-block" data-gap="body-note"></div>
+      <p class="reframe-note">{{disclaimerNote}}</p>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <div class="mnode" data-k="cta"><button class="input-cta" type="button">{{ctaLabel}}</button></div>
+  </div>
+</div>
+<script src="../shared/reveal-motion-engine.js"></script>
+<script src="../templates/reframe/preview.js"></script>

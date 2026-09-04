@@ -1,0 +1,18 @@
+{
+  "componentKey": "trustpilot-row",
+  "framerComponentId": "5jo1wtkgIZb38X2KsI6D",
+  "framerDisplayName": "Trustpilot Badge",
+  "pulledAt": "2026-09-02T10:55:13.883489+00:00",
+  "styles": {
+    "height": "26px",
+    "minWidth": "230px",
+    "width": "1fr",
+    "centerAnchorX": "50%"
+  },
+  "controls": {
+    "brand": "Moshy AU",
+    "style": "Micro TrustScore",
+    "blockTPLinks": "true"
+  },
+  "framerInstanceId": "QrWcIX48e"
+}

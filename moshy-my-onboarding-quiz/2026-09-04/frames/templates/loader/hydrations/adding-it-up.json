@@ -1,0 +1,22 @@
+{
+  "screenId": "s-38",
+  "template": "loader",
+  "title": "Adding it up",
+  "headline": "Adding it up",
+  "subhead": "Personalising your 12-month estimate.",
+  "showSubhead": true,
+  "progress": {
+    "done": 4,
+    "current": 3,
+    "total": 4
+  },
+  "steps": [
+    { "label": "Your metabolic profile", "durationMs": 900 },
+    { "label": "Age and body factors", "durationMs": 1100 },
+    { "label": "Calculating 12-month estimate", "durationMs": 1200 },
+    { "label": "Preparing your results", "durationMs": 800 }
+  ],
+  "defaultStepMs": 950,
+  "pauseAfterCompleteMs": 1500,
+  "trustpilot": false
+}

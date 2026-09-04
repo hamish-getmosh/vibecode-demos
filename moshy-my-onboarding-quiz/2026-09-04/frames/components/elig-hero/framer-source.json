@@ -1,0 +1,48 @@
+{
+  "componentKey": "elig-hero",
+  "framerComponentId": "eSDS5UTVn",
+  "framerDisplayName": "Quiz/Quiz Elig Hero",
+  "pulledAt": "2026-09-02T12:51:42.345944+00:00",
+  "styles": {
+    "card": {
+      "padding": "24px 16px 20px 16px",
+      "radius": "20px",
+      "fill": "rgb(255, 255, 255)",
+      "boxShadow": "0px 12px 40px 0px rgba(77, 65, 240, 0.16), 0px 2px 8px 0px rgba(49, 44, 98, 0.06)",
+      "gap": "16px"
+    },
+    "tick": {
+      "width": "64px",
+      "height": "64px",
+      "fill": "linear-gradient(145deg, rgb(67, 160, 71) 0%, rgb(46, 125, 50) 100%)",
+      "radius": "999px",
+      "boxShadow": "0px 10px 28px 0px rgba(46, 125, 50, 0.28)"
+    },
+    "headline": {
+      "color": "rgb(49, 44, 98)",
+      "fontFamily": "Area Inktrap",
+      "fontSize": "25px",
+      "fontWeight": 700,
+      "lineHeight": "1.2em",
+      "letterSpacing": "-0.02em",
+      "textAlignment": "center"
+    },
+    "subhead": {
+      "color": "rgb(139, 134, 176)",
+      "fontFamily": "Figtree",
+      "fontSize": "16px",
+      "fontWeight": 400,
+      "lineHeight": "1.4em",
+      "textAlignment": "center"
+    },
+    "defaultHeadline": "Your BMI is in range",
+    "defaultSubhead": "Next we'll build your metabolic profile and show you a personalised weight estimate."
+  },
+  "controls": {
+    "$control__headline": "Your BMI is in range",
+    "$control__subhead": "Next we'll build your metabolic profile and show you a personalised weight estimate.",
+    "$control__showSubhead": true
+  },
+  "framerInstanceId": "lQ3oWEhKy",
+  "framerPreviewNodeId": "thgOfUH2j"
+}

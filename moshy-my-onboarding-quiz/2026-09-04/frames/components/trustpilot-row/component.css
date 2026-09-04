@@ -1,0 +1,31 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh trustpilot-row */
+
+.phone--hifi .trust-row--embed,
+.trust-row--embed,
+.trust-embed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 230px;
+  min-height: 26px;
+}
+
+.trust-row__embed {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.trust-row__embed .trustpilot-widget {
+  width: 100%;
+}
+
+.trust-row__link-block {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="frame-preview">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Health profile</title>
+  <link rel="stylesheet" href="../../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../components/cta-primary/component.css" />
+  <link rel="stylesheet" href="../components/question/component.css" />
+  <link rel="stylesheet" href="../components/trustpilot-row/component.css" />
+  <link rel="stylesheet" href="../components/legal-fine/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input-dock/component.css" />
+  <link rel="stylesheet" href="../components/loader-step/component.css" />
+  <link rel="stylesheet" href="../components/loader-stack/component.css" />
+  <link rel="stylesheet" href="../templates/loader/template.css" />
+  <link rel="stylesheet" href="../templates/profile/template.css" />
+<style id="template-spacing">
+:root {
+  --quiz-gap-chrome-headline: 32px;
+  --quiz-gap-content-footer: 24px;
+  --quiz-gap-cta-trust: 8px;
+  --quiz-gap-headline-content: 44px;
+  --quiz-gap-headline-subhead: 8px;
+  --quiz-gap-subhead-content: 32px;
+  --quiz-gap-trust-bottom: 16px;
+  --quiz-gap-trust-legal: 8px;
+}
+</style>
+</head>
+<body>
+<div class="phone phone--hifi phone--profile has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--profile">
+      <div class="spacing-block" data-gap="chrome-headline" data-token="xl" data-px="32px"></div>
+      <div class="question-block">
+  <h2 class="q-head">Here's what we learned about you</h2>
+  <p class="q-sub">Based on what you told us.</p>
+</div>
+
+      <div class="spacing-block" data-gap="subhead-content" data-token="xl" data-px="32px"></div>
+      <div class="profile-wins">
+        
+        <div class="profile-win">
+          <span class="profile-win__icon profile-win__icon--check" aria-hidden="true"></span>
+          <div class="profile-win__copy">
+            <p class="profile-win__title">BMI check passed</p>
+            <p class="profile-win__sub">You may be eligible for this programme</p>
+          </div>
+        </div>
+        
+        <div class="profile-win">
+          <span class="profile-win__icon profile-win__icon--trend" aria-hidden="true"></span>
+          <div class="profile-win__copy">
+            <p class="profile-win__title">Up to 14 kg weight loss projection</p>
+            <p class="profile-win__sub">Personalised 12-month estimate · not a guarantee</p>
+          </div>
+        </div>
+        
+      </div>
+      <div class="spacing-block" data-gap="headline-content" data-token="2xl" data-px="44px"></div>
+      <p class="profile-section-label">A little more about you</p>
+      <div class="spacing-block" data-gap="headline-subhead" data-token="xs" data-px="8px"></div>
+      <div class="profile-details">
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Age</span>
+          <span class="profile-detail__value">30–39</span>
+        </div>
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Weight pattern</span>
+          <span class="profile-detail__value">Yo-yo for years</span>
+        </div>
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Metabolic</span>
+          <span class="profile-detail__value">Losing weight feels harder lately</span>
+        </div>
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Energy</span>
+          <span class="profile-detail__value">Often flat or run down</span>
+        </div>
+        
+        <div class="profile-detail profile-detail--female">
+          <span class="profile-detail__label">Menopause</span>
+          <span class="profile-detail__value">Perimenopause</span>
+        </div>
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Carry weight</span>
+          <span class="profile-detail__value">Mostly around belly</span>
+        </div>
+        
+        <div class="profile-detail">
+          <span class="profile-detail__label">Conditions</span>
+          <span class="profile-detail__value">High blood pressure</span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer" data-token="lg" data-px="24px"></div>
+    <button class="input-cta input-cta--profile" type="button">See how GLP-1s could help</button>
+    <div class="spacing-block" data-gap="cta-trust" data-token="xs" data-px="8px"></div>
+    <div class="trust-row trust-row--embed" data-layer="trust block">
+  <div class="trust-row__embed">
+    <div class="trustpilot-widget"
+      data-locale="en-AU"
+      data-template-id="5419b637fa0340045cd0c936"
+      data-businessunit-id="665c9030d93d3d8666e023d9"
+      data-style-height="20px"
+      data-style-width="100%"
+      data-token="66d3ceff-718a-448e-9e37-a90847f5fcfc">
+      <a href="https://www.trustpilot.com/review/www.getmoshy.com.au" target="_blank" rel="noopener noreferrer">Trustpilot</a>
+    </div>
+    <div class="trust-row__link-block" aria-hidden="true"></div>
+  </div>
+</div>
+<script src="../components/trustpilot-row/trustpilot-embed.js"></script>
+<div class="spacing-block is-hidden" data-gap="trust-legal" data-legal-slot></div><div class="legal-block is-hidden" data-legal-slot><p class="fine">By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p></div><div class="spacing-block" data-gap="trust-bottom" data-token="md" data-px="16px"></div>
+  </div>
+</div>
+
+</body>
+</html>

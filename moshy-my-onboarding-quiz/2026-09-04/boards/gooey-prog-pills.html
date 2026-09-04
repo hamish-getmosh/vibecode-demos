@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Gooey prog pills · 3 attempts</title>
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --dot-idle: #d8d5e0;
+      --border: #e2e0e8;
+      --board: #e8e6ee;
+      --side-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+
+      /* midfi prog-pills tokens */
+      --dot: 8px;
+      --pill-w: 22px;
+      --pill-h: 8px;
+      --pill-r: 4px;
+      --pitch: 12px; /* dot + 4px gap, scaled slightly for goo */
+      --done-opacity: 0.38;
+      --goo-hit: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--board);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w);
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; line-height: 1.25; }
+    .side .meta {
+      padding: 0 16px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .side a {
+      display: block;
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .side a:hover, .side a.active { background: var(--surface); }
+    .side .note {
+      padding: 12px 16px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .side .note strong { color: var(--ink); }
+
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; max-width: 920px; }
+    .chapter { margin-bottom: 48px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; max-width: 62ch; }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px 22px;
+      box-shadow: 0 8px 24px rgba(49, 44, 98, 0.06);
+    }
+    .panel + .panel { margin-top: 16px; }
+
+    .phone-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 88px;
+      padding: 18px 16px;
+      background: var(--ground);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100%, 280px);
+      min-height: 28px;
+      gap: 12px;
+    }
+    .back-min {
+      background: none;
+      border: 0;
+      padding: 0;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--muted);
+      font-weight: 300;
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    /* Static midfi reference */
+    .prog-pills {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .prog-pills i {
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--dot-idle);
+      transition: width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.28s ease,
+        opacity 0.28s ease;
+    }
+    .prog-pills i.done { background: var(--accent); opacity: var(--done-opacity); }
+    .prog-pills i.on {
+      width: 18px;
+      border-radius: 3px;
+      background: var(--accent);
+      opacity: 1;
+    }
+
+    /* Gooey track (Codrops pattern) */
+    .goo-wrap {
+      position: relative;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .goo-nav {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0;
+      filter: url("#goo");
+      transform: translateZ(0);
+      will-change: filter;
+    }
+    .goo-slot {
+      position: relative;
+      display: inline-block;
+      width: var(--goo-hit);
+      height: var(--goo-hit);
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      vertical-align: top;
+    }
+    .goo-slot::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--dot);
+      height: var(--dot);
+      margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2);
+      border-radius: 50%;
+      background: var(--dot-idle);
+      pointer-events: none;
+      transition: background 0.25s ease, opacity 0.25s ease;
+    }
+    .goo-slot.is-done::after {
+      background: var(--accent);
+      opacity: var(--done-opacity);
+    }
+    .goo-slot.is-active::after {
+      opacity: 0;
+    }
+    .goo-current {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: var(--pill-w);
+      height: var(--pill-h);
+      margin-top: calc(var(--pill-h) / -2);
+      border-radius: var(--pill-r);
+      background: var(--accent);
+      pointer-events: none;
+      transform-origin: center center;
+      will-change: transform, width, border-radius;
+    }
+    .goo-trail {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: var(--dot);
+      height: var(--dot);
+      margin-top: calc(var(--dot) / -2);
+      margin-left: calc(var(--dot) / -2);
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: center center;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .controls button {
+      font: 600 11px/1 var(--font);
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .controls button:hover { border-color: var(--accent); color: var(--accent); }
+    .controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .controls .step-readout {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .legend {
+      margin-top: 12px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .legend code {
+      font-size: 10px;
+      background: var(--surface);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .prog-pills i { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <filter id="goo" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -12" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="layout">
+    <aside class="side">
+      <h1>Gooey prog pills</h1>
+      <p class="meta">Codrops pagination adapted to midfi <code>.prog-pills</code> slot + dot. Click dots or use arrows.</p>
+      <a href="#ref">Static reference</a>
+      <a href="#a">A · Codrops squash</a>
+      <a href="#b">B · Stretch bridge</a>
+      <a href="#c">C · Split trail</a>
+      <p class="note">
+        <strong>Tokens:</strong> inactive <code>#d8d5e0</code> · active <code>#4d41f0</code> · done @ 38% · 6→18px pill in midfi (8→22px here for goo headroom).<br><br>
+        <strong>Ref:</strong> Lucas Bebber · <a href="https://tympanus.net/Development/CreativeGooeyEffects/pagination.html" target="_blank" rel="noopener">Codrops pagination</a>
+      </p>
+    </aside>
+
+    <main>
+      <section class="chapter" id="ref">
+        <div class="chapter-head">
+          <h2>Static reference · midfi CSS</h2>
+          <p>Current <code>.prog-pills</code> from <code>midfi-shared.css</code>. Width morph only, no goo.</p>
+        </div>
+        <div class="panel">
+          <div class="phone-strip">
+            <div class="nav-row">
+              <span class="back-min" aria-hidden="true">‹</span>
+              <div class="prog-pills" id="static-pills">
+                <i class="on"></i><i></i><i></i><i></i>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button type="button" data-static-prev>← Prev</button>
+            <button type="button" class="primary" data-static-next>Next →</button>
+            <span class="step-readout" id="static-readout">Act step 1 / 4</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" id="a">
+        <div class="chapter-head">
+          <h2>A · Codrops squash</h2>
+          <p>Faithful port: one pill blob slides along the track. Squash/stretch via scale peaks mid-travel (Bebber <code>updatePos</code> logic).</p>
+        </div>
+        <div class="panel">
+          <div class="phone-strip">
+            <div class="nav-row">
+              <span class="back-min" aria-hidden="true">‹</span>
+              <div class="goo-wrap">
+                <div class="goo-nav" data-goo="squash" data-index="0" aria-label="Quiz progress">
+                  <button type="button" class="goo-slot" aria-label="Step 1"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 2"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 3"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 4"></button>
+                  <div class="goo-current" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button type="button" data-goo-prev="squash">← Prev</button>
+            <button type="button" class="primary" data-goo-next="squash">Next →</button>
+            <button type="button" data-goo-play="squash">Auto loop</button>
+            <span class="step-readout" data-goo-readout="squash">Act step 1 / 4</span>
+          </div>
+          <p class="legend">Pill stays fixed width. Liquid feel comes from uniform scale pulse (up to ~1.4×) as the blob passes between slots.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="b">
+        <div class="chapter-head">
+          <h2>B · Stretch bridge</h2>
+          <p>Width morphs during travel: pill elongates across the gap, then snaps back to slot width at the destination.</p>
+        </div>
+        <div class="panel">
+          <div class="phone-strip">
+            <div class="nav-row">
+              <span class="back-min" aria-hidden="true">‹</span>
+              <div class="goo-wrap">
+                <div class="goo-nav" data-goo="stretch" data-index="0" aria-label="Quiz progress">
+                  <button type="button" class="goo-slot" aria-label="Step 1"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 2"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 3"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 4"></button>
+                  <div class="goo-current" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button type="button" data-goo-prev="stretch">← Prev</button>
+            <button type="button" class="primary" data-goo-next="stretch">Next →</button>
+            <button type="button" data-goo-play="stretch">Auto loop</button>
+            <span class="step-readout" data-goo-readout="stretch">Act step 1 / 4</span>
+          </div>
+          <p class="legend">Best match for slot ↔ dot: the active shape literally becomes a bridge, goo filter merges it with idle dots it passes over.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="c">
+        <div class="chapter-head">
+          <h2>C · Split trail</h2>
+          <p>Departing slot leaves a shrinking circle while the pill travels. Two blobs in the goo layer briefly, then reunite as one pill.</p>
+        </div>
+        <div class="panel">
+          <div class="phone-strip">
+            <div class="nav-row">
+              <span class="back-min" aria-hidden="true">‹</span>
+              <div class="goo-wrap">
+                <div class="goo-nav" data-goo="split" data-index="0" aria-label="Quiz progress">
+                  <button type="button" class="goo-slot" aria-label="Step 1"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 2"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 3"></button>
+                  <button type="button" class="goo-slot" aria-label="Step 4"></button>
+                  <div class="goo-trail" aria-hidden="true"></div>
+                  <div class="goo-current" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button type="button" data-goo-prev="split">← Prev</button>
+            <button type="button" class="primary" data-goo-next="split">Next →</button>
+            <button type="button" data-goo-play="split">Auto loop</button>
+            <span class="step-readout" data-goo-readout="split">Act step 1 / 4</span>
+          </div>
+          <p class="legend">Most "liquid" of the three: visible separation and rejoin. Slightly busier; good for hero moments, maybe heavy for every step.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var DOT = 8;
+      var PILL_W = 22;
+      var PILL_H = 8;
+      var PITCH = 12;
+      var DURATION = 560;
+      var loops = {};
+
+      function centerX(index) {
+        return index * PITCH + PITCH / 2;
+      }
+
+      function pillLeft(index) {
+        return centerX(index) - PILL_W / 2;
+      }
+
+      function dotLeft(index) {
+        return centerX(index) - DOT / 2;
+      }
+
+      function easeOutQuint(t) {
+        return 1 - Math.pow(1 - t, 5);
+      }
+
+      function easeOutElastic(t) {
+        if (t === 0 || t === 1) return t;
+        var p = 0.45;
+        return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+      }
+
+      function tween(from, to, duration, onUpdate, onComplete, easeFn) {
+        var start = null;
+        function frame(now) {
+          if (start === null) start = now;
+          var t = Math.min(1, (now - start) / duration);
+          var eased = (easeFn || easeOutQuint)(t);
+          onUpdate(from + (to - from) * eased, t, eased);
+          if (t < 1) requestAnimationFrame(frame);
+          else if (onComplete) onComplete();
+        }
+        requestAnimationFrame(frame);
+      }
+
+      function updateSlotStates(nav, index) {
+        var slots = nav.querySelectorAll(".goo-slot");
+        slots.forEach(function (slot, i) {
+          slot.classList.toggle("is-active", i === index);
+          slot.classList.toggle("is-done", i < index);
+        });
+        nav.dataset.index = String(index);
+        var readout = document.querySelector('[data-goo-readout="' + nav.dataset.goo + '"]');
+        if (readout) readout.textContent = "Act step " + (index + 1) + " / 4";
+      }
+
+      function setIdlePill(nav, index) {
+        var current = nav.querySelector(".goo-current");
+        var trail = nav.querySelector(".goo-trail");
+        current.style.transform = "translate3d(" + pillLeft(index) + "px,0,0) scale(1,1)";
+        current.style.width = PILL_W + "px";
+        current.style.borderRadius = "4px";
+        if (trail) {
+          trail.style.opacity = "0";
+          trail.style.transform = "translate3d(" + dotLeft(index) + "px,0,0) scale(1)";
+        }
+        updateSlotStates(nav, index);
+      }
+
+      function animateSquash(nav, from, to) {
+        var current = nav.querySelector(".goo-current");
+        var startX = pillLeft(from);
+        var endX = pillLeft(to);
+        var spacing = Math.abs(endX - startX) || PITCH;
+        var half = spacing / 2;
+        var animating = true;
+        nav.dataset.animating = "1";
+
+        tween(startX, endX, DURATION, function (x, t) {
+          var pos = x - startX;
+          var scale = Math.abs(pos) % spacing;
+          if (scale > half) scale = half - (scale - half);
+          scale = 1 - (scale / half) * 0.35;
+          var sx = scale * 1.55;
+          var sy = scale * 0.82;
+          current.style.transform = "translate3d(" + x + "px,0,0) scale(" + sx + "," + sy + ")";
+        }, function () {
+          current.style.transform = "translate3d(" + endX + "px,0,0) scale(1,1)";
+          nav.dataset.animating = "0";
+          updateSlotStates(nav, to);
+        });
+      }
+
+      function animateStretch(nav, from, to) {
+        var current = nav.querySelector(".goo-current");
+        var startX = pillLeft(from);
+        var endX = pillLeft(to);
+        var dir = to > from ? 1 : -1;
+        var gap = Math.abs(to - from) * PITCH;
+        nav.dataset.animating = "1";
+
+        tween(0, 1, DURATION, function (_, t) {
+          var x = startX + (endX - startX) * t;
+          var bridge = 1 - Math.abs(0.5 - t) * 2;
+          var w = PILL_W + gap * bridge * 0.85;
+          var left = dir > 0 ? x : x - (w - PILL_W);
+          var sy = 1 - bridge * 0.18;
+          current.style.width = w + "px";
+          current.style.borderRadius = (4 + bridge * 3) + "px";
+          current.style.transform = "translate3d(" + left + "px,0,0) scale(1," + sy + ")";
+        }, function () {
+          current.style.width = PILL_W + "px";
+          current.style.borderRadius = "4px";
+          current.style.transform = "translate3d(" + endX + "px,0,0) scale(1,1)";
+          nav.dataset.animating = "0";
+          updateSlotStates(nav, to);
+        });
+      }
+
+      function animateSplit(nav, from, to) {
+        var current = nav.querySelector(".goo-current");
+        var trail = nav.querySelector(".goo-trail");
+        var startX = pillLeft(from);
+        var endX = pillLeft(to);
+        nav.dataset.animating = "1";
+
+        trail.style.opacity = "1";
+        trail.style.transform = "translate3d(" + dotLeft(from) + "px,0,0) scale(1)";
+
+        tween(0, 1, DURATION, function (_, t) {
+          var x = startX + (endX - startX) * easeOutQuint(t);
+          var split = Math.sin(t * Math.PI);
+          var trailScale = 1 - t * 0.92;
+          var trailFade = 1 - t;
+          var sx = 1 + split * 0.35;
+          var sy = 1 - split * 0.2;
+          current.style.transform = "translate3d(" + x + "px,0,0) scale(" + sx + "," + sy + ")";
+          trail.style.opacity = String(Math.max(0, trailFade * 0.95));
+          trail.style.transform = "translate3d(" + dotLeft(from) + "px,0,0) scale(" + trailScale + ")";
+        }, function () {
+          current.style.transform = "translate3d(" + endX + "px,0,0) scale(1,1)";
+          trail.style.opacity = "0";
+          nav.dataset.animating = "0";
+          updateSlotStates(nav, to);
+        }, easeOutQuint);
+      }
+
+      function goTo(nav, nextIndex) {
+        if (nav.dataset.animating === "1") return;
+        var current = parseInt(nav.dataset.index || "0", 10);
+        if (nextIndex === current) return;
+        nextIndex = Math.max(0, Math.min(3, nextIndex));
+        var mode = nav.dataset.goo;
+        if (mode === "squash") animateSquash(nav, current, nextIndex);
+        else if (mode === "stretch") animateStretch(nav, current, nextIndex);
+        else animateSplit(nav, current, nextIndex);
+      }
+
+      function bindGoo(nav) {
+        setIdlePill(nav, 0);
+        nav.querySelectorAll(".goo-slot").forEach(function (slot, i) {
+          slot.addEventListener("click", function () { goTo(nav, i); });
+        });
+      }
+
+      document.querySelectorAll("[data-goo]").forEach(bindGoo);
+
+      document.querySelectorAll("[data-goo-prev]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var nav = document.querySelector('[data-goo="' + btn.dataset.gooPrev + '"]');
+          goTo(nav, parseInt(nav.dataset.index, 10) - 1);
+        });
+      });
+      document.querySelectorAll("[data-goo-next]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var nav = document.querySelector('[data-goo="' + btn.dataset.gooNext + '"]');
+          goTo(nav, parseInt(nav.dataset.index, 10) + 1);
+        });
+      });
+
+      document.querySelectorAll("[data-goo-play]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var key = btn.dataset.gooPlay;
+          var nav = document.querySelector('[data-goo="' + key + '"]');
+          if (loops[key]) {
+            clearInterval(loops[key]);
+            loops[key] = null;
+            btn.textContent = "Auto loop";
+            return;
+          }
+          btn.textContent = "Stop loop";
+          loops[key] = setInterval(function () {
+            if (nav.dataset.animating === "1") return;
+            var i = parseInt(nav.dataset.index, 10);
+            goTo(nav, i >= 3 ? 0 : i + 1);
+          }, 900);
+        });
+      });
+
+      /* Static reference */
+      var staticIndex = 0;
+      var staticPills = document.getElementById("static-pills");
+      var staticReadout = document.getElementById("static-readout");
+
+      function renderStatic() {
+        var items = staticPills.querySelectorAll("i");
+        items.forEach(function (el, i) {
+          el.className = i < staticIndex ? "done" : i === staticIndex ? "on" : "";
+        });
+        staticReadout.textContent = "Act step " + (staticIndex + 1) + " / 4";
+      }
+
+      document.querySelector("[data-static-prev]").addEventListener("click", function () {
+        staticIndex = Math.max(0, staticIndex - 1);
+        renderStatic();
+      });
+      document.querySelector("[data-static-next]").addEventListener("click", function () {
+        staticIndex = Math.min(3, staticIndex + 1);
+        renderStatic();
+      });
+      renderStatic();
+
+      /* Sidebar active link */
+      var links = document.querySelectorAll(".side a[href^='#']");
+      function markNav() {
+        var y = window.scrollY + 80;
+        var current = links[0];
+        links.forEach(function (a) {
+          var el = document.querySelector(a.getAttribute("href"));
+          if (el && el.offsetTop <= y) current = a;
+        });
+        links.forEach(function (a) { a.classList.toggle("active", a === current); });
+      }
+      window.addEventListener("scroll", markNav, { passive: true });
+      markNav();
+    })();
+  </script>
+</body>
+</html>

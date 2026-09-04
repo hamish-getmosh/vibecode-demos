@@ -1,0 +1,20 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "trust",
+  "required": ["screenId", "headline", "progress", "ctaLabel"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "showSubhead": { "type": "boolean", "default": false },
+    "motionVariant": { "type": "string", "default": "bridge", "enum": ["bridge"] },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "ctaLabel": "string",
+    "trustpilot": {
+      "type": "string | boolean",
+      "default": "prominent",
+      "description": "prominent = compact row below CTA; true = embed widget row"
+    },
+    "legal": { "type": "boolean", "default": false }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "componentKey": "loader-stack",
+  "framerCodeFile": "QuizLoaderStack.tsx",
+  "framerComponentId": "codeFile/KND7sAT:default",
+  "pulledAt": "2026-09-02T12:21:17.534646+00:00",
+  "stackTokens": {
+    "paddingY": 16,
+    "paddingX": 24,
+    "borderRadius": 12,
+    "iconGap": 16,
+    "iconSize": 22,
+    "labelFont": {
+      "fontSize": "16px",
+      "variant": "Medium",
+      "letterSpacing": "-0.01em",
+      "lineHeight": "1.2em",
+      "fontFamily": "Figtree",
+      "fontWeight": 500
+    },
+    "waiting": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "#8b86b0",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0"
+    },
+    "loading": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "rgb(77, 65, 240)",
+      "iconFill": "rgba(0, 0, 0, 0)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0",
+      "spinnerSize": 18,
+      "spinnerStroke": 2,
+      "spinnerDurationMs": 750,
+      "boxShadow": "#e2e0e8"
+    },
+    "completed": {
+      "rowFill": "rgb(77, 65, 240)",
+      "labelColor": "rgb(236, 239, 255)",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "checkColor": "rgb(77, 65, 240)",
+      "checkSize": 12,
+      "checkStroke": 4,
+      "spinnerColor": "#4d41f0"
+    }
+  },
+  "rowGap": 8,
+  "defaultStepMs": 950,
+  "pauseAfterCompleteMs": 1500,
+  "steps": [
+    {
+      "label": "BMI range",
+      "durationMs": 900
+    },
+    {
+      "label": "Health profile",
+      "durationMs": 1100
+    },
+    {
+      "label": "Confirming eligibility",
+      "durationMs": 800
+    }
+  ]
+}

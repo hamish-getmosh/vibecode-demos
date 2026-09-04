@@ -9,6 +9,7 @@ Interactive HTML demos and ideation runs, shareable without Cursor.
 | Demo | Date | Browse | Prototype |
 |---|---|---|---|
 | Experiment platform ideation | 2026-07-29 | [folder](experiment-platform/2026-07-29/) | [open prototype](https://hamish-getmosh.github.io/vibecode-demos/experiment-platform/2026-07-29/prototype/index.html) |
+| MOSHY MY quiz 002 onboarding mixboard | 2026-09-04 | [folder](moshy-my-onboarding-quiz/2026-09-04/) | [open mixboard](https://hamish-getmosh.github.io/vibecode-demos/moshy-my-onboarding-quiz/2026-09-04/boards/mixboard.html) |
 
 Each dated folder is a self-contained snapshot. Open its README for preview instructions and what to click through.
 

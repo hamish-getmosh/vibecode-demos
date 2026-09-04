@@ -1,0 +1,113 @@
+@import url("../../components/weight-chart/component.css");
+
+/* Stat reveal · Layout E · centred hero · no nav chrome · full-bleed chart */
+
+html.frame-preview .phone--stat-reveal {
+  height: 100%;
+}
+
+html.frame-preview .phone--stat-reveal .quiz-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+html.frame-preview .quiz-main--stat-reveal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  min-height: 0;
+}
+
+html.frame-preview .reveal-stat-zone,
+html.frame-preview .reveal-eyebrow,
+html.frame-preview .reveal-lead,
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="eyebrow"],
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="lead"],
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="statBlock"] {
+  text-align: center;
+}
+
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="eyebrow"],
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="lead"],
+html.frame-preview .quiz-main--stat-reveal .mnode[data-k="statBlock"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+html.frame-preview .quiz-main--stat-reveal .mnode {
+  will-change: transform, opacity;
+}
+
+html.frame-preview .reveal-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, #4d41f0);
+}
+
+html.frame-preview .reveal-lead {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--muted, #8b86b0);
+  max-width: 30ch;
+}
+
+html.frame-preview .stat-hero {
+  margin: 0;
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--accent, #4d41f0);
+}
+
+html.frame-preview .stat-hero .unit {
+  font-size: 0.45em;
+}
+
+html.frame-preview .stat-sub {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink, #312c62);
+}
+
+html.frame-preview .stat-sub em {
+  display: block;
+  margin-top: 3px;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted, #8b86b0);
+}
+
+html.frame-preview .chart-fullbleed {
+  width: 100%;
+  max-width: none;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+
+html.frame-preview .chart-fullbleed .weight-chart {
+  height: 128px;
+  width: 100%;
+}
+
+html.frame-preview .chart-fullbleed .weight-chart .axis-label {
+  padding: 0 var(--nav-pad-x, 32px);
+}
+
+html.frame-preview .phone--stat-reveal .footer-dock {
+  flex-shrink: 0;
+}

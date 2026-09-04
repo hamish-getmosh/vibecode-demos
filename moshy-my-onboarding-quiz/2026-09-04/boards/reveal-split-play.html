@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Stat reveal + reframe · Split play</title>
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62; --muted: #8b86b0; --ground: #fcfcfc; --surface: #f4f3f6;
+      --accent: #4d41f0; --accent-soft: #ece9ff; --ruby: #9a0239; --border: #e2e0e8;
+      --phone-w: 390px; --phone-h: 844px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+      --pill-display: "Area Inktrap", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink);
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 40px;
+    }
+    .toolbar {
+      width: 100%; max-width: var(--phone-w); display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px; margin-bottom: 12px;
+    }
+    .toolbar h1 { margin: 0; font-size: 15px; }
+    .toolbar p { margin: 2px 0 0; font-size: 11px; color: var(--muted); line-height: 1.45; }
+    .toolbar a { color: var(--accent); }
+    .screen-tabs { display: flex; gap: 6px; flex-shrink: 0; }
+    .screen-tabs button {
+      border: 1px solid var(--border); background: #fff; border-radius: 999px;
+      padding: 8px 12px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .screen-tabs button.is-active { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+    .screen-label {
+      width: 100%; max-width: var(--phone-w); font-size: 10px; font-weight: 600;
+      color: var(--accent); text-align: center; margin-bottom: 8px; min-height: 14px;
+    }
+    .phone-shell {
+      width: var(--phone-w); height: var(--phone-h); border: 2px solid var(--ink); border-radius: 24px;
+      overflow: hidden; background: var(--ground); box-shadow: 0 12px 40px rgba(49, 44, 98, 0.12);
+      position: relative;
+    }
+    .screen-panel {
+      position: absolute; inset: 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .screen-panel.is-active { opacity: 1; pointer-events: auto; }
+    .reveal-phone {
+      width: 100%; height: 100%; background: var(--ground);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .nav-shell {
+      padding: 12px 16px 0; display: grid; grid-template-columns: 32px 1fr 32px; align-items: center;
+    }
+    .back-btn {
+      width: 32px; height: 32px; border: none; background: none; border-radius: 8px;
+      font-size: 18px; color: var(--ink); cursor: pointer; font-family: inherit;
+      visibility: hidden;
+    }
+    .back-btn.is-visible { visibility: visible; }
+    .back-btn:hover { background: var(--surface); }
+    .prog-pills { display: flex; gap: 6px; justify-content: center; }
+    .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .prog-pills i.done { background: var(--accent); }
+    .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .stage {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 20px 8px; text-align: center; overflow: hidden;
+    }
+    .stage--reframe {
+      align-items: flex-start; text-align: left; justify-content: center; padding: 0 24px 8px;
+    }
+    .mnode { will-change: transform, opacity; }
+    .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+    .lead { font-size: 16px; line-height: 1.45; color: var(--muted); margin: 0 0 4px; max-width: 30ch; }
+    .stat-hero { font-family: var(--display); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--accent); margin: 0; font-size: 72px; }
+    .stat-hero .unit { font-size: 0.45em; }
+    .stat-sub { font-size: 15px; line-height: 1.4; margin: 6px 0 0; color: var(--ink); }
+    .stat-sub em { font-style: normal; display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .chart-wrap { width: 100%; max-width: 280px; margin-top: 10px; }
+    .weight-chart { height: 120px; position: relative; }
+    .weight-chart svg { width: 100%; height: 100%; display: block; }
+    .weight-chart .main { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .weight-chart .fill { opacity: 0; }
+    .weight-chart .axis-label { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-top: 4px; }
+    .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; }
+    .start-dot { left: 2%; top: 18%; }
+    .end-dot { right: 2%; bottom: 22%; }
+    .bridge { font-family: var(--display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0; max-width: 24ch; }
+    .bridge-sub { font-size: 15px; line-height: 1.45; color: var(--muted); margin: 8px 0 0; max-width: 28ch; }
+    .pill-wrap { margin-top: 18px; }
+    .pace-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .pace-duo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+    .pace-or {
+      font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.02em;
+      padding: 0 2px;
+    }
+    .daily-pill { display: inline-flex; align-items: baseline; gap: 5px; background: var(--accent-soft); border-radius: 14px; padding: 10px 16px; }
+    .daily-pill .num { font-family: var(--pill-display); font-size: 38px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .daily-pill .lbl { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .daily-pill--week .num { font-size: 34px; }
+    .reframe { font-size: 14px; line-height: 1.5; color: var(--muted); margin: 16px 0 0; max-width: 32ch; }
+    .reframe strong { color: var(--ink); }
+    .reframe-note { font-size: 11px; color: var(--muted); margin: 10px 0 0; max-width: 32ch; }
+    .footer-dock { flex-shrink: 0; padding: 10px 20px 16px; border-top: 1px solid var(--border); }
+    .cta {
+      width: 100%; border: none; border-radius: 999px; background: var(--ruby); color: #fff;
+      font-size: 15px; font-weight: 600; padding: 14px 18px; font-family: inherit; cursor: pointer;
+    }
+    .proto-hint {
+      max-width: var(--phone-w); margin-top: 16px; font-size: 10px; color: var(--muted);
+      text-align: center; line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <h1>Split play · G motion</h1>
+      <p>3.9 stat reveal → 3.10 reframe · <a href="reveal-motion-concepts.html#g">Motion board</a></p>
+    </div>
+    <div class="screen-tabs">
+      <button type="button" id="tab-stat" class="is-active">3.9 Stat</button>
+      <button type="button" id="tab-reframe">3.10 Reframe</button>
+    </div>
+  </div>
+  <div class="screen-label" id="screen-label">Screen 3.9 · Stat reveal</div>
+
+  <div class="phone-shell">
+    <div class="screen-panel is-active" id="panel-stat">
+      <div class="reveal-phone" data-variant="statFadeHold" id="phone-stat">
+        <div class="nav-shell">
+          <span aria-hidden="true"></span>
+          <div class="prog-pills" data-pills="stat"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>
+          <span aria-hidden="true"></span>
+        </div>
+        <div class="stage" data-stage>
+          <div class="mnode" data-k="eyebrow"><p class="eyebrow">Your 12-month estimate</p></div>
+          <div class="mnode" data-k="lead"><p class="lead">At your current weight, with Moshy you could lose up to</p></div>
+          <div class="mnode" data-k="statBlock">
+            <p class="stat-hero mnode" data-k="stat"><span data-stat-num>0</span><span class="unit">kg</span></p>
+            <p class="stat-sub mnode" data-k="sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>
+          </div>
+          <div class="mnode chart-wrap" data-k="chart">
+            <div class="weight-chart">
+              <div class="dot start-dot mnode" data-k="startDot"></div>
+              <div class="dot end-dot mnode" data-k="endDot"></div>
+              <svg viewBox="0 0 300 140" preserveAspectRatio="none">
+                <defs><linearGradient id="statGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4d41f0" stop-opacity="0.2"/><stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/>
+                </linearGradient></defs>
+                <path class="fill" data-chart-fill pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118 L278,132 L12,132 Z" fill="url(#statGrad)"/>
+                <path class="main" data-chart-line pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118"/>
+              </svg>
+              <div class="axis-label mnode" data-k="axis"><span>Today</span><span>12 months</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-dock">
+          <div class="mnode" data-k="cta"><button type="button" class="cta" id="btn-continue">Continue</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-panel" id="panel-reframe">
+      <div class="reveal-phone" data-variant="reframeFadeHold" id="phone-reframe">
+        <div class="nav-shell">
+          <button type="button" class="back-btn is-visible" id="btn-back" aria-label="Back to stat reveal">←</button>
+          <div class="prog-pills" data-pills="reframe"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></div>
+          <span aria-hidden="true"></span>
+        </div>
+        <div class="stage stage--reframe" data-stage>
+          <div class="mnode bridge-wrap" data-k="bridge">
+            <p class="bridge">14 kg sounds like a lot.</p>
+            <p class="bridge-sub">Spread over 12 months, the average works out to about:</p>
+          </div>
+          <div class="mnode pill-wrap" data-k="pill">
+            <div class="pace-stack">
+              <div class="pace-duo">
+                <div class="daily-pill"><span class="num">40</span><span class="lbl">grams / day</span></div>
+                <span class="pace-or">or</span>
+                <div class="daily-pill daily-pill--week"><span class="num">300</span><span class="lbl">grams / week</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="reframe mnode" data-k="reframe">Some weeks you'll lose more, some less. That's normal. It's the average over time that counts, not any single week.</p>
+          <p class="reframe-note">Estimate only · your pace will vary</p>
+        </div>
+        <div class="footer-dock">
+          <div class="mnode" data-k="cta"><button type="button" class="cta">How it works →</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="proto-hint">Tap <strong>Continue</strong> or use the tabs above · ← back on reframe · Same fade-rise entrances as G · no shrink or hide after landing</p>
+
+  <script src="../frames/shared/reveal-motion-engine.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var panelStat = document.getElementById("panel-stat");
+      var panelReframe = document.getElementById("panel-reframe");
+      var tabStat = document.getElementById("tab-stat");
+      var tabReframe = document.getElementById("tab-reframe");
+      var screenLabel = document.getElementById("screen-label");
+      var active = "stat";
+
+      var instStat = RevealMotion.mount(document.getElementById("phone-stat"), { loop: false });
+      var instReframe = RevealMotion.mount(document.getElementById("phone-reframe"), { loop: false, autoplay: false });
+
+      function showScreen(name) {
+        active = name;
+        var isStat = name === "stat";
+        panelStat.classList.toggle("is-active", isStat);
+        panelReframe.classList.toggle("is-active", !isStat);
+        tabStat.classList.toggle("is-active", isStat);
+        tabReframe.classList.toggle("is-active", !isStat);
+        screenLabel.textContent = isStat
+          ? "Screen 3.9 · Stat reveal"
+          : "Screen 3.10 · 300g reframe";
+        if (history.replaceState) {
+          history.replaceState(null, "", "#" + name);
+        }
+        if (isStat) {
+          instReframe.stop();
+          instStat.play();
+        } else {
+          instStat.stop();
+          instReframe.play();
+        }
+      }
+
+      document.getElementById("btn-continue").addEventListener("click", function () {
+        showScreen("reframe");
+      });
+      document.getElementById("btn-back").addEventListener("click", function () {
+        showScreen("stat");
+      });
+      tabStat.addEventListener("click", function () { showScreen("stat"); });
+      tabReframe.addEventListener("click", function () { showScreen("reframe"); });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" && active === "stat") { e.preventDefault(); showScreen("reframe"); }
+        if (e.key === "ArrowLeft" && active === "reframe") { e.preventDefault(); showScreen("stat"); }
+      });
+
+      var hash = (location.hash || "").replace("#", "");
+      showScreen(hash === "reframe" ? "reframe" : "stat");
+    })();
+  </script>
+</body>
+</html>

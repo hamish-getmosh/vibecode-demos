@@ -1,0 +1,33 @@
+{
+  "screenId": "s-36f",
+  "template": "radio",
+  "title": "Menopause",
+  "headline": "Are you in perimenopause or menopause?",
+  "subhead": "Hormonal changes can affect weight \u2014 we factor this into your estimate.",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "Not that I'm aware of",
+      "selected": false
+    },
+    {
+      "label": "Maybe / perimenopause",
+      "selected": true
+    },
+    {
+      "label": "Yes, menopause",
+      "selected": false
+    },
+    {
+      "label": "Prefer not to say",
+      "selected": false
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

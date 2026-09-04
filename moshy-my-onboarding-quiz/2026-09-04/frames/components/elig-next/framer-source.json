@@ -1,0 +1,55 @@
+{
+  "componentKey": "elig-next",
+  "framerComponentId": "X0igXYgRo",
+  "framerDisplayName": "Quiz/Quiz Elig Next",
+  "pulledAt": "2026-09-02T12:51:46.469556+00:00",
+  "styles": {
+    "sectionLabel": {
+      "color": "rgba(49, 44, 98, 0.62)",
+      "fontFamily": "Figtree",
+      "fontSize": "13px",
+      "fontWeight": 600,
+      "lineHeight": "1.3em",
+      "letterSpacing": "0.02em",
+      "textTransform": "uppercase"
+    },
+    "card": {
+      "radius": "16px",
+      "fill": "rgb(255, 255, 255)",
+      "boxShadow": "0px 10px 36px 0px rgba(77, 65, 240, 0.14), 0px 2px 8px 0px rgba(49, 44, 98, 0.06)"
+    },
+    "row": {
+      "padding": "12px 16px 12px 16px",
+      "borderBottom": null,
+      "gap": null
+    },
+    "rowLabel": {
+      "color": "rgb(49, 44, 98)",
+      "fontFamily": "Figtree",
+      "fontSize": "15px",
+      "fontWeight": 500,
+      "lineHeight": "1.35em"
+    },
+    "statusPill": {
+      "padding": "4px 10px 4px 10px",
+      "radius": "999px",
+      "fill": "rgb(236, 233, 255)"
+    },
+    "statusText": {
+      "color": "rgb(77, 65, 240)",
+      "fontFamily": "Figtree",
+      "fontSize": "11px",
+      "fontWeight": 700,
+      "lineHeight": "1em",
+      "letterSpacing": "0.04em",
+      "textTransform": "uppercase"
+    }
+  },
+  "controls": {
+    "$control__sectionLabel": "Next",
+    "$control__rowLabel": "Calculate how much weight I could lose",
+    "$control__statusLabel": "Next step"
+  },
+  "framerInstanceId": "EG9Mqa3V4",
+  "framerPreviewNodeId": "IaB64iAP4"
+}

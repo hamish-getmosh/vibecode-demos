@@ -1,0 +1,21 @@
+{
+  "screenId": "s-31",
+  "template": "loader",
+  "title": "Checking eligibility",
+  "headline": "One moment",
+  "subhead": "Checking your BMI and health profile.",
+  "showSubhead": true,
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "steps": [
+    { "label": "BMI range", "durationMs": 900 },
+    { "label": "Health profile", "durationMs": 1100 },
+    { "label": "Confirming eligibility", "durationMs": 800 }
+  ],
+  "defaultStepMs": 950,
+  "pauseAfterCompleteMs": 1500,
+  "trustpilot": false
+}

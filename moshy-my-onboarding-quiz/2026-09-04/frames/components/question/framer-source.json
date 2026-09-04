@@ -1,0 +1,31 @@
+{
+  "componentKey": "question",
+  "framerComponentId": "riceymdsf",
+  "framerDisplayName": "Quiz/Quiz Headline",
+  "pulledAt": "2026-09-02T11:07:30.775969+00:00",
+  "styles": {
+    "gap": "8px",
+    "headline": {
+      "color": "rgb(49, 44, 98)",
+      "fontFamily": "Area Inktrap",
+      "fontSize": "25px",
+      "fontWeight": 700,
+      "lineHeight": "1.2em",
+      "letterSpacing": "-0.02em"
+    },
+    "subhead": {
+      "color": "var(--ink-muted)",
+      "fontFamily": "Figtree",
+      "fontSize": "16px",
+      "fontWeight": 400,
+      "lineHeight": "1.4em"
+    },
+    "defaultHeadline": "What is your gender?",
+    "defaultSubhead": "For medical purposes."
+  },
+  "controls": {
+    "$control__headline": "What is your gender?",
+    "$control__subhead": "For medical purposes.",
+    "$control__showSubhead": true
+  }
+}

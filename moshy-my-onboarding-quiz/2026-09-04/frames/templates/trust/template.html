@@ -1,0 +1,22 @@
+<div class="phone phone--hifi phone--trust phone--trust-bridge has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--trust">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      {{> usp-cascade-bridge}}
+    </div>
+  </div>
+  <div class="footer-dock footer-dock--trust">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <button class="input-cta" type="button">{{ctaLabel}}</button>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>

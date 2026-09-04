@@ -1,0 +1,20 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "reframe",
+  "required": ["screenId", "bridgeHeadline", "bridgeSub", "gramsPerDay", "gramsPerWeek", "bodyCopy", "ctaLabel", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string",
+    "motionVariant": { "type": "string", "default": "reframeFadeHold" },
+    "bridgeHeadline": "string",
+    "bridgeSub": "string",
+    "gramsPerDay": "number",
+    "gramsPerWeek": "number",
+    "bodyCopy": "string",
+    "disclaimerNote": "string",
+    "ctaLabel": "string",
+    "showBack": { "type": "boolean", "default": true },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "trustpilot": { "type": "boolean", "default": false }
+  }
+}

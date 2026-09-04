@@ -1,0 +1,63 @@
+.profile-win {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--profile-divider, #ebe9ef);
+}
+
+.profile-win:first-child {
+  padding-top: 0;
+}
+
+.profile-win:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-win__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background-color: var(--accent, #4d41f0);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.profile-win__icon--check {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.5l2.5 2.5L16 9.5'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.5l2.5 2.5L16 9.5'/%3E%3C/svg%3E");
+}
+
+.profile-win__icon--trend {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 17l5-5 4 3 7-8'/%3E%3Cpath d='M16 7h4v4'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 17l5-5 4 3 7-8'/%3E%3Cpath d='M16 7h4v4'/%3E%3C/svg%3E");
+}
+
+.profile-win__copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-win__title {
+  margin: 0 0 3px;
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgb(49, 44, 98);
+}
+
+.profile-win__sub {
+  margin: 0;
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(49, 44, 98, 0.62);
+}

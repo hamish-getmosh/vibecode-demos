@@ -1,0 +1,107 @@
+{
+  "version": "2",
+  "screenId": "s-42",
+  "title": "Why GLP-1 may fit you",
+  "matrixRef": "docs/s-42-content-matrix.json",
+  "resolver": "frames/lib/fit-bullets.mjs",
+  "designDirection": "hero-image-plus-3-simple-bullets",
+  "fixed": {
+    "headline": "Why GLP-1 may fit you",
+    "subhead": "Based on your health profile",
+    "disclaimer": "A doctor will confirm what's right for you.",
+    "ctaLabel": "Continue",
+    "trustpilot": true
+  },
+  "hero": {
+    "variant": "gradient-figure",
+    "alt": "Doctor-led weight care illustration",
+    "note": "Framer build: replace gradient figure with photography or brand asset"
+  },
+  "charBudgets": {
+    "headline": 60,
+    "subhead": 40,
+    "bullet": 72,
+    "disclaimer": 80
+  },
+  "bulletCount": 3,
+  "inputs": {
+    "yoYo": {
+      "screenId": "s-34",
+      "field": "yoYo",
+      "values": ["never", "once", "few-times", "yo-yo"]
+    },
+    "harderLately": {
+      "screenId": "s-35",
+      "field": "harderLately",
+      "values": ["no", "a-little", "yes", "unsure"]
+    },
+    "energy": {
+      "screenId": "s-36",
+      "field": "energy",
+      "gender": "male",
+      "values": ["high", "moderate", "low", "exhausted"]
+    },
+    "menopause": {
+      "screenId": "s-36f",
+      "field": "menopause",
+      "gender": "female",
+      "values": ["no", "peri", "menopause", "prefer-not"]
+    }
+  },
+  "slots": [
+    {
+      "id": "yo-yo",
+      "label": "Your pattern",
+      "priority": 1,
+      "input": "yoYo",
+      "triggeredWhen": ["few-times", "yo-yo"],
+      "fallbackWhen": ["never", "once"],
+      "copy": {
+        "triggered": "Diet rebounds often respond to appetite support",
+        "fallback": "Appetite is something your doctor can assess"
+      }
+    },
+    {
+      "id": "metabolic",
+      "label": "Metabolic",
+      "priority": 2,
+      "input": "harderLately",
+      "triggeredWhen": ["a-little", "yes"],
+      "fallbackWhen": ["no", "unsure"],
+      "copy": {
+        "triggered": "Harder lately can mean metabolism, not willpower",
+        "fallback": "Metabolism can shift over time"
+      }
+    },
+    {
+      "id": "energy",
+      "label": "Energy",
+      "priority": 3,
+      "input": "energy",
+      "gender": "male",
+      "triggeredWhen": ["low", "exhausted"],
+      "fallbackWhen": ["high", "moderate"],
+      "copy": {
+        "triggered": "Low energy often links to metabolic slowdown",
+        "fallback": "Energy and metabolism change with age"
+      }
+    },
+    {
+      "id": "hormonal",
+      "label": "Hormonal",
+      "priority": 3,
+      "input": "menopause",
+      "gender": "female",
+      "triggeredWhen": ["peri", "menopause"],
+      "fallbackWhen": ["no", "prefer-not"],
+      "copy": {
+        "triggered": "Hormonal shifts can make weight harder to shift",
+        "fallback": "Hormones can affect how weight comes off"
+      }
+    }
+  ],
+  "genderPaths": {
+    "male": ["yo-yo", "metabolic", "energy"],
+    "female": ["yo-yo", "metabolic", "hormonal"]
+  }
+}

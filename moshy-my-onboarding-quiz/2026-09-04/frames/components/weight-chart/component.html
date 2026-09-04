@@ -1,0 +1,15 @@
+<div class="weight-chart" data-chart-root>
+  <div class="dot start-dot mnode" data-k="startDot"></div>
+  <div class="dot end-dot mnode" data-k="endDot"></div>
+  <svg viewBox="0 0 300 140" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="{{chartGradientId}}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4d41f0" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path class="fill" data-chart-fill pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118 L278,132 L12,132 Z" fill="url(#{{chartGradientId}})"/>
+    <path class="main" data-chart-line pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118"/>
+  </svg>
+  <div class="axis-label mnode" data-k="axis"><span>{{chartAxisStart}}</span><span>{{chartAxisEnd}}</span></div>
+</div>

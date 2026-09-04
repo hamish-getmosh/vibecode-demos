@@ -1,0 +1,8 @@
+<div
+  class="loader-steps"
+  data-loader-steps
+  data-default-step-ms="{{defaultStepMs}}"
+  data-pause-after-complete-ms="{{pauseAfterCompleteMs}}"
+>
+{{#each steps}}<div class="loader-step is-wait" data-loader-step data-duration-ms="{{durationMs}}"><span class="loader-step-icon" aria-hidden="true"></span><span class="loader-step-label">{{label}}</span></div>{{/each}}
+</div>

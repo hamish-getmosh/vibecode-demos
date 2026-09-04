@@ -1,0 +1,60 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh elig-next */
+
+
+.elig-section-label {
+  margin: 0 0 8px;
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(49, 44, 98, 0.62);
+}
+
+.elig-card {
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  box-shadow: 0px 10px 36px 0px rgba(77, 65, 240, 0.14), 0px 2px 8px 0px rgba(49, 44, 98, 0.06);
+  overflow: hidden;
+}
+
+.elig-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.elig-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 12px 16px;
+}
+
+.elig-card__row:last-child {
+  border-bottom: none;
+}
+
+.elig-card__name {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35em;
+  color: rgb(49, 44, 98);
+}
+
+.elig-card__status {
+  flex-shrink: 0;
+  padding: 4px 10px 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.elig-card__status--next {
+  background: rgb(236, 233, 255);
+  color: rgb(77, 65, 240);
+}

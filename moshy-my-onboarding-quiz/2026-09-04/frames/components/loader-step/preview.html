@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Loader step · preview</title>
+  <link rel="stylesheet" href="../preview-lab.css" />
+  <link rel="stylesheet" href="component.css" />
+  <style>
+    .preview-stack { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  </style>
+</head>
+<body class="preview-lab">
+  <div class="preview-pane">
+    <div class="preview-stack">
+      <div class="loader-step is-wait"><span class="loader-step-icon"></span><span class="loader-step-label">BMI range</span></div>
+      <div class="loader-step is-load"><span class="loader-step-icon"></span><span class="loader-step-label">Health profile</span></div>
+      <div class="loader-step is-done"><span class="loader-step-icon"></span><span class="loader-step-label">Confirming eligibility</span></div>
+    </div>
+  </div>
+  <script src="icons.js"></script>
+  <script>
+    document.querySelector(".loader-step.is-load .loader-step-icon").innerHTML = LoaderStepIcons.spinner();
+    document.querySelector(".loader-step.is-done .loader-step-icon").innerHTML = LoaderStepIcons.check();
+  </script>
+</body>
+</html>

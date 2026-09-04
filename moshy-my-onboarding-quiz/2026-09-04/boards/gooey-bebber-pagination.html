@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Bebber gooey pagination (exact port)</title>
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --accent: #4d41f0;
+      --dot-idle: #d8d5e0;
+      --dot-done: rgba(77, 65, 240, 0.38);
+      --border: #e2e0e8;
+      --board: #e8e6ee;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--board);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 8px; font-size: 15px; line-height: 1.25; }
+    .side p { margin: 0 0 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .side a { color: var(--accent); font-size: 11px; }
+    .side ol { margin: 0; padding-left: 18px; font-size: 10px; color: var(--muted); line-height: 1.55; }
+    .side li { margin-bottom: 6px; }
+
+    main { flex: 1; padding: 28px 32px 64px; }
+
+    .panel {
+      max-width: 520px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(49, 44, 98, 0.06);
+    }
+    .panel + .panel { margin-top: 24px; }
+    .panel h2 { margin: 0 0 6px; font-size: 16px; }
+    .panel .sub { margin: 0 0 20px; font-size: 12px; color: var(--muted); }
+
+    .phone-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 96px;
+      padding: 20px 16px;
+      background: var(--ground);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Lucas Bebber · pagination.css (MOSHY colours only) ── */
+    .pagination {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .pagination-navigation {
+      position: relative;
+      text-align: center;
+      font-size: 0;
+      -webkit-filter: url("#goo");
+      filter: url("#goo");
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    .pagination-dot,
+    .pagination-current {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      line-height: 32px;
+      background: var(--dot-idle);
+      border-radius: 50%;
+      margin: 0 13px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      font-family: var(--font);
+      cursor: pointer;
+      vertical-align: top;
+    }
+
+    .pagination-current {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: var(--accent);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .pagination-number {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      -webkit-transform: scale(0.01, 0.01);
+      transform: scale(0.01, 0.01);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      align-items: center;
+    }
+    .controls button {
+      font: 600 11px/1 var(--font);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .controls button:hover { border-color: var(--accent); color: var(--accent); }
+    .controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .controls span { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+    .pagination-dot.is-active-static {
+      background: var(--accent);
+    }
+    .pagination-dot.is-done-static:not(.is-active-static) {
+      background: var(--dot-done);
+    }
+    .pagination--no-numbers .pagination-number {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Bebber gooey pagination</h1>
+      <p>Exact port of Lucas Bebber&apos;s Codrops demo. Same DOM, filter, scale math, Quint ease, elastic dot bounce. MOSHY colours only.</p>
+      <p><a href="https://tympanus.net/Development/CreativeGooeyEffects/pagination.html" target="_blank" rel="noopener">Original demo ↗</a></p>
+      <p><a href="#v1">V1 · Bebber exact</a><br><a href="#v3">V3 · MOSHY</a><br><a href="#v4">V4 · MOSHY tuned</a></p>
+      <p style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:12px"><strong>Two layers:</strong> static dots (front) + sliding goo blob (behind). V3 keeps V1 mechanics; static dot turns blue when active; blob matches dot size.</p>
+      <ol>
+        <li><strong>Rest:</strong> active blob scale 1.4× merged on dot</li>
+        <li><strong>Lead-off:</strong> blob eases right, still welded to old dot</li>
+        <li><strong>Pinch:</strong> scale ~0.91× at midpoint</li>
+        <li><strong>Attach:</strong> blob welds onto new dot</li>
+        <li><strong>Rest:</strong> scale 1.4× on new dot; old dot elastic bounce</li>
+      </ol>
+    </aside>
+
+    <main>
+      <div class="panel" id="v1">
+        <h2>V1 · Bebber exact</h2>
+        <p class="sub">Original scale (1.4× at rest). Gray dot shows through as a ring around the active blob.</p>
+
+        <div class="phone-strip">
+          <div class="pagination" data-pagination="v1">
+            <div class="pagination-navigation">
+              <div class="pagination-current"></div>
+              <div class="pagination-dots">
+                <button type="button" class="pagination-dot" aria-label="Step 1">
+                  <span class="pagination-number">1</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 2">
+                  <span class="pagination-number">2</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 3">
+                  <span class="pagination-number">3</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 4">
+                  <span class="pagination-number">4</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button type="button" data-prev="v1">← Prev</button>
+          <button type="button" class="primary" data-next="v1">Next →</button>
+          <span data-readout="v1">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="v3">
+        <h2>V3 · MOSHY (target)</h2>
+        <p class="sub">Same two-layer Bebber mechanics as V1. Sliding blob is dot-sized (not 1.4×). Static dot at active index fills blue.</p>
+
+        <div class="phone-strip">
+          <div class="pagination" data-pagination="v3">
+            <div class="pagination-navigation">
+              <div class="pagination-current"></div>
+              <div class="pagination-dots">
+                <button type="button" class="pagination-dot" aria-label="Step 1">
+                  <span class="pagination-number">1</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 2">
+                  <span class="pagination-number">2</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 3">
+                  <span class="pagination-number">3</span>
+                </button>
+                <button type="button" class="pagination-dot" aria-label="Step 4">
+                  <span class="pagination-number">4</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button type="button" data-prev="v3">← Prev</button>
+          <button type="button" class="primary" data-next="v3">Next →</button>
+          <span data-readout="v3">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="v4">
+        <h2>V4 · MOSHY tuned</h2>
+        <p class="sub">V3 mechanics, slower (0.95s), rounder goo bridge, no numbers, completed steps in light blue.</p>
+
+        <div class="phone-strip">
+          <div class="pagination pagination--no-numbers" data-pagination="v4">
+            <div class="pagination-navigation">
+              <div class="pagination-current"></div>
+              <div class="pagination-dots">
+                <button type="button" class="pagination-dot" aria-label="Step 1"></button>
+                <button type="button" class="pagination-dot" aria-label="Step 2"></button>
+                <button type="button" class="pagination-dot" aria-label="Step 3"></button>
+                <button type="button" class="pagination-dot" aria-label="Step 4"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button type="button" data-prev="v4">← Prev</button>
+          <button type="button" class="primary" data-next="v4">Next →</button>
+          <span data-readout="v4">Step 1 / 4</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Bebber SVG filter (unchanged values) -->
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" aria-hidden="true" style="position:absolute;pointer-events:none">
+    <defs>
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+      <filter id="goo-soft" x="-35%" y="-35%" width="170%" height="170%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -7" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+  <script>
+    /* pagination.js · Lucas Bebber · init per instance */
+    $(document).ready(function () {
+      function initBebberPagination(root, options) {
+        var scalePeak = options.scalePeak;
+        var paintActiveStatic = options.paintActiveStatic;
+        var paintDoneStatic = options.paintDoneStatic;
+        var showNumbers = options.showNumbers;
+        var duration = options.duration || 0.6;
+        var pinchFactor = options.pinchFactor != null ? options.pinchFactor : 0.35;
+        var travelScaleBoost = options.travelScaleBoost || 0;
+        var gooFilter = options.gooFilter || "goo";
+        var readoutEl = document.querySelector('[data-readout="' + options.id + '"]');
+
+        var $root = $(root);
+        var $nav = $root.find(".pagination-navigation");
+        var $dots = $root.find(".pagination-dot");
+        var $current = $root.find(".pagination-current");
+        $nav.css("filter", "url(#" + gooFilter + ")");
+        var spacing = parseFloat($dots.css("width")) + parseFloat($dots.css("marginLeft")) * 2;
+        var halfSpacing = spacing / 2;
+        var startPos = $dots.eq(0).position().left;
+        var lastItem = 0;
+        var lastItemR = 0;
+        var lastTime = Date.now();
+        var activeIndex = 0;
+
+        $current.data("pos", { x: startPos });
+
+        function updateReadout() {
+          if (readoutEl) readoutEl.textContent = "Step " + (activeIndex + 1) + " / 4";
+        }
+
+        function goToIndex(index) {
+          index = Math.max(0, Math.min($dots.length - 1, index));
+          activeIndex = index;
+          var dest = index * spacing;
+          TweenMax.to($current.data("pos"), duration, {
+            x: startPos + dest,
+            onUpdate: updatePos,
+            onComplete: function () {
+              updatePos();
+              updateReadout();
+            },
+            ease: Quint.easeOut
+          });
+          updateReadout();
+        }
+
+        $dots.click(function () {
+          goToIndex($(this).index());
+        });
+
+        function updatePos() {
+          var pos = $current.data("pos").x - startPos;
+          var scale = pos % spacing;
+          if (scale > halfSpacing) {
+            scale = halfSpacing - (scale - halfSpacing);
+          }
+          scale = 1 - (scale / halfSpacing) * pinchFactor;
+
+          var curItem = pos / spacing;
+          var curItemR = Math.round(curItem);
+          var distFromDot = Math.abs(curItem - curItemR);
+          var travelRound = 1 + travelScaleBoost * Math.sin((distFromDot / 0.5) * (Math.PI / 2));
+
+          TweenMax.set($current, {
+            x: pos + startPos,
+            scale: scale * scalePeak * travelRound,
+            force3D: true
+          });
+
+          $dots.each(function (i) {
+            var $dot = $(this);
+            if (paintDoneStatic) {
+              $dot.toggleClass("is-done-static", i < activeIndex);
+            }
+            if (paintActiveStatic) {
+              $dot.toggleClass("is-active-static", i === curItemR);
+            }
+            if (showNumbers) {
+              var d = i - curItem;
+              var dAbs = Math.abs(d);
+              TweenMax.set($dot.children(".pagination-number"), {
+                scale: Math.max(0, 1 - 2 * dAbs),
+                force3D: true
+              });
+            }
+          });
+
+          var now = Date.now();
+          var diff = now - lastTime;
+          var deltaTime = diff / (1000 / 60);
+          lastTime = now;
+
+          if (lastItemR !== curItemR) {
+            var $bounceDot = $dots.eq(lastItemR);
+            TweenMax.to($bounceDot, 0.1, {
+              x: 70 * ((curItem - lastItem) / deltaTime),
+              ease: Quad.easeOut,
+              onComplete: function () {
+                TweenMax.to($bounceDot, 1, {
+                  x: 0,
+                  ease: Elastic.easeOut,
+                  easeParams: [1.1, 0.5]
+                });
+              }
+            });
+          }
+          lastItem = curItem;
+          lastItemR = curItemR;
+        }
+
+        goToIndex(0);
+
+        document.querySelector('[data-prev="' + options.id + '"]').addEventListener("click", function () {
+          goToIndex(activeIndex - 1);
+        });
+        document.querySelector('[data-next="' + options.id + '"]').addEventListener("click", function () {
+          goToIndex(activeIndex + 1);
+        });
+
+        return { goToIndex: goToIndex };
+      }
+
+      initBebberPagination('[data-pagination="v1"]', {
+        id: "v1",
+        scalePeak: 1.4,
+        paintActiveStatic: false,
+        showNumbers: true
+      });
+
+      initBebberPagination('[data-pagination="v3"]', {
+        id: "v3",
+        scalePeak: 1,
+        paintActiveStatic: true,
+        showNumbers: true
+      });
+
+      initBebberPagination('[data-pagination="v4"]', {
+        id: "v4",
+        scalePeak: 1,
+        paintActiveStatic: true,
+        paintDoneStatic: true,
+        showNumbers: false,
+        duration: 0.95,
+        pinchFactor: 0.18,
+        travelScaleBoost: 0.38,
+        gooFilter: "goo-soft"
+      });
+    });
+  </script>
+</body>
+</html>

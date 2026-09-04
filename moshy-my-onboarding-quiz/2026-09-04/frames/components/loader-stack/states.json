@@ -1,0 +1,10 @@
+{
+  "defaultStepMs": 950,
+  "pauseAfterCompleteMs": 1500,
+  "previewActiveIndex": 1,
+  "steps": [
+    { "label": "BMI range", "durationMs": 900 },
+    { "label": "Health profile", "durationMs": 1100 },
+    { "label": "Confirming eligibility", "durationMs": 800 }
+  ]
+}

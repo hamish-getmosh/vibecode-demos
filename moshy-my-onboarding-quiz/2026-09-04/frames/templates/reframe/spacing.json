@@ -1,0 +1,9 @@
+{
+  "gaps": {
+    "chrome-headline": "lg",
+    "bridge-pill": "md",
+    "pill-body": "md",
+    "body-note": "sm",
+    "content-footer": "lg"
+  }
+}

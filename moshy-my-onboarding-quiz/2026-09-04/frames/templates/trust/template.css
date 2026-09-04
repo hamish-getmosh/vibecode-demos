@@ -1,0 +1,34 @@
+/* tpl-trust · D3 bridge cascade (s-44) */
+@import url("../../components/usp-cascade-bridge/component.css");
+@import url("../../components/trust-compact/component.css");
+
+.phone--hifi.phone--trust .quiz-scroll {
+  padding: 0 var(--nav-pad-x, 32px);
+  overflow: hidden;
+}
+
+.phone--hifi.phone--trust .quiz-main--trust {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.phone--hifi.phone--trust .q-head {
+  font-size: 25px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.phone--hifi.phone--trust .footer-dock--trust {
+  padding-top: 0;
+}
+
+.phone--hifi.phone--trust .footer-dock--trust .trust-compact {
+  margin: 0;
+}
+
+.phone--hifi.phone--trust [data-usp-cascade] {
+  flex: 1;
+  min-height: 0;
+}

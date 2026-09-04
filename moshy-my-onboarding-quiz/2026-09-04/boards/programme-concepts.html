@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · What Moshy does · Programme concepts</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --blue-light: #6e7fe8;
+      --blue-mid: #3d34c4;
+      --blue-deep: #2a2489;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --tp-green: #00b67a;
+      --side-w: 240px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+    .side .note strong { color: var(--ink); }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); max-width: 80ch; }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; scroll-margin-top: 80px; }
+    .art-label { margin-bottom: 8px; min-height: 108px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+    .mobbin-ref { font-size: 9px; color: #6a6488; margin-top: 4px; line-height: 1.45; }
+    .mobbin-ref a { color: var(--accent); text-decoration: none; }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+
+    .prog-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .prog-phone .nav-shell { padding: 12px 32px 0; flex-shrink: 0; }
+    .prog-phone .nav-row { display: flex; align-items: center; gap: 12px; min-height: 28px; }
+    .prog-phone .nav-back {
+      width: 28px; height: 28px; border: 0; border-radius: 8px;
+      background: var(--surface); display: grid; place-items: center;
+      font-size: 18px; color: var(--muted); cursor: default; padding: 0;
+    }
+    .prog-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .prog-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .prog-phone .prog-pills i.done { background: var(--accent); }
+    .prog-phone .prog-pills i.on { background: var(--accent); opacity: 0.4; }
+
+    .prog-phone .quiz-scroll {
+      flex: 1;
+      overflow: hidden;
+      padding: 32px 32px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .prog-phone .quiz-main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+    .prog-phone .q-head {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 8px;
+    }
+    .prog-phone .q-sub {
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0 0 20px;
+      max-width: 32ch;
+    }
+    .prog-phone .q-fine {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+      text-align: center;
+      margin: 16px 0 0;
+      max-width: 28ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .prog-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 12px 32px 20px;
+      background: var(--ground);
+    }
+    .prog-phone .input-cta {
+      border-radius: 999px;
+      background: var(--ruby);
+      color: #fcfcfc;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 16px 28px;
+      box-shadow: 0 8px 24px rgba(154, 2, 57, 0.22);
+      border: 0;
+      width: 100%;
+      cursor: default;
+    }
+    .prog-phone .footer-dock--tp { padding-top: 8px; }
+    .prog-phone .tp-compact {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin: 10px 0 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .prog-phone .tp-compact__stars { color: var(--tp-green); letter-spacing: 1px; font-size: 12px; }
+    .prog-phone .tp-compact strong { color: var(--ink); font-weight: 600; }
+
+    /* A · Checklist rows */
+    .prog-phone .check-list { width: 100%; display: flex; flex-direction: column; }
+    .prog-phone .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .prog-phone .check-row:last-child { border-bottom: 0; }
+    .prog-phone .check-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .prog-phone .check-copy b {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--ink);
+    }
+    .prog-phone .check-copy p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    /* B · Numbered cards */
+    .prog-phone--b .quiz-scroll { padding-top: 24px; }
+    .prog-phone .num-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .prog-phone .num-card {
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 16px 16px 16px 14px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: 0 2px 10px rgba(49, 44, 98, 0.05);
+    }
+    .prog-phone .num-card__badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .prog-phone .num-card:nth-child(1) .num-card__badge { background: var(--blue-light); }
+    .prog-phone .num-card:nth-child(2) .num-card__badge { background: var(--blue-mid); }
+    .prog-phone .num-card:nth-child(3) .num-card__badge { background: var(--blue-deep); }
+    .prog-phone .num-card__title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+      color: var(--ink);
+    }
+    .prog-phone .num-card__body {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+    .prog-phone .num-card__icon {
+      margin-left: auto;
+      font-size: 22px;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    /* C · Programme timeline (selected direction) */
+    .prog-phone--c .quiz-scroll {
+      padding-top: var(--quiz-gap-chrome-headline, 32px);
+    }
+    .prog-phone--c .head-block {
+      margin-bottom: var(--quiz-gap-subhead-content, 32px);
+    }
+    .prog-phone--c .q-head {
+      margin-bottom: var(--quiz-gap-headline-subhead, 8px);
+      max-width: 14ch;
+    }
+    .prog-phone--c .q-sub {
+      margin: 0;
+      max-width: 26ch;
+      font-size: 15px;
+    }
+    .prog-phone--c .q-kicker {
+      display: inline-block;
+      margin: 0 0 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .prog-phone--c .timeline {
+      position: relative;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      column-gap: 16px;
+      align-items: stretch;
+    }
+    .prog-phone--c .timeline__spine {
+      position: relative;
+      min-height: 100%;
+    }
+    .prog-phone--c .timeline__track {
+      position: absolute;
+      top: 28px;
+      bottom: 28px;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 38%, var(--border) 38%, var(--border) 100%);
+    }
+    .prog-phone--c .timeline__nodes {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      padding: 22px 0;
+    }
+    .prog-phone--c .timeline__node {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      box-shadow: 0 0 0 4px var(--ground);
+      flex-shrink: 0;
+    }
+    .prog-phone--c .timeline__node--on {
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--ground), 0 0 0 6px rgba(77, 65, 240, 0.18);
+    }
+
+    .prog-phone--c .timeline__steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .prog-phone--c .step-card {
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: 0 2px 12px rgba(49, 44, 98, 0.06);
+    }
+    .prog-phone--c .step-card--lead {
+      border-color: rgba(77, 65, 240, 0.22);
+      box-shadow: 0 6px 24px rgba(77, 65, 240, 0.1);
+    }
+    .prog-phone--c .step-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+    }
+    .prog-phone--c .step-thumb svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--ink);
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .prog-phone--c .step-thumb--med {
+      background: linear-gradient(160deg, #f3f1ff 0%, #e4dfff 100%);
+    }
+    .prog-phone--c .step-thumb--med svg { stroke: var(--blue-mid); }
+    .prog-phone--c .step-thumb--doc {
+      background: linear-gradient(160deg, #eef3ff 0%, #dce8ff 100%);
+    }
+    .prog-phone--c .step-thumb--doc svg { stroke: #3d5a9e; }
+    .prog-phone--c .step-thumb--ship {
+      background: linear-gradient(160deg, #fdf0f5 0%, #f5dce8 100%);
+    }
+    .prog-phone--c .step-thumb--ship svg { stroke: #9a4570; }
+
+    .prog-phone--c .step-copy { flex: 1; min-width: 0; padding-top: 2px; }
+    .prog-phone--c .step-copy__kicker {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .prog-phone--c .step-copy__title {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--ink);
+      margin: 0 0 5px;
+    }
+    .prog-phone--c .step-copy__body {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .prog-phone--c .q-fine {
+      margin-top: auto;
+      max-width: none;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      background: var(--accent-soft);
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(77, 65, 240, 0.12);
+    }
+    .prog-phone--c .q-fine strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .prog-phone--c .footer-dock {
+      padding-top: var(--quiz-gap-input-cta, 24px);
+    }
+    .prog-phone--c .tp-compact {
+      margin-top: var(--quiz-gap-cta-trust, 8px);
+      padding-bottom: var(--quiz-gap-trust-bottom, 16px);
+    }
+
+    .board--selected .art { width: 280px; flex-basis: 280px; }
+    .board--selected .hifi-viewport {
+      width: 280px;
+      height: calc(844px * 0.7179);
+    }
+    .board--selected .hifi-viewport__inner {
+      transform: scale(0.7179);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>What Moshy does</h1>
+      <p class="meta">002 onboarding · s-43 · Act 3.3<br/>Programme stack · no pricing</p>
+      <a href="#selected">Selected · C refined</a>
+      <a href="#concepts">Earlier explorations</a>
+      <a href="#mobbin">Mobbin refs</a>
+      <a href="mixboard.html#s-43">Main mixboard</a>
+      <a href="../frames/gallery.html">Templates gallery</a>
+      <p class="note">
+        <strong>Job:</strong> Explain what's in the programme after dynamic fit. No pricing. Bridge to trust + consult.<br/><br/>
+        <strong>Copy spine:</strong> Locked from mixboard lofi. Clinic review before ship.<br/><br/>
+        <strong>Layout:</strong> Nav bar · left-aligned headline · benefit list · doctor disclaimer · fixed CTA + Trustpilot.
+      </p>
+    </aside>
+    <main>
+      <section class="chapter" id="selected">
+        <div class="chapter-head">
+          <h2>Selected · C refined</h2>
+          <p>Programme timeline with act-2 spacing lock, unified spine, and typographic hierarchy. Ready to hydrate into <code>tpl-programme</code>.</p>
+        </div>
+        <div class="board board--selected" id="selected-board"></div>
+      </section>
+
+      <section class="chapter" id="concepts">
+        <div class="chapter-head">
+          <h2>Earlier explorations · A &amp; B</h2>
+          <p>Discarded directions kept for reference.</p>
+        </div>
+        <div class="board" id="concept-board"></div>
+      </section>
+
+      <section class="chapter" id="mobbin">
+        <div class="chapter-head">
+          <h2>Mobbin research notes</h2>
+          <p>Patterns for programme inclusion / benefit stack screens in medical weight loss funnels.</p>
+        </div>
+        <ul style="font-size:12px;color:var(--muted);max-width:72ch;line-height:1.55;padding-left:18px;">
+          <li><strong>A · Checklist rows (closest to lofi):</strong> <a href="https://mobbin.com/screens/8c7d371e-1137-4de0-9308-ff87c57e8d9b">Hers</a> shipping benefits checklist (circle tick + short label rows); <a href="https://mobbin.com/screens/d906ade6-540e-4f08-ab77-e4ce3f8f27a8">Hers</a> weight loss flow</li>
+          <li><strong>B · Numbered benefit cards:</strong> <a href="https://mobbin.com/screens/9142fb51-ace4-4fa2-8f43-b606e95d62dc">Superpower</a> onboarding cards (01/02/03 + icon + body); <a href="https://mobbin.com/screens/303bbc36-a38e-4bff-9718-b87257ecba41">CVS Health</a> benefit tiles</li>
+          <li><strong>C · Programme timeline:</strong> <a href="https://mobbin.com/screens/8c7d371e-1137-4de0-9308-ff87c57e8d9b">Hers</a> consultation step cards (thumb + title + body, active card elevated); <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a> step cards; <a href="https://mobbin.com/screens/fff76175-20df-44ee-afd9-d9823ac4b93d">Alan</a> timeline</li>
+          <li><strong>Competitor weight loss flows:</strong> <a href="https://mobbin.com/flows/061e04f8-11e2-49c9-99ba-409a707e5f25">Hers</a> treatment questionnaire (18 screens); <a href="https://mobbin.com/flows/7154e10b-ba9f-48a2-b2a4-19e7b438978e">Noom</a> weight loss profile (education + stat cards)</li>
+          <li><strong>Trust footer pattern:</strong> Keep Trustpilot in footer dock (matches existing quiz frames). Do not bury below fold on this screen.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      var HEAD = "What's included in a Moshy programme";
+      var SUB = "Doctor-led weight loss — not a DIY diet.";
+      var FINE = "Your <strong>doctor</strong> will confirm what's right for you at your free consult.";
+      var ITEMS = [
+        { kicker: "Medication", title: "GLP-1 medication", body: "Prescribed by your doctor if suitable", thumb: "med", icon: "med" },
+        { kicker: "Clinical care", title: "Doctor-led care", body: "Reviews and adjustments, not self-serve", thumb: "doc", icon: "doc" },
+        { kicker: "Ongoing support", title: "Programme support", body: "Discreet delivery and ongoing care", thumb: "ship", icon: "ship" }
+      ];
+
+      var ICONS = {
+        med: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="5"/><line x1="12" y1="8" x2="12" y2="16"/></svg>',
+        doc: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M6 20v-1.2c0-2.2 2.7-3.8 6-3.8s6 1.6 6 3.8V20"/><path d="M16 12h3l1.5 2-1.5 2h-3"/></svg>',
+        ship: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16l-2 10H6L4 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><line x1="12" y1="12" x2="12" y2="15"/></svg>'
+      };
+
+      function navHtml() {
+        return (
+          '<div class="nav-shell">' +
+            '<div class="nav-row">' +
+              '<button class="nav-back" type="button" aria-label="Back">‹</button>' +
+              '<div class="prog-pills">' +
+                '<i class="done"></i><i class="done"></i><i class="on"></i><i></i>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function headerHtmlC() {
+        return (
+          '<div class="head-block">' +
+            '<p class="q-kicker">Your programme</p>' +
+            '<h2 class="q-head">' + HEAD + '</h2>' +
+            '<p class="q-sub">' + SUB + '</p>' +
+          '</div>'
+        );
+      }
+
+      function headerHtml() {
+        return (
+          '<h2 class="q-head">' + HEAD + '</h2>' +
+          '<p class="q-sub">' + SUB + '</p>'
+        );
+      }
+
+      function footerHtml() {
+        return (
+          '<div class="footer-dock footer-dock--tp">' +
+            '<button class="input-cta" type="button">Continue</button>' +
+            '<div class="tp-compact" data-layer="trust block">' +
+              '<span class="tp-compact__stars" aria-hidden="true">★★★★★</span>' +
+              '<span><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</span>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function conceptA() {
+        var rows = ITEMS.map(function (item) {
+          return (
+            '<div class="check-row">' +
+              '<span class="check-icon" aria-hidden="true">✓</span>' +
+              '<div class="check-copy">' +
+                '<b>' + item.title + '</b>' +
+                '<p>' + item.body + '</p>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join("");
+
+        return (
+          '<div class="prog-phone">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtml() +
+                '<div class="check-list">' + rows + '</div>' +
+                '<p class="q-fine">' + FINE + '</p>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptB() {
+        var cards = ITEMS.map(function (item, i) {
+          var num = String(i + 1).padStart(2, "0");
+          return (
+            '<article class="num-card">' +
+              '<span class="num-card__badge">' + num + '</span>' +
+              '<div>' +
+                '<p class="num-card__title">' + item.title + '</p>' +
+                '<p class="num-card__body">' + item.body + '</p>' +
+              '</div>' +
+              '<span class="num-card__icon" aria-hidden="true">' + ["💊", "🩺", "📦"][i] + '</span>' +
+            '</article>'
+          );
+        }).join("");
+
+        return (
+          '<div class="prog-phone prog-phone--b">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtml() +
+                '<div class="num-stack">' + cards + '</div>' +
+                '<p class="q-fine">' + FINE + '</p>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptC() {
+        var steps = ITEMS.map(function (item, i) {
+          var lead = i === 0 ? " step-card--lead" : "";
+          return (
+            '<article class="step-card' + lead + '">' +
+              '<div class="step-thumb step-thumb--' + item.thumb + '">' + ICONS[item.icon] + '</div>' +
+              '<div class="step-copy">' +
+                '<span class="step-copy__kicker">' + item.kicker + '</span>' +
+                '<strong class="step-copy__title">' + item.title + '</strong>' +
+                '<p class="step-copy__body">' + item.body + '</p>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join("");
+
+        var nodes = ITEMS.map(function (_, i) {
+          return '<span class="timeline__node' + (i === 0 ? ' timeline__node--on' : '') + '"></span>';
+        }).join("");
+
+        return (
+          '<div class="prog-phone prog-phone--c">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtmlC() +
+                '<div class="timeline">' +
+                  '<div class="timeline__spine" aria-hidden="true">' +
+                    '<div class="timeline__track"></div>' +
+                    '<div class="timeline__nodes">' + nodes + '</div>' +
+                  '</div>' +
+                  '<div class="timeline__steps">' + steps + '</div>' +
+                '</div>' +
+                '<p class="q-fine">' + FINE + '</p>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      var concepts = [
+        {
+          id: "a",
+          tag: "A · Checklist rows",
+          title: "Tick circles + divider rows",
+          job: "Direct hi-fi lift of lofi mixboard. Purple tick circles, title + body per row, hairline dividers. Lowest cognitive load.",
+          psych: "Clarity · parity",
+          mobbin: 'Refs: <a href="https://mobbin.com/screens/8c7d371e-1137-4de0-9308-ff87c57e8d9b">Hers</a> benefits checklist, mixboard s-43',
+          render: conceptA
+        },
+        {
+          id: "b",
+          tag: "B · Numbered cards",
+          title: "01/02/03 stacked benefit cards",
+          job: "Superpower pattern: numbered badges on blue gradient, icon anchor right, each benefit in its own elevated card. More visual weight per item.",
+          psych: "Value stack · enumeration",
+          mobbin: 'Refs: <a href="https://mobbin.com/screens/9142fb51-ace4-4fa2-8f43-b606e95d62dc">Superpower</a>, <a href="https://mobbin.com/screens/303bbc36-a38e-4bff-9718-b87257ecba41">CVS Health</a>',
+          render: conceptB
+        }
+      ];
+
+      var selected = {
+        id: "c",
+        tag: "C · Programme timeline",
+        title: "Unified spine + step cards",
+        job: "Hers consultation pattern refined: continuous accent spine, SVG icon tiles, kicker → title → body hierarchy, doctor disclaimer callout. Spacing follows act-2 lock.",
+        psych: "Journey · clinical process",
+        mobbin: 'Refs: <a href="https://mobbin.com/screens/8c7d371e-1137-4de0-9308-ff87c57e8d9b">Hers</a> consultation, <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a> step cards',
+        render: conceptC
+      };
+
+      function mountConcept(boardEl, c, large) {
+        var art = document.createElement("article");
+        art.className = "art";
+        art.id = "prog-" + c.id;
+        art.innerHTML =
+          '<div class="art-label">' +
+            '<span class="tag">' + c.tag + '</span>' +
+            '<b>' + c.title + '</b>' +
+            '<div class="job">' + c.job + '</div>' +
+            '<span class="psych">' + c.psych + '</span>' +
+            '<div class="mobbin-ref">' + c.mobbin + '</div>' +
+          '</div>' +
+          '<div class="hifi-viewport">' +
+            '<div class="hifi-viewport__inner">' + c.render() + '</div>' +
+          '</div>';
+        boardEl.appendChild(art);
+      }
+
+      mountConcept(document.getElementById("selected-board"), selected, true);
+
+      var board = document.getElementById("concept-board");
+      concepts.forEach(function (c) {
+        mountConcept(board, c);
+      });
+    })();
+  </script>
+</body>
+</html>

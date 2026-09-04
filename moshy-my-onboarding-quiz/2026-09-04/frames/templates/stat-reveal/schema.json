@@ -1,0 +1,20 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "stat-reveal",
+  "required": ["screenId", "eyebrow", "lead", "statSubBold", "ctaLabel", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string",
+    "motionVariant": { "type": "string", "default": "statFadeHold" },
+    "eyebrow": "string",
+    "lead": "string",
+    "statSubBold": "string",
+    "statSubFine": "string",
+    "chartGradientId": { "type": "string", "default": "statChartGrad" },
+    "chartAxisStart": { "type": "string", "default": "Today" },
+    "chartAxisEnd": { "type": "string", "default": "12 months" },
+    "ctaLabel": "string",
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "trustpilot": { "type": "boolean", "default": false }
+  }
+}

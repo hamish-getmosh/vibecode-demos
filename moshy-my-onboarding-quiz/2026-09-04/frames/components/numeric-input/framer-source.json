@@ -1,0 +1,43 @@
+{
+  "componentKey": "numeric-input",
+  "framerComponentId": "vgu7wKkk7",
+  "framerDisplayName": "Quiz/Quiz Numeric Input",
+  "pulledAt": "2026-09-02T12:31:58.092062+00:00",
+  "styles": {
+    "shell": {
+      "padding": "17px 20px 16px 20px",
+      "radius": "20px",
+      "gap": "6px",
+      "fill": "rgb(255, 255, 255)",
+      "stackAlignment": "end",
+      "transition": "spring-duration 0.2s 0.2 0s"
+    },
+    "unfocused": {
+      "border": "2px solid rgb(226, 224, 232)"
+    },
+    "focused": {
+      "border": "2px solid rgb(77, 65, 240)",
+      "boxShadow": "0px 0px 0px 4px rgba(77, 65, 240, 0.35)"
+    },
+    "value": {
+      "fontFamily": "Area Inktrap",
+      "fontSize": "40px",
+      "fontWeight": 700,
+      "lineHeight": "1em",
+      "emptyColor": "rgb(139, 134, 176)",
+      "filledColor": "rgb(49, 44, 98)"
+    },
+    "unit": {
+      "fontFamily": "Figtree",
+      "fontSize": "16px",
+      "fontWeight": 600,
+      "lineHeight": "1em",
+      "color": "rgb(139, 134, 176)",
+      "wrapPadding": "0px 0px 3px 0px"
+    },
+    "defaultValue": "165"
+  },
+  "controls": {
+    "$control__value": "165"
+  }
+}

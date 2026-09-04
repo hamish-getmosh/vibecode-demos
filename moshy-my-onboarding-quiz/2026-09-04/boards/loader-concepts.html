@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Loader concepts · Mixboard</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --border: #e2e0e8;
+      --side-w: 220px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); margin-top: 8px; }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 36px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    .chapter-head h2 { margin: 0 0 4px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); max-width: 72ch; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; scroll-margin-top: 80px; }
+    .art-label { margin-bottom: 8px; min-height: 72px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+
+    /* Loader concept phones */
+    .loader-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .loader-phone .nav-shell { padding: 12px 20px 0; }
+    .loader-phone .nav-row { display: flex; align-items: center; gap: 12px; }
+    .loader-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .loader-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .loader-phone .prog-pills i.done { background: var(--accent); }
+    .loader-phone .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .loader-phone .quiz-scroll { flex: 1; display: flex; flex-direction: column; padding: 0 20px 24px; overflow: hidden; }
+    .loader-phone .loader-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; padding-top: 24px; }
+    .loader-phone .q-head {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 8px;
+    }
+    .loader-phone .q-sub {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin: 0 0 20px;
+      max-width: 28ch;
+    }
+    .loader-phone .hero-spinner {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--surface);
+      border-top-color: var(--accent);
+      margin: 0 auto 20px;
+      animation: lc-spin 0.9s linear infinite;
+    }
+    .loader-phone .step-list { width: 100%; text-align: left; margin-top: 8px; }
+    .loader-phone .step-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      background: var(--surface);
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+    .loader-phone .step-row.is-wait { color: var(--muted); }
+    .loader-phone .step-row.is-load { color: var(--ink); background: #fff; box-shadow: 0 0 0 1px var(--border); }
+    .loader-phone .step-row.is-done { color: var(--ink); }
+    .loader-phone .step-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .loader-phone .step-row.is-wait .step-icon { border: 1.5px solid var(--border); background: #fff; }
+    .loader-phone .step-row.is-load .step-icon { border: none; background: transparent; }
+    .loader-phone .step-row.is-done .step-icon { background: var(--accent); color: #fff; }
+    .loader-phone .step-icon .mini-spin {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--surface);
+      border-top-color: var(--accent);
+      animation: lc-spin 0.75s linear infinite;
+    }
+    .loader-phone .progress-track {
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--surface);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .loader-phone .progress-track i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.45s ease;
+    }
+    .loader-phone .step-counter {
+      font-family: var(--display);
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .loader-phone .step-counter span { font-size: 18px; color: var(--muted); font-weight: 600; }
+    .loader-phone .micro { font-size: 13px; color: var(--muted); margin: 0 0 18px; min-height: 1.4em; transition: opacity 0.3s ease; }
+    .loader-phone .headline-wrap { min-height: 92px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+    @keyframes lc-spin { to { transform: rotate(360deg); } }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Loader concepts</h1>
+      <p class="meta">002 onboarding · offline exploration<br/>Pick one, then hydrate back into template</p>
+      <a href="#act1">Act 1 · Eligibility</a>
+      <a href="#act2">Act 2 · Adding it up</a>
+      <a href="../frames/gallery.html#loader">Templates gallery</a>
+      <a href="mixboard.html">Main mixboard</a>
+      <p class="note"><strong>Mobbin refs:</strong> discrete vertical progress tracker (health onboarding), continuous bar (wellness flows), checklist with inline status. <strong>Psychology:</strong> goal-gradient, ethical Zeigarnik, peak-end before stat reveal. Three row states only: waiting · loading · complete.</p>
+    </aside>
+    <main>
+      <section class="chapter" id="act1">
+        <div class="chapter-head">
+          <h2>Act 1 · Checking eligibility (s-31)</h2>
+          <p>Four layout directions on the eligibility loader. Copy is provisional (design exploration). Estimate and eligibility framing only, no outcome promises.</p>
+        </div>
+        <div class="board">
+          <article class="art" id="a1-a">
+            <div class="art-label">
+              <span class="tag">A · Baseline</span>
+              <b>Hero spinner + checklist</b>
+              <div class="job">Mobbin discrete tracker. Spinner stays centred above rows; rows flip waiting → complete.</div>
+              <span class="psych">Goal-gradient · reassurance</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="hero" data-flow="eligibility"></div></div></div>
+          </article>
+          <article class="art" id="a1-b">
+            <div class="art-label">
+              <span class="tag">B · Inline spinner</span>
+              <b>Spinner moves with the row</b>
+              <div class="job">No hero spinner. Active row holds the spinner; completed rows get a tick.</div>
+              <span class="psych">Process transparency · cognitive fluency</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="inline" data-flow="eligibility"></div></div></div>
+          </article>
+          <article class="art" id="a1-c">
+            <div class="art-label">
+              <span class="tag">C · Suspense headline</span>
+              <b>Headline rotates as steps advance</b>
+              <div class="job">Continuous bar + copy that builds anticipation toward eligibility result.</div>
+              <span class="psych">Ethical Zeigarnik · peak-end setup</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="suspense" data-flow="eligibility"></div></div></div>
+          </article>
+          <article class="art" id="a1-d">
+            <div class="art-label">
+              <span class="tag">D · Step counter</span>
+              <b>Big "2 / 3" + inline spinner</b>
+              <div class="job">Deel-style checklist clarity. Counter and micro-copy update each step.</div>
+              <span class="psych">Goal-gradient · activation energy</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="counter" data-flow="eligibility"></div></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="act2">
+        <div class="chapter-head">
+          <h2>Act 2 · Adding it up (s-38)</h2>
+          <p>Same four directions on the stat-reveal loader. Stronger anticipation copy toward the 12-month estimate screen.</p>
+        </div>
+        <div class="board">
+          <article class="art" id="a2-a">
+            <div class="art-label"><span class="tag">A · Baseline</span><b>Hero spinner + checklist</b></div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="hero" data-flow="estimate"></div></div></div>
+          </article>
+          <article class="art" id="a2-b">
+            <div class="art-label"><span class="tag">B · Inline spinner</span><b>Spinner moves with the row</b></div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="inline" data-flow="estimate"></div></div></div>
+          </article>
+          <article class="art" id="a2-c">
+            <div class="art-label"><span class="tag">C · Suspense headline</span><b>Headline rotates as steps advance</b></div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="suspense" data-flow="estimate"></div></div></div>
+          </article>
+          <article class="art" id="a2-d">
+            <div class="art-label"><span class="tag">D · Step counter</span><b>Big "2 / 4" + inline spinner</b></div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="loader-phone" data-concept="counter" data-flow="estimate"></div></div></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      var FLOWS = {
+        eligibility: {
+          progress: [1, 1, 1, 0],
+          steps: ["BMI range", "Health profile", "Confirming eligibility"],
+          copy: {
+            hero: { headline: "One moment", subhead: "Checking your BMI and health profile." },
+            inline: { headline: "Checking your details", subhead: "This usually takes a few seconds." },
+            suspense: [
+              { headline: "Reviewing your answers", subhead: "Making sure we have what we need." },
+              { headline: "Checking your profile", subhead: "Your BMI and health details matter here." },
+              { headline: "Almost ready", subhead: "Confirming whether this programme may suit you." },
+              { headline: "One last look", subhead: "A doctor will still confirm what's right for you." }
+            ],
+            counter: {
+              headline: "Checking eligibility",
+              micro: ["Starting your check…", "BMI range verified", "Health profile reviewed", "Final confirmation"]
+            }
+          }
+        },
+        estimate: {
+          progress: [1, 1, 1, 1],
+          steps: [
+            "Your metabolic profile",
+            "Age and body factors",
+            "Calculating 12-month estimate",
+            "Preparing your results"
+          ],
+          copy: {
+            hero: { headline: "Adding it up", subhead: "Personalising your 12-month estimate." },
+            inline: { headline: "Building your estimate", subhead: "Using what you told us about you." },
+            suspense: [
+              { headline: "Putting your picture together", subhead: "Your answers are shaping the next screen." },
+              { headline: "Your profile looks good", subhead: "Factoring in age and where you carry weight." },
+              { headline: "Getting closer", subhead: "Running your 12-month estimate now." },
+              { headline: "Nearly there", subhead: "Your personalised result is almost ready." }
+            ],
+            counter: {
+              headline: "Your estimate is taking shape",
+              micro: ["Reading your profile…", "Metabolic factors applied", "Estimate calculated", "Preparing your reveal"]
+            }
+          }
+        }
+      };
+
+      var STEP_MS = 950;
+      var PAUSE_MS = 1500;
+
+      function pillsHtml(doneCount, currentOn) {
+        var html = "";
+        for (var i = 0; i < 4; i += 1) {
+          if (i < doneCount) html += '<i class="done"></i>';
+          else if (currentOn && i === doneCount) html += '<i class="on"></i>';
+          else html += "<i></i>";
+        }
+        return html;
+      }
+
+      function renderPhone(el) {
+        var concept = el.dataset.concept;
+        var flowKey = el.dataset.flow;
+        var flow = FLOWS[flowKey];
+        var copy = flow.copy[concept] || flow.copy.hero;
+        var doneCount = flow.progress.filter(Boolean).length;
+        var showHeroSpinner = concept === "hero";
+        var showBar = concept === "suspense";
+        var showCounter = concept === "counter";
+
+        el.innerHTML =
+          '<div class="nav-shell"><div class="nav-row"><div class="prog-pills">' +
+          pillsHtml(doneCount, true) +
+          '</div></div></div><div class="quiz-scroll"><div class="loader-body">' +
+          (showBar ? '<div class="progress-track" data-progress-track><i></i></div>' : "") +
+          (showCounter ? '<div class="step-counter" data-counter>0 <span>/ ' + flow.steps.length + "</span></div>" : "") +
+          (showHeroSpinner ? '<div class="hero-spinner" aria-hidden="true"></div>' : "") +
+          '<div class="headline-wrap">' +
+          '<h2 class="q-head" data-headline>' +
+          (showCounter ? copy.headline : copy.headline || copy[0].headline) +
+          "</h2>" +
+          '<p class="' +
+          (showCounter ? "micro" : "q-sub") +
+          '" data-subhead>' +
+          (showCounter ? copy.micro[0] : copy.subhead || copy[0].subhead) +
+          "</p></div>" +
+          '<div class="step-list" data-step-list></div></div></div>';
+
+        var list = el.querySelector("[data-step-list]");
+        flow.steps.forEach(function (label) {
+          var row = document.createElement("div");
+          row.className = "step-row is-wait";
+          row.dataset.step = "true";
+          row.innerHTML = '<span class="step-icon"></span><span class="step-label">' + label + "</span>";
+          list.appendChild(row);
+        });
+
+        animate(el, flow, concept);
+      }
+
+      function setRowState(row, state, concept) {
+        row.classList.remove("is-wait", "is-load", "is-done");
+        row.classList.add("is-" + state);
+        var icon = row.querySelector(".step-icon");
+        if (state === "wait") icon.innerHTML = "";
+        else if (state === "load" && concept === "hero") icon.innerHTML = "";
+        else if (state === "load") icon.innerHTML = '<span class="mini-spin" aria-hidden="true"></span>';
+        else icon.textContent = "\u2713";
+      }
+
+      function animate(root, flow, concept) {
+        var steps = root.querySelectorAll("[data-step]");
+        var headline = root.querySelector("[data-headline]");
+        var subhead = root.querySelector("[data-subhead]");
+        var bar = root.querySelector("[data-progress-track] i");
+        var counter = root.querySelector("[data-counter]");
+        var copy = flow.copy[concept];
+        var activeIndex = 0;
+        var timer;
+
+        function paint(activeIndex) {
+          steps.forEach(function (row, i) {
+            if (i < activeIndex) setRowState(row, "done", concept);
+            else if (i === activeIndex && activeIndex < steps.length) setRowState(row, "load", concept);
+            else setRowState(row, "wait", concept);
+          });
+
+          if (bar) {
+            var pct = Math.round((activeIndex / steps.length) * 100);
+            bar.style.width = pct + "%";
+          }
+
+          if (counter) {
+            counter.innerHTML = activeIndex + ' <span>/ ' + steps.length + "</span>";
+          }
+
+          if (concept === "suspense" && copy[activeIndex]) {
+            headline.textContent = copy[activeIndex].headline;
+            subhead.textContent = copy[activeIndex].subhead;
+          }
+
+          if (concept === "counter" && copy.micro[activeIndex]) {
+            subhead.textContent = copy.micro[activeIndex];
+          }
+        }
+
+        function loop() {
+          if (activeIndex > steps.length) {
+            activeIndex = 0;
+            paint(0);
+            timer = window.setTimeout(advance, STEP_MS);
+            return;
+          }
+
+          if (activeIndex === steps.length) {
+            steps.forEach(function (row) {
+              setRowState(row, "done", concept);
+            });
+            if (bar) bar.style.width = "100%";
+            if (counter) counter.innerHTML = steps.length + ' <span>/ ' + steps.length + "</span>";
+            if (concept === "suspense" && copy[copy.length - 1]) {
+              headline.textContent = copy[copy.length - 1].headline;
+              subhead.textContent = copy[copy.length - 1].subhead;
+            }
+            if (concept === "counter" && copy.micro[copy.micro.length - 1]) {
+              subhead.textContent = copy.micro[copy.micro.length - 1];
+            }
+            activeIndex += 1;
+            timer = window.setTimeout(loop, PAUSE_MS);
+            return;
+          }
+
+          paint(activeIndex);
+          activeIndex += 1;
+          timer = window.setTimeout(loop, STEP_MS);
+        }
+
+        function advance() {
+          loop();
+        }
+
+        paint(0);
+        timer = window.setTimeout(advance, STEP_MS);
+      }
+
+      document.querySelectorAll(".loader-phone").forEach(renderPhone);
+
+      if (location.hash) {
+        var target = document.querySelector(location.hash);
+        if (target) {
+          window.setTimeout(function () {
+            target.scrollIntoView({ behavior: "instant", inline: "center", block: "nearest" });
+          }, 120);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

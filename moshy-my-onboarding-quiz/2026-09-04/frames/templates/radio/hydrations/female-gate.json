@@ -1,0 +1,16 @@
+{
+  "screenId": "s-22b",
+  "template": "radio",
+  "title": "Female gate",
+  "headline": "Do any of the following apply to you right now?",
+  "subhead": "GLP-1 programmes aren't suitable during these times.",
+  "progress": { "done": 1, "current": 1, "total": 4 },
+  "options": [
+    { "label": "I'm pregnant", "selected": false },
+    { "label": "I'm breastfeeding", "selected": false },
+    { "label": "I'm planning a pregnancy in the next 3 months", "selected": false },
+    { "label": "None of these", "selected": true }
+  ],
+  "trustpilot": true,
+  "legal": false
+}

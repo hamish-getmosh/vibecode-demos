@@ -1,0 +1,43 @@
+<div class="phone phone--hifi phone--profile has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--profile">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      <div class="profile-wins">
+        {{#each wins}}
+        <div class="profile-win">
+          <span class="profile-win__icon profile-win__icon--{{icon}}" aria-hidden="true"></span>
+          <div class="profile-win__copy">
+            <p class="profile-win__title">{{title}}</p>
+            <p class="profile-win__sub">{{sub}}</p>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      <div class="spacing-block" data-gap="headline-content"></div>
+      <p class="profile-section-label">{{aboutSectionLabel}}</p>
+      <div class="spacing-block" data-gap="headline-subhead"></div>
+      <div class="profile-details">
+        {{#each details}}
+        <div class="profile-detail{{femaleClass}}">
+          <span class="profile-detail__label">{{label}}</span>
+          <span class="profile-detail__value">{{value}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <button class="input-cta input-cta--profile" type="button">{{ctaLabel}}</button>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>

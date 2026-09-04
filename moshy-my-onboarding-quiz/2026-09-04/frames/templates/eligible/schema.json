@@ -1,0 +1,37 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "eligible",
+  "required": ["screenId", "headline", "checks", "progress", "ctaLabel"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string (optional)",
+    "showSubhead": {
+      "type": "boolean",
+      "default": true
+    },
+    "stepHint": "string (optional uppercase progress line)",
+    "bridgeLine": "string (optional accent callout above footer dock)",
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "checksSectionLabel": "string (default What we checked)",
+    "nextSectionLabel": "string (default Next)",
+    "nextStepLabel": "string",
+    "nextStepStatus": "string (e.g. Next step)",
+    "checks": [
+      {
+        "label": "string",
+        "status": "string (e.g. Passed)"
+      }
+    ],
+    "ctaLabel": "string",
+    "trustpilot": {
+      "type": "boolean",
+      "default": true
+    },
+    "legal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

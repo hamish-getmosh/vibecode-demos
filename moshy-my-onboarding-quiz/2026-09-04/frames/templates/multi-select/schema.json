@@ -1,0 +1,45 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "multi-select",
+  "required": ["screenId", "headline", "options", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": {
+      "type": "string",
+      "default": "Select all that apply.",
+      "description": "Subhead copy; shown when showSubhead is true (default true on multi-select)"
+    },
+    "showSubhead": {
+      "type": "boolean",
+      "default": true,
+      "description": "Show subhead under headline in accent blue (#4d41f0). Default true for multi-select."
+    },
+    "nonePreset": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, exclusive (none) option is moved to top with mutual-exclusion rules. Nothing pre-selected; CTA shows after first tap. Requires one option with exclusive: true."
+    },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "options": [
+      {
+        "label": "string",
+        "icon": "string (optional)",
+        "selected": "bool (ignored when nonePreset: true; hydrate clears all)",
+        "exclusive": "bool (none option; required when nonePreset: true)"
+      }
+    ],
+    "ctaLabel": "string (default Continue)",
+    "trustpilot": {
+      "type": "boolean",
+      "default": true,
+      "description": "Footer Trustpilot row. Framer embed 5jo1wtkgIZb38X2KsI6D; pull trustpilot-row"
+    },
+    "legal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Terms & Privacy under Trustpilot. Framer legal preview wsFJGhnNs; pull legal-fine"
+    }
+  }
+}

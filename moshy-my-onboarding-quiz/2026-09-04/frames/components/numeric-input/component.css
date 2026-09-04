@@ -1,0 +1,97 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh numeric-input */
+
+
+.phone--hifi .num-field,
+.num-field {
+  display: block;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: 17px 20px 16px 20px;
+  border-radius: 20px;
+  border: 2px solid rgb(226, 224, 232);
+  background: rgb(255, 255, 255);
+  cursor: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.phone--hifi .num-field.focused,
+.num-field.focused {
+  border: 2px solid rgb(77, 65, 240);
+  box-shadow: 0px 0px 0px 4px rgba(77, 65, 240, 0.35);
+}
+
+.num-field__body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.num-field__cluster {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.num-field__value-wrap {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.num-field__input {
+  display: block;
+  border: 0;
+  background: transparent;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1em;
+  letter-spacing: 0;
+  color: rgb(49, 44, 98);
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  caret-color: rgb(77, 65, 240);
+  width: 1ch;
+  min-width: 1ch;
+  field-sizing: content;
+  -moz-appearance: textfield;
+}
+
+.num-field.is-empty .num-field__input,
+.num-field.is-empty .num-field__input::placeholder {
+  color: rgb(139, 134, 176);
+  opacity: 1;
+}
+
+.num-field__input:focus {
+  outline: none;
+}
+
+.num-field__input:read-only {
+  cursor: default;
+}
+
+.num-field__unit-wrap {
+  flex-shrink: 0;
+  padding: 0px 0px 3px 0px;
+}
+
+.num-field .unit {
+  font-family: "Figtree", Figtree, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1em;
+  color: rgb(139, 134, 176);
+}
+
+.num-hint {
+  margin: 12px 0 0;
+  font: 400 12px/1.4 Figtree, sans-serif;
+  color: rgb(139, 134, 176);
+  text-align: center;
+}

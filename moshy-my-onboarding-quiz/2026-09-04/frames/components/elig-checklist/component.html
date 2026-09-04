@@ -1,0 +1,8 @@
+<div class="elig-checks">
+  <p class="elig-section-label">{{checksSectionLabel}}</p>
+  <div class="elig-card">
+    <ul class="elig-card__list">
+      {{#each checks}}<li class="elig-card__row"><span class="elig-card__name">{{label}}</span><span class="elig-card__status elig-card__status--passed">{{status}}</span></li>{{/each}}
+    </ul>
+  </div>
+</div>

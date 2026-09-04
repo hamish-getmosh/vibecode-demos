@@ -1,0 +1,50 @@
+/* Eligibility passed · tpl-eligible */
+@import url("../../components/elig-hero/component.css");
+@import url("../../components/elig-checklist/component.css");
+@import url("../../components/elig-next/component.css");
+
+/* Page wash */
+.phone--hifi.phone--eligible {
+  background: linear-gradient(165deg, #f6e8ff 0%, #fdeef6 42%, #ebe6ff 100%);
+}
+
+.phone--hifi.phone--eligible .nav-shell,
+.phone--hifi.phone--eligible .quiz-scroll,
+.phone--hifi.phone--eligible .footer-dock {
+  background: transparent;
+}
+
+.phone--hifi.phone--eligible .elig-section-label {
+  margin: 0 0 8px;
+  color: rgba(49, 44, 98, 0.62);
+}
+
+.phone--hifi.phone--eligible .elig-hero {
+  margin: 0;
+  padding: 24px 16px 20px;
+  border-radius: 20px;
+  background: #fff;
+  border: none;
+  box-shadow:
+    0 12px 40px rgba(77, 65, 240, 0.16),
+    0 2px 8px rgba(49, 44, 98, 0.06);
+}
+
+.phone--hifi.phone--eligible .elig-hero__copy {
+  text-align: center;
+}
+
+.phone--hifi.phone--eligible .elig-hero__copy .q-head,
+.phone--hifi.phone--eligible .elig-hero__copy .q-sub {
+  text-align: center;
+}
+
+.phone--hifi.phone--eligible .footer-dock .input-cta--eligible {
+  font-size: 15px;
+  line-height: 1.25;
+  padding: 16px 20px;
+  white-space: nowrap;
+  box-shadow:
+    0 10px 28px rgba(154, 2, 57, 0.32),
+    0 2px 6px rgba(49, 44, 98, 0.08);
+}

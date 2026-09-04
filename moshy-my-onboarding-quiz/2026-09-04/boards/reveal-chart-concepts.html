@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" class="frame-preview">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Stat reveal chart · 6 concepts</title>
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../frames/components/cta-primary/component.css" />
+  <link rel="stylesheet" href="../frames/templates/stat-reveal/template.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --side-w: 240px;
+      --phone-source-w: 390px;
+      --phone-source-h: 844px;
+      --phone-scale: 0.6;
+      --phone-w: calc(var(--phone-source-w) * var(--phone-scale));
+      --phone-h: calc(var(--phone-source-h) * var(--phone-scale));
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: #e8e6ee;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w);
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta {
+      padding: 0 16px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .side a {
+      display: block;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .side a:hover { background: var(--surface); }
+    .side .note {
+      padding: 12px 16px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter-head {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    .chapter-head h2 { margin: 0 0 4px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); max-width: 60ch; }
+    .board {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 20px;
+      padding-bottom: 16px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
+    .art {
+      flex: 0 0 var(--phone-w);
+      width: var(--phone-w);
+      scroll-snap-align: start;
+      scroll-margin-top: 16px;
+    }
+    .art-label { margin-bottom: 10px; }
+    .art-label .letter {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-right: 6px;
+    }
+    .art-label b { display: block; font-size: 14px; margin-top: 4px; }
+    .art-label .job { font-size: 11px; color: var(--muted); margin-top: 2px; max-width: 34ch; }
+    .phone-shell {
+      width: var(--phone-w);
+      height: var(--phone-h);
+      border: 2px solid var(--ink);
+      border-radius: calc(24px * var(--phone-scale));
+      overflow: hidden;
+      background: var(--ground);
+      box-shadow: 0 8px 28px rgba(49, 44, 98, 0.12);
+      position: relative;
+    }
+    .phone-shell .phone {
+      width: var(--phone-source-w);
+      height: var(--phone-source-h);
+      transform: scale(var(--phone-scale));
+      transform-origin: top left;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .toolbar button {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .toolbar button:hover { background: var(--surface); }
+
+    /* Board chart overrides */
+    .chart-concept .weight-chart { height: 128px; }
+    .chart-concept .weight-chart .dot-div { display: none; }
+    .chart-concept .weight-chart svg .dot {
+      opacity: 0;
+      transform-origin: center;
+    }
+    .chart-concept--b .weight-chart .main { stroke-width: 3; }
+    .chart-concept--b .weight-chart .fill { display: none; }
+    .chart-concept--c .weight-chart .main { stroke-width: 2; }
+    .chart-concept--c .weight-chart svg .dot { filter: drop-shadow(0 1px 3px rgba(77, 65, 240, 0.35)); }
+    .chart-concept--d .weight-chart .tick-label {
+      font-size: 8px;
+      fill: var(--muted);
+      font-family: Figtree, sans-serif;
+    }
+    .chart-concept--d .weight-chart .tick-line {
+      stroke: #d8d4e8;
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+    }
+    .chart-concept--e .weight-chart .start-dot { fill: var(--ruby); }
+    .chart-concept--f .weight-chart .main {
+      stroke-width: 4;
+      filter: drop-shadow(0 2px 6px rgba(77, 65, 240, 0.25));
+    }
+    .chart-concept--f .weight-chart .fill { display: none; }
+    .input-cta {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--ruby);
+      color: #fff;
+      cursor: pointer;
+    }
+    .footer-dock { padding: 0 24px 24px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Chart concepts</h1>
+      <p class="meta">s-39 stat reveal · 6 chart treatments · same <code>statFadeHold</code> wipe-in</p>
+      <a href="#chart-a">A · Baseline fixed</a>
+      <a href="#chart-b">B · Line only</a>
+      <a href="#chart-c">C · Soft wash</a>
+      <a href="#chart-d">D · Milestone ticks</a>
+      <a href="#chart-e">E · Dual endpoint</a>
+      <a href="#chart-f">F · Bold arc</a>
+      <a href="reveal-side-by-side.html">← Side by side</a>
+      <a href="mixboard.html">Mixboard</a>
+      <p class="note">Dots sit on SVG path endpoints (12,32) and (278,118), not percentage CSS. All variants share the same curve and wipe animation.</p>
+    </aside>
+
+    <main>
+      <div class="chapter-head">
+        <h2>Weight loss reveal · chart explorations</h2>
+        <p>Fix: misaligned end dot came from HTML dots positioned with % while the SVG stretches with <code>preserveAspectRatio="none"</code>. These concepts anchor dots in SVG space. Scroll horizontally →</p>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" id="replay-all">Replay all animations</button>
+      </div>
+
+      <div class="board" id="board"></div>
+    </main>
+  </div>
+
+  <script src="../frames/shared/reveal-motion-engine.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var PATH_LINE = "M12,32 C80,38 140,72 200,98 S280,118 278,118";
+      var PATH_FILL = PATH_LINE + " L278,132 L12,132 Z";
+      var START = { x: 12, y: 32 };
+      var END = { x: 278, y: 118 };
+
+      var CONCEPTS = [
+        {
+          id: "a",
+          letter: "A",
+          title: "Baseline fixed",
+          job: "Current gradient fill + stroke. Dots as SVG circles on path endpoints. Direct fix for the misalignment bug.",
+          mod: "chart-concept--a"
+        },
+        {
+          id: "b",
+          letter: "B",
+          title: "Line only",
+          job: "Stroke wipe with no area fill. Cleaner, less visual weight under the stat. Hollow ring end marker.",
+          mod: "chart-concept--b"
+        },
+        {
+          id: "c",
+          letter: "C",
+          title: "Soft wash",
+          job: "Lighter gradient (12% opacity), thinner 2px stroke, slightly larger dots with soft drop shadow.",
+          mod: "chart-concept--c"
+        },
+        {
+          id: "d",
+          letter: "D",
+          title: "Milestone ticks",
+          job: "Quarter markers at months 3, 6, 9. Reinforces time horizon without changing the curve shape.",
+          mod: "chart-concept--d"
+        },
+        {
+          id: "e",
+          letter: "E",
+          title: "Dual endpoint",
+          job: "Ruby start dot (today) + accent end dot (12 months). Makes the journey direction explicit.",
+          mod: "chart-concept--e"
+        },
+        {
+          id: "f",
+          letter: "F",
+          title: "Bold arc",
+          job: "4px stroke, no fill, subtle glow. Arc reads as the hero graphic when the stat is already large.",
+          mod: "chart-concept--f"
+        }
+      ];
+
+      function dots(id, opts) {
+        opts = opts || {};
+        var startFill = opts.startFill || "#4d41f0";
+        var endFill = opts.endFill || "#4d41f0";
+        var endRing = opts.endRing ? ' fill="none" stroke="' + endFill + '" stroke-width="2"' : ' fill="' + endFill + '" stroke="#fff" stroke-width="2"';
+        return (
+          '<circle class="dot start-dot mnode" data-k="startDot" cx="' + START.x + '" cy="' + START.y + '" r="' + (opts.r || 4) + '" fill="' + startFill + '" stroke="#fff" stroke-width="2"/>' +
+          '<circle class="dot end-dot mnode" data-k="endDot" cx="' + END.x + '" cy="' + END.y + '" r="' + (opts.r || 4) + '"' + endRing + '/>'
+        );
+      }
+
+      function gradient(id, topOpacity) {
+        topOpacity = topOpacity != null ? topOpacity : 0.2;
+        return (
+          '<defs>' +
+          '<linearGradient id="grad-' + id + '" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="#4d41f0" stop-opacity="' + topOpacity + '"/>' +
+          '<stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/>' +
+          '</linearGradient></defs>'
+        );
+      }
+
+      function chartSvg(concept) {
+        var id = concept.id;
+        var extras = "";
+        var fillPath = "";
+        var grad = gradient(id, concept.id === "c" ? 0.12 : 0.2);
+
+        if (concept.id === "d") {
+          extras =
+            '<line class="tick-line" x1="78" y1="24" x2="78" y2="128"/>' +
+            '<line class="tick-line" x1="144" y1="24" x2="144" y2="128"/>' +
+            '<line class="tick-line" x1="210" y1="24" x2="210" y2="128"/>' +
+            '<text class="tick-label" x="78" y="136" text-anchor="middle">3 mo</text>' +
+            '<text class="tick-label" x="144" y="136" text-anchor="middle">6 mo</text>' +
+            '<text class="tick-label" x="210" y="136" text-anchor="middle">9 mo</text>';
+        }
+
+        if (concept.id !== "b" && concept.id !== "f") {
+          fillPath = '<path class="fill" data-chart-fill pathLength="1" d="' + PATH_FILL + '" fill="url(#grad-' + id + ')"/>';
+        } else {
+          fillPath = '<path class="fill" data-chart-fill pathLength="1" d="' + PATH_FILL + '" fill="url(#grad-' + id + ')" style="opacity:0"/>';
+        }
+
+        var dotOpts = {};
+        if (concept.id === "c") dotOpts.r = 5;
+        if (concept.id === "e") dotOpts.startFill = "#9a0239";
+        if (concept.id === "b") dotOpts.endRing = true;
+
+        return (
+          '<div class="weight-chart chart-concept ' + concept.mod + '" data-chart-root>' +
+          '<svg viewBox="0 0 300 140" preserveAspectRatio="none" aria-hidden="true">' +
+          grad + extras + fillPath +
+          '<path class="main" data-chart-line pathLength="1" d="' + PATH_LINE + '"/>' +
+          dots(id, dotOpts) +
+          '</svg>' +
+          '<div class="axis-label mnode" data-k="axis"><span>Today</span><span>12 months</span></div>' +
+          '</div>'
+        );
+      }
+
+      function phoneHtml(concept) {
+        return (
+          '<div class="phone phone--hifi phone--stat-reveal has-footer-dock" data-reveal-motion data-variant="statFadeHold">' +
+          '<div class="quiz-scroll"><div class="quiz-main quiz-main--stat-reveal">' +
+          '<div style="height:24px"></div>' +
+          '<div class="mnode" data-k="eyebrow"><p class="reveal-eyebrow">Your 12-month estimate</p></div>' +
+          '<div style="height:12px"></div>' +
+          '<div class="mnode" data-k="lead"><p class="reveal-lead">At your current weight, with Moshy you could lose up to</p></div>' +
+          '<div style="height:8px"></div>' +
+          '<div class="mnode" data-k="statBlock">' +
+          '<p class="stat-hero mnode" data-k="stat"><span data-stat-num>0</span><span class="unit">kg</span></p>' +
+          '<p class="stat-sub mnode" data-k="sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>' +
+          '</div>' +
+          '<div style="height:16px"></div>' +
+          '<div class="chart-fullbleed mnode" data-k="chart">' + chartSvg(concept) + '</div>' +
+          '</div></div>' +
+          '<div class="footer-dock">' +
+          '<div style="height:24px"></div>' +
+          '<div class="mnode" data-k="cta"><button class="input-cta" type="button">Continue</button></div>' +
+          '</div></div>'
+        );
+      }
+
+      var board = document.getElementById("board");
+      var instances = [];
+
+      CONCEPTS.forEach(function (c) {
+        var art = document.createElement("article");
+        art.className = "art";
+        art.id = "chart-" + c.id;
+        art.innerHTML =
+          '<div class="art-label">' +
+          '<span class="letter">' + c.letter + '</span>' +
+          '<b>' + c.title + '</b>' +
+          '<p class="job">' + c.job + '</p>' +
+          '</div>' +
+          '<div class="phone-shell">' + phoneHtml(c) + '</div>';
+        board.appendChild(art);
+        instances.push(RevealMotion.mount(art.querySelector("[data-reveal-motion]"), { loop: true, autoplay: true }));
+      });
+
+      document.getElementById("replay-all").addEventListener("click", function () {
+        instances.forEach(function (inst) { inst.play(); });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MOSHY MY · Act 2 hi-fi · Invest & personalise</title>
+  <link rel="stylesheet" href="../../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../../design/midfi-shared.css" />
+  <style>
+    @font-face {
+      font-family: "Area Inktrap";
+      src: url("../../design/fonts/AreaInktrap-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Figtree";
+      src: url("../../design/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: var(--color-ink);
+      --ink-muted: var(--color-ink-muted);
+      --ground: var(--color-ground);
+      --surface: var(--color-surface-quiet);
+      --ruby: var(--color-action);
+      --accent: var(--color-accent);
+      --accent-soft: var(--blue-xlight);
+      --accent-ring: rgba(77, 65, 240, 0.35);
+      --border: var(--color-divider);
+      --board: #e8e6ee;
+      --font: var(--font-sans);
+      --display: var(--font-heading);
+      --phone-w: 390px;
+      --safe-bottom: var(--space-md);
+    }
+
+    body { margin: 0; background: var(--board); color: var(--ink); font-family: var(--font); font-size: var(--type-p2-phone); }
+    .intro { padding: 28px 28px 12px; max-width: 100ch; }
+    .intro h1 { margin: 0 0 6px; font: 700 var(--type-h3-phone)/1.2 var(--display); }
+    .intro p { margin: 0 0 12px; font-size: var(--type-p2-phone); line-height: 1.55; color: var(--ink-muted); }
+    .intro a { color: var(--accent); font-weight: 600; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;
+      background: #fff; color: var(--accent); border: 1px solid var(--border);
+    }
+    .board { display: flex; flex-wrap: wrap; gap: 28px 24px; padding: 16px 28px 64px; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); }
+    .art-label { margin-bottom: 10px; }
+    .art-label b { display: block; font: 700 15px/1.25 var(--display); }
+    .art-label .tpl { font-size: 10px; font-weight: 700; color: var(--ruby); text-transform: uppercase; letter-spacing: 0.05em; }
+    .art-label .step { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; }
+    .art-label .job { margin-top: 4px; font-size: 12px; color: var(--ink-muted); }
+
+    .phone--hifi {
+      width: var(--phone-w);
+      min-height: 844px;
+      background: var(--ground);
+      border-radius: 0;
+      border: 1px solid var(--border);
+      box-shadow: var(--elev-card);
+    }
+    .phone--hifi .q-head { font-size: var(--type-h4-phone); line-height: var(--type-h4-phone); letter-spacing: -0.02em; }
+    .phone--hifi .q-sub { font-size: var(--type-p2-phone); line-height: 1.5; }
+    .phone--hifi .opt { border-radius: var(--radius-m); font-size: var(--type-p2-phone); margin-bottom: var(--space-sm); padding: var(--space-md); }
+    .phone--hifi .opt .ico { border-radius: var(--radius-s); }
+    .phone--hifi .cta, .phone--hifi .input-cta { border-radius: var(--radius-s); font-size: var(--type-p2-phone); box-shadow: var(--elev-cta); }
+    .phone--hifi .num-field { border-radius: var(--radius-l); border-width: 2px; }
+    .phone--hifi .num-field input { font-size: 40px; }
+    .phone--hifi .fine { font-size: var(--type-p3-phone); text-align: left; }
+    .phone--hifi .loader-head { font-size: var(--type-h5-phone); }
+    .phone--hifi .loader-check { border-radius: var(--radius-m); font-size: var(--type-p2-phone); }
+    .phone--hifi .hero-illus { border-radius: var(--radius-l); }
+    .phone--hifi .brand-bar .lang { border-radius: var(--radius-s); font-size: var(--type-p3-phone); }
+  </style>
+</head>
+<body>
+  <header class="intro">
+    <h1>Act 2 hi-fi · Layout examples</h1>
+    <p><strong>Deprecated for production hi-fi.</strong> Use <a href="../../frames/gallery.html">frames/gallery.html</a> and per-screen <code>frames/built/s-XX.html</code> instead. This board remains as a layout reference only.</p>
+    <p>Rules: <a href="../quiz-layout-rules.md">quiz-layout-rules.md</a> · Spacing: <a href="../act-2-spacing.lock.json">lock file</a> · <a href="../midfi/act-2-spacing-mixboard.html">Tuner</a></p>
+    <div class="tags">
+      <span class="tag">Trustpilot page-footer</span>
+      <span class="tag">Fixed CTA + TP dock</span>
+      <span class="tag">Headline→content 44px</span>
+    </div>
+  </header>
+
+  <div class="board">
+
+    <!-- 2.1 Layout B: fixed CTA dock + TP below -->
+    <article class="art">
+      <div class="art-label"><span class="tpl">Layout B</span><span class="step">2.1</span><b>Why we ask</b><div class="job">Scroll · legal in scroll · CTA + TP fixed</div></div>
+      <div class="phone phone--hifi has-footer-dock">
+        <div class="brand-shell"><div class="brand-bar"><div class="logo">moshy</div><div class="lang">EN</div></div></div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">First, a few details about you</h2></div>
+            <div class="spacing-block" data-gap="headline-subhead"></div>
+            <div class="subhead-block"><p class="q-sub">We'll check if this programme is right for you and estimate how much weight you could lose over 12 months.</p></div>
+            <div class="spacing-block" data-gap="subhead-content"></div>
+            <div class="content-block">
+              <div class="hero-illus">
+                <div class="icon-ring">📊</div>
+                <p>Your personalised 12-month estimate — built from your details, not a generic claim.</p>
+              </div>
+            </div>
+            <div class="spacing-block" data-gap="content-footer"></div>
+            <div class="legal-block"><p class="fine">By continuing you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></p></div>
+          </div>
+        </div>
+        <div class="footer-dock">
+          <button class="cta" type="button">Continue →</button>
+          <div class="spacing-block" data-gap="cta-trust"></div>
+          <div class="trust-row" data-layer="trust block">
+            <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+            <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+          </div>
+          <div class="spacing-block" data-gap="trust-bottom"></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2.2 Layout A: tap advance + TP page-footer -->
+    <article class="art" id="frame-gender">
+      <div class="art-label"><span class="tpl">Layout A</span><span class="step">2.2</span><b>Gender</b><div class="job">TP pins bottom when short</div></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min" type="button" aria-label="Back">‹</button>
+            <div class="prog-pills"><i class="on"></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">What is your gender?</h2></div>
+            <div class="spacing-block" data-gap="headline-subhead"></div>
+            <div class="subhead-block"><p class="q-sub">For medical purposes.</p></div>
+            <div class="spacing-block" data-gap="subhead-content"></div>
+            <div class="content-block">
+              <div class="opts">
+                <div class="opt sel"><span class="ico">♀</span>Female</div>
+                <div class="opt"><span class="ico">♂</span>Male</div>
+              </div>
+            </div>
+          </div>
+          <div class="page-footer">
+            <div class="trust-row" data-layer="trust block">
+              <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+              <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+            </div>
+            <div class="spacing-block" data-gap="trust-bottom"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2.3 Layout C: no subhead · 44px · TP above numpad -->
+    <article class="art" id="frame-height">
+      <div class="art-label"><span class="tpl">Layout C</span><span class="step">2.3</span><b>Height</b><div class="job">Headline→content 44px</div></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min" type="button">‹</button>
+            <div class="prog-pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">My height is…</h2></div>
+            <div class="spacing-block" data-gap="headline-content"></div>
+            <div class="content-block">
+              <label class="num-field focused">
+                <input type="number" inputmode="decimal" value="165" aria-label="Height in centimetres" />
+                <span class="unit">cm</span>
+              </label>
+              <button class="input-cta" type="button">Continue →</button>
+            </div>
+          </div>
+          <div class="page-footer">
+            <div class="trust-row" data-layer="trust block">
+              <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+              <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+            </div>
+            <div class="spacing-block" data-gap="trust-bottom"></div>
+          </div>
+        </div>
+        <div class="numpad-dock" aria-hidden="true"><div class="numpad-grid"><key>1</key><key>2</key><key>3</key><key>4</key><key>5</key><key>6</key><key>7</key><key>8</key><key>9</key><key class="action">.</key><key>0</key><key class="action">⌫</key></div></div>
+      </div>
+    </article>
+
+    <!-- 2.4 -->
+    <article class="art" id="frame-weight">
+      <div class="art-label"><span class="tpl">Layout C</span><span class="step">2.4</span><b>Weight</b></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min" type="button">‹</button>
+            <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="on"></i><i></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">My weight is…</h2></div>
+            <div class="spacing-block" data-gap="headline-content"></div>
+            <div class="content-block">
+              <label class="num-field focused">
+                <input type="number" inputmode="decimal" value="82" aria-label="Weight in kilograms" />
+                <span class="unit">kg</span>
+              </label>
+              <button class="input-cta" type="button">Continue →</button>
+            </div>
+          </div>
+          <div class="page-footer">
+            <div class="trust-row" data-layer="trust block">
+              <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+              <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+            </div>
+            <div class="spacing-block" data-gap="trust-bottom"></div>
+          </div>
+        </div>
+        <div class="numpad-dock" aria-hidden="true"><div class="numpad-grid"><key>1</key><key>2</key><key>3</key><key>4</key><key>5</key><key>6</key><key>7</key><key>8</key><key>9</key><key class="action">.</key><key>0</key><key class="action">⌫</key></div></div>
+      </div>
+    </article>
+
+    <!-- 2.5 Layout A + legal -->
+    <article class="art">
+      <div class="art-label"><span class="tpl">Layout A+legal</span><span class="step">2.5</span><b>Age</b><div class="job">TP then legal · short content</div></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min" type="button">‹</button>
+            <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">How old are you?</h2></div>
+            <div class="spacing-block" data-gap="headline-subhead"></div>
+            <div class="subhead-block"><p class="q-sub">Helps us personalise your estimate.</p></div>
+            <div class="spacing-block" data-gap="subhead-content"></div>
+            <div class="content-block">
+              <div class="opts">
+                <div class="opt">18–29</div><div class="opt sel">30–39</div><div class="opt">40–49</div>
+                <div class="opt">50–59</div><div class="opt">60–69</div><div class="opt">70+</div>
+              </div>
+            </div>
+          </div>
+          <div class="page-footer">
+            <div class="trust-row" data-layer="trust block">
+              <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+              <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+            </div>
+            <div class="spacing-block" data-gap="trust-legal"></div>
+            <div class="legal-block"><p class="fine">By continuing you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></p></div>
+            <div class="spacing-block" data-gap="trust-bottom"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2.5b long scroll -->
+    <article class="art">
+      <div class="art-label"><span class="tpl">Layout A+legal</span><span class="step">2.5b</span><b>Age · long</b><div class="job">TP + legal scroll with options</div></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min" type="button">‹</button>
+            <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="headline-block"><h2 class="q-head">How old are you?</h2></div>
+            <div class="spacing-block" data-gap="headline-subhead"></div>
+            <div class="subhead-block"><p class="q-sub">Helps us personalise your estimate.</p></div>
+            <div class="spacing-block" data-gap="subhead-content"></div>
+            <div class="content-block">
+              <div class="opts">
+                <div class="opt">Under 18</div><div class="opt">18–24</div><div class="opt">25–29</div>
+                <div class="opt">30–34</div><div class="opt sel">35–39</div><div class="opt">40–44</div>
+                <div class="opt">45–49</div><div class="opt">50–54</div><div class="opt">55–59</div>
+                <div class="opt">60–64</div><div class="opt">65–69</div><div class="opt">70–74</div>
+                <div class="opt">75+</div>
+              </div>
+            </div>
+          </div>
+          <div class="page-footer">
+            <div class="trust-row" data-layer="trust block">
+              <span class="trust-row__stars" aria-hidden="true">★★★★★</span>
+              <span class="trust-row__text"><strong>Excellent</strong> · 4.8 on Trustpilot</span>
+            </div>
+            <div class="spacing-block" data-gap="trust-legal"></div>
+            <div class="legal-block"><p class="fine">By continuing you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></p></div>
+            <div class="spacing-block" data-gap="trust-bottom"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2.6 Layout D -->
+    <article class="art">
+      <div class="art-label"><span class="tpl">Layout D</span><span class="step">2.6</span><b>Adding it up</b><div class="job">No Trustpilot</div></div>
+      <div class="phone phone--hifi">
+        <div class="nav-shell">
+          <div class="nav-row">
+            <button class="back-min hidden" type="button" aria-hidden="true">‹</button>
+            <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></div>
+          </div>
+        </div>
+        <div class="quiz-scroll">
+          <div class="quiz-main">
+            <div class="spacing-block" data-gap="chrome-headline"></div>
+            <div class="content-block">
+              <div class="loader-zone" style="padding:0">
+                <div class="loader-ring" aria-hidden="true"></div>
+                <h2 class="loader-head">Adding it up</h2>
+                <p class="loader-sub">Personalising your 12-month estimate.</p>
+                <div class="loader-checks">
+                  <div class="loader-check done"><span class="tick">✓</span> Checking BMI range</div>
+                  <div class="loader-check done"><span class="tick">✓</span> Calculating 12-month estimate</div>
+                  <div class="loader-check pending"><span class="tick"></span> Preparing your results</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+  <script>
+    (function () {
+      if (!location.hash) return;
+      var el = document.querySelector(location.hash);
+      if (el) setTimeout(function () { el.scrollIntoView({ behavior: "instant", inline: "center", block: "nearest" }); }, 150);
+    })();
+  </script>
+</body>
+</html>

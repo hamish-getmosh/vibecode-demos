@@ -1,0 +1,93 @@
+/* Entry hook · tpl-entry-hook · Layout B + full-bleed hero (concept B) */
+
+html.frame-preview .phone--entry-hook {
+  background: var(--ground, #fcfcfc);
+}
+
+html.frame-preview .phone--entry-hook .brand-shell,
+html.frame-preview .phone--entry-hook .quiz-scroll,
+html.frame-preview .phone--entry-hook .footer-dock {
+  background: transparent;
+}
+
+html.frame-preview .phone--entry-hook .quiz-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+html.frame-preview .entry-hero {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 340px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+html.frame-preview .entry-hero__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 8%, rgba(110, 127, 232, 0.42) 0%, transparent 68%),
+    linear-gradient(165deg, #ece9ff 0%, #f6f4fc 42%, #fcfcfc 100%);
+}
+
+html.frame-preview .entry-hero__fig {
+  position: relative;
+  z-index: 1;
+  padding: 0 32px 28px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+html.frame-preview .entry-hero__ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #ffffff 0%, #ebe6ff 100%);
+  border: 1px solid rgba(77, 65, 240, 0.14);
+  box-shadow:
+    0 20px 56px rgba(77, 65, 240, 0.16),
+    0 4px 16px rgba(49, 44, 98, 0.08);
+}
+
+html.frame-preview .entry-hero__icon {
+  width: 72px;
+  height: 72px;
+  color: var(--accent, #4d41f0);
+}
+
+html.frame-preview .entry-copy {
+  flex-shrink: 0;
+  padding: 0 32px;
+}
+
+html.frame-preview .phone--entry-hook .question-block {
+  margin: 0;
+}
+
+html.frame-preview .phone--entry-hook .q-head {
+  font-size: 30px;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  max-width: 16ch;
+}
+
+html.frame-preview .phone--entry-hook .q-sub {
+  max-width: 32ch;
+  margin-bottom: 0;
+}
+
+html.frame-preview .phone--entry-hook .footer-dock .input-cta--entry {
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 18px 28px;
+}

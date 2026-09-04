@@ -1,0 +1,260 @@
+{
+  "templates": [
+    {
+      "id": "entry-hook",
+      "name": "entry-hook",
+      "templateId": "entry-hook",
+      "templateHref": "templates/entry-hook/template.html",
+      "instances": [
+        {
+          "screenId": "s-11",
+          "title": "Entry hook",
+          "src": "built/s-11.html",
+          "hydration": "templates/entry-hook/hydrations/entry.json"
+        }
+      ]
+    },
+    {
+      "id": "intro",
+      "name": "intro",
+      "templateId": "intro",
+      "templateHref": "templates/intro/template.html",
+      "instances": [
+        {
+          "screenId": "s-21",
+          "title": "Check-in roadmap",
+          "src": "built/s-21.html",
+          "hydration": "templates/intro/hydrations/check-in-roadmap.json"
+        }
+      ]
+    },
+    {
+      "id": "radio",
+      "name": "radio",
+      "templateId": "radio",
+      "templateHref": "templates/radio/template.html",
+      "instances": [
+        {
+          "screenId": "s-22",
+          "title": "Gender",
+          "src": "built/s-22.html",
+          "hydration": "templates/radio/hydrations/gender.json"
+        },
+        {
+          "screenId": "s-22b",
+          "title": "Female gate",
+          "src": "built/s-22b.html",
+          "hydration": "templates/radio/hydrations/female-gate.json"
+        },
+        {
+          "screenId": "s-33",
+          "title": "Age",
+          "src": "built/s-33.html",
+          "hydration": "templates/radio/hydrations/age.json"
+        },
+        {
+          "screenId": "s-34",
+          "title": "Yo-yo history",
+          "src": "built/s-34.html",
+          "hydration": "templates/radio/hydrations/yo-yo.json"
+        },
+        {
+          "screenId": "s-35",
+          "title": "Harder lately",
+          "src": "built/s-35.html",
+          "hydration": "templates/radio/hydrations/harder-lately.json"
+        },
+        {
+          "screenId": "s-36",
+          "title": "Energy",
+          "src": "built/s-36.html",
+          "hydration": "templates/radio/hydrations/energy.json"
+        },
+        {
+          "screenId": "s-36f",
+          "title": "Menopause",
+          "src": "built/s-36f.html",
+          "hydration": "templates/radio/hydrations/menopause.json"
+        },
+        {
+          "screenId": "s-37",
+          "title": "Carry weight",
+          "src": "built/s-37.html",
+          "hydration": "templates/radio/hydrations/carry-weight.json"
+        }
+      ]
+    },
+    {
+      "id": "multi-select",
+      "name": "multi-select",
+      "templateId": "multi-select",
+      "templateHref": "templates/multi-select/template.html",
+      "instances": [
+        {
+          "screenId": "s-25",
+          "title": "Health conditions",
+          "src": "built/s-25.html",
+          "hydration": "templates/multi-select/hydrations/health-conditions.json"
+        }
+      ]
+    },
+    {
+      "id": "numeric-input",
+      "name": "numeric-input",
+      "templateId": "numeric-input",
+      "templateHref": "templates/numeric-input/template.html",
+      "instances": [
+        {
+          "screenId": "s-23",
+          "title": "Height",
+          "src": "built/s-23.html",
+          "hydration": "templates/numeric-input/hydrations/height.json"
+        },
+        {
+          "screenId": "s-24",
+          "title": "Weight",
+          "src": "built/s-24.html",
+          "hydration": "templates/numeric-input/hydrations/weight.json"
+        }
+      ]
+    },
+    {
+      "id": "loader",
+      "name": "loader",
+      "templateId": "loader",
+      "templateHref": "templates/loader/template.html",
+      "instances": [
+        {
+          "screenId": "s-31",
+          "title": "Checking eligibility",
+          "src": "built/s-31.html",
+          "hydration": "templates/loader/hydrations/checking-eligibility.json"
+        },
+        {
+          "screenId": "s-38",
+          "title": "Adding it up",
+          "src": "built/s-38.html",
+          "hydration": "templates/loader/hydrations/adding-it-up.json"
+        }
+      ]
+    },
+    {
+      "id": "stat-reveal",
+      "name": "stat-reveal",
+      "templateId": "stat-reveal",
+      "templateHref": "templates/stat-reveal/template.html",
+      "instances": [
+        {
+          "screenId": "s-39",
+          "title": "Stat reveal",
+          "src": "built/s-39.html",
+          "hydration": "templates/stat-reveal/hydrations/stat-reveal.json"
+        }
+      ]
+    },
+    {
+      "id": "reframe",
+      "name": "reframe",
+      "templateId": "reframe",
+      "templateHref": "templates/reframe/template.html",
+      "instances": [
+        {
+          "screenId": "s-310",
+          "title": "300g reframe",
+          "src": "built/s-310.html",
+          "hydration": "templates/reframe/hydrations/pace-reframe.json"
+        }
+      ]
+    },
+    {
+      "id": "decline",
+      "name": "decline",
+      "templateId": "decline",
+      "templateHref": "templates/decline/template.html",
+      "instances": [
+        {
+          "screenId": "s-fail",
+          "title": "Not eligible",
+          "src": "built/s-fail.html",
+          "hydration": "templates/decline/hydrations/not-eligible.json"
+        }
+      ]
+    },
+    {
+      "id": "eligible",
+      "name": "eligible",
+      "templateId": "eligible",
+      "templateHref": "templates/eligible/template.html",
+      "instances": [
+        {
+          "screenId": "s-32",
+          "title": "BMI check passed",
+          "src": "built/s-32.html",
+          "hydration": "templates/eligible/hydrations/bmi-passed.json"
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "name": "profile",
+      "templateId": "profile",
+      "templateHref": "templates/profile/template.html",
+      "instances": [
+        {
+          "screenId": "s-41",
+          "title": "Health profile",
+          "src": "built/s-41.html",
+          "hydration": "templates/profile/hydrations/health-profile.json"
+        }
+      ]
+    },
+    {
+      "id": "fit",
+      "name": "fit",
+      "templateId": "fit",
+      "templateHref": "templates/fit/template.html",
+      "instances": [
+        {
+          "screenId": "s-42",
+          "title": "Why GLP-1 may fit you",
+          "src": "built/s-42.html",
+          "hydration": "templates/fit/hydrations/why-glp-fit.json"
+        },
+        {
+          "screenId": "s-42-male-preview",
+          "title": "Why GLP-1 may fit you \u00b7 male",
+          "src": "built/s-42-male-preview.html",
+          "hydration": "templates/fit/hydrations/why-glp-fit-male.json"
+        }
+      ]
+    },
+    {
+      "id": "programme",
+      "name": "programme",
+      "templateId": "programme",
+      "templateHref": "templates/programme/template.html",
+      "instances": [
+        {
+          "screenId": "s-43",
+          "title": "What Moshy does",
+          "src": "built/s-43.html",
+          "hydration": "templates/programme/hydrations/what-moshy-does.json"
+        }
+      ]
+    },
+    {
+      "id": "trust",
+      "name": "trust",
+      "templateId": "trust",
+      "templateHref": "templates/trust/template.html",
+      "instances": [
+        {
+          "screenId": "s-44",
+          "title": "You're in safe hands",
+          "src": "built/s-44.html",
+          "hydration": "templates/trust/hydrations/safe-hands.json"
+        }
+      ]
+    }
+  ]
+}

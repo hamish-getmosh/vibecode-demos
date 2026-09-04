@@ -1,0 +1,101 @@
+{
+  "version": "2",
+  "personas": [
+    {
+      "id": "max-female",
+      "label": "Max · female",
+      "description": "All triggered — strongest personalisation",
+      "gender": "female",
+      "answers": {
+        "yoYo": "yo-yo",
+        "harderLately": "yes",
+        "menopause": "peri"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 3,
+        "fallbackCount": 0
+      }
+    },
+    {
+      "id": "max-male",
+      "label": "Max · male",
+      "description": "All triggered — strongest personalisation",
+      "gender": "male",
+      "answers": {
+        "yoYo": "yo-yo",
+        "harderLately": "yes",
+        "energy": "exhausted"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 3,
+        "fallbackCount": 0
+      }
+    },
+    {
+      "id": "neutral-female",
+      "label": "Neutral · female",
+      "description": "All fallback — softest copy",
+      "gender": "female",
+      "answers": {
+        "yoYo": "never",
+        "harderLately": "no",
+        "menopause": "no"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 0,
+        "fallbackCount": 3
+      }
+    },
+    {
+      "id": "neutral-male",
+      "label": "Neutral · male",
+      "description": "All fallback — softest copy",
+      "gender": "male",
+      "answers": {
+        "yoYo": "once",
+        "harderLately": "unsure",
+        "energy": "moderate"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 0,
+        "fallbackCount": 3
+      }
+    },
+    {
+      "id": "mixed-female",
+      "label": "Mixed · female",
+      "description": "Two triggered, one fallback",
+      "gender": "female",
+      "answers": {
+        "yoYo": "few-times",
+        "harderLately": "no",
+        "menopause": "menopause"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 2,
+        "fallbackCount": 1
+      }
+    },
+    {
+      "id": "mixed-male",
+      "label": "Mixed · male",
+      "description": "Two triggered, one fallback",
+      "gender": "male",
+      "answers": {
+        "yoYo": "few-times",
+        "harderLately": "a-little",
+        "energy": "high"
+      },
+      "expected": {
+        "bulletCount": 3,
+        "triggeredCount": 2,
+        "fallbackCount": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "fit",
+  "required": ["screenId", "headline", "bullets", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string",
+    "showSubhead": { "type": "boolean", "default": true },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "bullets": [{
+      "text": "string",
+      "variant": "triggered | fallback",
+      "slotId": "string (optional, for Framer runtime)"
+    }],
+    "disclaimer": "string",
+    "ctaLabel": { "type": "string", "default": "Continue" },
+    "trustpilot": { "type": "boolean", "default": true },
+    "legal": { "type": "boolean", "default": false }
+  }
+}

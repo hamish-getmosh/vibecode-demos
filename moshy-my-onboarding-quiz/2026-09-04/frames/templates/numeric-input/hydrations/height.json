@@ -1,0 +1,18 @@
+{
+  "screenId": "s-23",
+  "template": "numeric-input",
+  "title": "Height",
+  "headline": "My height is\u2026",
+  "value": "165",
+  "unit": "cm",
+  "ariaLabel": "Height in centimetres",
+  "showNumpad": true,
+  "progress": {
+    "done": 1,
+    "current": 1,
+    "total": 4
+  },
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

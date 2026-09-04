@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="frame-preview">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Height</title>
+  <link rel="stylesheet" href="../../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../components/cta-primary/component.css" />
+  <link rel="stylesheet" href="../components/question/component.css" />
+  <link rel="stylesheet" href="../components/trustpilot-row/component.css" />
+  <link rel="stylesheet" href="../components/legal-fine/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input-dock/component.css" />
+  <link rel="stylesheet" href="../components/loader-step/component.css" />
+  <link rel="stylesheet" href="../components/loader-stack/component.css" />
+  <link rel="stylesheet" href="../templates/loader/template.css" />
+<style id="template-spacing">
+:root {
+  --quiz-gap-chrome-headline: 44px;
+  --quiz-gap-headline-content: 44px;
+  --quiz-gap-trust-bottom: 16px;
+  --quiz-gap-trust-legal: 8px;
+}
+</style>
+</head>
+<body>
+<div class="phone phone--hifi">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main">
+      <div class="spacing-block" data-gap="chrome-headline" data-token="2xl" data-px="44px"></div>
+      <div class="question-block">
+  <h2 class="q-head">My height is…</h2>
+  
+</div>
+
+      <div class="spacing-block" data-gap="headline-content" data-token="2xl" data-px="44px"></div>
+      <div class="content-block">
+        <div class="numeric-input-dock">
+  <label class="num-field">
+  <span class="num-field__body">
+    <span class="num-field__cluster">
+      <span class="num-field__value-wrap">
+        <input type="text" class="num-field__input" inputmode="decimal" value="165" aria-label="Height in centimetres" readonly tabindex="-1" />
+      </span>
+      <span class="num-field__unit-wrap">
+        <span class="unit">cm</span>
+      </span>
+    </span>
+  </span>
+</label>
+
+  <button class="input-cta" type="button">Continue</button>
+
+  <div class="trust-row trust-row--embed" data-layer="trust block">
+  <div class="trust-row__embed">
+    <div class="trustpilot-widget"
+      data-locale="en-AU"
+      data-template-id="5419b637fa0340045cd0c936"
+      data-businessunit-id="665c9030d93d3d8666e023d9"
+      data-style-height="20px"
+      data-style-width="100%"
+      data-token="66d3ceff-718a-448e-9e37-a90847f5fcfc">
+      <a href="https://www.trustpilot.com/review/www.getmoshy.com.au" target="_blank" rel="noopener noreferrer">Trustpilot</a>
+    </div>
+    <div class="trust-row__link-block" aria-hidden="true"></div>
+  </div>
+</div>
+<script src="../components/trustpilot-row/trustpilot-embed.js"></script>
+<div class="spacing-block is-hidden" data-gap="trust-legal" data-legal-slot></div><div class="legal-block is-hidden" data-legal-slot><p class="fine">By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p></div><div class="spacing-block" data-gap="trust-bottom" data-token="md" data-px="16px"></div>
+</div>
+
+      </div>
+    </div>
+  </div>
+  <div class="numpad-dock" aria-hidden="true"><div class="numpad-grid"><key>1</key><key>2</key><key>3</key><key>4</key><key>5</key><key>6</key><key>7</key><key>8</key><key>9</key><key class="action">.</key><key>0</key><key class="action">⌫</key></div></div>
+</div>
+
+</body>
+</html>

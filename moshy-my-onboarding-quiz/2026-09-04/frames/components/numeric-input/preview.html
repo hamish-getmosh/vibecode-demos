@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" class="frame-preview component-lab">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>numeric-input · preview</title>
+  <link rel="stylesheet" href="../../../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../../../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../../../design/frame-hifi.css" />
+  <link rel="stylesheet" href="component.css" />
+  <link rel="stylesheet" href="interactive.css" />
+  <link rel="stylesheet" href="../preview-lab.css?v=3" />
+</head>
+<body>
+<div class="phone phone--hifi">
+  <div class="quiz-scroll">
+    <div class="quiz-main">
+      <div class="content-block">
+        <label class="num-field num-field--interactive is-empty" id="field-preview">
+          <span class="num-field__body">
+            <span class="num-field__cluster">
+              <span class="num-field__value-wrap">
+                <span class="num-field__mirror" id="mirror-preview" aria-hidden="true"></span>
+                <input type="text" class="num-field__input" id="num-preview" inputmode="decimal" value="" aria-label="Height in centimetres" />
+              </span>
+              <span class="num-field__unit-wrap">
+                <span class="unit" id="unit-preview">cm</span>
+              </span>
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="interactive.js"></script>
+<script src="preview.js"></script>
+</body>
+</html>

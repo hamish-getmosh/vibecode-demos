@@ -1,0 +1,16 @@
+{
+  "screenId": "s-39",
+  "template": "stat-reveal",
+  "title": "Stat reveal",
+  "motionVariant": "statFadeHold",
+  "eyebrow": "Your 12-month estimate",
+  "lead": "At your current weight, with Moshy you could lose up to",
+  "statSubBold": "over 12 months",
+  "statSubFine": "~12% body mass · estimate only",
+  "chartGradientId": "statChartGrad",
+  "chartAxisStart": "Today",
+  "chartAxisEnd": "12 months",
+  "ctaLabel": "Continue",
+  "trustpilot": true,
+  "legal": false
+}

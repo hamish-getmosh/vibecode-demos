@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Stat reveal + 300g reframe · Concepts</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --side-w: 240px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+    .side .note strong { color: var(--ink); }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); max-width: 80ch; }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; scroll-margin-top: 80px; }
+    .art.wide { width: calc(var(--phone-w) * 2 + 16px); flex: 0 0 calc(var(--phone-w) * 2 + 16px); }
+    .art-label { margin-bottom: 8px; min-height: 88px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+    .mobbin-ref { font-size: 9px; color: #6a6488; margin-top: 4px; }
+    .mobbin-ref a { color: var(--accent); text-decoration: none; }
+    .pair { display: flex; gap: 8px; }
+    .pair .step-badge { font-size: 8px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; text-align: center; }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+
+    /* Reveal phone */
+    .reveal-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .reveal-phone .nav-shell { padding: 12px 20px 0; flex-shrink: 0; }
+    .reveal-phone .nav-row { display: flex; align-items: center; justify-content: space-between; min-height: 28px; }
+    .reveal-phone .nav-back { width: 28px; height: 28px; border-radius: 8px; background: var(--surface); display: grid; place-items: center; font-size: 16px; color: var(--muted); }
+    .reveal-phone .nav-back.hidden { visibility: hidden; }
+    .reveal-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .reveal-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .reveal-phone .prog-pills i.done { background: var(--accent); }
+    .reveal-phone .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .reveal-phone .quiz-scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 0 20px; }
+    .reveal-phone .quiz-scroll.center { text-align: center; align-items: center; }
+    .reveal-phone .quiz-scroll.left { text-align: left; align-items: stretch; }
+    .reveal-phone .hero-block { flex: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; padding: 16px 0 8px; }
+    .reveal-phone .lead { font-size: 16px; line-height: 1.45; color: var(--muted); margin: 0 0 12px; max-width: 28ch; }
+    .reveal-phone.center .lead { margin-left: auto; margin-right: auto; }
+    .reveal-phone .stat-hero {
+      font-family: var(--display);
+      font-size: 72px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--accent);
+      margin: 0 0 4px;
+    }
+    .reveal-phone .stat-hero .unit { font-size: 32px; font-weight: 700; vertical-align: baseline; margin-left: 2px; }
+    .reveal-phone .stat-hero.ruby { color: var(--ruby); }
+    .reveal-phone .stat-sub { font-size: 16px; color: var(--ink); margin: 0 0 16px; line-height: 1.4; }
+    .reveal-phone .stat-sub em { font-style: normal; color: var(--muted); font-size: 14px; display: block; margin-top: 4px; }
+    .reveal-phone .headline {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 24px 0 10px;
+    }
+    .reveal-phone .subhead { font-size: 16px; line-height: 1.5; color: var(--muted); margin: 0 0 20px; }
+    .reveal-phone .subhead strong { color: var(--ink); font-weight: 600; }
+    .reveal-phone .infographic {
+      width: 100%;
+      max-width: 280px;
+      height: 120px;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 auto 12px;
+    }
+    .reveal-phone.left .infographic { margin: 0 0 12px; max-width: none; }
+    .reveal-phone .fine { font-size: 11px; line-height: 1.45; color: var(--muted); margin: 8px 0 0; max-width: 32ch; }
+    .reveal-phone.center .fine { margin-left: auto; margin-right: auto; }
+
+    .reveal-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0));
+      background: var(--ground);
+      border-top: 1px solid var(--border);
+    }
+    .reveal-phone .cta {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: var(--ruby);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 20px;
+      cursor: default;
+    }
+    .reveal-phone .cta.secondary { background: var(--surface); color: var(--ink); }
+
+    /* Charts */
+    .chart-card {
+      width: 100%;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .chart-card .chart-title { font-size: 12px; font-weight: 600; color: var(--muted); margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .bars-compare { display: flex; align-items: flex-end; justify-content: center; gap: 24px; height: 120px; padding-top: 8px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; max-width: 80px; }
+    .bar-col .bar {
+      width: 100%;
+      border-radius: 8px 8px 4px 4px;
+      min-height: 8px;
+    }
+    .bar-col .bar.lo { height: 48px; background: #d4d0dc; }
+    .bar-col .bar.mid { height: 72px; background: #b8b2c8; }
+    .bar-col .bar.hi { height: 112px; background: var(--accent); }
+    .bar-col .lbl { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.3; max-width: 72px; }
+    .bar-col .badge {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .trajectory {
+      width: 100%;
+      height: 140px;
+      position: relative;
+      margin: 8px 0 4px;
+    }
+    .trajectory svg { width: 100%; height: 100%; display: block; }
+    .trajectory .axis-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .trajectory-annot {
+      position: absolute;
+      right: 12%;
+      top: 18%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .daily-pill {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin: 12px auto;
+    }
+    .daily-pill .num {
+      font-family: var(--display);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+    }
+    .daily-pill .lbl { font-size: 14px; color: var(--ink); }
+
+    .divider-section {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 8px;
+    }
+    .divider-section .section-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .combo-scroll .hero-block { flex: 0; padding-top: 32px; }
+    .combo-scroll .divider-section { flex-shrink: 0; }
+
+    .staged-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      flex-shrink: 0;
+      color: var(--muted);
+      font-size: 18px;
+      align-self: center;
+      margin-top: 48px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Reveal + reframe</h1>
+      <p class="meta">002 onboarding · Act 2 peak moments (3.9 + 3.10)<br/>Offline exploration. Copy is provisional.</p>
+      <a href="#arch">Architecture</a>
+      <a href="reveal-staged-morph.html">Staged morph scenes</a>
+      <a href="#concepts">Concept directions</a>
+      <a href="#mobbin">Mobbin refs</a>
+      <a href="loader-concepts.html">Loader concepts</a>
+      <a href="mixboard.html#s-39">Main mixboard</a>
+      <p class="note">
+        <strong>Jobs:</strong> 3.9 = hope (tangible 12-month number). 3.10 = human scale (300g/day feels doable).<br/><br/>
+        <strong>Layout rules:</strong> E = centred hero, no back. F = left-aligned + chart, back visible. No Trustpilot on either.<br/><br/>
+        <strong>Open question:</strong> two taps vs one scroll vs staged morph on one screen.
+      </p>
+    </aside>
+    <main>
+      <section class="chapter" id="arch">
+        <div class="chapter-head">
+          <h2>Architecture · One screen or two?</h2>
+          <p>Both jobs must land before Act 3. The question is pacing: let the big number breathe, or reframe immediately while momentum is high?</p>
+        </div>
+        <div class="board">
+          <article class="art wide" id="arch-two">
+            <div class="art-label">
+              <span class="tag">Current lofi</span>
+              <b>Two screens · peak then pace</b>
+              <div class="job">Layout E → Layout F. User sits with 14 kg, taps Continue, then gets the daily reframe. Matches mixboard s-39 / s-310.</div>
+              <span class="psych">Peak-end · spacing effect</span>
+            </div>
+            <div class="pair">
+              <div>
+                <div class="step-badge">3.9 · reveal</div>
+                <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="baseline-reveal"></div></div></div>
+              </div>
+              <div class="staged-arrow">→</div>
+              <div>
+                <div class="step-badge">3.10 · reframe</div>
+                <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="baseline-reframe"></div></div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="arch-one">
+            <div class="art-label">
+              <span class="tag">Alt architecture</span>
+              <b>Single scroll · reveal + reframe</b>
+              <div class="job">One Layout E scroll: hero stat, divider, chart + daily pace, one CTA. Less tap friction; risk of chart competing with the number.</div>
+              <span class="psych">Cognitive fluency · one breath</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="single-scroll"></div></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="concepts">
+        <div class="chapter-head">
+          <h2>Concept directions</h2>
+          <p>Five treatments for the same copy spine. Pick an architecture first, then a visual direction. All use estimate framing and omit Trustpilot.</p>
+        </div>
+        <div class="board">
+          <article class="art wide" id="c-a">
+            <div class="art-label">
+              <span class="tag">A · Baseline</span>
+              <b>Hero stat + separate reframe chart</b>
+              <div class="job">Centred 14 kg with optional body-shape placeholder. Second screen: headline + 300g + without/with bars.</div>
+              <span class="psych">Hope → feasibility</span>
+              <div class="mobbin-ref">Refs: <a href="https://mobbin.com/screens/7c008b0f-60bc-427a-b146-0630fbcdacc6">Hers</a>, <a href="https://mobbin.com/screens/61bec45a-1a33-479a-8836-b7b9e0183384">Noom</a></div>
+            </div>
+            <div class="pair">
+              <div><div class="step-badge">Reveal</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="baseline-reveal"></div></div></div></div>
+              <div class="staged-arrow">→</div>
+              <div><div class="step-badge">Reframe</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="baseline-reframe"></div></div></div></div>
+            </div>
+          </article>
+
+          <article class="art" id="c-b">
+            <div class="art-label">
+              <span class="tag">B · Trajectory arc</span>
+              <b>Curve reveal, then zoom to daily</b>
+              <div class="job">Screen 1: 14 kg anchored on a 12-month descent curve (Cal AI / Bloom). Screen 2: same curve with 300g/day callout and comparison overlay.</div>
+              <span class="psych">Mental simulation · goal gradient</span>
+              <div class="mobbin-ref">Refs: <a href="https://mobbin.com/screens/2cf049e1-e6f3-4a04-b10b-b0323d01b4f5">Cal AI</a>, <a href="https://mobbin.com/screens/1aa2e324-6cef-4be6-8032-e211fbee17da">Bloom</a></div>
+            </div>
+            <div class="pair">
+              <div><div class="step-badge">Reveal</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="trajectory-reveal"></div></div></div></div>
+              <div class="staged-arrow">→</div>
+              <div><div class="step-badge">Reframe</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="trajectory-reframe"></div></div></div></div>
+            </div>
+          </article>
+
+          <article class="art wide" id="c-c">
+            <div class="art-label">
+              <span class="tag">C · Daily hero</span>
+              <b>Flip the hero to 300g</b>
+              <div class="job">Screen 1: conventional big-number reveal (14 kg). Screen 2: 300g becomes the hero stat (Apple Fitness move goal). 14 kg demoted to supporting line.</div>
+              <span class="psych">Anchoring inversion · chunking</span>
+              <div class="mobbin-ref">Refs: Apple Fitness goal screen, <a href="https://mobbin.com/screens/1579a318-4651-4c14-85f7-e5c88ca30875">Mobbin</a></div>
+            </div>
+            <div class="pair">
+              <div><div class="step-badge">Reveal</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="baseline-reveal"></div></div></div></div>
+              <div class="staged-arrow">→</div>
+              <div><div class="step-badge">Reframe</div><div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="daily-hero"></div></div></div></div>
+            </div>
+          </article>
+
+          <article class="art" id="c-d">
+            <div class="art-label">
+              <span class="tag">D · Comparison first</span>
+              <b>2× bars on one screen</b>
+              <div class="job">Noom-style without/with comparison carries both jobs. Headline states 14 kg; chart shows 2× outcome. CTA bridges to Act 3.</div>
+              <span class="psych">Social proof · contrast effect</span>
+              <div class="mobbin-ref">Refs: <a href="https://mobbin.com/flows/ca8cc45e-0b6b-4832-a95c-95bbb3a08430">Noom 2× flow</a>, <a href="https://mobbin.com/screens/40d35548-6e3d-4681-bdde-c1efc448b656">QUITTR</a></div>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="comparison-single"></div></div></div>
+          </article>
+
+          <article class="art" id="c-e">
+            <div class="art-label">
+              <span class="tag">E · Staged morph</span>
+              <b>One screen · scene strip (selected)</b>
+              <div class="job">10-beat comic strip for animation handoff. Chart slopes down. <a href="reveal-staged-morph.html">Open scene board →</a></div>
+              <span class="psych">Peak-end · progressive disclosure</span>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="staged-morph-final"></div></div></div>
+          </article>
+
+          <article class="art" id="c-f">
+            <div class="art-label">
+              <span class="tag">F · Personalised proof</span>
+              <b>Stat + "because you told us" chips</b>
+              <div class="job">Reveal ties number to quiz inputs (age, yo-yo, carry weight). Reframe stays chart-led. Builds "they mapped my body" before hope.</div>
+              <span class="psych">Self-reference effect · earned reveal</span>
+              <div class="mobbin-ref">Refs: Noom profile quiz intro, Equinox+ assessment</div>
+            </div>
+            <div class="hifi-viewport"><div class="hifi-viewport__inner"><div class="reveal-phone" data-variant="personalised"></div></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="mobbin">
+        <div class="chapter-head">
+          <h2>Mobbin patterns worth stealing</h2>
+          <p>Grouped by mechanism, not app category. Malaysia compliance still applies: estimate framing, no drug names pre-review.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;max-width:960px;font-size:11px;line-height:1.5;color:var(--muted);">
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Big centred number</strong>
+            Hers, Noom, Apple Fitness. Hope lands when the stat is the only thing in the viewport.
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Trajectory curve</strong>
+            Cal AI, Bloom, QUITTR. Shows path not just destination. Good after a loader.
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Without / with bars</strong>
+            Noom 2×, Commons. Reframe via contrast. Watch compliance on "2×" claims.
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Daily unit hero</strong>
+            Apple Fitness calories/day. Makes 300g feel like a habit not a diet.
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Dual-line emotional chart</strong>
+            Ahead, QUITTR. Jagged vs smooth. Works if yo-yo pattern was answered.
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;">
+            <strong style="color:var(--ink);display:block;margin-bottom:4px;">Input echo chips</strong>
+            Noom quiz intro. Ties projection to answers user just gave.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      function trajectorySvg(opts) {
+        var showCompare = opts.compare;
+        var showAnnot = opts.annot;
+        var h = 140;
+        var w = 280;
+        var comparePath = showCompare
+          ? '<path d="M8,28 Q70,45 120,55 T240,50 T272,58" fill="none" stroke="#d4d0dc" stroke-width="2.5" stroke-dasharray="6 4"/>'
+          : "";
+        var uid = "tg" + Math.floor(Math.random() * 9999);
+        var mainPath =
+          '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4d41f0" stop-opacity="0.22"/><stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/></linearGradient></defs>' +
+          '<path d="M8,28 Q90,42 160,78 T272,118" fill="none" stroke="#4d41f0" stroke-width="3" stroke-linecap="round"/>' +
+          '<path d="M8,28 Q90,42 160,78 T272,118 L272,' + h + ' L8,' + h + ' Z" fill="url(#' + uid + ')"/>';
+        var annot = showAnnot ? '<div class="trajectory-annot">≈ 300g/day</div>' : "";
+        return (
+          '<div class="trajectory">' + annot +
+          '<svg viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none">' +
+          comparePath + mainPath +
+          '</svg><div class="axis-label"><span>Today</span><span>12 months</span></div></div>'
+        );
+      }
+
+      function barsChart(badge) {
+        var badgeHtml = badge ? '<div class="bar-col"><div class="badge">' + badge + '</div><div class="bar hi"></div><div class="lbl">With Moshy</div></div>' : "";
+        return (
+          '<div class="chart-card"><div class="chart-title">Weight trajectory · 12 months</div>' +
+          '<div class="bars-compare">' +
+          '<div class="bar-col"><div class="bar lo"></div><div class="lbl">Without support</div></div>' +
+          badgeHtml +
+          (badge ? "" : '<div class="bar-col"><div class="bar hi"></div><div class="lbl">With Moshy</div></div>') +
+          "</div></div>"
+        );
+      }
+
+      function navHtml(backHidden, pillsDone) {
+        var pills = "";
+        for (var i = 0; i < 4; i += 1) {
+          pills += i < pillsDone ? '<i class="done"></i>' : i === pillsDone ? '<i class="on"></i>' : "<i></i>";
+        }
+        return (
+          '<div class="nav-shell"><div class="nav-row">' +
+          '<div class="nav-back' + (backHidden ? " hidden" : "") + '">‹</div>' +
+          '<div class="prog-pills">' + pills + "</div>" +
+          '<div style="width:28px"></div></div></div>'
+        );
+      }
+
+      function footerCta(label) {
+        return '<div class="footer-dock"><button type="button" class="cta">' + label + "</button></div>";
+      }
+
+      var VARIANTS = {
+        "baseline-reveal": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead">At your current weight, with Moshy you could lose up to</p>' +
+            '<p class="stat-hero">14<span class="unit">kg</span></p>' +
+            '<p class="stat-sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>' +
+            '<div class="infographic">body shape · optional</div>' +
+            '<p class="fine">Based on your age, metabolic profile, and where you carry weight.</p>' +
+            "</div></div>" + footerCta("Continue")
+          );
+        },
+        "baseline-reframe": function () {
+          return (
+            navHtml(false, 3) +
+            '<div class="quiz-scroll left"><div class="hero-block" style="justify-content:flex-start;padding-top:32px">' +
+            '<p class="headline">That might sound like a lot.</p>' +
+            '<p class="subhead">With Moshy, it\'s about <strong>300 grams a day</strong>. Small, steady progress beats crash diets.</p>' +
+            barsChart("") +
+            '<p class="fine">Illustrative trajectory. Individual results vary. A doctor confirms what\'s right for you.</p>' +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "single-scroll": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center combo-scroll">' +
+            '<div class="hero-block">' +
+            '<p class="lead">At your current weight, with Moshy you could lose up to</p>' +
+            '<p class="stat-hero">14<span class="unit">kg</span></p>' +
+            '<p class="stat-sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>' +
+            "</div>" +
+            '<div class="divider-section" style="text-align:left;width:100%">' +
+            '<div class="section-tag">The daily pace</div>' +
+            '<p class="headline" style="margin-top:0;font-size:22px">That\'s about 300g a day.</p>' +
+            '<p class="subhead" style="margin-bottom:12px">Small, steady progress beats crash diets.</p>' +
+            barsChart("") +
+            '<p class="fine">Estimate only. A doctor confirms what\'s right for you.</p>' +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "trajectory-reveal": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead">Your 12-month estimate with Moshy</p>' +
+            '<p class="stat-hero">14<span class="unit">kg</span></p>' +
+            '<p class="stat-sub"><em>~12% body mass · estimate only</em></p>' +
+            trajectorySvg({ compare: false, annot: false }) +
+            '<p class="fine">Based on your metabolic profile and body factors.</p>' +
+            "</div></div>" + footerCta("Continue")
+          );
+        },
+        "trajectory-reframe": function () {
+          return (
+            navHtml(false, 3) +
+            '<div class="quiz-scroll left"><div class="hero-block" style="justify-content:flex-start;padding-top:28px">' +
+            '<p class="headline">That might sound like a lot.</p>' +
+            '<p class="subhead">It breaks down to about <strong>300 grams a day</strong> with support.</p>' +
+            trajectorySvg({ compare: true, annot: true }) +
+            '<div style="display:flex;gap:16px;font-size:10px;color:var(--muted);margin-top:8px">' +
+            '<span>— Without support</span><span style="color:var(--accent)">— With Moshy</span></div>' +
+            '<p class="fine">Illustrative only. Individual results vary.</p>' +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "daily-hero": function () {
+          return (
+            navHtml(false, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead">That 14 kg? It starts here.</p>' +
+            '<div class="daily-pill"><span class="num">300</span><span class="lbl">grams / day</span></div>' +
+            '<p class="stat-sub" style="max-width:26ch;margin:0 auto"><strong>Small, steady progress</strong> beats crash diets. That\'s how we get to your 12-month estimate.</p>' +
+            '<div class="infographic" style="height:100px;margin-top:20px">week-by-week rhythm · optional</div>' +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "comparison-single": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead">At your current weight, with Moshy you could lose up to</p>' +
+            '<p class="stat-hero">14<span class="unit">kg</span></p>' +
+            '<p class="stat-sub"><em>over 12 months · estimate only</em></p>' +
+            '<div class="chart-card" style="text-align:left;margin-top:16px">' +
+            '<div class="chart-title">Steady progress vs yo-yo cycles</div>' +
+            '<div class="bars-compare" style="height:100px">' +
+            '<div class="bar-col"><div class="bar mid"></div><div class="lbl">Without support</div></div>' +
+            '<div class="bar-col"><div class="badge" style="margin-bottom:4px">Steadier</div><div class="bar hi"></div><div class="lbl">With Moshy</div></div>' +
+            "</div></div>" +
+            '<p class="subhead" style="font-size:14px;margin:12px 0 0">That\'s about <strong>300g a day</strong> — a pace you can live with.</p>' +
+            "</div></div>" + footerCta("See what this means for you →")
+          );
+        },
+        "staged-morph-final": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="stat-hero" style="font-size:36px;color:var(--muted);opacity:0.5;margin-bottom:4px">14<span class="unit" style="font-size:16px">kg</span></p>' +
+            '<div class="daily-pill" style="margin:12px auto"><span class="num" style="font-family:var(--display)">300</span><span class="lbl">grams / day</span></div>' +
+            '<p class="subhead" style="font-size:15px;max-width:28ch;margin:12px auto 16px"><strong>Small, steady progress</strong> with ongoing weight loss medication is how you get to where you want to be.</p>' +
+            trajectorySvg({ compare: false, annot: true }) +
+            '<p class="fine">Estimate only. Individual results vary.</p>' +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "staged-morph": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead" style="font-size:14px;opacity:0.7">Your 12-month estimate</p>' +
+            '<p class="stat-hero" style="font-size:48px;color:var(--muted)">14<span class="unit" style="font-size:22px">kg</span></p>' +
+            '<p class="headline" style="font-size:24px;margin:16px 0 8px">Breaks down to</p>' +
+            '<div class="daily-pill"><span class="num">300</span><span class="lbl">g / day</span></div>' +
+            '<p class="subhead" style="font-size:14px;max-width:24ch;margin:12px auto 0">Small, steady progress beats crash diets.</p>' +
+            trajectorySvg({ compare: false, annot: true }) +
+            "</div></div>" + footerCta("How it works →")
+          );
+        },
+        "personalised": function () {
+          return (
+            navHtml(true, 3) +
+            '<div class="quiz-scroll center"><div class="hero-block">' +
+            '<p class="lead">Based on what you told us, you could lose up to</p>' +
+            '<p class="stat-hero">14<span class="unit">kg</span></p>' +
+            '<p class="stat-sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 8px;max-width:280px">' +
+            '<span style="font-size:11px;background:var(--surface);padding:6px 10px;border-radius:999px;color:var(--ink)">Age 30–39</span>' +
+            '<span style="font-size:11px;background:var(--surface);padding:6px 10px;border-radius:999px;color:var(--ink)">Yo-yo pattern</span>' +
+            '<span style="font-size:11px;background:var(--surface);padding:6px 10px;border-radius:999px;color:var(--ink)">Belly carry</span>' +
+            "</div>" +
+            '<p class="fine">These factors shaped your estimate. A doctor still confirms what\'s right for you.</p>' +
+            "</div></div>" + footerCta("Continue")
+          );
+        }
+      };
+
+      document.querySelectorAll(".reveal-phone[data-variant]").forEach(function (el) {
+        var key = el.getAttribute("data-variant");
+        if (VARIANTS[key]) el.innerHTML = VARIANTS[key]();
+      });
+    })();
+  </script>
+</body>
+</html>

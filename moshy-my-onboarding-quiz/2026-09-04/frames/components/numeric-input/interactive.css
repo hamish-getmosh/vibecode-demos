@@ -1,0 +1,99 @@
+/**
+ * Interactive display layer — custom caret + mirror (not pulled from Framer).
+ * Framer tokens live in component.css; this file owns typing UX.
+ */
+
+.num-field__value-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+  min-height: 40px;
+}
+
+.num-field--interactive .num-field__mirror {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1em;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.num-field__digits {
+  display: block;
+  color: rgb(49, 44, 98);
+}
+
+.num-field.is-empty .num-field__digits {
+  color: rgb(139, 134, 176);
+}
+
+.num-field__caret {
+  flex-shrink: 0;
+  align-self: center;
+  width: 2px;
+  height: 0.88em;
+  border-radius: 999px;
+  background: rgb(77, 65, 240);
+  transform: translateY(-0.035em);
+  animation: num-field-caret-blink 1.05s step-start infinite;
+}
+
+.num-field__caret.is-leading {
+  margin-right: 2px;
+  margin-left: 0;
+}
+
+.num-field__caret.is-trailing {
+  margin-left: 3px;
+  margin-right: 0;
+}
+
+.num-field:not(.focused) .num-field__caret {
+  display: none;
+}
+
+@keyframes num-field-caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Capture focus/keys; visible layer is the mirror */
+.num-field__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  color: transparent;
+  caret-color: transparent;
+  background: transparent;
+  border: 0;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  -moz-appearance: textfield;
+}
+
+.num-field__input:focus {
+  outline: none;
+}
+
+/* Pull script sets .num-field__input display:block — override for interactive */
+.num-field--interactive .num-field__input {
+  display: block;
+}
+
+.num-field--interactive .num-field__value-wrap > .num-field__input {
+  position: absolute;
+}

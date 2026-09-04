@@ -1,0 +1,11 @@
+{
+  "gaps": {
+    "chrome-headline": "xl",
+    "subhead-content": "xl",
+    "headline-content": "lg",
+    "content-footer": "lg",
+    "cta-trust": "xs",
+    "trust-bottom": "md",
+    "trust-legal": "xs"
+  }
+}

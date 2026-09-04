@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · onboarding-value-stack · Mixboard</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <style>
+    :root {
+      --ink: #312c62; --muted: #7a7594; --ground: #f4f3f6; --board: #e8e6ee;
+      --wire: #c8c4d4; --fill: #fff; --accent: #4d41f0; --green: #2e7d32;
+      --green-bg: #e8f5e9; --ruby: #9a0239; --side-w: 240px; --phone-w: 248px;
+      --font: ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: var(--board); color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: var(--fill);
+      border-right: 1px solid var(--wire); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--wire); margin-bottom: 8px; }
+    .side a.doc { display: block; padding: 0 16px 10px; font-size: 11px; color: var(--accent); }
+    .nav-group { margin-bottom: 4px; }
+    .nav-group label {
+      display: block; padding: 8px 16px 4px; font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+    }
+    .nav-group a {
+      display: block; padding: 6px 16px; font-size: 12px; color: var(--ink);
+      text-decoration: none; border-left: 3px solid transparent;
+    }
+    .nav-group a:hover { background: var(--ground); }
+    .nav-group a.active { border-left-color: var(--accent); background: #f0edff; font-weight: 600; }
+    .nav-group a .id { color: var(--accent); font-weight: 700; margin-right: 6px; font-size: 10px; }
+    .nav-group a.branch { font-style: italic; color: var(--muted); }
+    .path-toggle { padding: 12px 16px; border-top: 1px solid var(--wire); margin-top: 8px; }
+    .path-toggle span { display: block; font-size: 10px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .path-toggle button {
+      border: 1px solid var(--wire); background: var(--fill); border-radius: 6px;
+      padding: 6px 10px; font-size: 11px; font-weight: 600; cursor: pointer; margin-right: 4px;
+    }
+    .path-toggle button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head {
+      margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--wire);
+    }
+    .chapter-head h2 { margin: 0 0 4px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+    .board .art { scroll-snap-align: start; }
+    .fidelity-badge { display: inline-block; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px; vertical-align: middle; text-transform: uppercase; }
+    .fidelity-badge.lofi { background: var(--ground); color: var(--muted); }
+    .fidelity-badge.hifi { background: var(--green-bg); color: var(--green); }
+    .hifi-viewport { width: var(--phone-w); height: calc(844px * 0.6359); overflow: hidden; border: 2px solid var(--ink); border-radius: 18px; background: #fff; flex-shrink: 0; }
+    .dynamic-note { font-size: 9px; color: var(--ruby); margin-top: 4px; line-height: 1.35; font-weight: 600; }
+    .phone-foot { margin-top: auto; width: 100%; }
+    .tp-foot { width: 100%; padding: 8px; border-radius: 8px; background: var(--ground); font-size: 9px; text-align: center; line-height: 1.35; }
+    .tp-foot .stars { color: #00b67a; font-size: 10px; letter-spacing: 1px; }
+    .note { font-size: 8px; color: var(--muted); margin-top: 6px; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-margin-top: 80px; }
+    .art-label { margin-bottom: 8px; }
+    .art-label .step { font-size: 10px; font-weight: 700; color: var(--accent); }
+    .art-label b { display: block; font-size: 13px; }
+    .art-label .job { font-size: 10px; color: var(--muted); }
+    .phone {
+      width: var(--phone-w); min-height: 480px; background: var(--fill);
+      border: 2px solid var(--ink); border-radius: 18px;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .chrome { padding: 8px 12px; border-bottom: 1px solid var(--wire); font-size: 9px; color: var(--muted); display: flex; justify-content: space-between; }
+    .body { flex: 1; padding: 10px 12px; display: flex; flex-direction: column; }
+    .body.center { align-items: center; text-align: center; }
+    .h { font-size: 14px; font-weight: 700; margin: 0 0 5px; line-height: 1.25; }
+    .sub { margin: 0 0 8px; font-size: 10px; color: var(--muted); line-height: 1.4; }
+    .opts { width: 100%; }
+    .opt {
+      padding: 8px 10px; margin-bottom: 5px; border-radius: 8px;
+      background: var(--ground); font-size: 10px; border: 1px solid transparent;
+    }
+    .opt.sel { border-color: var(--accent); background: #f0edff; }
+    .box { border: 1.5px dashed var(--wire); border-radius: 8px; padding: 8px; font-size: 10px; color: var(--muted); text-align: center; background: var(--ground); }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 999px; background: var(--green-bg); color: var(--green); font-size: 8px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--ground); border-top-color: var(--accent); border-radius: 50%; margin: 16px auto 8px; }
+    .check { font-size: 9px; padding: 5px 8px; margin-bottom: 3px; background: var(--ground); border-radius: 5px; width: 100%; text-align: left; }
+    .check::before { content: "✓ "; color: var(--accent); font-weight: 700; }
+    .check.wait::before { content: "○ "; color: var(--wire); }
+    .cta { margin-top: auto; width: 100%; padding: 10px; border: 0; border-radius: 999px; background: var(--ruby); color: #fff; font: 600 10px/1 var(--font); }
+    .stat { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .stat span { font-size: 14px; }
+    .acc { font-size: 9px; color: var(--muted); margin-top: 6px; }
+    .bars { display: flex; align-items: flex-end; gap: 6px; height: 56px; margin-top: 6px; }
+    .bar { flex: 1; background: var(--wire); border-radius: 3px 3px 0 0; }
+    .bar.hi { background: var(--accent); height: 88%; }
+    .bar.lo { height: 32%; }
+    .foot { font-size: 8px; color: var(--accent); margin-top: auto; padding-top: 8px; font-weight: 600; }
+    .hidden-path { display: none; }
+    .hidden-path.visible { display: block; }
+    .tag-f { background: #fce4ec; color: #c2185b; font-size: 8px; padding: 2px 5px; border-radius: 4px; font-weight: 700; }
+    .tag-m { background: #e3f2fd; color: #1565c0; font-size: 8px; padding: 2px 5px; border-radius: 4px; font-weight: 700; }
+    .profile-card {
+      width: 100%; text-align: left; font-size: 9px; line-height: 1.5;
+      border: 1px solid var(--wire); border-radius: 10px; padding: 10px; background: var(--ground);
+    }
+    .profile-card dt { color: var(--muted); margin-top: 6px; }
+    .profile-card dt:first-child { margin-top: 0; }
+    .profile-card dd { margin: 2px 0 0; font-weight: 600; color: var(--ink); }
+    .bullets { width: 100%; text-align: left; margin: 0; padding: 0; list-style: none; font-size: 10px; }
+    .bullets li { padding: 6px 0; border-bottom: 1px solid var(--wire); color: var(--ink); }
+    .bullets li:last-child { border-bottom: 0; }
+    .bullets li::before { content: "→ "; color: var(--accent); font-weight: 700; }
+    .trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 8px; }
+    .trust-item {
+      padding: 10px 6px; border-radius: 8px; background: var(--ground);
+      font-size: 9px; font-weight: 600; text-align: center; line-height: 1.3;
+    }
+    .trust-item span { display: block; font-size: 14px; margin-bottom: 4px; }
+    .trustpilot-row {
+      width: 100%; margin: 10px 0; padding: 10px; border-radius: 10px;
+      background: var(--ground); font-size: 10px; text-align: center;
+    }
+    .trustpilot-row .stars { color: #00b67a; font-size: 12px; letter-spacing: 2px; }
+    .value-item { display: flex; gap: 8px; padding: 6px 0; font-size: 10px; border-bottom: 1px solid var(--wire); }
+    .value-item:last-child { border-bottom: 0; }
+    .value-item .tick { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+    .rm5-box {
+      width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 10px;
+      background: #f0edff; border: 1px solid #d8d4ff; font-size: 9px; line-height: 1.45; text-align: left;
+    }
+    .rm5-box strong { color: var(--accent); }
+    .prac-card {
+      display: flex; gap: 10px; padding: 10px; margin-bottom: 6px; border-radius: 10px;
+      background: var(--ground); border: 1px solid transparent; width: 100%; text-align: left;
+    }
+    .prac-card.sel { border-color: var(--accent); background: #f0edff; }
+    .prac-av {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #ece9ff, #d4d0f5);
+    }
+    .prac-card b { display: block; font-size: 11px; }
+    .prac-card p { margin: 0; font-size: 9px; color: var(--muted); }
+    .slot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 8px; }
+    .slot {
+      padding: 8px 6px; border-radius: 8px; background: var(--ground);
+      font-size: 9px; font-weight: 600; text-align: center; border: 1px solid transparent;
+    }
+    .slot.sel { border-color: var(--accent); background: #f0edff; color: var(--accent); }
+    .confirm-icon {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--green-bg);
+      color: var(--green); font-size: 24px; display: grid; place-items: center; margin: 12px auto;
+    }
+    .next-avail {
+      width: 100%; padding: 10px; margin-top: 4px; border-radius: 10px;
+      border: 1.5px dashed var(--accent); background: #faf9ff; font-size: 10px;
+      font-weight: 600; text-align: center; color: var(--accent);
+    }
+    .next-avail.sel { background: #f0edff; border-style: solid; }
+  </style>
+</head>
+<body class="mixboard">
+  <div class="layout">
+    <aside class="side">
+      <h1>002 · value stack</h1>
+      <p class="meta">Mixboard · 4 acts · <a class="doc" href="../LOCKED.md">LOCKED</a></p>
+      <a class="doc" href="../flow-architecture.md">Architecture →</a>
+      <a class="doc" href="../screens.json">screens.json →</a>
+      <a class="doc" href="../frames/gallery.html">Templates gallery →</a>
+      <a class="doc" href="hifi/act-01-invest-personalise.html">Act 1 hi-fi ref →</a>
+
+      <nav class="nav-group">
+        <label>Act 1 · Clinical gate</label>
+        <a href="#s-11"><span class="id">1.1</span>Entry hook</a>
+        <a href="#s-21"><span class="id">1.2</span>Roadmap</a>
+        <a href="#s-22"><span class="id">1.3</span>Gender</a>
+        <a href="#s-22b" class="branch"><span class="id">1.4</span>Female gate</a>
+        <a href="#s-23"><span class="id">1.5</span>Height</a>
+        <a href="#s-24"><span class="id">1.6</span>Weight</a>
+        <a href="#s-25"><span class="id">1.7</span>Conditions</a>
+        <a href="#s-31"><span class="id">1.8</span>Checking</a>
+        <a class="doc" href="loader-concepts.html">Loader concepts →</a>
+        <a href="#s-32"><span class="id">1.9</span>BMI passed</a>
+        <a class="doc" href="eligible-concepts.html">Eligible concepts →</a>
+        <a href="#s-fail"><span class="id">1.x</span>Not eligible</a>
+        <a class="doc" href="decline-concepts.html">Decline concepts →</a>
+      </nav>
+      <nav class="nav-group">
+        <label>Act 2 · Metabolic + reveal</label>
+        <a href="#s-33"><span class="id">2.1</span>Age</a>
+        <a href="#s-34"><span class="id">2.2</span>Yo-yo</a>
+        <a href="#s-35"><span class="id">2.3</span>Harder lately</a>
+        <a href="#s-36"><span class="id">2.4</span>Energy</a>
+        <a href="#s-36f" class="branch-f"><span class="id">2.5</span>Menopause <span class="tag-f">♀</span></a>
+        <a href="#s-37"><span class="id">2.6</span>Carry weight</a>
+        <a href="#s-38"><span class="id">2.7</span>Adding it up</a>
+        <a href="#s-39"><span class="id">2.8</span>Stat reveal</a>
+        <a href="#s-310"><span class="id">2.9</span>300g reframe</a>
+        <a class="doc" href="reveal-split-play.html">Split play (G · 2 screens) →</a>
+        <a class="doc" href="reveal-motion-concepts.html">Motion concepts (7) →</a>
+        <a class="doc" href="reveal-staged-morph.html">Staged morph scenes →</a>
+        <a class="doc" href="reveal-concepts.html">All reveal concepts →</a>
+      </nav>
+      <nav class="nav-group">
+        <label>Act 3 · Mirror + trust</label>
+        <a href="#s-41"><span class="id">3.1</span>Health profile</a>
+        <a class="doc" href="profile-concepts.html">Profile concepts →</a>
+        <a href="#s-42"><span class="id">3.2</span>Why GLP-1 fits</a>
+        <a href="#s-43"><span class="id">3.3</span>What Moshy does</a>
+        <a class="doc" href="programme-concepts.html">Programme concepts →</a>
+        <a href="#s-44"><span class="id">3.4</span>Safe hands</a>
+        <a class="doc" href="trust-concepts.html">Trust concepts →</a>
+        <a href="#s-45"><span class="id">3.5</span>15-min consult</a>
+      </nav>
+      <nav class="nav-group">
+        <label>Act 4 · Book</label>
+        <a href="#s-51"><span class="id">4.1</span>Choose doctor</a>
+        <a href="#s-53"><span class="id">4.2</span>Pick a time</a>
+        <a href="#s-54"><span class="id">4.3</span>Pay RM5</a>
+        <a href="#s-55"><span class="id">4.4</span>You're booked</a>
+      </nav>
+
+      <div class="path-toggle">
+        <span>Preview path</span>
+        <button type="button" class="active" data-path="female">♀ Female</button>
+        <button type="button" data-path="male">♂ Male</button>
+      </div>
+    </aside>
+
+    <main>
+      <!-- ACT 1 · Clinical gate + eligibility -->
+      <section class="chapter" id="ch-1">
+        <div class="chapter-head">
+          <h2>Act 1 · Clinical gate + eligibility</h2>
+          <p>Entry, gate questions, eligibility win, ineligible exit. Scroll horizontally →</p>
+        </div>
+        <div class="board">
+          <article class="art" id="s-11">
+            <div class="art-label"><span class="step">1.1</span><b>Entry hook</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-11.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#entry-hook" target="_blank">Templates</a> · <a href="entry-hook-concepts.html">Concepts</a></div></div>
+            <div class="hifi-viewport" aria-label="Entry hook hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-11.html" title="Entry hook" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+          <article class="art" id="s-21">
+            <div class="art-label"><span class="step">1.2 · tpl-intro</span><b>Check-in roadmap</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-21.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#intro" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Check-in roadmap hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-21.html" title="Check-in roadmap" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-22">
+            <div class="art-label"><span class="step">1.3</span><b>Gender</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-22.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Gender hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-22.html" title="Gender" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art path-female" id="s-22b">
+            <div class="art-label"><span class="step">1.4</span><b>Female gate</b> <span class="tag-f">♀ only</span><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-22b.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a> · Ineligible if not "None of these"</div></div>
+            <div class="hifi-viewport" aria-label="Female gate hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-22b.html" title="Female gate" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-23">
+            <div class="art-label"><span class="step">1.5</span><b>Height</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-23.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#numeric-input" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Height hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-23.html" title="Height" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-24">
+            <div class="art-label"><span class="step">1.6</span><b>Weight</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-24.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#numeric-input" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Weight hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-24.html" title="Weight" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-25">
+            <div class="art-label"><span class="step">1.7</span><b>Health conditions</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-25.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#multi-select" target="_blank">Templates</a> · Marketing multi-select</div></div>
+            <div class="hifi-viewport" aria-label="Health conditions hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-25.html" title="Health conditions" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-31">
+            <div class="art-label"><span class="step">1.8 · tpl-loader</span><b>Checking eligibility</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-31.html" target="_blank">Open frame</a> · <a href="loader-concepts.html" target="_blank">Concepts</a> · <a href="../frames/gallery.html#loader" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Checking eligibility hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-31.html" title="Checking eligibility" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-32">
+            <div class="art-label"><span class="step">1.9 · tpl-eligible</span><b>BMI check passed</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-32.html" target="_blank">Open frame</a> · <a href="eligible-concepts.html" target="_blank">Concepts</a> · <a href="../frames/gallery.html#eligible" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="BMI check passed hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-32.html" title="BMI check passed" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-fail">
+            <div class="art-label"><span class="step">1.x · tpl-decline</span><b>Not eligible</b><span class="fidelity-badge hifi">hi-fi · locked</span><div class="job"><a href="../frames/built/s-fail.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#decline" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Not eligible hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-fail.html" title="Not eligible" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ACT 2 · Metabolic + reveal -->
+      <section class="chapter" id="ch-2">
+        <div class="chapter-head">
+          <h2>Act 2 · Metabolic profile + reveal</h2>
+          <p>Metabolic inputs → projection theatre. Scroll horizontally →</p>
+        </div>
+        <div class="board">
+          <article class="art" id="s-33">
+            <div class="art-label"><span class="step">2.1</span><b>Age</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-33.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Age hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-33.html" title="Age" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-34">
+            <div class="art-label"><span class="step">2.2</span><b>Yo-yo history</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-34.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a> · Sets up bar chart narrative</div></div>
+            <div class="hifi-viewport" aria-label="Yo-yo history hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-34.html" title="Yo-yo history" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-35">
+            <div class="art-label"><span class="step">2.3</span><b>Harder lately</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-35.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a> · Metabolic slowdown</div></div>
+            <div class="hifi-viewport" aria-label="Harder lately hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-35.html" title="Harder lately" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-36">
+            <div class="art-label"><span class="step">2.4</span><b>Energy</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-36.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a> · All paths</div></div>
+            <div class="hifi-viewport" aria-label="Energy hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-36.html" title="Energy" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art path-female" id="s-36f">
+            <div class="art-label"><span class="step">2.5</span><b>Menopause</b> <span class="tag-f">Female only</span><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-36f.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Menopause hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-36f.html" title="Menopause" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-37">
+            <div class="art-label"><span class="step">2.6</span><b>Carry weight</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-37.html" target="_blank">Open frame</a> · <a href="../frames/gallery.html#radio" target="_blank">Templates</a> · Body shape · both paths</div></div>
+            <div class="hifi-viewport" aria-label="Carry weight hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-37.html" title="Carry weight" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-38">
+            <div class="art-label"><span class="step">2.7 · tpl-loader</span><b>Adding it up</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-38.html" target="_blank">Open frame</a> · <a href="loader-concepts.html" target="_blank">Concepts</a> · <a href="../frames/gallery.html#loader" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Adding it up hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-38.html" title="Adding it up" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-39">
+            <div class="art-label"><span class="step">3.9 · tpl-reveal</span><b>Stat reveal</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-39.html" target="_blank">Open frame</a> · <a href="reveal-split-play.html" target="_blank">Split play</a> · <a href="../frames/gallery.html#stat-reveal" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Stat reveal hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-39.html" title="Stat reveal" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-310">
+            <div class="art-label"><span class="step">3.10 · tpl-reframe</span><b>300g reframe</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-310.html" target="_blank">Open frame</a> · <a href="reveal-split-play.html#reframe" target="_blank">Split play</a> · <a href="../frames/gallery.html#reframe" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="300g reframe hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-310.html" title="300g reframe" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ACT 3 · Mirror + trust -->
+      <section class="chapter" id="ch-3">
+        <div class="chapter-head">
+          <h2>Act 3 · Mirror + trust</h2>
+          <p>Profile → dynamic fit → programme → safe hands → consult bridge. Scroll horizontally →</p>
+        </div>
+        <div class="board">
+          <article class="art" id="s-41">
+            <div class="art-label"><span class="step">4.1 · tpl-profile</span><b>Health profile</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-41.html" target="_blank">Open frame</a> · <a href="profile-concepts.html" target="_blank">Concepts</a> · <a href="../frames/gallery.html#profile" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Health profile hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-41.html" title="Health profile" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-42">
+            <div class="art-label"><span class="step">3.2 · tpl-fit</span><b>Why GLP-1 may fit you</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-42.html" target="_blank">Open frame</a> · <a href="fit-concepts.html">Concepts</a> · <a href="../frames/gallery.html#fit" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="Why GLP-1 may fit you hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-42.html" title="Why GLP-1 may fit you" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-43">
+            <div class="art-label"><span class="step">4.3 · tpl-programme</span><b>What Moshy does</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-43.html" target="_blank">Open frame</a> · <a href="programme-concepts.html" target="_blank">Concepts</a> · <a href="../frames/gallery.html#programme" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="What Moshy does hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-43.html" title="What Moshy does" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-44">
+            <div class="art-label"><span class="step">4.4 · tpl-trust</span><b>You're in safe hands</b><span class="fidelity-badge hifi">hi-fi</span><div class="job"><a href="../frames/built/s-44.html" target="_blank">Open frame</a> · <a href="trust-concepts.html#trust-d3" target="_blank">Concepts</a> · <a href="../frames/gallery.html#trust" target="_blank">Templates</a></div></div>
+            <div class="hifi-viewport" aria-label="You're in safe hands hi-fi">
+              <div class="hifi-viewport__inner">
+                <iframe class="hifi-frame" src="../frames/built/s-44.html" title="You're in safe hands" scrolling="no"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-45">
+            <div class="art-label"><span class="step">4.5 · tpl-consult</span><b>Start with a consult</b><div class="job">Bridge → Act 5 doctor pick</div></div>
+            <div class="phone">
+              <div class="chrome"><span>‹</span><span>act 4</span></div>
+              <div class="body">
+                <p class="h">Start with a 15-minute consult</p>
+                <p class="sub">Free. From home. No obligation.</p>
+                <div style="width:100%;margin:8px 0">
+                  <div class="value-item"><span class="tick">✓</span>Your health history reviewed properly</div>
+                  <div class="value-item"><span class="tick">✓</span>Whether GLP-1 is suitable for you</div>
+                  <div class="value-item"><span class="tick">✓</span>Options explained clearly</div>
+                  <div class="value-item"><span class="tick">✓</span>No pressure to start a programme</div>
+                </div>
+                <p class="sub" style="margin-top:6px">If you'd like to get started, choose a doctor and book your consult.</p>
+                <button class="cta">See available doctors</button>
+                <div class="phone-foot"><div class="tp-foot"><span class="stars">★★★★★</span><br/><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</div></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ACT 4 · Book -->
+      <section class="chapter" id="ch-4">
+        <div class="chapter-head">
+          <h2>Act 4 · Book</h2>
+          <p>Doctor pick → Cal → RM5 → confirmed. Scroll horizontally →</p>
+        </div>
+        <div class="board">
+          <article class="art" id="s-51">
+            <div class="art-label"><span class="step">5.1 · tpl-doctor</span><b>Choose your doctor</b><div class="job">RM5 explainer · doctors · next available</div></div>
+            <div class="phone">
+              <div class="chrome"><span>‹</span><span>book</span></div>
+              <div class="body">
+                <p class="h">Choose your doctor</p>
+                <div class="rm5-box">
+                  <strong>RM5 deposit</strong> on all consults. Goes towards your medication if you proceed. Refunded if you don't. Our doctors are weight loss specialists — <strong>200k+</strong> patients treated.
+                </div>
+                <div class="prac-card sel">
+                  <div class="prac-av" style="display:grid;place-items:center;font-size:16px">⚡</div>
+                  <div><b>Next available doctor</b><p>We'll match you to the soonest slot</p></div>
+                </div>
+                <div class="prac-card">
+                  <div class="prac-av"></div>
+                  <div><b>Dr. Siti Aminah</b><p>Women's health · English · Malay</p></div>
+                </div>
+                <div class="prac-card">
+                  <div class="prac-av"></div>
+                  <div><b>Dr. Priya Nair</b><p>Weight management · English</p></div>
+                </div>
+                <p class="note" style="margin-top:6px">Next available → round-robin Cal · Doctor → that doctor's Cal</p>
+                <div class="phone-foot"><div class="tp-foot"><span class="stars">★★★★★</span><br/><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-53">
+            <div class="art-label"><span class="step">5.3 · tpl-cal</span><b>Pick a time</b><div class="job">Doctor Cal · or round-robin pool</div></div>
+            <div class="phone">
+              <div class="chrome"><span>‹</span><span>Dr. Siti Aminah</span></div>
+              <div class="body">
+                <p class="h">Pick a time</p>
+                <p class="sub">15-minute video consult · free</p>
+                <div class="box" style="min-height:140px;margin:8px 0;display:grid;place-items:center">
+                  Cal embed<br/>month grid + slots
+                </div>
+                <div class="slot-grid">
+                  <div class="slot">Tue 2pm</div>
+                  <div class="slot sel">Wed 10am</div>
+                  <div class="slot">Thu 4pm</div>
+                  <div class="slot">Fri 11am</div>
+                </div>
+                <button class="cta">Continue</button>
+                <div class="phone-foot"><div class="tp-foot"><span class="stars">★★★★★</span><br/><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-54">
+            <div class="art-label"><span class="step">5.4 · tpl-payment</span><b>Pay booking fee</b><div class="job">Consult summary + RM5</div></div>
+            <div class="phone">
+              <div class="chrome"><span>‹</span><span>payment</span></div>
+              <div class="body">
+                <p class="h">Your consult</p>
+                <div class="box" style="text-align:left;margin-bottom:10px;color:var(--ink)">
+                  <strong>Dr. Siti Aminah</strong><br/>
+                  Wed 10 Sep · 10:00am<br/>
+                  <span style="color:var(--muted)">15 min · video · free consult</span>
+                </div>
+                <div style="width:100%;margin-bottom:10px">
+                  <div class="value-item"><span class="tick">✓</span>Health history reviewed</div>
+                  <div class="value-item"><span class="tick">✓</span>GLP-1 suitability assessed</div>
+                  <div class="value-item"><span class="tick">✓</span>Options explained clearly · no obligation</div>
+                </div>
+                <div class="rm5-box">
+                  <strong>RM5 booking deposit</strong><br/>
+                  Applied to medication if you proceed. Refunded if you don't.
+                </div>
+                <button class="cta">Pay RM5 & confirm</button>
+                <div class="phone-foot"><div class="tp-foot"><span class="stars">★★★★★</span><br/><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="art" id="s-55">
+            <div class="art-label"><span class="step">5.5 · tpl-confirm</span><b>You're booked</b></div>
+            <div class="phone">
+              <div class="chrome"><span>moshy</span><span>✓</span></div>
+              <div class="body center">
+                <div class="confirm-icon">✓</div>
+                <p class="h">You're booked</p>
+                <p class="sub">Wed 10 Sep · 10:00am<br/>Dr. Siti Aminah</p>
+                <div class="box" style="margin:10px 0;text-align:left;font-size:9px">
+                  We'll send a reminder before your consult. Have your health history ready — your doctor will review the profile you built today.
+                </div>
+                <button class="cta" style="background:var(--accent)">Add to calendar</button>
+                <div class="phone-foot"><div class="tp-foot"><span class="stars">★★★★★</span><br/><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</div></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var path = "female";
+      var btns = document.querySelectorAll(".path-toggle button");
+      var femaleEls = document.querySelectorAll(".path-female");
+      var link36f = document.querySelector('a[href="#s-36f"]');
+      var link22b = document.querySelector('a[href="#s-22b"]');
+
+      function setPath(p) {
+        path = p;
+        btns.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-path") === p); });
+        femaleEls.forEach(function (el) { el.style.display = p === "female" ? "" : "none"; });
+        if (link36f) link36f.style.display = p === "female" ? "" : "none";
+        if (link22b) link22b.style.display = p === "female" ? "" : "none";
+      }
+      btns.forEach(function (btn) {
+        btn.addEventListener("click", function () { setPath(btn.getAttribute("data-path")); });
+      });
+
+      function setPathCopy(p) {
+        document.querySelectorAll(".path-female-text").forEach(function (el) {
+          el.style.display = p === "female" ? "" : "none";
+        });
+      }
+      var origSetPath = setPath;
+      setPath = function (p) { origSetPath(p); setPathCopy(p); };
+      setPathCopy("female");
+
+      var links = document.querySelectorAll(".side a[href^='#']");
+      var arts = document.querySelectorAll(".art[id]");
+      function onScroll() {
+        var y = window.scrollY + 100;
+        var current = null;
+        arts.forEach(function (a) {
+          if (a.offsetTop <= y) current = a.id;
+        });
+        links.forEach(function (l) {
+          l.classList.toggle("active", l.getAttribute("href") === "#" + current);
+        });
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>

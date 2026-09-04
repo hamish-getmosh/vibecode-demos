@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Slot morph prog pills (no goo)</title>
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --accent: #4d41f0;
+      --dot-idle: #d8d5e0;
+      --dot-done: color-mix(in srgb, var(--accent) 38%, transparent);
+      --border: #e2e0e8;
+      --board: #e8e6ee;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --dot: 6px;
+      --slot-w: 18px;
+      --slot-r: 3px;
+      --pill-ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --morph-ms: 520ms;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--board);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .side h1 { margin: 0 0 8px; font-size: 15px; line-height: 1.25; }
+    .side p { margin: 0 0 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .side a { color: var(--accent); font-size: 11px; }
+
+    main { flex: 1; padding: 28px 32px 64px; }
+
+    .panel {
+      max-width: 520px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(49, 44, 98, 0.06);
+    }
+    .panel h2 { margin: 0 0 6px; font-size: 16px; }
+    .panel .sub { margin: 0 0 20px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .phone-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 96px;
+      padding: 20px 16px;
+      background: var(--ground);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* midfi .prog-pills · pure CSS morph, no goo */
+    .prog-pills {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin: 0 auto;
+    }
+
+    .prog-pills button {
+      display: block;
+      width: var(--dot);
+      height: var(--dot);
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background-color: var(--dot-idle);
+      cursor: pointer;
+      flex-shrink: 0;
+      /* width + color must share duration/easing or blue snaps before slot grows */
+      transition:
+        width var(--morph-ms) var(--pill-ease),
+        border-radius var(--morph-ms) var(--pill-ease),
+        background-color var(--morph-ms) var(--pill-ease);
+    }
+
+    .prog-pills button.is-done:not(.is-active) {
+      background-color: var(--dot-done);
+    }
+
+    .prog-pills button.is-active {
+      width: var(--slot-w);
+      border-radius: var(--slot-r);
+      background-color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      align-items: center;
+    }
+    .controls button {
+      font: 600 11px/1 var(--font);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .controls button:hover { border-color: var(--accent); color: var(--accent); }
+    .controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .controls span { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .prog-pills button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Slot morph · no goo</h1>
+      <p>Vector-sharp CSS only. Active step expands dot → slot; previous slot shrinks slot → dot. Prep for merging with V3 goo later.</p>
+      <p><a href="gooey-bebber-pagination.html#v3">← V3 gooey reference</a></p>
+    </aside>
+
+    <main>
+      <div class="panel">
+        <h2>Dot ↔ slot morph</h2>
+        <p class="sub">Trailing slot shrinks + fades to done blue while leading dot grows + fills accent. Same 520ms on width and color.</p>
+
+        <div class="phone-strip">
+          <div class="prog-pills" id="pills" role="tablist" aria-label="Quiz progress">
+            <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+            <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+            <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+            <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button type="button" id="btn-prev">← Prev</button>
+          <button type="button" class="primary" id="btn-next">Next →</button>
+          <span id="readout">Step 1 / 4</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var active = 0;
+      var total = 4;
+      var pills = document.querySelectorAll("#pills button");
+      var readout = document.getElementById("readout");
+
+      function render() {
+        pills.forEach(function (btn, i) {
+          btn.classList.toggle("is-active", i === active);
+          btn.classList.toggle("is-done", i < active);
+          btn.setAttribute("aria-selected", i === active ? "true" : "false");
+        });
+        readout.textContent = "Step " + (active + 1) + " / " + total;
+      }
+
+      function goTo(index) {
+        index = Math.max(0, Math.min(total - 1, index));
+        if (index === active) return;
+        active = index;
+        render();
+      }
+
+      pills.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          goTo(parseInt(btn.dataset.index, 10));
+        });
+      });
+
+      document.getElementById("btn-prev").addEventListener("click", function () {
+        goTo(active - 1);
+      });
+      document.getElementById("btn-next").addEventListener("click", function () {
+        goTo(active + 1);
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

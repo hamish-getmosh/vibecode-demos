@@ -1,0 +1,47 @@
+<div class="phone phone--hifi phone--fit has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll quiz-scroll--fit">
+    <div class="fit-hero" data-layer="hero block">
+      <div class="fit-hero__wash" aria-hidden="true"></div>
+      <div class="fit-hero__fig" aria-hidden="true">
+        <div class="fit-hero__ring">
+          <svg class="fit-hero__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="20" y="12" width="24" height="36" rx="12" stroke="currentColor" stroke-width="3"/>
+            <path d="M32 24v16M26 32h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M16 48c4-6 10-8 16-8s12 2 16 8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-main quiz-main--fit">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      <div class="fit-bullet-list">
+        {{#each bullets}}
+        <div class="fit-bullet fit-bullet--{{variant}}">
+          <span class="fit-bullet__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <p class="fit-bullet__text">{{text}}</p>
+        </div>
+        {{/each}}
+      </div>
+      <div class="spacing-block" data-gap="body-note"></div>
+      <p class="fit-disclaimer">{{disclaimer}}</p>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <button class="input-cta input-cta--fit" type="button">{{ctaLabel}}</button>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>

@@ -1,0 +1,33 @@
+{
+  "screenId": "s-35",
+  "template": "radio",
+  "title": "Harder lately",
+  "headline": "Has losing weight felt harder than it used to?",
+  "subhead": "Many people notice their body responds differently over time.",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "No",
+      "selected": false
+    },
+    {
+      "label": "A little",
+      "selected": true
+    },
+    {
+      "label": "Yes, much harder",
+      "selected": false
+    },
+    {
+      "label": "I'm not sure",
+      "selected": false
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

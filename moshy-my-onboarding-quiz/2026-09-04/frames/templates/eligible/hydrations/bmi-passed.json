@@ -1,0 +1,25 @@
+{
+  "screenId": "s-32",
+  "template": "eligible",
+  "title": "BMI check passed",
+  "headline": "Your BMI is in range",
+  "subhead": "Next we'll build your metabolic profile and show you a personalised weight estimate.",
+  "showSubhead": true,
+  "checksSectionLabel": "What we checked",
+  "nextSectionLabel": "Next",
+  "nextStepLabel": "Calculate how much weight I could lose",
+  "nextStepStatus": "Next step",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "checks": [
+    { "label": "Height & weight", "status": "Passed" },
+    { "label": "Health conditions", "status": "Passed" },
+    { "label": "Clinical eligibility", "status": "Passed" }
+  ],
+  "ctaLabel": "Continue",
+  "trustpilot": true,
+  "legal": false
+}

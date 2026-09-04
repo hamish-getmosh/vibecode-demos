@@ -1,0 +1,35 @@
+<div class="phone phone--hifi phone--programme has-footer-dock">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills">{{progressPills}}</div>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--programme">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      {{> question}}
+      {{headlineTail}}
+      <div class="programme-stack">
+        {{#each items}}
+        <article class="programme-card">
+          <div class="programme-card__thumb programme-card__thumb--{{icon}}" aria-hidden="true"></div>
+          <div class="programme-card__copy">
+            <span class="programme-card__kicker">{{kicker}}</span>
+            <strong class="programme-card__title">{{title}}</strong>
+            <p class="programme-card__body">{{body}}</p>
+          </div>
+        </article>
+        {{/each}}
+      </div>
+      <div class="spacing-block" data-gap="body-note"></div>
+      <p class="programme-disclaimer">{{disclaimer}}</p>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <button class="input-cta input-cta--programme" type="button">{{ctaLabel}}</button>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>

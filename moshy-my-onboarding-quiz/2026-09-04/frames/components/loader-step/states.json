@@ -1,0 +1,6 @@
+{
+  "states": {
+    "state": "waiting"
+  },
+  "variants": ["waiting", "loading", "completed"]
+}

@@ -1,0 +1,41 @@
+{
+  "screenId": "s-33",
+  "template": "radio",
+  "title": "Age",
+  "headline": "How old are you?",
+  "subhead": "Helps us personalise your estimate.",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "18\u201329",
+      "selected": false
+    },
+    {
+      "label": "30\u201339",
+      "selected": true
+    },
+    {
+      "label": "40\u201349",
+      "selected": false
+    },
+    {
+      "label": "50\u201359",
+      "selected": false
+    },
+    {
+      "label": "60\u201369",
+      "selected": false
+    },
+    {
+      "label": "70+",
+      "selected": false
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

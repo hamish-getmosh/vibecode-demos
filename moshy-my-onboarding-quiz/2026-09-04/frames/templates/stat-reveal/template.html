@@ -1,0 +1,27 @@
+<div class="phone phone--hifi phone--stat-reveal has-footer-dock" data-reveal-motion data-variant="{{motionVariant}}">
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--stat-reveal">
+      <div class="spacing-block" data-gap="chrome-headline"></div>
+      <div class="mnode" data-k="eyebrow"><p class="reveal-eyebrow">{{eyebrow}}</p></div>
+      <div class="spacing-block" data-gap="eyebrow-lead"></div>
+      <div class="mnode" data-k="lead"><p class="reveal-lead">{{lead}}</p></div>
+      <div class="spacing-block" data-gap="lead-stat"></div>
+      <div class="mnode" data-k="statBlock">
+        <p class="stat-hero mnode" data-k="stat"><span data-stat-num>0</span><span class="unit">kg</span></p>
+        <p class="stat-sub mnode" data-k="sub"><strong>{{statSubBold}}</strong><em>{{statSubFine}}</em></p>
+      </div>
+      <div class="spacing-block" data-gap="stat-chart"></div>
+      <div class="chart-fullbleed mnode" data-k="chart">
+        {{> weight-chart}}
+      </div>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer"></div>
+    <div class="mnode" data-k="cta"><button class="input-cta" type="button">{{ctaLabel}}</button></div>
+    <div class="spacing-block" data-gap="cta-trust"></div>
+    {{footerTrustLegal}}
+  </div>
+</div>
+<script src="../shared/reveal-motion-engine.js"></script>
+<script src="../templates/stat-reveal/preview.js"></script>

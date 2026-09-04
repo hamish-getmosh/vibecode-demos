@@ -1,0 +1,38 @@
+{
+  "screenId": "s-41",
+  "template": "profile",
+  "title": "Health profile",
+  "headline": "Here's what we learned about you",
+  "subhead": "Based on what you told us.",
+  "showSubhead": true,
+  "aboutSectionLabel": "A little more about you",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "wins": [
+    {
+      "icon": "check",
+      "title": "BMI check passed",
+      "sub": "You may be eligible for this programme"
+    },
+    {
+      "icon": "trend",
+      "title": "Up to 14 kg weight loss projection",
+      "sub": "Personalised 12-month estimate · not a guarantee"
+    }
+  ],
+  "details": [
+    { "label": "Age", "value": "30–39", "femaleClass": "" },
+    { "label": "Weight pattern", "value": "Yo-yo for years", "femaleClass": "" },
+    { "label": "Metabolic", "value": "Losing weight feels harder lately", "femaleClass": "" },
+    { "label": "Energy", "value": "Often flat or run down", "femaleClass": "" },
+    { "label": "Menopause", "value": "Perimenopause", "femaleClass": " profile-detail--female" },
+    { "label": "Carry weight", "value": "Mostly around belly", "femaleClass": "" },
+    { "label": "Conditions", "value": "High blood pressure", "femaleClass": "" }
+  ],
+  "ctaLabel": "See how GLP-1s could help",
+  "trustpilot": true,
+  "legal": false
+}

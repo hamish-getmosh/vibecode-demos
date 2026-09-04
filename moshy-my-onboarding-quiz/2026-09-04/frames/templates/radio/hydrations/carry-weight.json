@@ -1,0 +1,33 @@
+{
+  "screenId": "s-37",
+  "template": "radio",
+  "title": "Carry weight",
+  "headline": "Where do you tend to carry weight?",
+  "subhead": "Body shape affects how weight comes off.",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "Mostly around my belly",
+      "selected": true
+    },
+    {
+      "label": "Hips and thighs",
+      "selected": false
+    },
+    {
+      "label": "All over fairly evenly",
+      "selected": false
+    },
+    {
+      "label": "Not sure",
+      "selected": false
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Goo × slot morph mixboard</title>
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --accent: #4d41f0;
+      --dot-idle: #d8d5e0;
+      --dot-done: color-mix(in srgb, var(--accent) 38%, transparent);
+      --border: #e2e0e8;
+      --board: #e8e6ee;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --dot: 6px;
+      --slot-w: 18px;
+      --slot-r: 3px;
+      --pill-ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --morph-ms: 520ms;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--board);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 8px; font-size: 15px; line-height: 1.25; }
+    .side p { margin: 0 0 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .side a { color: var(--accent); font-size: 11px; }
+
+    main { flex: 1; padding: 28px 32px 64px; }
+
+    .panel {
+      max-width: 520px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(49, 44, 98, 0.06);
+      margin-bottom: 20px;
+    }
+    .panel .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .panel h2 { margin: 4px 0 6px; font-size: 16px; }
+    .panel .sub { margin: 0 0 20px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .phone-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 96px;
+      padding: 20px 16px;
+      background: var(--ground);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── shared: prog-pills slot morph (used by reference + all three hybrids, unmodified mechanics) ── */
+    .prog-pills {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .prog-pills button {
+      display: block;
+      width: var(--dot);
+      height: var(--dot);
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background-color: var(--dot-idle);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition:
+        width var(--morph-ms) var(--pill-ease),
+        border-radius var(--morph-ms) var(--pill-ease),
+        background-color var(--morph-ms) var(--pill-ease);
+    }
+    .prog-pills button.is-done:not(.is-active) { background-color: var(--dot-done); }
+    .prog-pills button.is-active {
+      width: var(--slot-w);
+      border-radius: var(--slot-r);
+      background-color: var(--accent);
+    }
+
+    /* Hybrid A: filter permanently on */
+    .goo-wrap-a { filter: url(#goo-hybrid-a); }
+    /* Hybrid A v2: same filter; opaque done color so goo doesn't shrink completed dots */
+    .goo-wrap-a-v2 {
+      filter: url(#goo-hybrid-a);
+      --dot-done: color-mix(in srgb, var(--accent) 38%, var(--ground));
+    }
+    /* Hybrid B: filter permanently on, rounder tuning */
+    .goo-wrap-b { filter: url(#goo-hybrid-b); }
+    /* Hybrid C: filter only while morphing */
+    .goo-wrap-c.is-morphing { filter: url(#goo-hybrid-c); }
+
+    /* ── V3 reference: exact Bebber pagination markup/CSS (unmodified from gooey-bebber-pagination.html) ── */
+    .pagination { position: relative; width: 100%; max-width: 360px; margin: 0 auto; }
+    .pagination-navigation {
+      position: relative; text-align: center; font-size: 0;
+      -webkit-filter: url("#goo-bebber-ref"); filter: url("#goo-bebber-ref");
+      -webkit-transform: translateZ(0); transform: translateZ(0);
+    }
+    .pagination-dot, .pagination-current {
+      position: relative; display: inline-block; width: 32px; height: 32px; padding: 0;
+      line-height: 32px; background: var(--dot-idle); border-radius: 50%; margin: 0 13px;
+      border: none; outline: none; font-size: 16px; font-weight: bold; color: #fff;
+      font-family: var(--font); cursor: pointer; vertical-align: top;
+    }
+    .pagination-current { position: absolute; left: 0; top: 0; background: var(--accent); cursor: default; pointer-events: none; }
+    .pagination-number { display: block; width: 100%; height: 100%; border-radius: 50%; -webkit-transform: scale(0.01, 0.01); transform: scale(0.01, 0.01); }
+    .pagination-dot.is-active-static { background: var(--accent); }
+
+    .controls { display: flex; gap: 8px; margin-top: 16px; align-items: center; }
+    .controls button {
+      font: 600 11px/1 var(--font); padding: 8px 14px; border-radius: 999px;
+      border: 1px solid var(--border); background: #fff; color: var(--ink); cursor: pointer;
+    }
+    .controls button:hover { border-color: var(--accent); color: var(--accent); }
+    .controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .controls span { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .prog-pills button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Goo × slot morph</h1>
+      <p>Base = <code>slot-morph-prog-pills.html</code> (no goo, unmodified). Each hybrid below is that exact widget with goo added &mdash; same markup, same CSS transitions, same JS. Nothing rebuilt from scratch. Widgets are inlined directly on this page (not iframed) so nothing gets clipped or overlaps.</p>
+      <p><a href="#ref-slot">Reference · no goo</a><br><a href="#ref-v3">Reference · V3 goo</a><br><a href="#hybrid-a">Hybrid A</a><br><a href="#hybrid-a-v2">Hybrid A v2</a><br><a href="#hybrid-b">Hybrid B</a><br><a href="#hybrid-c">Hybrid C</a></p>
+    </aside>
+
+    <main>
+      <div class="panel" id="ref-slot">
+        <p class="tag">Reference</p>
+        <h2>Slot morph · no goo</h2>
+        <p class="sub">Vector-sharp CSS only. Active step expands dot → slot; previous slot shrinks slot → dot. 520ms shared on width + color.</p>
+        <div class="phone-strip">
+          <div class="prog-pills" id="pills-ref-slot" role="tablist" aria-label="Quiz progress">
+            <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+            <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+            <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+            <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="ref-slot">← Prev</button>
+          <button type="button" class="primary" data-next="ref-slot">Next →</button>
+          <span data-readout="ref-slot">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="ref-v3">
+        <p class="tag">Reference</p>
+        <h2>V3 gooey · Bebber circles</h2>
+        <p class="sub">Exact two-layer Bebber mechanics from <code>gooey-bebber-pagination.html</code>. Sliding blob is dot-sized; static dot fills blue when active.</p>
+        <div class="phone-strip">
+          <div class="pagination" data-pagination="ref-v3">
+            <div class="pagination-navigation">
+              <div class="pagination-current"></div>
+              <div class="pagination-dots">
+                <button type="button" class="pagination-dot" aria-label="Step 1"><span class="pagination-number">1</span></button>
+                <button type="button" class="pagination-dot" aria-label="Step 2"><span class="pagination-number">2</span></button>
+                <button type="button" class="pagination-dot" aria-label="Step 3"><span class="pagination-number">3</span></button>
+                <button type="button" class="pagination-dot" aria-label="Step 4"><span class="pagination-number">4</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="ref-v3">← Prev</button>
+          <button type="button" class="primary" data-next="ref-v3">Next →</button>
+          <span data-readout="ref-v3">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="hybrid-a">
+        <p class="tag">Hybrid A</p>
+        <h2>Filter always on</h2>
+        <p class="sub">Permanent <code>filter: url(#goo)</code> on the pills row. stdDeviation 2.0 / matrix (6, -1) &mdash; tuned down hard from Bebber's 10/(19,-9) so it doesn't wipe the semi-transparent done dots. Soft halo bridge during travel, crisp at rest.</p>
+        <div class="phone-strip">
+          <div class="goo-wrap-a">
+            <div class="prog-pills" id="pills-hybrid-a" role="tablist" aria-label="Quiz progress">
+              <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+              <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+              <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+              <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="hybrid-a">← Prev</button>
+          <button type="button" class="primary" data-next="hybrid-a">Next →</button>
+          <span data-readout="hybrid-a">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="hybrid-a-v2">
+        <p class="tag">Hybrid A v2</p>
+        <h2>Filter always on · matched done dots</h2>
+        <p class="sub">Same as Hybrid A. Done dots use opaque light blue (<code>color-mix(accent 38%, ground)</code>) instead of semi-transparent, so the goo alpha threshold doesn't render them smaller than upcoming idle dots.</p>
+        <div class="phone-strip">
+          <div class="goo-wrap-a-v2">
+            <div class="prog-pills" id="pills-hybrid-a-v2" role="tablist" aria-label="Quiz progress">
+              <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+              <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+              <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+              <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="hybrid-a-v2">← Prev</button>
+          <button type="button" class="primary" data-next="hybrid-a-v2">Next →</button>
+          <span data-readout="hybrid-a-v2">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="hybrid-b">
+        <p class="tag">Hybrid B</p>
+        <h2>Filter always on · rounder</h2>
+        <p class="sub">Same approach as A, pushed rounder: stdDeviation 2.6 / matrix (5, -0.6). Bigger halo on travel; rest is a touch softer than A around the idle dots &mdash; documented tradeoff.</p>
+        <div class="phone-strip">
+          <div class="goo-wrap-b">
+            <div class="prog-pills" id="pills-hybrid-b" role="tablist" aria-label="Quiz progress">
+              <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+              <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+              <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+              <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="hybrid-b">← Prev</button>
+          <button type="button" class="primary" data-next="hybrid-b">Next →</button>
+          <span data-readout="hybrid-b">Step 1 / 4</span>
+        </div>
+      </div>
+
+      <div class="panel" id="hybrid-c">
+        <p class="tag">Hybrid C · recommended</p>
+        <h2>Filter on transition only</h2>
+        <p class="sub"><code>.is-morphing</code> toggled on for the 520ms of each click, filter only applies during that window. Rest state is pixel-identical to the no-goo reference; glow only appears while travelling.</p>
+        <div class="phone-strip">
+          <div class="goo-wrap-c" id="goo-wrap-hybrid-c">
+            <div class="prog-pills" id="pills-hybrid-c" role="tablist" aria-label="Quiz progress">
+              <button type="button" role="tab" aria-label="Step 1" data-index="0"></button>
+              <button type="button" role="tab" aria-label="Step 2" data-index="1"></button>
+              <button type="button" role="tab" aria-label="Step 3" data-index="2"></button>
+              <button type="button" role="tab" aria-label="Step 4" data-index="3"></button>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" data-prev="hybrid-c">← Prev</button>
+          <button type="button" class="primary" data-next="hybrid-c">Next →</button>
+          <span data-readout="hybrid-c">Step 1 / 4</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <filter id="goo-bebber-ref">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+      <filter id="goo-hybrid-a">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.0" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 6 -1" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+      <filter id="goo-hybrid-b">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -0.6" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+      <filter id="goo-hybrid-c">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 8 -1.6" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+  <script>
+    /* ── shared: plain CSS-only prog-pills init (ref-slot, hybrid-a, hybrid-b share this exactly) ── */
+    function initProgPills(id, opts) {
+      opts = opts || {};
+      var total = 4;
+      var active = 0;
+      var pills = document.querySelectorAll("#pills-" + id + " button");
+      var readoutEl = document.querySelector('[data-readout="' + id + '"]');
+      var gooWrap = opts.morphTarget ? document.getElementById(opts.morphTarget) : null;
+      var morphMs = 520;
+      var morphTimer = null;
+
+      function render() {
+        pills.forEach(function (btn, i) {
+          btn.classList.toggle("is-active", i === active);
+          btn.classList.toggle("is-done", i < active);
+          btn.setAttribute("aria-selected", i === active ? "true" : "false");
+        });
+        if (readoutEl) readoutEl.textContent = "Step " + (active + 1) + " / " + total;
+      }
+
+      function goTo(index) {
+        index = Math.max(0, Math.min(total - 1, index));
+        if (index === active) return;
+        active = index;
+        if (gooWrap) {
+          gooWrap.classList.add("is-morphing");
+          if (morphTimer) clearTimeout(morphTimer);
+          morphTimer = setTimeout(function () { gooWrap.classList.remove("is-morphing"); }, morphMs);
+        }
+        render();
+      }
+
+      pills.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          goTo(parseInt(btn.dataset.index, 10));
+        });
+      });
+      var prevBtn = document.querySelector('[data-prev="' + id + '"]');
+      var nextBtn = document.querySelector('[data-next="' + id + '"]');
+      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(active - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(active + 1); });
+
+      render();
+    }
+
+    initProgPills("ref-slot");
+    initProgPills("hybrid-a");
+    initProgPills("hybrid-a-v2");
+    initProgPills("hybrid-b");
+    initProgPills("hybrid-c", { morphTarget: "goo-wrap-hybrid-c" });
+
+    /* ── V3 reference: exact Bebber init from gooey-bebber-pagination.html ── */
+    $(function () {
+      function initBebberPagination(root, options) {
+        var scalePeak = options.scalePeak;
+        var paintActiveStatic = options.paintActiveStatic;
+        var showNumbers = options.showNumbers;
+        var duration = options.duration || 0.6;
+        var pinchFactor = options.pinchFactor != null ? options.pinchFactor : 0.35;
+        var gooFilter = options.gooFilter || "goo-bebber-ref";
+        var readoutEl = document.querySelector('[data-readout="' + options.id + '"]');
+
+        var $root = $(root);
+        var $nav = $root.find(".pagination-navigation");
+        var $dots = $root.find(".pagination-dot");
+        var $current = $root.find(".pagination-current");
+        $nav.css("filter", "url(#" + gooFilter + ")");
+        var spacing = parseFloat($dots.css("width")) + parseFloat($dots.css("marginLeft")) * 2;
+        var halfSpacing = spacing / 2;
+        var startPos = $dots.eq(0).position().left;
+        var lastItem = 0;
+        var lastItemR = 0;
+        var lastTime = Date.now();
+        var activeIndex = 0;
+
+        $current.data("pos", { x: startPos });
+
+        function updateReadout() {
+          if (readoutEl) readoutEl.textContent = "Step " + (activeIndex + 1) + " / 4";
+        }
+
+        function goToIndex(index) {
+          index = Math.max(0, Math.min($dots.length - 1, index));
+          activeIndex = index;
+          var dest = index * spacing;
+          TweenMax.to($current.data("pos"), duration, {
+            x: startPos + dest,
+            onUpdate: updatePos,
+            onComplete: function () { updatePos(); updateReadout(); },
+            ease: Quint.easeOut
+          });
+          updateReadout();
+        }
+
+        $dots.click(function () { goToIndex($(this).index()); });
+
+        function updatePos() {
+          var pos = $current.data("pos").x - startPos;
+          var scale = pos % spacing;
+          if (scale > halfSpacing) scale = halfSpacing - (scale - halfSpacing);
+          scale = 1 - (scale / halfSpacing) * pinchFactor;
+
+          var curItem = pos / spacing;
+          var curItemR = Math.round(curItem);
+
+          TweenMax.set($current, { x: pos + startPos, scale: scale * scalePeak, force3D: true });
+
+          $dots.each(function (i) {
+            var $dot = $(this);
+            if (paintActiveStatic) $dot.toggleClass("is-active-static", i === curItemR);
+            if (showNumbers) {
+              var d = i - curItem;
+              var dAbs = Math.abs(d);
+              TweenMax.set($dot.children(".pagination-number"), { scale: Math.max(0, 1 - 2 * dAbs), force3D: true });
+            }
+          });
+
+          var now = Date.now();
+          var diff = now - lastTime;
+          var deltaTime = diff / (1000 / 60);
+          lastTime = now;
+
+          if (lastItemR !== curItemR) {
+            var $bounceDot = $dots.eq(lastItemR);
+            TweenMax.to($bounceDot, 0.1, {
+              x: 70 * ((curItem - lastItem) / deltaTime),
+              ease: Quad.easeOut,
+              onComplete: function () {
+                TweenMax.to($bounceDot, 1, { x: 0, ease: Elastic.easeOut, easeParams: [1.1, 0.5] });
+              }
+            });
+          }
+          lastItem = curItem;
+          lastItemR = curItemR;
+        }
+
+        goToIndex(0);
+        document.querySelector('[data-prev="' + options.id + '"]').addEventListener("click", function () { goToIndex(activeIndex - 1); });
+        document.querySelector('[data-next="' + options.id + '"]').addEventListener("click", function () { goToIndex(activeIndex + 1); });
+      }
+
+      initBebberPagination('[data-pagination="ref-v3"]', {
+        id: "ref-v3",
+        scalePeak: 1,
+        paintActiveStatic: true,
+        showNumbers: true,
+        gooFilter: "goo-bebber-ref"
+      });
+    });
+  </script>
+</body>
+</html>

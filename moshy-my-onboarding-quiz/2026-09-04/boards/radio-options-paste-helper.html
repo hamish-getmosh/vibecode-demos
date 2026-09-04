@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Radio options paste helper</title>
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --border: #e2e0e8;
+      --ok: #0a7a52;
+      --side-w: 260px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: #e8e6ee;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w);
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 {
+      margin: 0 0 4px;
+      padding: 0 16px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+    .side .meta {
+      padding: 0 16px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .side nav a {
+      display: block;
+      padding: 7px 16px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .side nav a:hover,
+    .side nav a.is-active {
+      background: var(--surface);
+    }
+    .side nav a.is-active { font-weight: 600; }
+    .side .note {
+      padding: 12px 16px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .side .note strong { color: var(--ink); }
+    main {
+      flex: 1;
+      padding: 24px 28px 80px;
+      min-width: 0;
+      max-width: 720px;
+    }
+    .section {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px 20px;
+      margin-bottom: 20px;
+      scroll-margin-top: 16px;
+    }
+    .section h2 {
+      margin: 0 0 4px;
+      font-size: 17px;
+    }
+    .section .framer-path {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .section .headline {
+      margin: 0 0 14px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .section .headline em {
+      font-style: normal;
+      color: var(--ink);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      padding: 0 8px 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th:last-child { width: 72px; }
+    td {
+      padding: 10px 8px 10px 0;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--surface);
+    }
+    tr:last-child td { border-bottom: 0; }
+    .cell-text {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      word-break: break-word;
+    }
+    .cell-text.label { font-family: var(--font); }
+    .copy-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .copy-btn.is-copied {
+      color: var(--ok);
+      border-color: #b8e6d4;
+      background: #eefbf4;
+    }
+    .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .copy-all {
+      margin-top: 12px;
+      appearance: none;
+      border: 1px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .copy-all:hover { filter: brightness(0.98); }
+    .hint {
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Radio options paste helper</h1>
+      <p class="meta">Quiz 002 · Act 4 metabolic steps<br />SSOT: act-3-question-map.md</p>
+      <nav id="nav"></nav>
+      <p class="note">
+        <strong>Where to paste:</strong> Radio Question master → pick variant → QuizRadioStack → Options array.<br /><br />
+        <strong>Value</strong> = English id (never translate).<br />
+        <strong>Label</strong> = display copy.<br />
+        <strong>Icon</strong> = leave blank on metabolic steps.
+      </p>
+    </aside>
+    <main id="main"></main>
+  </div>
+
+  <script>
+    const SECTIONS = [
+      {
+        id: "age",
+        step: "2.1",
+        variant: "Age",
+        path: "Radio Question → Age variant → QuizRadioStack",
+        headline: "How old are you?",
+        note: "Canvas may already have US-style bands (under-18, 18-24, …). SSOT bands below if you want to align to act-3-question-map.",
+        options: [
+          { value: "18-29", label: "18–29" },
+          { value: "30-39", label: "30–39" },
+          { value: "40-49", label: "40–49" },
+          { value: "50-59", label: "50–59" },
+          { value: "60-69", label: "60–69" },
+          { value: "70-plus", label: "70+" },
+        ],
+      },
+      {
+        id: "yo-yo",
+        step: "2.2",
+        variant: "History",
+        path: "Radio Question → History variant → QuizRadioStack",
+        headline: "Have you lost weight before and gained it back?",
+        options: [
+          { value: "never", label: "No, not really" },
+          { value: "once", label: "Once" },
+          { value: "few-times", label: "A few times" },
+          { value: "yo-yo", label: "Yes — yo-yo for years" },
+        ],
+      },
+      {
+        id: "harder",
+        step: "2.3",
+        variant: "Harder",
+        path: "Radio Question → Harder variant → QuizRadioStack",
+        headline: "Has losing weight felt harder than it used to?",
+        options: [
+          { value: "no", label: "No" },
+          { value: "a-little", label: "A little" },
+          { value: "yes", label: "Yes, much harder" },
+          { value: "unsure", label: "I'm not sure" },
+        ],
+      },
+      {
+        id: "energy",
+        step: "2.4",
+        variant: "Energy",
+        path: "Radio Question → Energy variant → QuizRadioStack",
+        headline: "How would you describe your energy lately? (male path)",
+        options: [
+          { value: "high", label: "Plenty of energy and drive" },
+          { value: "moderate", label: "Fine, but not like it used to be" },
+          { value: "low", label: "Often flat or run down" },
+          { value: "exhausted", label: "Exhausted most days" },
+        ],
+      },
+      {
+        id: "menopause",
+        step: "2.5",
+        variant: "Menopause",
+        path: "Radio Question → Menopause variant → QuizRadioStack",
+        headline: "Are you in perimenopause or menopause? (female path)",
+        options: [
+          { value: "no", label: "Not that I'm aware of" },
+          { value: "peri", label: "Maybe / perimenopause" },
+          { value: "menopause", label: "Yes, menopause" },
+          { value: "prefer-not", label: "Prefer not to say" },
+        ],
+      },
+      {
+        id: "carry-weight",
+        step: "2.6",
+        variant: "Carry Weight",
+        path: "Radio Question → Carry Weight variant → QuizRadioStack",
+        headline: "Where do you tend to carry weight?",
+        options: [
+          { value: "belly", label: "Mostly around my belly" },
+          { value: "hips-thighs", label: "Hips and thighs" },
+          { value: "even", label: "All over fairly evenly" },
+          { value: "unsure", label: "Not sure" },
+        ],
+      },
+    ];
+
+    async function copyText(text, btn) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      const prev = btn.textContent;
+      btn.textContent = "Copied";
+      btn.classList.add("is-copied");
+      setTimeout(() => {
+        btn.textContent = prev;
+        btn.classList.remove("is-copied");
+      }, 1200);
+    }
+
+    function makeCopyBtn(label, text) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-btn";
+      btn.textContent = label;
+      btn.addEventListener("click", () => copyText(text, btn));
+      return btn;
+    }
+
+    function renderSection(section) {
+      const el = document.createElement("section");
+      el.className = "section";
+      el.id = section.id;
+
+      const rows = section.options
+        .map(
+          (opt, i) => `
+        <tr>
+          <td class="cell-text">${i + 1}</td>
+          <td class="cell-text label">${escapeHtml(opt.label)}</td>
+          <td class="cell-text">${escapeHtml(opt.value)}</td>
+          <td>
+            <div class="row-actions">
+              <span data-copy-label="${i}"></span>
+              <span data-copy-value="${i}"></span>
+            </div>
+          </td>
+        </tr>`
+        )
+        .join("");
+
+      el.innerHTML = `
+        <h2>${section.step} · ${section.variant}</h2>
+        <p class="framer-path">${section.path}</p>
+        <p class="headline"><em>${escapeHtml(section.headline)}</em></p>
+        ${section.note ? `<p class="hint">${escapeHtml(section.note)}</p>` : ""}
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Label</th>
+              <th>Value</th>
+              <th>Copy</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <button type="button" class="copy-all" data-copy-all>Copy all (tab-separated)</button>
+      `;
+
+      section.options.forEach((opt, i) => {
+        el.querySelector(`[data-copy-label="${i}"]`).appendChild(makeCopyBtn("Label", opt.label));
+        el.querySelector(`[data-copy-value="${i}"]`).appendChild(makeCopyBtn("Value", opt.value));
+      });
+
+      el.querySelector("[data-copy-all]").addEventListener("click", (e) => {
+        const tsv = section.options.map((o) => `${o.label}\t${o.value}`).join("\n");
+        copyText(tsv, e.currentTarget);
+      });
+
+      return el;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    const nav = document.getElementById("nav");
+    const main = document.getElementById("main");
+
+    SECTIONS.forEach((section) => {
+      const link = document.createElement("a");
+      link.href = `#${section.id}`;
+      link.textContent = `${section.step} ${section.variant}`;
+      link.addEventListener("click", () => {
+        nav.querySelectorAll("a").forEach((a) => a.classList.remove("is-active"));
+        link.classList.add("is-active");
+      });
+      nav.appendChild(link);
+      main.appendChild(renderSection(section));
+    });
+
+    if (nav.firstChild) nav.firstChild.classList.add("is-active");
+  </script>
+</body>
+</html>

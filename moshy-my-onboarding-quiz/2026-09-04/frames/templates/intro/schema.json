@@ -1,0 +1,20 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "intro",
+  "required": ["screenId", "headline", "steps", "ctaLabel"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string",
+    "showSubhead": { "type": "boolean", "default": true },
+    "steps": [{
+      "number": "string",
+      "text": "string",
+      "icon": "check | chart | doctor (visual only)"
+    }],
+    "ctaLabel": "string",
+    "trustpilot": { "type": "boolean", "default": true },
+    "legal": { "type": "boolean", "default": false }
+  }
+}

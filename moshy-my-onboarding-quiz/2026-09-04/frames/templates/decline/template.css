@@ -1,0 +1,36 @@
+/* Decline / ineligible exit · tpl-decline (Hers mirror) */
+
+.phone--hifi.phone--decline {
+  background: var(--ground);
+}
+
+.phone--hifi.phone--decline .decline-copy {
+  text-align: left;
+}
+
+.phone--hifi.phone--decline .decline-copy .q-head {
+  font-family: var(--display);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+  text-align: left;
+}
+
+.phone--hifi.phone--decline .decline-body {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+
+.phone--hifi.phone--decline .footer-dock .input-cta--decline {
+  background: var(--accent);
+  box-shadow:
+    0 10px 28px rgba(77, 65, 240, 0.32),
+    0 2px 6px rgba(49, 44, 98, 0.08);
+}

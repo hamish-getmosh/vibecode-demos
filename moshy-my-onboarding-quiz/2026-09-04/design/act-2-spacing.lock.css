@@ -1,0 +1,25 @@
+/**
+ * MOSHY MY consult onboarding · Act 2 spacing lock
+ * SSOT pair: act-2-spacing.lock.json
+ * Operator locked: 2026-09-01
+ * Do not edit by hand — update JSON (spacing tuner → copy lock) and mirror here.
+ */
+:root {
+  --nav-pad-x: 32px;
+  --quiz-chrome-pad-top: 16px;
+  --quiz-gap-chrome-headline: 32px;
+  --quiz-gap-headline-subhead: 8px;
+  --quiz-gap-subhead-content: 32px;
+  --quiz-gap-headline-content: 44px;
+  --quiz-gap-content-footer: 60px;
+  --quiz-gap-input-cta: 24px;
+  --quiz-gap-trust-legal: 8px;
+  --quiz-gap-cta-trust: 8px;
+  --quiz-gap-trust-bottom: 16px;
+  --quiz-gap-eyebrow-lead: 12px;
+  --quiz-gap-lead-stat: 8px;
+  --quiz-gap-stat-chart: 16px;
+  --quiz-gap-bridge-pill: 16px;
+  --quiz-gap-pill-body: 16px;
+  --quiz-gap-body-note: 12px;
+}

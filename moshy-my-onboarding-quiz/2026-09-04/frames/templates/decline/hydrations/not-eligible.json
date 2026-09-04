@@ -1,0 +1,11 @@
+{
+  "screenId": "s-fail",
+  "template": "decline",
+  "title": "Not eligible",
+  "headline": "Your safety comes first",
+  "body1": "Based on your answers, a GLP-1 weight loss programme isn't suitable through MOSHY right now. Our partner clinic sets medical criteria for virtual care.",
+  "body2": "We recommend speaking to your GP in person so you get the most appropriate support for your situation.",
+  "ctaLabel": "Back to Moshy",
+  "trustpilot": false,
+  "legal": false
+}

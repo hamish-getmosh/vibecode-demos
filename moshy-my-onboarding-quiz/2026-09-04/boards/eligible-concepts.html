@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · BMI passed · Selected</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root { --side-w: 220px; --phone-w: 248px; --border: #e2e0e8; --muted: #8b86b0; --accent: #4d41f0; }
+    body { margin: 0; font-family: Figtree, sans-serif; background: #e8e6ee; color: #312c62; font-size: 13px; }
+    .layout { display: flex; min-height: 100vh; }
+    .side { width: var(--side-w); background: #fff; border-right: 1px solid var(--border); padding: 16px; position: sticky; top: 0; height: 100vh; }
+    .side h1 { font-size: 15px; margin: 0 0 8px; }
+    .side p { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0 0 12px; }
+    .side a { color: var(--accent); font-size: 12px; }
+    main { flex: 1; padding: 24px 28px; }
+    .hifi-viewport { width: var(--phone-w); height: calc(844px * 0.6359); overflow: hidden; border: 2px solid #312c62; border-radius: 18px; background: #fff; }
+    .hifi-viewport__inner { width: 390px; height: 844px; transform: scale(0.6359); transform-origin: top left; }
+    .hifi-viewport iframe { width: 390px; height: 844px; border: 0; display: block; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>BMI passed · selected</h1>
+      <p>Combined A headline + B subhead. Minimal tick + what we checked. No accordion. Hi-fi frame: <code>s-32.html</code>.</p>
+      <a href="../frames/built/s-32.html" target="_blank">Open frame</a><br/>
+      <a href="mixboard.html#s-32">Mixboard</a>
+    </aside>
+    <main>
+      <div class="hifi-viewport">
+        <div class="hifi-viewport__inner">
+          <iframe src="../frames/built/s-32.html" title="BMI check passed" scrolling="no"></iframe>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

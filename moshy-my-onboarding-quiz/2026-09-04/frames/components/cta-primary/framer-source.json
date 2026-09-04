@@ -1,0 +1,26 @@
+{
+  "componentKey": "cta-primary",
+  "framerComponentId": "Yf0P638Mj",
+  "framerDisplayName": "Quiz/Quiz CTA",
+  "pulledAt": "2026-09-02T10:10:28.496086+00:00",
+  "styles": {
+    "background": "rgb(154, 2, 57)",
+    "borderRadius": "999px",
+    "padding": "18px 28px 18px 28px",
+    "color": "rgb(252, 252, 252)",
+    "fontFamily": "Figtree",
+    "fontSize": "16px",
+    "fontWeight": 500,
+    "lineHeight": "1.2em",
+    "boxShadow": "0px 8px 24px 0px rgba(154,2,57,0.28)",
+    "defaultLabel": "Continue"
+  },
+  "controls": {
+    "$control__label": "Continue",
+    "$control__leftIcon": false,
+    "$control__rightIcon": true,
+    "$control__elevation": true,
+    "$control__leftIconChoice": "Arrow Left",
+    "$control__rightIconChoice": "Arrow Right"
+  }
+}

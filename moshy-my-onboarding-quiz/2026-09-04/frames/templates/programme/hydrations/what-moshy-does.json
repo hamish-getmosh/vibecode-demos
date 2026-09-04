@@ -1,0 +1,37 @@
+{
+  "screenId": "s-43",
+  "template": "programme",
+  "title": "What Moshy does",
+  "headline": "What's included in a Moshy programme",
+  "subhead": "Doctor-led weight loss — not a DIY diet.",
+  "showSubhead": true,
+  "progress": {
+    "done": 2,
+    "current": 2,
+    "total": 4
+  },
+  "items": [
+    {
+      "kicker": "Medication",
+      "title": "GLP-1 medication",
+      "body": "Prescribed by your doctor if suitable",
+      "icon": "med"
+    },
+    {
+      "kicker": "Clinical care",
+      "title": "Doctor-led care",
+      "body": "Reviews and adjustments, not self-serve",
+      "icon": "doc"
+    },
+    {
+      "kicker": "Ongoing support",
+      "title": "Programme support",
+      "body": "Discreet delivery and ongoing care",
+      "icon": "ship"
+    }
+  ],
+  "disclaimer": "Your doctor will confirm what's right for you at your free consult.",
+  "ctaLabel": "Continue",
+  "trustpilot": true,
+  "legal": false
+}

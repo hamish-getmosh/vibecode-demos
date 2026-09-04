@@ -1,0 +1,123 @@
+/* Intro · tpl-intro · Layout B · check-in roadmap (s-21) */
+
+html.frame-preview .phone--intro {
+  background: var(--ground, #fcfcfc);
+}
+
+html.frame-preview .phone--intro .brand-shell,
+html.frame-preview .phone--intro .quiz-scroll,
+html.frame-preview .phone--intro .footer-dock {
+  background: transparent;
+}
+
+html.frame-preview .quiz-main--intro {
+  padding: 0 32px;
+}
+
+html.frame-preview .phone--intro .question-block {
+  margin: 0;
+}
+
+html.frame-preview .phone--intro .q-head {
+  font-size: 28px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+
+html.frame-preview .phone--intro .q-sub {
+  max-width: 34ch;
+  margin-bottom: 0;
+}
+
+html.frame-preview .intro-roadmap-visual {
+  position: relative;
+  height: 72px;
+  margin-top: 4px;
+}
+
+html.frame-preview .intro-roadmap-visual__track {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent, #4d41f0) 0%, #6e7fe8 50%, #c8c4d8 100%);
+  border-radius: 999px;
+}
+
+html.frame-preview .intro-roadmap-visual__nodes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 8%;
+}
+
+html.frame-preview .intro-roadmap-visual__node {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--surface, #f4f3f6);
+  border: 1px solid var(--border, #e2e0e8);
+  box-shadow: 0 4px 16px rgba(49, 44, 98, 0.06);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 28px 28px;
+}
+
+html.frame-preview .intro-roadmap-visual__node--check {
+  background-color: var(--accent-soft, #ece9ff);
+  border-color: rgba(77, 65, 240, 0.16);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 12l5 5L19 7' stroke='%234d41f0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+html.frame-preview .intro-roadmap-visual__node--chart {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M4 18V6M10 18V10M16 18V14M22 18H2' stroke='%234d41f0' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+html.frame-preview .intro-roadmap-visual__node--doctor {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='8' r='3.5' stroke='%238b86b0' stroke-width='2.5'/%3E%3Cpath d='M6 20v-1.2c0-2.2 2.7-3.8 6-3.8s6 1.6 6 3.8V20' stroke='%238b86b0' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+html.frame-preview .intro-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+html.frame-preview .intro-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+html.frame-preview .intro-step__num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent, #4d41f0);
+  background: var(--accent-soft, #ece9ff);
+}
+
+html.frame-preview .intro-step__text {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink, #312c62);
+}
+
+html.frame-preview .phone--intro .footer-dock .input-cta--intro {
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 16px 28px;
+}

@@ -1,0 +1,103 @@
+{
+  "componentKey": "loader-step",
+  "framerComponentId": "QWRRBVGty",
+  "framerDisplayName": "Quiz/Quiz Loader Step",
+  "pulledAt": "2026-09-02T12:21:17.534646+00:00",
+  "styles": {
+    "waiting": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "#8b86b0",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0"
+    },
+    "loading": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "rgb(77, 65, 240)",
+      "iconFill": "rgba(0, 0, 0, 0)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0",
+      "spinnerSize": 18,
+      "spinnerStroke": 2,
+      "spinnerDurationMs": 750,
+      "boxShadow": "#e2e0e8"
+    },
+    "completed": {
+      "rowFill": "rgb(77, 65, 240)",
+      "labelColor": "rgb(236, 239, 255)",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "checkColor": "rgb(77, 65, 240)",
+      "checkSize": 12,
+      "checkStroke": 4,
+      "spinnerColor": "#4d41f0"
+    },
+    "defaultLabel": "Checking BMI range"
+  },
+  "controls": {
+    "label": "Checking BMI range",
+    "accent": "#4d41f0",
+    "surface": "#f4f3f6",
+    "activeSurface": "#fcfcfc",
+    "border": "#e2e0e8",
+    "waitingText": "#8b86b0",
+    "activeText": "#312c62"
+  },
+  "stackTokens": {
+    "paddingY": 16,
+    "paddingX": 24,
+    "borderRadius": 12,
+    "iconGap": 16,
+    "iconSize": 22,
+    "labelFont": {
+      "fontSize": "16px",
+      "variant": "Medium",
+      "letterSpacing": "-0.01em",
+      "lineHeight": "1.2em",
+      "fontFamily": "Figtree",
+      "fontWeight": 500
+    },
+    "waiting": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "#8b86b0",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0"
+    },
+    "loading": {
+      "rowFill": "rgb(220, 225, 255)",
+      "labelColor": "rgb(77, 65, 240)",
+      "iconFill": "rgba(0, 0, 0, 0)",
+      "iconSize": 22,
+      "iconBorder": "#e2e0e8",
+      "iconBorderWidth": 1,
+      "checkColor": "rgb(77, 65, 240)",
+      "spinnerColor": "#4d41f0",
+      "spinnerSize": 18,
+      "spinnerStroke": 2,
+      "spinnerDurationMs": 750,
+      "boxShadow": "#e2e0e8"
+    },
+    "completed": {
+      "rowFill": "rgb(77, 65, 240)",
+      "labelColor": "rgb(236, 239, 255)",
+      "iconFill": "rgb(236, 239, 255)",
+      "iconSize": 22,
+      "checkColor": "rgb(77, 65, 240)",
+      "checkSize": 12,
+      "checkStroke": 4,
+      "spinnerColor": "#4d41f0"
+    }
+  },
+  "framerInstanceId": "bccl2TwIz",
+  "framerPreviewNodeId": "L74CcxJlC"
+}

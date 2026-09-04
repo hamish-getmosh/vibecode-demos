@@ -1,0 +1,49 @@
+/* Pace pills · day OR week reframe */
+
+.pace-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pace-duo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.pace-or {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted, #8b86b0);
+  letter-spacing: 0.02em;
+}
+
+.daily-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  background: var(--accent-soft, #ece9ff);
+  border-radius: 14px;
+  padding: 10px 16px;
+}
+
+.daily-pill .num {
+  font-family: "Area Inktrap", Georgia, serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--accent, #4d41f0);
+  line-height: 1;
+}
+
+.daily-pill .lbl {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink, #312c62);
+}
+
+.daily-pill--week .num {
+  font-size: 34px;
+}

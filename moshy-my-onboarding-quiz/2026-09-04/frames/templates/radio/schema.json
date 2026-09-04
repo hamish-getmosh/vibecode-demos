@@ -1,0 +1,28 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "radio",
+  "required": ["screenId", "headline", "options", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string (optional copy; shown only when showSubhead is true)",
+    "showSubhead": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show subhead under headline. Multi-select uses accent blue (#4d41f0) when true."
+    },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "options": [{ "label": "string", "icon": "string (optional)", "selected": "bool" }],
+    "trustpilot": {
+      "type": "boolean",
+      "default": true,
+      "description": "Footer Trustpilot row. Visual SSOT: Framer embed 5jo1wtkgIZb38X2KsI6D; pull via pull-quiz-component.sh trustpilot-row"
+    },
+    "legal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show Terms & Privacy under Trustpilot. Visual SSOT: Framer legal preview wsFJGhnNs; pull via pull-quiz-component.sh legal-fine"
+    }
+  }
+}

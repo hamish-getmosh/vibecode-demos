@@ -1,0 +1,404 @@
+/* USP cascade · bridge connectors (D3) */
+.usp-cascade {
+  position: relative;
+  display: flex;
+  min-height: 0;
+}
+
+.usp-cascade__cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.usp-cascade--bridge {
+  padding-top: 2px;
+}
+
+.usp-cascade--bridge .usp-card {
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none;
+  color: #fff;
+  opacity: 0.2;
+  transform: scale(0.985);
+  filter: saturate(0.55) brightness(0.92);
+  transition: box-shadow 0.5s ease, filter 0.5s ease;
+  position: relative;
+}
+
+.usp-cascade--bridge .usp-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(168deg, rgba(255, 255, 255, 0.16) 0%, transparent 46%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.usp-cascade--bridge .usp-card__inner {
+  position: relative;
+  z-index: 2;
+  padding: 20px 22px 18px;
+}
+
+.usp-cascade--bridge .usp-card--light .usp-card__inner {
+  padding-bottom: 16px;
+}
+
+.usp-cascade--bridge .usp-card--accent .usp-card__inner {
+  padding-bottom: 14px;
+}
+
+.usp-cascade--bridge .usp-card--light {
+  background: linear-gradient(158deg, #8f9bf2 0%, #6e7fe8 42%, #5f72e0 100%);
+}
+
+.usp-cascade--bridge .usp-card--accent {
+  background: linear-gradient(158deg, #6a5ff5 0%, #4d41f0 48%, #4338d4 100%);
+}
+
+.usp-cascade--bridge .usp-card--mid {
+  background: linear-gradient(158deg, #5248c8 0%, #3d34c4 52%, #2f2899 100%);
+}
+
+.usp-cascade--bridge .usp-card__kicker {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.72;
+  margin: 0 0 10px;
+}
+
+.usp-cascade--bridge .usp-card__hero {
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  color: #fff;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.usp-cascade--bridge .usp-card--light .usp-card__hero {
+  font-size: 72px;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+}
+
+.usp-cascade--bridge .usp-card__hero--sm {
+  font-size: 52px;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  margin-bottom: 2px;
+}
+
+.usp-cascade--bridge .usp-card__sub {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #fff;
+  margin: 4px 0 0;
+}
+
+.usp-cascade--bridge .usp-card__title {
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.usp-cascade--bridge .usp-card__body {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #fff;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.usp-cascade--bridge .usp-dotmap {
+  margin-top: 12px;
+  height: 68px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  position: relative;
+  overflow: hidden;
+}
+
+.usp-cascade--bridge .usp-dotmap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.usp-cascade--bridge .usp-dotmap__lbl {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.88;
+}
+
+.usp-cascade--bridge .usp-dotmap__countries {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  display: flex;
+  gap: 10px;
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+  opacity: 0.85;
+}
+
+.usp-cascade--bridge .usp-avatars {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.usp-cascade--bridge .usp-avatars__stack {
+  display: flex;
+}
+
+.usp-cascade--bridge .usp-avatars__stack i {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  margin-left: -10px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.12));
+  display: block;
+}
+
+.usp-cascade--bridge .usp-avatars__stack i:first-child {
+  margin-left: 0;
+}
+
+.usp-cascade--bridge .usp-avatars__lbl {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  opacity: 0.92;
+  line-height: 1.35;
+}
+
+.usp-cascade--bridge .usp-bridge-wrap {
+  position: relative;
+}
+
+.usp-cascade--bridge .usp-bridge-line {
+  height: 22px;
+  width: 3px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.usp-cascade--bridge .usp-bridge-line__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(77, 65, 240, 0.14);
+}
+
+.usp-cascade--bridge .usp-bridge-line__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8b82f8 0%, var(--accent, #4d41f0) 100%);
+  box-shadow: 0 0 10px rgba(77, 65, 240, 0.45);
+}
+
+.usp-cascade--bridge .usp-bridge-line__fill::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--accent, #4d41f0);
+  box-shadow: 0 0 14px rgba(77, 65, 240, 0.65);
+  opacity: 0;
+}
+
+.usp-cascade--bridge .usp-bridge-line__cap {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  background: rgba(77, 65, 240, 0.2);
+  border: 1.5px solid var(--ground, #fcfcfc);
+  z-index: 1;
+}
+
+.usp-cascade--bridge .usp-bridge-line__cap--top {
+  top: -1px;
+}
+
+.usp-cascade--bridge .usp-bridge-line__cap--bot {
+  bottom: -1px;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__fill {
+  animation: usp-bridge-fill-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__fill::after {
+  animation: usp-bridge-dot-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__cap--bot {
+  animation: usp-bridge-cap-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__fill {
+  animation: usp-bridge-fill-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__fill::after {
+  animation: usp-bridge-dot-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__cap--bot {
+  animation: usp-bridge-cap-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-wrap:nth-child(1) .usp-card {
+  animation: usp-bridge-unlock-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-wrap:nth-child(3) .usp-card {
+  animation: usp-bridge-unlock-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.usp-cascade--bridge .usp-bridge-wrap:nth-child(5) .usp-card {
+  animation: usp-bridge-unlock-3 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes usp-bridge-unlock-1 {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1);
+    box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+  }
+}
+
+@keyframes usp-bridge-unlock-2 {
+  0%, 32% {
+    opacity: 0.2;
+    transform: scale(0.985);
+    filter: saturate(0.55) brightness(0.92);
+    box-shadow: none;
+  }
+  38%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1);
+    box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+  }
+}
+
+@keyframes usp-bridge-unlock-3 {
+  0%, 66% {
+    opacity: 0.2;
+    transform: scale(0.985);
+    filter: saturate(0.55) brightness(0.92);
+    box-shadow: none;
+  }
+  72%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1);
+    box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+  }
+}
+
+@keyframes usp-bridge-fill-1 {
+  0%, 32% { height: 0; }
+  38%, 100% { height: 100%; }
+}
+
+@keyframes usp-bridge-fill-2 {
+  0%, 66% { height: 0; }
+  72%, 100% { height: 100%; }
+}
+
+@keyframes usp-bridge-dot-1 {
+  0%, 32% { opacity: 0; bottom: -3px; }
+  34% { opacity: 1; }
+  38%, 100% { opacity: 0; bottom: calc(100% - 3px); }
+}
+
+@keyframes usp-bridge-dot-2 {
+  0%, 66% { opacity: 0; bottom: -3px; }
+  68% { opacity: 1; }
+  72%, 100% { opacity: 0; bottom: calc(100% - 3px); }
+}
+
+@keyframes usp-bridge-cap-1 {
+  0%, 36% { background: rgba(77, 65, 240, 0.2); transform: scale(1); }
+  38%, 100% {
+    background: var(--accent, #4d41f0);
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(77, 65, 240, 0.5);
+  }
+}
+
+@keyframes usp-bridge-cap-2 {
+  0%, 70% { background: rgba(77, 65, 240, 0.2); transform: scale(1); }
+  72%, 100% {
+    background: var(--accent, #4d41f0);
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(77, 65, 240, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .usp-cascade--bridge .usp-card,
+  .usp-cascade--bridge .usp-bridge-line__fill,
+  .usp-cascade--bridge .usp-bridge-line__fill::after,
+  .usp-cascade--bridge .usp-bridge-line__cap--bot {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+  }
+
+  .usp-cascade--bridge .usp-bridge-line__fill {
+    height: 100% !important;
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "programme",
+  "required": ["screenId", "headline", "items", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string",
+    "showSubhead": { "type": "boolean", "default": true },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "items": [{
+      "kicker": "string (uppercase label above title)",
+      "title": "string",
+      "body": "string",
+      "icon": "med | doc | ship"
+    }],
+    "disclaimer": "string (doctor consult note)",
+    "ctaLabel": { "type": "string", "default": "Continue" },
+    "trustpilot": { "type": "boolean", "default": true },
+    "legal": { "type": "boolean", "default": false }
+  }
+}

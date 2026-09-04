@@ -1,0 +1,21 @@
+.numeric-input-dock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.numeric-input-dock .num-field {
+  margin-bottom: 24px;
+}
+
+.numeric-input-dock .input-cta {
+  margin-bottom: 24px;
+}
+
+.numeric-input-dock .trust-row {
+  margin-top: 0;
+}
+
+.numeric-input-dock .legal-block {
+  margin-top: 0;
+}

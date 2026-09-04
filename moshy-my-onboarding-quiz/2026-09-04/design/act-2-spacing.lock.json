@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "status": "locked",
+  "band": "mobile",
+  "brand": "moshy",
+  "market": "MY",
+  "lockKind": "act-2-quiz-spacing",
+  "notes": "Operator locked 2026-09-01 from act-2-spacing-mixboard.html. Layout rules: quiz-layout-rules.md. CSS mirror: act-2-spacing.lock.css.",
+  "shell": {
+    "padX": 32,
+    "chromePadTop": 16
+  },
+  "gaps": [
+    { "id": "chrome-headline", "token": "xl", "mobilePx": 32, "label": "Chrome bar → headline block" },
+    { "id": "headline-subhead", "token": "xs", "mobilePx": 8, "label": "Headline → subhead block" },
+    { "id": "subhead-content", "token": "xl", "mobilePx": 32, "label": "Subhead → content block" },
+    { "id": "headline-content", "token": "2xl", "mobilePx": 44, "label": "Headline → content (no subhead)" },
+    { "id": "content-footer", "token": "3xl", "mobilePx": 60, "label": "Content → page footer (Trustpilot / legal)" },
+    { "id": "trust-legal", "token": "xs", "mobilePx": 8, "label": "Trustpilot → legal" },
+    { "id": "cta-trust", "token": "xs", "mobilePx": 8, "label": "CTA → Trustpilot (footer dock)" },
+    { "id": "trust-bottom", "token": "md", "mobilePx": 16, "label": "Footer → bottom (screen edge or numpad)" }
+  ],
+  "cssVars": {
+    "--nav-pad-x": "32px",
+    "--quiz-chrome-pad-top": "16px",
+    "--quiz-gap-chrome-headline": "32px",
+    "--quiz-gap-headline-subhead": "8px",
+    "--quiz-gap-subhead-content": "32px",
+    "--quiz-gap-headline-content": "44px",
+    "--quiz-gap-content-footer": "60px",
+    "--quiz-gap-trust-legal": "8px",
+    "--quiz-gap-cta-trust": "8px",
+    "--quiz-gap-trust-bottom": "16px"
+  },
+  "cssFile": "act-2-spacing.lock.css",
+  "savedAt": "2026-09-01T12:38:00.000+08:00"
+}

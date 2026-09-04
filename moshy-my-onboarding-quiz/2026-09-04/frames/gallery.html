@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Templates gallery</title>
+  <link rel="stylesheet" href="gallery.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>002 · Templates gallery</h1>
+    <p class="lede">One template at a time. Live preview on the left; scaled instances on the right. Flow: <a href="../boards/mixboard.html">mixboard</a> · Components: <a href="components/gallery.html">components gallery</a>.</p>
+    <div class="toolbar">
+      <label><input type="checkbox" id="toggle-spacing" checked /> Show spacing overlay</label>
+      <button type="button" class="btn-save" id="btn-save" disabled>Save spacing</button>
+      <span class="toast" id="toast" aria-live="polite"></span>
+    </div>
+  </header>
+
+  <nav class="template-tabs" id="template-tabs" aria-label="Templates"></nav>
+
+  <div class="gallery-layout">
+    <section class="live-section" aria-label="Live preview">
+      <div class="live-meta">
+        <span class="live-meta__title" id="live-title"></span>
+        <span class="live-meta__id" id="live-id"></span>
+        <label class="live-legal-toggle" id="live-legal-toggle" hidden>
+          <input type="checkbox" id="toggle-legal" />
+          <span>Show legal</span>
+        </label>
+      </div>
+      <div class="phone-shell phone-shell--live">
+        <iframe class="phone-frame" id="live-frame" title="Live preview" scrolling="no"></iframe>
+      </div>
+    </section>
+
+    <section class="thumb-section" aria-label="Instances">
+      <div class="thumb-grid" id="thumb-grid"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="gap-modal" hidden>
+    <div class="modal" role="dialog" aria-labelledby="gap-modal-title">
+      <h2 id="gap-modal-title">Spacing</h2>
+      <p class="gap-readout" id="gap-readout"></p>
+      <select id="gap-select" aria-label="Spacing ladder token"></select>
+      <div class="modal-actions">
+        <button type="button" id="gap-cancel">Cancel</button>
+        <button type="button" class="btn-apply" id="gap-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="gallery-spacing.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "screenId": "s-21",
+  "template": "intro",
+  "title": "Check-in roadmap",
+  "headline": "Let's get you checked in for doctor-led weight loss",
+  "subhead": "A few quick questions. Here's what happens next:",
+  "showSubhead": true,
+  "steps": [
+    {
+      "number": "1",
+      "text": "Confirm your eligibility for a GLP-1 prescription programme",
+      "icon": "check"
+    },
+    {
+      "number": "2",
+      "text": "See your personalised estimate — how much weight you could lose over 12 months",
+      "icon": "chart"
+    },
+    {
+      "number": "3",
+      "text": "Explore your options — next steps with a doctor, only if you're happy",
+      "icon": "doctor"
+    }
+  ],
+  "ctaLabel": "Get started",
+  "trustpilot": true,
+  "legal": false
+}

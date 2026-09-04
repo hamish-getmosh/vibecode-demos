@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Why GLP-1 may fit you · Fit concepts v2</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --tp-green: #00b67a;
+      --side-w: 248px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+    .side .note strong { color: var(--ink); }
+    .side .toggle-row { padding: 8px 16px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .side .toggle-btn {
+      font-size: 10px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border);
+      background: #fff; color: var(--muted); cursor: pointer;
+    }
+    .side .toggle-btn.is-on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); max-width: 80ch; }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); }
+    .art-label { margin-bottom: 8px; min-height: 88px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .art-label .persona-tag { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 3px 6px; margin-top: 6px; display: inline-block; }
+    .hifi-viewport {
+      width: var(--phone-w); height: calc(844px * 0.6359); overflow: hidden;
+      border: 2px solid var(--ink); border-radius: 18px; background: #fff;
+    }
+    .hifi-viewport__inner { width: 390px; height: 844px; transform: scale(0.6359); transform-origin: top left; }
+
+    .fit-phone {
+      width: 390px; height: 844px; background: var(--ground);
+      display: flex; flex-direction: column; overflow: hidden; color: var(--ink);
+    }
+    .fit-phone .nav-shell { padding: 12px 32px 0; flex-shrink: 0; }
+    .fit-phone .nav-row { display: flex; align-items: center; gap: 12px; }
+    .fit-phone .nav-back {
+      width: 28px; height: 28px; border: 0; border-radius: 8px; background: var(--surface);
+      display: grid; place-items: center; font-size: 18px; color: var(--muted);
+    }
+    .fit-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .fit-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .fit-phone .prog-pills i.done { background: var(--accent); }
+    .fit-phone .prog-pills i.on { background: var(--accent); opacity: 0.4; }
+
+    .fit-phone .quiz-scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .fit-phone .quiz-main { flex: 1; display: flex; flex-direction: column; min-height: 0; padding: 0 32px; }
+
+    .fit-phone .q-head {
+      font-family: var(--display); font-size: 26px; font-weight: 700;
+      line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 6px;
+    }
+    .fit-phone .q-sub { font-size: 15px; color: var(--muted); margin: 0 0 20px; }
+    .fit-phone .q-fine { font-size: 12px; color: var(--muted); text-align: center; margin: 20px 0 0; }
+    .fit-phone .footer-dock { flex-shrink: 0; padding: 8px 32px 20px; }
+    .fit-phone .input-cta {
+      border-radius: 999px; background: var(--ruby); color: #fcfcfc;
+      font-size: 16px; font-weight: 600; padding: 16px 28px; border: 0; width: 100%;
+      box-shadow: 0 8px 24px rgba(154, 2, 57, 0.22);
+    }
+    .fit-phone .tp-compact {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      margin: 10px 0 0; padding: 10px 14px; border-radius: 999px;
+      background: var(--surface); font-size: 11px; color: var(--muted); text-align: center;
+    }
+    .fit-phone .tp-compact__stars { color: var(--tp-green); letter-spacing: 1px; }
+
+    /* Shared hero */
+    .fit-hero {
+      position: relative; flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fit-hero__wash {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 20%, rgba(110, 127, 232, 0.35) 0%, transparent 70%),
+        linear-gradient(165deg, #ece9ff 0%, #f6f4fc 55%, #fcfcfc 100%);
+    }
+    .fit-hero__fig { position: relative; z-index: 1; }
+    .fit-hero__ring {
+      width: 120px; height: 120px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: linear-gradient(145deg, #fff 0%, #ebe6ff 100%);
+      border: 1px solid rgba(77, 65, 240, 0.12);
+      box-shadow: 0 12px 40px rgba(77, 65, 240, 0.14);
+    }
+    .fit-hero__icon { width: 52px; height: 52px; color: var(--accent); }
+
+    /* A · Hero + airy dots */
+    .fit-phone--a .fit-hero { height: 200px; margin: 0 -32px 20px; }
+    .fit-phone--a .bullet-list { display: flex; flex-direction: column; gap: 18px; }
+    .fit-phone--a .bullet {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 16px; line-height: 1.35;
+    }
+    .fit-phone--a .bullet__dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      margin-top: 7px; flex-shrink: 0;
+    }
+    .fit-phone--a .bullet.is-fallback { color: var(--muted); }
+    .fit-phone--a .bullet.is-fallback .bullet__dot { background: #c8c4d8; }
+
+    /* B · Inset image card */
+    .fit-phone--b .fit-hero {
+      height: 160px; margin: 8px 0 24px; border-radius: 16px;
+    }
+    .fit-phone--b .fit-hero__wash { border-radius: 16px; }
+    .fit-phone--b .fit-hero__ring { width: 88px; height: 88px; }
+    .fit-phone--b .fit-hero__icon { width: 40px; height: 40px; }
+    .fit-phone--b .bullet-list { display: flex; flex-direction: column; gap: 14px; }
+    .fit-phone--b .bullet {
+      display: flex; gap: 10px; align-items: center;
+      font-size: 15px; line-height: 1.35; padding: 12px 14px;
+      border-radius: 12px; background: var(--surface);
+    }
+    .fit-phone--b .bullet.is-triggered { background: var(--accent-soft); }
+    .fit-phone--b .bullet.is-fallback { color: var(--muted); }
+    .fit-phone--b .bullet__tick {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+      display: grid; place-items: center;
+    }
+    .fit-phone--b .bullet.is-fallback .bullet__tick { background: #d8d5e4; }
+
+    /* C · Full-bleed hero bleed */
+    .fit-phone--c .quiz-scroll { padding: 0; }
+    .fit-phone--c .quiz-main { padding: 0 32px 0; }
+    .fit-phone--c .nav-shell { padding-left: 32px; padding-right: 32px; }
+    .fit-phone--c .fit-hero {
+      height: 220px; margin: 0 0 0; align-items: flex-end; padding-bottom: 24px;
+    }
+    .fit-phone--c .fit-hero__wash {
+      background:
+        radial-gradient(ellipse 90% 80% at 50% 0%, rgba(110, 127, 232, 0.45) 0%, transparent 65%),
+        linear-gradient(180deg, #e8e4ff 0%, #f8f7fc 70%, #fcfcfc 100%);
+    }
+    .fit-phone--c .fit-hero__ring { width: 100px; height: 100px; }
+    .fit-phone--c .head-block { margin-top: 4px; }
+    .fit-phone--c .bullet-list { display: flex; flex-direction: column; gap: 0; }
+    .fit-phone--c .bullet {
+      font-size: 16px; line-height: 1.4; padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .fit-phone--c .bullet:last-child { border-bottom: 0; }
+    .fit-phone--c .bullet.is-fallback { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>s-42 · v2</h1>
+      <p class="meta">Hero image + 3 simple bullets<br/>Less dense · pick A, B, or C</p>
+      <a href="../docs/s-42-dynamic-fit-brief.md">Brief</a>
+      <a href="../docs/s-42-content-matrix.json">Matrix</a>
+      <a href="mixboard.html#s-42">Mixboard</a>
+      <div class="toggle-row" id="persona-toggle"></div>
+      <p class="note">
+        <strong>v2 change:</strong> Dropped 4th bullet. Hero visual up top. Copy capped at ~72 chars.<br/><br/>
+        <strong>Personas:</strong> Max = all triggered. Neutral = all fallback.
+      </p>
+    </aside>
+    <main>
+      <div class="chapter-head">
+        <h2>Hero + 3 bullets</h2>
+        <p>Visual break first, then scannable lines. Photography replaces gradient figure in Framer.</p>
+      </div>
+      <div class="board" id="concept-board"></div>
+    </main>
+  </div>
+  <script type="module">
+    import { resolveFitBullets } from "../frames/lib/fit-bullets-core.mjs";
+
+    const [matrix, personasData] = await Promise.all([
+      fetch("../docs/s-42-content-matrix.json").then((r) => r.json()),
+      fetch("../docs/s-42-personas.json").then((r) => r.json()),
+    ]);
+
+    const SHOW_PERSONAS = ["max-female", "neutral-male"];
+    const personaMap = Object.fromEntries(personasData.personas.map((p) => [p.id, p]));
+
+    const HERO_SVG =
+      '<svg class="fit-hero__icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">' +
+        '<rect x="20" y="12" width="24" height="36" rx="12" stroke="currentColor" stroke-width="3"/>' +
+        '<path d="M32 24v16M26 32h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>' +
+        '<path d="M16 48c4-6 10-8 16-8s12 2 16 8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>' +
+      '</svg>';
+
+    function navHtml() {
+      return '<div class="nav-shell"><div class="nav-row">' +
+        '<button class="nav-back" type="button" aria-label="Back">‹</button>' +
+        '<div class="prog-pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>' +
+      '</div></div>';
+    }
+
+    function footerHtml() {
+      return '<div class="footer-dock">' +
+        '<button class="input-cta" type="button">' + matrix.fixed.ctaLabel + '</button>' +
+        '<div class="tp-compact"><span class="tp-compact__stars" aria-hidden="true">★★★★★</span>' +
+        '<span><strong>Excellent</strong> · 4.8 on Trustpilot · 1,200+ reviews</span></div></div>';
+    }
+
+    function heroHtml() {
+      return '<div class="fit-hero" data-layer="hero">' +
+        '<div class="fit-hero__wash" aria-hidden="true"></div>' +
+        '<div class="fit-hero__fig"><div class="fit-hero__ring">' + HERO_SVG + '</div></div></div>';
+    }
+
+    function headerHtml() {
+      return '<div class="head-block">' +
+        '<h2 class="q-head">' + matrix.fixed.headline + '</h2>' +
+        '<p class="q-sub">' + matrix.fixed.subhead + '</p></div>';
+    }
+
+    function bulletsA(slots) {
+      return '<div class="bullet-list">' + slots.map(function (s) {
+        return '<div class="bullet is-' + s.variant + '"><span class="bullet__dot"></span><span>' + s.text + '</span></div>';
+      }).join("") + '</div>';
+    }
+
+    function bulletsB(slots) {
+      return '<div class="bullet-list">' + slots.map(function (s) {
+        return '<div class="bullet is-' + s.variant + '"><span class="bullet__tick" aria-hidden="true">✓</span><span>' + s.text + '</span></div>';
+      }).join("") + '</div>';
+    }
+
+    function bulletsC(slots) {
+      return '<div class="bullet-list">' + slots.map(function (s) {
+        return '<div class="bullet is-' + s.variant + '">' + s.text + '</div>';
+      }).join("") + '</div>';
+    }
+
+    function buildPhone(personaId, variant, renderBullets) {
+      const persona = personaMap[personaId];
+      const result = resolveFitBullets(persona.answers, persona.gender, matrix);
+      const body = headerHtml() + renderBullets(result.slots) +
+        '<p class="q-fine">' + matrix.fixed.disclaimer + '</p>';
+
+      if (variant === "c") {
+        return '<div class="fit-phone fit-phone--c">' +
+          navHtml() +
+          '<div class="quiz-scroll">' + heroHtml() +
+            '<div class="quiz-main">' + body + '</div></div>' +
+          footerHtml() + '</div>';
+      }
+
+      return '<div class="fit-phone fit-phone--' + variant + '">' +
+        navHtml() +
+        '<div class="quiz-scroll"><div class="quiz-main">' +
+          heroHtml() + body +
+        '</div></div>' +
+        footerHtml() + '</div>';
+    }
+
+    const concepts = [
+      {
+        id: "a", tag: "A · Hero + dots",
+        title: "Gradient hero, airy dot list",
+        job: "Big visual up top. Three one-line bullets with purple dots and generous spacing. Lightest read.",
+        variant: "a", renderBullets: bulletsA
+      },
+      {
+        id: "b", tag: "B · Inset card",
+        title: "Rounded image card + tick pills",
+        job: "Contained hero card inside the scroll zone. Each bullet in a soft pill with a tick. Triggered rows get accent wash.",
+        variant: "b", renderBullets: bulletsB
+      },
+      {
+        id: "c", tag: "C · Full bleed",
+        title: "Edge-to-edge hero, minimal lines",
+        job: "Entry-hook energy: full-bleed wash, figure centred, then headline and three hairline-divided lines. Most editorial.",
+        variant: "c", renderBullets: bulletsC
+      }
+    ];
+
+    function mountBoard() {
+      const board = document.getElementById("concept-board");
+      board.innerHTML = "";
+      concepts.forEach(function (c) {
+        SHOW_PERSONAS.forEach(function (personaId) {
+          const art = document.createElement("article");
+          art.className = "art";
+          art.innerHTML =
+            '<div class="art-label"><span class="tag">' + c.tag + '</span><b>' + c.title + '</b>' +
+            '<div class="job">' + c.job + '</div>' +
+            '<span class="persona-tag">' + personaMap[personaId].label + '</span></div>' +
+            '<div class="hifi-viewport"><div class="hifi-viewport__inner">' +
+            buildPhone(personaId, c.variant, c.renderBullets) + '</div></div>';
+          board.appendChild(art);
+        });
+      });
+    }
+
+    const toggleEl = document.getElementById("persona-toggle");
+    personasData.personas.forEach(function (p) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "toggle-btn" + (SHOW_PERSONAS.includes(p.id) ? " is-on" : "");
+      btn.textContent = p.label;
+      btn.dataset.id = p.id;
+      btn.addEventListener("click", function () {
+        const idx = SHOW_PERSONAS.indexOf(p.id);
+        if (idx >= 0) { if (SHOW_PERSONAS.length <= 2) return; SHOW_PERSONAS.splice(idx, 1); }
+        else { if (SHOW_PERSONAS.length >= 2) SHOW_PERSONAS.shift(); SHOW_PERSONAS.push(p.id); }
+        toggleEl.querySelectorAll(".toggle-btn").forEach(function (b) {
+          b.classList.toggle("is-on", SHOW_PERSONAS.includes(b.dataset.id));
+        });
+        mountBoard();
+      });
+      toggleEl.appendChild(btn);
+    });
+
+    mountBoard();
+  </script>
+</body>
+</html>

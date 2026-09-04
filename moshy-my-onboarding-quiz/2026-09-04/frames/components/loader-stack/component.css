@@ -1,0 +1,9 @@
+/* GENERATED — row gap synced from QuizLoaderStack; run pull-and-sync-loader-row.sh */
+
+.loader-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+}

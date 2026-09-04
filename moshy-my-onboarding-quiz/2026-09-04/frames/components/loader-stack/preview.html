@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Loader stack · preview</title>
+  <link rel="stylesheet" href="../preview-lab.css" />
+  <link rel="stylesheet" href="../loader-step/component.css" />
+  <link rel="stylesheet" href="component.css" />
+</head>
+<body class="preview-lab">
+  <div class="preview-pane">
+    <div
+      class="loader-steps"
+      data-loader-steps
+      data-default-step-ms="950"
+      data-pause-after-complete-ms="1500"
+    >
+      <div class="loader-step is-wait" data-loader-step data-duration-ms="900">
+        <span class="loader-step-icon"></span><span class="loader-step-label">BMI range</span>
+      </div>
+      <div class="loader-step is-wait" data-loader-step data-duration-ms="1100">
+        <span class="loader-step-icon"></span><span class="loader-step-label">Health profile</span>
+      </div>
+      <div class="loader-step is-wait" data-loader-step data-duration-ms="800">
+        <span class="loader-step-icon"></span><span class="loader-step-label">Confirming eligibility</span>
+      </div>
+    </div>
+  </div>
+  <script src="preview.js"></script>
+</body>
+</html>

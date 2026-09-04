@@ -1,0 +1,25 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh legal-fine */
+
+
+.phone--hifi .legal-block .fine,
+.legal-block .fine,
+.footer-block .fine {
+  font-family: "Figtree", Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--ink-muted);
+  margin: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.phone--hifi .legal-block .fine a,
+.legal-block .fine a,
+.footer-block .fine a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: inherit;
+}

@@ -1,0 +1,78 @@
+@import url("../../components/pace-pills/component.css");
+
+/* Reframe · Layout F · left-aligned · fadeHold motion */
+
+html.frame-preview .phone--reframe {
+  height: 100%;
+}
+
+html.frame-preview .phone--reframe .quiz-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+html.frame-preview .quiz-main--reframe {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  min-height: 0;
+  padding: 0 var(--nav-pad-x, 32px);
+  box-sizing: border-box;
+}
+
+html.frame-preview .quiz-main--reframe .mnode {
+  will-change: transform, opacity;
+}
+
+html.frame-preview .reframe-bridge {
+  margin: 0;
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  max-width: 24ch;
+}
+
+html.frame-preview .reframe-bridge-sub {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--muted, #8b86b0);
+  max-width: 28ch;
+}
+
+html.frame-preview .reframe-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted, #8b86b0);
+  max-width: 32ch;
+}
+
+html.frame-preview .reframe-note {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted, #8b86b0);
+  max-width: 32ch;
+}
+
+html.frame-preview .phone--reframe .nav-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+}
+
+html.frame-preview .nav-row__spacer {
+  width: 32px;
+}
+
+html.frame-preview .phone--reframe .footer-dock {
+  flex-shrink: 0;
+}

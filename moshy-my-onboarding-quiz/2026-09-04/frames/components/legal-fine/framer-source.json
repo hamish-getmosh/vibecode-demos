@@ -1,0 +1,20 @@
+{
+  "componentKey": "legal-fine",
+  "framerComponentId": "wsFJGhnNs",
+  "framerDisplayName": "Quiz/Quiz Legal Fine",
+  "pulledAt": "2026-09-02T11:04:38.529964+00:00",
+  "styles": {
+    "fontFamily": "Figtree",
+    "fontSize": "12px",
+    "fontWeight": 400,
+    "lineHeight": "1.4em",
+    "letterSpacing": "0.02em",
+    "textAlign": "center",
+    "bodyColor": "var(--ink-muted)",
+    "linkColor": "var(--ink)",
+    "width": "266px",
+    "defaultText": "By continuing you agree to our Terms & Privacy Policy"
+  },
+  "controls": {},
+  "framerPreviewNodeId": "wsFJGhnNs"
+}

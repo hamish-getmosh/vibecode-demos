@@ -1,0 +1,202 @@
+{
+  "components": [
+    {
+      "id": "question",
+      "name": "Question",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "riceymdsf",
+      "framerName": "Quiz/Quiz Headline",
+      "preview": "question/preview.html",
+      "states": { "showSubhead": false },
+      "controls": [
+        { "type": "toggle", "id": "showSubhead", "label": "Show subhead" }
+      ]
+    },
+    {
+      "id": "radio-stack",
+      "name": "Radio stack",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer-code",
+      "framerCodeFile": "QuizRadioStack.tsx",
+      "framerId": "codeFile/C6kFUEl:default",
+      "preview": "radio-stack/preview.html",
+      "states": { "variant": "gender", "selectedIndex": 0 },
+      "controls": [
+        {
+          "type": "select",
+          "id": "variant",
+          "label": "Variant",
+          "options": [
+            { "value": "gender", "label": "Gender (icons)" },
+            { "value": "age", "label": "Age bands" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta-primary",
+      "name": "CTA primary",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "Yf0P638Mj",
+      "framerName": "Quiz/Quiz CTA",
+      "preview": "cta-primary/preview.html",
+      "states": {},
+      "controls": []
+    },
+    {
+      "id": "trustpilot-row",
+      "name": "Trustpilot row",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "5jo1wtkgIZb38X2KsI6D",
+      "framerName": "Trustpilot Badge",
+      "preview": "trustpilot-row/preview.html",
+      "states": {},
+      "controls": []
+    },
+    {
+      "id": "legal-fine",
+      "name": "Legal fine",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "wsFJGhnNs",
+      "framerName": "Quiz/Quiz Legal Fine",
+      "preview": "legal-fine/preview.html",
+      "states": {},
+      "controls": []
+    },
+    {
+      "id": "numeric-input",
+      "name": "Numeric input",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "vgu7wKkk7",
+      "framerName": "Quiz/Quiz Numeric Input",
+      "preview": "numeric-input/preview.html",
+      "states": {
+        "focused": false,
+        "empty": true,
+        "value": "",
+        "unit": "cm"
+      },
+      "controls": [
+        { "type": "toggle", "id": "focused", "label": "Focused" },
+        { "type": "toggle", "id": "empty", "label": "Empty (placeholder 0)" },
+        {
+          "type": "select",
+          "id": "unit",
+          "label": "Unit",
+          "options": [
+            { "value": "cm", "label": "cm (height)" },
+            { "value": "kg", "label": "kg (weight)" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loader-step",
+      "name": "Loader step",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "QWRRBVGty",
+      "framerName": "Quiz/Quiz Loader Step",
+      "framerInstanceId": "bccl2TwIz",
+      "preview": "loader-step/preview.html",
+      "states": { "state": "loading" },
+      "controls": [
+        {
+          "type": "select",
+          "id": "state",
+          "label": "State",
+          "options": [
+            { "value": "waiting", "label": "Waiting" },
+            { "value": "loading", "label": "Loading" },
+            { "value": "completed", "label": "Completed" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loader-stack",
+      "name": "Loader stack",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer-code",
+      "framerCodeFile": "QuizLoaderStack.tsx",
+      "framerId": "codeFile/KND7sAT:default",
+      "framerInstanceId": "FbNUqoawm",
+      "preview": "loader-stack/preview.html",
+      "states": { "previewActiveIndex": 1 },
+      "controls": [
+        {
+          "type": "number",
+          "id": "previewActiveIndex",
+          "label": "Active step index",
+          "min": 0,
+          "max": 5
+        }
+      ]
+    },
+    {
+      "id": "elig-hero",
+      "name": "Elig hero",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "eSDS5UTVn",
+      "framerName": "Quiz/Quiz Elig Hero",
+      "framerInstanceId": "lQ3oWEhKy",
+      "preview": "elig-hero/preview.html",
+      "states": { "hasSubhead": true },
+      "controls": [
+        { "type": "toggle", "id": "hasSubhead", "label": "Show subhead" }
+      ]
+    },
+    {
+      "id": "elig-checklist",
+      "name": "Elig checklist",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "tX9LH3MhG",
+      "framerName": "Quiz/Quiz Elig Checklist",
+      "framerInstanceId": "YbauInNix",
+      "preview": "elig-checklist/preview.html",
+      "states": {},
+      "controls": []
+    },
+    {
+      "id": "elig-next",
+      "name": "Elig next step",
+      "tier": 1,
+      "frame": "content",
+      "source": "framer",
+      "framerId": "X0igXYgRo",
+      "framerName": "Quiz/Quiz Elig Next",
+      "framerInstanceId": "EG9Mqa3V4",
+      "preview": "elig-next/preview.html",
+      "states": {},
+      "controls": []
+    },
+    {
+      "id": "numeric-input-dock",
+      "name": "Numeric input dock",
+      "tier": 2,
+      "frame": "phone",
+      "preview": "numeric-input-dock/preview.html",
+      "states": { "value": "165", "unit": "cm", "legal": false },
+      "controls": [
+        { "type": "toggle", "id": "legal", "label": "Show legal" }
+      ]
+    }
+  ]
+}

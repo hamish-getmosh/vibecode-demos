@@ -1,0 +1,31 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "numeric-input",
+  "required": ["screenId", "headline", "value", "unit", "ariaLabel", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string",
+    "headline": "string",
+    "subhead": "string (optional copy; shown only when showSubhead is true)",
+    "showSubhead": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show subhead under headline (usually omitted on numeric screens)"
+    },
+    "value": "string | number",
+    "unit": "string (cm | kg)",
+    "ariaLabel": "string",
+    "showNumpad": "bool",
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "trustpilot": {
+      "type": "boolean",
+      "default": true,
+      "description": "Footer Trustpilot row (via numeric-input-dock). Framer embed 5jo1wtkgIZb38X2KsI6D; pull trustpilot-row"
+    },
+    "legal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Terms & Privacy under Trustpilot. Framer legal preview wsFJGhnNs; pull legal-fine"
+    }
+  }
+}

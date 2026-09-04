@@ -1,0 +1,16 @@
+{
+  "screenId": "s-44",
+  "template": "trust",
+  "title": "You're in safe hands",
+  "headline": "You're in safe hands",
+  "showSubhead": false,
+  "motionVariant": "bridge",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "ctaLabel": "Continue",
+  "trustpilot": "prominent",
+  "legal": false
+}

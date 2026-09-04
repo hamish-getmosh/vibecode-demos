@@ -1,0 +1,20 @@
+{
+  "screenId": "s-310",
+  "template": "reframe",
+  "title": "300g reframe",
+  "motionVariant": "reframeFadeHold",
+  "bridgeHeadline": "14 kg sounds like a lot.",
+  "bridgeSub": "Spread over 12 months, the average works out to about:",
+  "gramsPerDay": 40,
+  "gramsPerWeek": 300,
+  "bodyCopy": "Some weeks you'll lose more, some less. That's normal. It's the average over time that counts, not any single week.",
+  "disclaimerNote": "Estimate only · your pace will vary",
+  "ctaLabel": "How it works →",
+  "showBack": true,
+  "progress": {
+    "done": 4,
+    "current": 3,
+    "total": 4
+  },
+  "trustpilot": false
+}

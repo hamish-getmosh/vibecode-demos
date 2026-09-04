@@ -1,0 +1,37 @@
+/* elig-pass · prototype until Framer native pull */
+
+.elig-pass {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.elig-pass__ring {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(46, 125, 50, 0.1);
+  animation: elig-pulse 2.4s ease-in-out infinite;
+}
+
+.elig-pass__icon {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #43a047 0%, #2e7d32 100%);
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(46, 125, 50, 0.28);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@keyframes elig-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.65; }
+  50% { transform: scale(1.08); opacity: 0.35; }
+}

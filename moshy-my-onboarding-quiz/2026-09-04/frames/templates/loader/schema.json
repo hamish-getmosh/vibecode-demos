@@ -1,0 +1,33 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "loader",
+  "required": ["screenId", "headline", "steps", "progress"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string (optional supporting copy under headline)",
+    "showSubhead": {
+      "type": "boolean",
+      "default": true,
+      "description": "Show subhead under headline. Default true for loader screens."
+    },
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "steps": [{ "label": "string", "durationMs": "number (optional per-step ms)" }],
+    "defaultStepMs": {
+      "type": "number",
+      "default": 950,
+      "description": "Fallback duration when a step omits durationMs."
+    },
+    "pauseAfterCompleteMs": {
+      "type": "number",
+      "default": 1500,
+      "description": "Pause before loop restart."
+    },
+    "trustpilot": {
+      "type": "boolean",
+      "default": false,
+      "description": "Footer Trustpilot row. Loaders omit Trustpilot per layout rules."
+    }
+  }
+}

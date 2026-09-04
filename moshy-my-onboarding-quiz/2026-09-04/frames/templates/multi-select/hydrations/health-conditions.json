@@ -1,0 +1,38 @@
+{
+  "screenId": "s-25",
+  "template": "multi-select",
+  "title": "Health conditions",
+  "headline": "Do any of these apply to you?",
+  "subhead": "Select all that apply.",
+  "nonePreset": true,
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "ctaLabel": "Continue",
+  "options": [
+    {
+      "label": "None of these",
+      "exclusive": true
+    },
+    {
+      "label": "Type 2 diabetes / pre-diabetes"
+    },
+    {
+      "label": "High blood pressure"
+    },
+    {
+      "label": "PCOS"
+    },
+    {
+      "label": "Thyroid condition"
+    },
+    {
+      "label": "Heart disease"
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": true
+}

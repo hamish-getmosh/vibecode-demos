@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Staged morph · Scene strip</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --side-w: 252px;
+      --strip-phone-w: 200px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+      --pill-display: "Area Inktrap", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 6px; font-size: 15px; }
+    .side p, .side li { font-size: 11px; color: var(--muted); line-height: 1.55; }
+    .side ul { margin: 8px 0; padding-left: 18px; }
+    .side a { color: var(--accent); font-size: 12px; }
+    .side .beat-list { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .side .beat-list li { margin-bottom: 4px; }
+    .side .beat-list strong { color: var(--ink); }
+    main { flex: 1; padding: 20px 24px 64px; min-width: 0; overflow-x: auto; }
+    .intro { max-width: 72ch; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid var(--border); }
+    .intro h2 { margin: 0 0 6px; font-size: 17px; }
+    .intro p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Comic strip row */
+    .strip {
+      display: flex;
+      gap: 0;
+      align-items: flex-start;
+      min-width: max-content;
+      padding-bottom: 8px;
+    }
+    .scene {
+      flex: 0 0 auto;
+      width: calc(var(--strip-phone-w) + 28px);
+      scroll-snap-align: start;
+    }
+    .scene-head {
+      text-align: center;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+    .scene-head .num {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-bottom: 4px;
+    }
+    .scene-head .label { display: block; font-size: 11px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .scene-head .note { display: block; font-size: 9px; color: var(--muted); margin-top: 3px; line-height: 1.35; max-width: 18ch; margin-left: auto; margin-right: auto; }
+    .scene-arrow {
+      flex: 0 0 20px;
+      align-self: center;
+      padding-top: 72px;
+      text-align: center;
+      color: #b8b2c8;
+      font-size: 16px;
+    }
+
+    .phone-wrap {
+      width: var(--strip-phone-w);
+      height: calc(844px * 0.5128);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      background: #fff;
+      margin: 0 auto;
+    }
+    .phone-wrap__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.5128);
+      transform-origin: top left;
+    }
+
+    /* Single morph phone */
+    .morph-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .morph-phone .nav-shell { padding: 12px 20px 0; flex-shrink: 0; }
+    .morph-phone .nav-row { display: flex; align-items: center; justify-content: space-between; min-height: 28px; }
+    .morph-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .morph-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .morph-phone .prog-pills i.done { background: var(--accent); }
+    .morph-phone .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .morph-phone .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px 24px 12px;
+      justify-content: center;
+    }
+    .morph-phone .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 16px;
+    }
+    .morph-phone .lead {
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0 0 12px;
+      max-width: 30ch;
+    }
+    .morph-phone .stat-hero {
+      font-family: var(--display);
+      font-size: 80px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--accent);
+      margin: 0;
+    }
+    .morph-phone .stat-hero .unit { font-size: 36px; }
+    .morph-phone .stat-hero.small {
+      font-size: 52px;
+      color: #7a7498;
+      opacity: 1;
+      margin-bottom: 0;
+    }
+    .morph-phone .stat-hero.small .unit { font-size: 22px; }
+    .morph-phone .stat-sub.compact {
+      font-size: 15px;
+      color: #7a7498;
+      opacity: 1;
+    }
+    .morph-phone .stat-sub.compact em { font-size: 12px; color: #9a96ad; }
+    .morph-phone .bridge-wrap { margin-top: 36px; }
+    .morph-phone .stat-sub {
+      font-size: 17px;
+      line-height: 1.4;
+      margin: 10px 0 0;
+      color: var(--ink);
+    }
+    .morph-phone .stat-sub em {
+      font-style: normal;
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .morph-phone .bridge {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin: 16px 0 12px;
+      max-width: 26ch;
+    }
+    .morph-phone .daily-pill {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--accent-soft);
+      border-radius: 16px;
+      padding: 12px 20px;
+      margin: 28px 0 16px;
+    }
+    .morph-phone .daily-pill .num {
+      font-family: var(--pill-display);
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .morph-phone .daily-pill .lbl {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .morph-phone .reframe-copy {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 30ch;
+      margin: 0;
+    }
+    .morph-phone .reframe-copy strong { color: var(--ink); font-weight: 600; }
+    .morph-phone .fine {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 32ch;
+      margin: 12px 0 0;
+    }
+    .morph-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 12px 20px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .morph-phone .cta {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: var(--ruby);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 20px;
+    }
+    .morph-phone .cta.ghost {
+      background: var(--surface);
+      color: var(--muted);
+    }
+    .morph-phone .slot { min-height: 0; transition: none; }
+    .morph-phone .slot.stat-slot { min-height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .morph-phone .slot.chart-slot { width: 100%; max-width: 300px; min-height: 148px; margin: 12px 0 4px; }
+    .morph-phone .slot.pill-slot { min-height: 72px; }
+    .morph-phone .slot.cta-slot { min-height: 52px; width: 100%; }
+
+    /* Weight-loss trajectory — line goes DOWN left → right */
+    .weight-chart { width: 100%; height: 140px; position: relative; }
+    .weight-chart svg { width: 100%; height: 100%; display: block; }
+    .weight-chart .axis-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .weight-chart .annot {
+      position: absolute;
+      right: 6%;
+      bottom: 28%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .weight-chart .start-dot, .weight-chart .end-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px var(--accent-soft);
+    }
+    .weight-chart .start-dot { left: 2%; top: 18%; }
+    .weight-chart .end-dot { right: 2%; bottom: 22%; }
+
+    .hidden { visibility: hidden; opacity: 0; height: 0; min-height: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden; }
+    .dim { opacity: 0.35; }
+    .chart-partial .weight-chart svg path.main { stroke-dasharray: 120; stroke-dashoffset: 80; }
+    .chart-full .weight-chart svg path.main { stroke-dasharray: none; }
+
+    /* Keyframe strip at bottom */
+    .timeline {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 2px solid var(--border);
+      max-width: 960px;
+    }
+    .timeline h3 { margin: 0 0 10px; font-size: 14px; }
+    .timeline table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .timeline th, .timeline td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .timeline th { color: var(--muted); font-weight: 600; width: 48px; }
+    .timeline td:first-child { font-weight: 700; color: var(--accent); white-space: nowrap; width: 56px; }
+    .timeline .dur { color: var(--muted); white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Staged morph · scenes</h1>
+      <p>5 blended phases (not 10 sequential beats). <a href="reveal-staged-morph-play.html"><strong>▶ Play animation</strong></a></p>
+      <ul>
+        <li>Layout E throughout · no back · no Trustpilot</li>
+        <li>Auto-advance or tap after beat 8</li>
+        <li>Copy provisional · legal TBD</li>
+      </ul>
+      <div class="beat-list">
+        <p><strong>Motion principles</strong></p>
+        <ul>
+          <li>Stat count-up on beat 3</li>
+          <li>Chart draw L→R on beat 5–6</li>
+          <li>14 kg scale-down + fade on beat 7</li>
+          <li>300g pill scale-up + accent bounce on beat 8</li>
+          <li>CTA slide-up on beat 10</li>
+        </ul>
+      </div>
+      <p style="margin-top:12px"><a href="reveal-motion-concepts.html"><strong>6 motion concepts →</strong></a><br/>
+      <a href="reveal-staged-morph-play.html">▶ Play (A)</a><br/>
+      <a href="reveal-concepts.html">← Layout concepts</a><br/><a href="mixboard.html#s-39">Mixboard</a></p>
+    </aside>
+    <main>
+      <div class="intro">
+        <h2>Scene strip · 5 blended phases</h2>
+        <p>Each panel = a phase with overlapping motion inside it. Hit play for the full timeline.</p>
+      </div>
+
+      <div class="strip" id="strip"></div>
+
+      <div class="timeline">
+        <h3>Shot list (for Framer / motion handoff)</h3>
+        <table>
+          <thead><tr><th>Scene</th><th>On screen</th><th>Motion</th><th class="dur">Dur</th></tr></thead>
+          <tbody id="shot-list"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      var SCENES = [
+        { n: 1, label: "Float in", note: "Eyebrow + lead float up (240ms stagger)", dur: "650ms",
+          eyebrow: true, lead: true },
+        { n: 2, label: "Ticker + chart", note: "0→14 · over 12 months · chart draw together", dur: "1400ms",
+          eyebrow: true, lead: true, stat: "hero", sub: true, chart: "partial" },
+        { n: 3, label: "Shift up", note: "14 kg → 52px grey · lead out · stack moves up", dur: "750ms",
+          eyebrow: true, stat: "compact", sub: "compact", chart: "full" },
+        { n: 4, label: "Bridge + pill", note: "36px below chart · 300g pill 160ms after bridge", dur: "700ms",
+          stat: "compact", sub: "compact", chart: "full", bridge: true, pill: true },
+        { n: 5, label: "Close", note: "Reframe + disclaimer + CTA fade together", dur: "hold",
+          stat: "compact", sub: "compact", chart: "full", bridge: true, pill: true, reframe: true, cta: true, fine: true }
+      ];
+
+      var SHOTS = [
+        ["1", "Eyebrow + lead float up", "translateY 14→0 · stagger 240ms", "650ms"],
+        ["2", "Ticker 0→14 + over 12 months + chart draw", "all overlap · chart pathLength 1.15s", "1400ms"],
+        ["3", "14 kg compact (52px grey) · stack shift up", "fontSize not scale · lead fades out", "750ms"],
+        ["4", "Bridge + 300g pill", "36px chart gap · pill 160ms after bridge", "700ms"],
+        ["5", "Reframe + CTA + disclaimer", "single fade-in beat", "650ms"]
+      ];
+
+      function chartHtml(mode) {
+        var partial = mode === "partial";
+        var annot = mode === "full annot";
+        var uid = "g" + Math.random().toString(36).slice(2, 8);
+        /* Weight loss: start high (left), end low (right) */
+        var mainLine = "M12,32 C80,38 140,72 200,98 S280,118 278,118";
+        var fillLine = mainLine + " L278,132 L12,132 Z";
+        var dash = partial ? ' stroke-dasharray="200" stroke-dashoffset="120"' : "";
+        var annotEl = annot ? '<div class="annot">≈ 300g/day</div>' : "";
+        var dots = mode === "partial"
+          ? '<div class="start-dot"></div>'
+          : '<div class="start-dot"></div><div class="end-dot"></div>';
+        return (
+          '<div class="weight-chart">' + annotEl + dots +
+          '<svg viewBox="0 0 300 140" preserveAspectRatio="none">' +
+          '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="#4d41f0" stop-opacity="0.2"/>' +
+          '<stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/></linearGradient></defs>' +
+          (mode !== "partial" && mode !== "hidden"
+            ? '<path class="fill" d="' + fillLine + '" fill="url(#' + uid + ')"/>'
+            : "") +
+          '<path class="main" d="' + mainLine + '" fill="none" stroke="#4d41f0" stroke-width="3" stroke-linecap="round"' + dash + "/>" +
+          "</svg>" +
+          '<div class="axis-label"><span>Today</span><span>12 months</span></div></div>'
+        );
+      }
+
+      function renderScene(s) {
+        var eyebrow = s.eyebrow
+          ? '<p class="eyebrow">Your 12-month estimate</p>'
+          : '<p class="eyebrow hidden">Your 12-month estimate</p>';
+
+        var lead = s.lead
+          ? '<p class="lead">At your current weight, with Moshy you could lose up to</p>'
+          : '<p class="lead hidden">At your current weight, with Moshy you could lose up to</p>';
+
+        var stat = "";
+        if (s.stat === "hero") {
+          stat = '<p class="stat-hero">14<span class="unit">kg</span></p>';
+        } else if (s.stat === "compact" || s.stat === "small") {
+          stat = '<p class="stat-hero small">14<span class="unit">kg</span></p>';
+        } else if (s.stat === "none") {
+          stat = "";
+        } else {
+          stat = '<div class="slot stat-slot"></div>';
+        }
+
+        var sub = "";
+        if (s.sub === true) {
+          sub = '<p class="stat-sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>';
+        } else if (s.sub === "compact") {
+          sub = '<p class="stat-sub compact"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>';
+        }
+
+        var chart = "";
+        if (s.chart) {
+          chart = '<div class="slot chart-slot">' + chartHtml(s.chart) + "</div>";
+        } else {
+          chart = '<div class="slot chart-slot hidden"></div>';
+        }
+
+        var bridge = s.bridge
+          ? '<div class="bridge-wrap"><p class="bridge">That breaks down to only</p></div>'
+          : "";
+
+        var pill = s.pill
+          ? '<div class="daily-pill"><span class="num">300</span><span class="lbl">grams / day</span></div>'
+          : '<div class="slot pill-slot hidden"></div>';
+
+        var reframe = s.reframe
+          ? '<p class="reframe-copy"><strong>Small, steady progress</strong> with ongoing weight loss medication is how you get to where you want to be.</p>'
+          : "";
+
+        var fine = s.fine
+          ? '<p class="fine">Estimate only. Individual results vary. A doctor confirms what\'s right for you.</p>'
+          : "";
+
+        var ctaInner = s.cta
+          ? '<button type="button" class="cta">How it works →</button>'
+          : '<button type="button" class="cta ghost" disabled> </button>';
+
+        return (
+          '<div class="morph-phone">' +
+          '<div class="nav-shell"><div class="nav-row">' +
+          '<div style="width:28px"></div>' +
+          '<div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div>' +
+          '<div style="width:28px"></div></div></div>' +
+          '<div class="stage">' +
+          eyebrow + lead +
+          '<div class="slot stat-slot">' + stat + sub + "</div>" +
+          chart + bridge + pill + reframe + fine +
+          "</div>" +
+          '<div class="footer-dock">' + ctaInner + "</div></div>"
+        );
+      }
+
+      var strip = document.getElementById("strip");
+      SCENES.forEach(function (s, i) {
+        if (i > 0) {
+          var arrow = document.createElement("div");
+          arrow.className = "scene-arrow";
+          arrow.textContent = "→";
+          strip.appendChild(arrow);
+        }
+        var scene = document.createElement("div");
+        scene.className = "scene";
+        scene.id = "scene-" + s.n;
+        scene.innerHTML =
+          '<div class="scene-head">' +
+          '<span class="num">' + s.n + "</span>" +
+          '<span class="label">' + s.label + "</span>" +
+          '<span class="note">' + s.note + " · " + s.dur + "</span></div>" +
+          '<div class="phone-wrap"><div class="phone-wrap__inner">' +
+          renderScene(s) +
+          "</div></div>";
+        strip.appendChild(scene);
+      });
+
+      var tbody = document.getElementById("shot-list");
+      SHOTS.forEach(function (row) {
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + row[0] + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td class=\"dur\">" + row[3] + "</td>";
+        tbody.appendChild(tr);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Shell vertical align · Concept mock</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --border: #e2e0e8;
+      --chrome: #ebe9f2;
+      --scroll-tint: rgba(77, 65, 240, 0.04);
+      --guts-fill: rgba(77, 65, 240, 0.12);
+      --guts-stroke: rgba(77, 65, 240, 0.55);
+      --tp-fill: rgba(0, 182, 122, 0.1);
+      --tp-stroke: rgba(0, 182, 122, 0.5);
+      --dock-fill: rgba(49, 44, 98, 0.06);
+      --side-w: 220px;
+      --phone-w: 180px;
+      --phone-h: 390px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: #e8e6ee;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w);
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta {
+      padding: 0 16px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .side a {
+      display: block;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .side a:hover { background: var(--surface); }
+    .side .note {
+      padding: 12px 16px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .side code {
+      font-size: 9px;
+      background: var(--surface);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    .chapter-head h2 { margin: 0 0 4px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); max-width: 78ch; }
+    .board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 20px;
+      padding-bottom: 12px;
+    }
+    .art {
+      width: var(--phone-w);
+      flex: 0 0 var(--phone-w);
+    }
+    .art-label { margin-bottom: 8px; min-height: 72px; }
+    .art-label .tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+    .art-label .enum {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+    }
+    .art-phone {
+      width: var(--phone-w);
+      height: var(--phone-h);
+    }
+
+    /* Compact shell — native size, no transform */
+    .shell-phone {
+      width: 100%;
+      height: 100%;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(49, 44, 98, 0.08);
+    }
+
+    .shell-phone .chrome {
+      flex-shrink: 0;
+      background: var(--chrome);
+      border-bottom: 1px dashed var(--border);
+      padding: 8px 14px 6px;
+    }
+    .shell-phone .chrome .row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .shell-phone .chrome .back {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      background: #fff;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .shell-phone .chrome .pills {
+      display: flex;
+      gap: 3px;
+      margin: 0 auto;
+    }
+    .shell-phone .chrome .pills i {
+      width: 13px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--surface);
+      display: block;
+    }
+    .shell-phone .chrome .pills i.on { background: var(--accent); opacity: 0.45; }
+    .shell-phone .chrome .pills i.done { background: var(--accent); }
+    .shell-phone .chrome .lbl {
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .shell-phone .scroll {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--scroll-tint);
+      border-bottom: 1px dashed var(--border);
+      position: relative;
+    }
+    .shell-phone .scroll .region-lbl {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      opacity: 0.85;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .shell-phone .scroll .flex-spacer {
+      flex: 1 1 0;
+      min-height: 4px;
+      border: 1px dashed rgba(139, 134, 176, 0.35);
+      margin: 4px 8px;
+      border-radius: 4px;
+      display: grid;
+      place-items: center;
+      font-size: 7px;
+      font-weight: 600;
+      color: var(--muted);
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 3px,
+        rgba(139, 134, 176, 0.06) 3px,
+        rgba(139, 134, 176, 0.06) 6px
+      );
+    }
+    .shell-phone .scroll .flex-spacer.is-off {
+      flex: 0 0 0;
+      min-height: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .shell-phone .guts {
+      flex-shrink: 0;
+      margin: 0 14px;
+      padding: 7px;
+      border: 2px dashed var(--guts-stroke);
+      border-radius: 6px;
+      background: var(--guts-fill);
+    }
+    .shell-phone .guts .title {
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .shell-phone .guts .block {
+      height: 12px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border);
+      margin-bottom: 3px;
+    }
+    .shell-phone .guts .block.wide { height: 15px; }
+    .shell-phone .guts .block:last-child { margin-bottom: 0; }
+
+    .shell-phone .shell-tp {
+      flex-shrink: 0;
+      margin: 0 14px 7px;
+      padding: 5px 6px;
+      border: 2px dashed var(--tp-stroke);
+      border-radius: 4px;
+      background: var(--tp-fill);
+      font-size: 7px;
+      font-weight: 600;
+      color: #00875a;
+      text-align: center;
+    }
+    .shell-phone .shell-tp.is-hidden {
+      opacity: 0.25;
+      border-style: dotted;
+    }
+
+    .shell-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      background: var(--dock-fill);
+      border-top: 1px dashed var(--border);
+    }
+    .shell-phone .footer-dock .cta {
+      height: 22px;
+      border-radius: 4px;
+      background: var(--accent);
+      opacity: 0.35;
+      margin-bottom: 4px;
+    }
+    .shell-phone .footer-dock .lbl {
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Align modes */
+    .shell-phone[data-align="top"] .scroll { justify-content: flex-start; }
+    .shell-phone[data-align="top"] .scroll .spacer-top { display: none; }
+    .shell-phone[data-align="top"] .scroll .spacer-bottom { flex: 1; }
+
+    .shell-phone[data-align="center"] .scroll { justify-content: center; }
+    .shell-phone[data-align="center"] .scroll .spacer-top,
+    .shell-phone[data-align="center"] .scroll .spacer-bottom { flex: 1; }
+
+    .shell-phone[data-align="bottom"] .scroll { justify-content: flex-end; }
+    .shell-phone[data-align="bottom"] .scroll .spacer-top { flex: 1; }
+    .shell-phone[data-align="bottom"] .scroll .spacer-bottom { display: none; }
+
+    /* Overflow row: align collapses to top */
+    .shell-phone.is-overflow .scroll { justify-content: flex-start !important; overflow-y: auto; }
+    .shell-phone.is-overflow .scroll .flex-spacer { display: none; }
+    .shell-phone.is-overflow .guts .block.extra { display: block; }
+    .shell-phone:not(.is-overflow) .guts .block.extra { display: none; }
+    .shell-phone.is-overflow .scroll-hint {
+      display: block;
+      font-size: 7px;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+      padding: 2px 14px 4px;
+      flex-shrink: 0;
+    }
+    .shell-phone .scroll-hint { display: none; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-bottom: 20px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .legend .i-chrome { background: var(--chrome); border: 1px solid var(--border); }
+    .legend .i-scroll { background: var(--scroll-tint); border: 1px dashed var(--accent); }
+    .legend .i-guts { background: var(--guts-fill); border: 2px dashed var(--guts-stroke); }
+    .legend .i-tp { background: var(--tp-fill); border: 2px dashed var(--tp-stroke); }
+    .legend .i-dock { background: var(--dock-fill); border: 1px dashed var(--border); }
+
+    .flow {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 11px;
+      line-height: 1.6;
+      max-width: 90ch;
+    }
+    .flow strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Shell vertical align</h1>
+      <p class="meta">Quiz 002 · new-quiz branch · Per-layout option mock</p>
+      <a href="#short">Short content</a>
+      <a href="#overflow">Overflow fallback</a>
+      <a href="#dock">Footer dock shell</a>
+      <a href="#plan">Implementation plan</a>
+      <div class="note">
+        <strong>Same pattern as Control Bar</strong><br />
+        Native variable on each guts template → hidden <code>ContentAlignSelector</code> → <code>quizBridge</code> → scroll area override reads mode.<br /><br />
+        <strong>Default:</strong> Top (radio, numeric, multi-select)<br />
+        <strong>Center:</strong> loader, stat reveal scroll hero<br />
+        <strong>Bottom:</strong> entry-hook (optional)
+      </div>
+    </aside>
+
+    <main>
+      <div class="legend">
+        <span><i class="i-chrome"></i> ControlBarDriver (fixed)</span>
+        <span><i class="i-scroll"></i> Scroll area (flex 1, receives align)</span>
+        <span><i class="i-guts"></i> QuizDriver guts slot</span>
+        <span><i class="i-tp"></i> Shell Trustpilot embed</span>
+        <span><i class="i-dock"></i> Footer dock (Layout B only)</span>
+      </div>
+
+      <section class="chapter" id="short">
+        <div class="chapter-head">
+          <h2>Short content · three align modes</h2>
+          <p>
+            When step content is shorter than the scroll viewport, vertical align controls where the
+            <strong>guts block</strong> sits between chrome and shell Trustpilot. Chrome and shell Trustpilot stay pinned.
+          </p>
+        </div>
+        <div class="board">
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Scroll shell</span>
+              <b>Top aligned</b>
+              <span class="enum">Content align = Top</span>
+              <div class="job">Default · tpl-radio, tpl-numeric, tpl-multi-select, most question screens</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone" data-align="top">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll area</span>
+                <div class="flex-spacer spacer-top is-off"></div>
+                <div class="guts">
+                  <div class="title">Guts slot · quiz-main</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                  <div class="block"></div>
+                </div>
+                <div class="flex-spacer spacer-bottom">flex spacer grows</div>
+              </div>
+              <div class="shell-tp">Shell Trustpilot</div>
+            </div></div>
+          </article>
+
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Scroll shell</span>
+              <b>Center aligned</b>
+              <span class="enum">Content align = Center</span>
+              <div class="job">tpl-loader, centred hero blocks · content floats in middle of scroll</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone" data-align="center">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll area</span>
+                <div class="flex-spacer spacer-top">flex spacer grows</div>
+                <div class="guts">
+                  <div class="title">Guts slot · loader / hero</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                </div>
+                <div class="flex-spacer spacer-bottom">flex spacer grows</div>
+              </div>
+              <div class="shell-tp is-hidden">Shell Trustpilot (hidden on loader)</div>
+            </div></div>
+          </article>
+
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Scroll shell</span>
+              <b>Bottom aligned</b>
+              <span class="enum">Content align = Bottom</span>
+              <div class="job">tpl-entry-hook · copy sits low in scroll, above Trustpilot or dock</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone" data-align="bottom">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver (On Load)</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll area</span>
+                <div class="flex-spacer spacer-top">flex spacer grows</div>
+                <div class="guts">
+                  <div class="title">Guts slot · entry hook</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                </div>
+                <div class="flex-spacer spacer-bottom is-off"></div>
+              </div>
+              <div class="shell-tp">Shell Trustpilot</div>
+            </div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="overflow">
+        <div class="chapter-head">
+          <h2>Overflow · align falls back to top</h2>
+          <p>
+            When guts content exceeds scroll height, spacers collapse and content scrolls from the top.
+            Center/bottom modes must not clip the headline (same rule as page-footer margin-top: auto today).
+          </p>
+        </div>
+        <div class="board">
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Safety rule</span>
+              <b>Long content (any mode)</b>
+              <div class="job">Instance may say Center, runtime treats as Top once overflow detected</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone is-overflow" data-align="center">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll · overflow-y auto</span>
+                <div class="guts">
+                  <div class="title">Guts slot · age long</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                  <div class="block"></div>
+                  <div class="block extra"></div>
+                  <div class="block extra"></div>
+                  <div class="block extra"></div>
+                  <div class="block extra"></div>
+                  <div class="block extra"></div>
+                </div>
+              </div>
+              <div class="scroll-hint">↓ scroll · align = top</div>
+              <div class="shell-tp">Shell Trustpilot scrolls with content</div>
+            </div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="dock">
+        <div class="chapter-head">
+          <h2>Footer dock shell · align applies above dock only</h2>
+          <p>
+            Layout B (intro, eligible, stat reveal) keeps CTA + Trustpilot in a fixed footer dock.
+            Vertical align only affects the scroll region above the dock, not the dock itself.
+          </p>
+        </div>
+        <div class="board">
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Layout B</span>
+              <b>Center · scroll only</b>
+              <span class="enum">Content align = Center</span>
+              <div class="job">tpl-intro, tpl-eligible · dock stays pinned at bottom</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone" data-align="center">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll (align here)</span>
+                <div class="flex-spacer spacer-top">spacer</div>
+                <div class="guts">
+                  <div class="title">Guts · intro copy</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                </div>
+                <div class="flex-spacer spacer-bottom">spacer</div>
+              </div>
+              <div class="footer-dock">
+                <div class="cta"></div>
+                <div class="lbl">Footer dock · CTA + Trustpilot</div>
+              </div>
+            </div></div>
+          </article>
+
+          <article class="art">
+            <div class="art-label">
+              <span class="tag">Layout B</span>
+              <b>Top · scroll only</b>
+              <span class="enum">Content align = Top</span>
+              <div class="job">Why we ask · headline starts under chrome</div>
+            </div>
+            <div class="art-phone"><div class="shell-phone" data-align="top">
+              <div class="chrome">
+                <div class="row">
+                  <div class="back"></div>
+                  <div class="pills"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+                </div>
+                <div class="lbl">ControlBarDriver</div>
+              </div>
+              <div class="scroll">
+                <span class="region-lbl">Scroll (align here)</span>
+                <div class="guts">
+                  <div class="title">Guts · intro copy</div>
+                  <div class="block wide"></div>
+                  <div class="block"></div>
+                  <div class="block"></div>
+                </div>
+                <div class="flex-spacer spacer-bottom">spacer</div>
+              </div>
+              <div class="footer-dock">
+                <div class="cta"></div>
+                <div class="lbl">Footer dock · CTA + Trustpilot</div>
+              </div>
+            </div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="chapter" id="plan">
+        <div class="chapter-head">
+          <h2>Implementation plan (Framer new-quiz)</h2>
+        </div>
+        <div class="flow">
+          <p><strong>1. Bridge field</strong> · Add <code>contentAlignMode: "Top" | "Center" | "Bottom"</code> to <code>quizBridge.ts</code> (default Top).</p>
+          <p><strong>2. Publisher</strong> · New hidden code component <code>ContentAlignSelector</code> (copy ControlBarSelector pattern). Property control enum Top / Center / Bottom. Chain-link to native <strong>Content align</strong> variable on each guts template master.</p>
+          <p><strong>3. Consumer</strong> · Code override <code>withQuizScrollAlign</code> on the Mobile frame scroll area. Subscribes to bridge; sets <code>justifyContent</code> on the scroll flex column. Overflow guard: if <code>scrollHeight &gt; clientHeight</code>, force flex-start.</p>
+          <p><strong>4. Template masters</strong> · Add Option variable + hidden selector to Intro, Radio Question, Loader, Number Input, etc. Set per instance like Control Bar (loader → Center, radio → Top).</p>
+          <p><strong>5. Docs + tests</strong> · Update quiz-guts-slot-templates.md, quiz-layout-rules.md mapping table, smoke fixture for center step.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+/**
+ * Component gallery — hi-fi atoms inline, content-driven height.
+ * Atoms: no .phone class (avoids 844px aspect-ratio). Composite: phone shell.
+ */
+
+/* Atoms — strip phone frame dimensions */
+.comp-lab--atom.phone--hifi {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+  display: block;
+}
+
+.comp-lab--atom .quiz-scroll,
+.comp-lab--atom .quiz-main,
+.comp-lab--atom .content-block,
+.comp-lab--atom .page-footer {
+  display: block;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  flex: none;
+  min-height: 0;
+}
+
+.comp-lab--atom .page-footer {
+  margin-top: 0;
+}
+
+.comp-lab--atom .q-head {
+  margin: 0;
+}
+
+.comp-lab--atom .subhead-block {
+  margin-top: 8px;
+}
+
+.comp-lab--atom .subhead-block .q-sub,
+.comp-lab--atom .q-sub {
+  margin: 0;
+}
+
+.comp-lab--atom .opts .opt:last-child {
+  margin-bottom: 0;
+}
+
+.comp-lab--atom .opts .opt {
+  cursor: pointer;
+}
+
+/* Composite — phone frame, height from content */
+.comp-phone-shell {
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--ground, #fcfcfc);
+}
+
+.comp-lab--phone.phone.phone--hifi {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.comp-lab--phone .quiz-scroll {
+  flex: none;
+  min-height: 0;
+  overflow: visible;
+  padding: 24px var(--nav-pad-x, 32px) 0;
+}
+
+.comp-lab--phone .quiz-main {
+  padding: 0;
+}
+
+.comp-lab--phone .numpad-dock {
+  flex-shrink: 0;
+}
+
+.comp-lab .is-hidden {
+  display: none !important;
+}
+
+.comp-lab .numeric-input-dock .spacing-block[data-gap="trust-legal"] {
+  padding-top: var(--quiz-gap-trust-legal, 8px);
+}
+
+.comp-lab .numeric-input-dock .spacing-block[data-gap="trust-bottom"] {
+  padding-top: var(--quiz-gap-trust-bottom, 16px);
+}

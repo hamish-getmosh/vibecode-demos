@@ -1,0 +1,81 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh loader-step */
+
+
+.phone--hifi .loader-step,
+.loader-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: rgb(220, 225, 255);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Figtree", Figtree, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: -0.01em;
+}
+
+.phone--hifi .loader-step.is-wait,
+.loader-step.is-wait {
+  color: #8b86b0;
+  background: rgb(220, 225, 255);
+}
+
+.phone--hifi .loader-step.is-load,
+.loader-step.is-load {
+  color: rgb(77, 65, 240);
+  background: rgb(220, 225, 255);
+  box-shadow: 0 0 0 1px #e2e0e8;
+}
+
+.phone--hifi .loader-step.is-done,
+.loader-step.is-done {
+  color: rgb(236, 239, 255);
+  background: rgb(77, 65, 240);
+}
+
+.loader-step-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.loader-step-icon svg {
+  display: block;
+}
+
+.loader-step.is-wait .loader-step-icon {
+  border: 1px solid #e2e0e8;
+  background: rgb(236, 239, 255);
+}
+
+.loader-step.is-load .loader-step-icon {
+  border: 1px solid #e2e0e8;
+  background: rgba(0, 0, 0, 0);
+}
+
+.loader-step.is-done .loader-step-icon {
+  background: rgb(236, 239, 255);
+  border: none;
+}
+
+.loader-step-label {
+  margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.loader-step-icon .loader-spin {
+  animation: loader-step-spin 750ms linear infinite;
+}
+
+@keyframes loader-step-spin {
+  to { transform: rotate(360deg); }
+}

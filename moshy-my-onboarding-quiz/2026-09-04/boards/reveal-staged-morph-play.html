@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Staged morph · Play</title>
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62; --muted: #8b86b0; --ground: #fcfcfc; --surface: #f4f3f6;
+      --accent: #4d41f0; --accent-soft: #ece9ff; --ruby: #9a0239; --border: #e2e0e8;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+      --pill-display: "Area Inktrap", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink);
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 40px;
+    }
+    .toolbar {
+      width: 100%; max-width: 390px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; margin-bottom: 16px;
+    }
+    .toolbar h1 { margin: 0; font-size: 15px; }
+    .toolbar p { margin: 2px 0 0; font-size: 11px; color: var(--muted); }
+    .toolbar-actions { display: flex; gap: 8px; }
+    .toolbar button {
+      border: 1px solid var(--border); background: #fff; border-radius: 999px;
+      padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .beat-label { font-size: 10px; font-weight: 600; color: var(--accent); text-align: center; min-height: 16px; margin-bottom: 8px; }
+    .phone-shell {
+      width: 390px; height: 844px; border: 2px solid var(--ink); border-radius: 24px;
+      overflow: hidden; background: var(--ground); box-shadow: 0 12px 40px rgba(49, 44, 98, 0.12);
+    }
+    .reveal-phone {
+      width: 100%; height: 100%; background: var(--ground);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .nav-shell { padding: 12px 20px 0; }
+    .prog-pills { display: flex; gap: 6px; justify-content: center; }
+    .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .prog-pills i.done { background: var(--accent); }
+    .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .stage {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 24px 8px; text-align: center; overflow: hidden;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mnode { will-change: transform, opacity; }
+    .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+    .lead { font-size: 17px; line-height: 1.45; color: var(--muted); margin: 0 auto 6px; max-width: 30ch; }
+    .stat-hero { font-family: var(--display); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--accent); margin: 0; font-size: 80px; }
+    .stat-hero .unit { font-size: 0.45em; }
+    .stat-sub { font-size: 17px; line-height: 1.4; margin: 8px 0 0; color: var(--ink); }
+    .stat-sub em { font-style: normal; display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .chart-wrap { width: 100%; max-width: 300px; margin-top: 12px; }
+    .weight-chart { height: 132px; position: relative; }
+    .weight-chart svg { width: 100%; height: 100%; display: block; }
+    .weight-chart .main { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .weight-chart .fill { opacity: 0; }
+    .weight-chart .axis-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 6px; }
+    .dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--accent-soft); }
+    .start-dot { left: 2%; top: 18%; }
+    .end-dot { right: 2%; bottom: 22%; }
+    .bridge-wrap { margin-top: 36px; }
+    .bridge { font-family: var(--display); font-size: 22px; font-weight: 700; line-height: 1.25; margin: 0; }
+    .pill-wrap { margin-top: 14px; }
+    .daily-pill { display: inline-flex; align-items: baseline; gap: 6px; background: var(--accent-soft); border-radius: 16px; padding: 12px 20px; }
+    .daily-pill .num { font-family: var(--pill-display); font-size: 44px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .daily-pill .lbl { font-size: 15px; font-weight: 500; color: var(--ink); }
+    .reframe { font-size: 15px; line-height: 1.55; color: var(--muted); margin: 16px 0 0; max-width: 30ch; }
+    .reframe strong { color: var(--ink); font-weight: 600; }
+    .footer-dock { flex-shrink: 0; padding: 12px 20px 20px; border-top: 1px solid var(--border); }
+    .cta { width: 100%; border: none; border-radius: 999px; background: var(--ruby); color: #fff; font-size: 16px; font-weight: 600; padding: 16px 20px; font-family: inherit; cursor: pointer; }
+    .framer-notes {
+      max-width: 390px; margin-top: 20px; font-size: 10px; color: var(--muted); line-height: 1.5;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <h1>Staged morph · play</h1>
+      <p>Concept A · <a href="reveal-motion-concepts.html">Compare all 6</a></p>
+    </div>
+    <div class="toolbar-actions">
+      <button type="button" id="btn-replay" class="primary">Replay</button>
+    </div>
+  </div>
+  <div class="beat-label">Concept A · blended spring (softened)</div>
+
+  <div class="phone-shell">
+    <div class="reveal-phone" data-variant="blended" id="phone">
+      <div class="nav-shell"><div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div></div>
+      <div class="stage" data-stage>
+        <div class="mnode" data-k="eyebrow"><p class="eyebrow">Your 12-month estimate</p></div>
+        <div class="mnode" data-k="lead"><p class="lead">At your current weight, with Moshy you could lose up to</p></div>
+        <div class="mnode" data-k="statBlock">
+          <p class="stat-hero mnode" data-k="stat"><span data-stat-num>0</span><span class="unit">kg</span></p>
+          <p class="stat-sub mnode" data-k="sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p>
+        </div>
+        <div class="mnode chart-wrap" data-k="chart">
+          <div class="weight-chart" data-chart-root>
+            <div class="dot start-dot mnode" data-k="startDot"></div>
+            <div class="dot end-dot mnode" data-k="endDot"></div>
+            <svg viewBox="0 0 300 140" preserveAspectRatio="none">
+              <defs><linearGradient id="playGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4d41f0" stop-opacity="0.2"/><stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/>
+              </linearGradient></defs>
+              <path class="fill" data-chart-fill pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118 L278,132 L12,132 Z" fill="url(#playGrad)"/>
+              <path class="main" data-chart-line pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118"/>
+            </svg>
+            <div class="axis-label mnode" data-k="axis"><span>Today</span><span>12 months</span></div>
+          </div>
+        </div>
+        <div class="mnode bridge-wrap" data-k="bridge"><p class="bridge">That breaks down to only</p></div>
+        <div class="mnode pill-wrap" data-k="pill"><div class="daily-pill"><span class="num">300</span><span class="lbl">grams / day</span></div></div>
+        <p class="reframe mnode" data-k="reframe"><strong>Small, steady progress</strong> with ongoing weight loss medication is how you get to where you want to be.</p>
+      </div>
+      <div class="footer-dock"><div class="mnode" data-k="cta"><button type="button" class="cta">How it works →</button></div></div>
+    </div>
+  </div>
+
+  <div class="framer-notes">
+    Variant <strong>A · blended spring</strong>. Softer damping (38–42), no tick bounce. Ticker runs 0→14 over 1.2s while chart draws. See all six on the motion mixboard.
+  </div>
+
+  <script src="reveal-motion-engine.js"></script>
+  <script>
+    (function () {
+      var inst = RevealMotion.mount(document.getElementById("phone"));
+      document.getElementById("btn-replay").addEventListener("click", function () { inst.play(); });
+    })();
+  </script>
+</body>
+</html>

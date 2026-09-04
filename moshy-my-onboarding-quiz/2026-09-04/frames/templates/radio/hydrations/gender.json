@@ -1,0 +1,27 @@
+{
+  "screenId": "s-22",
+  "template": "radio",
+  "title": "Gender",
+  "headline": "What is your gender?",
+  "subhead": "For medical purposes.",
+  "progress": {
+    "done": 0,
+    "current": 0,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "Female",
+      "icon": "\u2640",
+      "selected": true
+    },
+    {
+      "label": "Male",
+      "icon": "\u2642",
+      "selected": false
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

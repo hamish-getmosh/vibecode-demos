@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Safe hands · Trust concepts</title>
+  <link rel="stylesheet" href="../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../design/mixboard-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62;
+      --muted: #8b86b0;
+      --ground: #fcfcfc;
+      --surface: #f4f3f6;
+      --accent: #4d41f0;
+      --accent-soft: #ece9ff;
+      --blue-light: #6e7fe8;
+      --blue-mid: #3d34c4;
+      --blue-deep: #2a2489;
+      --ruby: #9a0239;
+      --border: #e2e0e8;
+      --tp-green: #00b67a;
+      --gold: #c9a227;
+      --side-w: 240px;
+      --phone-w: 248px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff;
+      border-right: 1px solid var(--border); padding: 16px 0;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+    .side .note strong { color: var(--ink); }
+    main { flex: 1; padding: 24px 28px 80px; min-width: 0; }
+    .chapter { margin-bottom: 40px; scroll-margin-top: 16px; }
+    .chapter-head { margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); max-width: 80ch; }
+    .chapter-head h2 { margin: 0 0 6px; font-size: 18px; }
+    .chapter-head p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px 16px; padding-bottom: 12px; scroll-snap-type: x proximity; }
+    .art { width: var(--phone-w); flex: 0 0 var(--phone-w); scroll-snap-align: start; scroll-margin-top: 80px; }
+    .art-label { margin-bottom: 8px; min-height: 108px; }
+    .art-label .tag { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .art-label b { display: block; font-size: 13px; margin-top: 2px; }
+    .art-label .job { font-size: 10px; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .psych { font-size: 9px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 6px; margin-top: 6px; display: inline-block; }
+    .mobbin-ref { font-size: 9px; color: #6a6488; margin-top: 4px; line-height: 1.45; }
+    .mobbin-ref a { color: var(--accent); text-decoration: none; }
+
+    .hifi-viewport {
+      width: var(--phone-w);
+      height: calc(844px * 0.6359);
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .hifi-viewport__inner {
+      width: 390px;
+      height: 844px;
+      transform: scale(0.6359);
+      transform-origin: top left;
+    }
+
+    /* Trust phone shell */
+    .trust-phone {
+      width: 390px;
+      height: 844px;
+      background: var(--ground);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font);
+      color: var(--ink);
+    }
+    .trust-phone .nav-shell { padding: 12px 32px 0; flex-shrink: 0; }
+    .trust-phone .nav-row { display: flex; align-items: center; gap: 12px; min-height: 28px; }
+    .trust-phone .nav-back {
+      width: 28px; height: 28px; border: 0; border-radius: 8px;
+      background: var(--surface); display: grid; place-items: center;
+      font-size: 18px; color: var(--muted); cursor: default; padding: 0;
+    }
+    .trust-phone .prog-pills { display: flex; gap: 6px; margin: 0 auto; }
+    .trust-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .trust-phone .prog-pills i.done { background: var(--accent); }
+    .trust-phone .prog-pills i.on { background: var(--accent); opacity: 0.4; }
+
+    .trust-phone .quiz-scroll {
+      flex: 1;
+      overflow: hidden;
+      padding: 32px 32px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .trust-phone .quiz-main { flex: 1; display: flex; flex-direction: column; }
+
+    .trust-phone .q-head {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 8px;
+    }
+    .trust-phone .q-sub {
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0 0 24px;
+      max-width: 32ch;
+    }
+
+    .trust-phone .footer-dock {
+      flex-shrink: 0;
+      padding: 12px 32px 20px;
+      background: var(--ground);
+    }
+    .trust-phone .input-cta {
+      border-radius: 999px;
+      background: var(--ruby);
+      color: #fcfcfc;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 16px 28px;
+      box-shadow: 0 8px 24px rgba(154, 2, 57, 0.22);
+      border: 0;
+      width: 100%;
+      cursor: default;
+    }
+
+    /* A · Credential grid */
+    .trust-phone .tp-hero {
+      width: 100%;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 18px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .trust-phone .tp-hero__stars { color: var(--tp-green); letter-spacing: 2px; font-size: 16px; margin-bottom: 6px; }
+    .trust-phone .tp-hero__label { font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 2px; }
+    .trust-phone .tp-hero__score { font-size: 14px; color: var(--muted); margin: 0; }
+
+    .trust-phone .cred-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .trust-phone .cred-card {
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 14px 12px;
+      min-height: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+    .trust-phone .cred-card .ico { font-size: 20px; line-height: 1; margin-bottom: 4px; }
+    .trust-phone .cred-card .stat {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .trust-phone .cred-card .lbl { font-size: 12px; line-height: 1.35; color: var(--muted); }
+
+    /* B · Rating hero + reviews */
+    .trust-phone--b .quiz-scroll { padding-top: 20px; }
+    .trust-phone .rating-orb {
+      width: 168px;
+      height: 168px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      background: radial-gradient(circle at 40% 30%, #fff 0%, var(--accent-soft) 55%, #e8e4ff 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .trust-phone .rating-orb__stars { color: var(--ink); letter-spacing: 1px; font-size: 12px; margin-bottom: 2px; }
+    .trust-phone .rating-orb__num {
+      font-family: var(--display);
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .trust-phone .rating-orb__lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .trust-phone .rating-orb__wreath {
+      position: absolute;
+      bottom: 18px;
+      font-size: 28px;
+      opacity: 0.85;
+    }
+
+    .trust-phone .review-rail {
+      display: flex;
+      gap: 10px;
+      overflow: hidden;
+      margin: 0 -32px 16px;
+      padding: 0 32px;
+    }
+    .trust-phone .review-card {
+      flex: 0 0 240px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 14px;
+      box-shadow: 0 2px 8px rgba(49, 44, 98, 0.06);
+    }
+    .trust-phone .review-card__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .trust-phone .review-card__stars { color: var(--tp-green); font-size: 11px; letter-spacing: 1px; }
+    .trust-phone .review-card__name { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .trust-phone .review-card__title { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .trust-phone .review-card__body { font-size: 12px; line-height: 1.45; color: var(--muted); margin: 0; }
+
+    .trust-phone .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      padding-bottom: 8px;
+    }
+    .trust-phone .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      background: var(--surface);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .trust-phone .pill span { font-size: 14px; }
+
+    /* C · Bridge stack */
+    .trust-phone .laurel-stat {
+      text-align: center;
+      margin: 8px 0 20px;
+      position: relative;
+    }
+    .trust-phone .laurel-stat__inner {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 0 36px;
+      position: relative;
+    }
+    .trust-phone .laurel-stat__wreath {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      color: var(--gold);
+      opacity: 0.9;
+    }
+    .trust-phone .laurel-stat__wreath--l { left: 0; }
+    .trust-phone .laurel-stat__wreath--r { right: 0; transform: translateY(-50%) scaleX(-1); }
+    .trust-phone .laurel-stat__num {
+      font-family: var(--display);
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .trust-phone .laurel-stat__lbl { font-size: 13px; color: var(--muted); }
+
+    .trust-phone .bridge-list { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .trust-phone .bridge-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .trust-phone .bridge-row:last-child { border-bottom: 0; }
+    .trust-phone .bridge-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+    .trust-phone .bridge-thumb--au { background: #e8f0ff; }
+    .trust-phone .bridge-thumb--my { background: #fce8ec; }
+    .trust-phone .bridge-thumb--spec { background: var(--accent-soft); font-size: 20px; }
+    .trust-phone .bridge-copy b { display: block; font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .trust-phone .bridge-copy p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--muted); }
+
+    .trust-phone .tp-compact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: auto;
+      padding: 12px 0 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .trust-phone .tp-compact__stars { color: var(--tp-green); letter-spacing: 1px; font-size: 12px; }
+    .trust-phone .tp-compact strong { color: var(--ink); font-weight: 600; }
+
+    .trust-phone--c .q-sub { margin-bottom: 12px; }
+
+    /* D · USP cascade */
+    .trust-phone--d .quiz-scroll { padding: 20px 32px 0; }
+    .trust-phone--d .q-head { font-size: 26px; margin-bottom: 14px; color: var(--ink); }
+    .trust-phone--d .q-sub { display: none; }
+
+    .trust-phone .footer-dock--tp { padding-top: 8px; }
+    .trust-phone .footer-dock--tp .tp-compact { margin: 10px 0 0; padding: 0; }
+
+    .usp-cascade { position: relative; flex: 1; display: flex; min-height: 0; }
+    .usp-cascade__cards {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .usp-card {
+      border-radius: 18px;
+      padding: 18px 20px;
+      color: #fff;
+      opacity: 0.28;
+      transform: translateY(6px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .usp-card.is-unlocked {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .usp-card--light { background: var(--blue-light); }
+    .usp-card--accent { background: var(--accent); padding-bottom: 16px; }
+    .usp-card--mid { background: var(--blue-mid); }
+
+    .usp-card__hero {
+      font-family: var(--display);
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: #fff;
+      margin: 0;
+    }
+    .usp-card__hero--sm {
+      font-size: 44px;
+      letter-spacing: -0.03em;
+    }
+    .usp-card__kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+      margin: 0 0 6px;
+    }
+    .usp-card__title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin: 0 0 6px;
+    }
+    .usp-card__body {
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.82);
+      margin: 0;
+    }
+    .usp-card__sub {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: #fff;
+      margin: 4px 0 0;
+    }
+
+    .usp-dotmap {
+      margin-top: 14px;
+      height: 80px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+    .usp-dotmap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .usp-dotmap__lbl {
+      position: absolute;
+      bottom: 10px;
+      left: 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+    .usp-dotmap__countries {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      display: flex;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .usp-avatars {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .usp-avatars__stack {
+      display: flex;
+    }
+    .usp-avatars__stack i {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      margin-left: -10px;
+      background: rgba(255, 255, 255, 0.22);
+      display: block;
+    }
+    .usp-avatars__stack i:first-child { margin-left: 0; }
+    .usp-avatars__lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.35;
+    }
+
+    /* D1 · left spine */
+    .usp-cascade--spine { padding-left: 22px; }
+    .usp-cascade--spine .usp-spine {
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+    }
+    .usp-cascade--spine .usp-spine__track {
+      position: absolute;
+      inset: 0;
+      background: rgba(77, 65, 240, 0.18);
+      border-radius: 999px;
+    }
+    .usp-cascade--spine .usp-spine__fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      background: var(--accent);
+      border-radius: 999px;
+      animation: usp-spine-fill 4.2s ease-in-out infinite;
+    }
+    .usp-cascade--spine .usp-node {
+      position: absolute;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      border-radius: 50%;
+      background: rgba(77, 65, 240, 0.25);
+      border: 2px solid var(--ground);
+      z-index: 1;
+    }
+    .usp-cascade--spine .usp-node--1 { top: 12%; }
+    .usp-cascade--spine .usp-node--2 { top: 46%; }
+    .usp-cascade--spine .usp-node--3 { top: 82%; }
+    .usp-cascade--spine .usp-node.is-lit {
+      background: var(--accent);
+      animation: usp-node-lit 4.2s ease-in-out infinite;
+    }
+    .usp-cascade--spine .usp-node--1 { animation: usp-node-1 4.2s ease-in-out infinite; }
+    .usp-cascade--spine .usp-node--2 { animation: usp-node-2 4.2s ease-in-out infinite; }
+    .usp-cascade--spine .usp-node--3 { animation: usp-node-3 4.2s ease-in-out infinite; }
+
+    .usp-cascade--spine .usp-card:nth-child(1) { animation: usp-unlock-1 4.2s ease-in-out infinite; }
+    .usp-cascade--spine .usp-card:nth-child(2) { animation: usp-unlock-2 4.2s ease-in-out infinite; }
+    .usp-cascade--spine .usp-card:nth-child(3) { animation: usp-unlock-3 4.2s ease-in-out infinite; }
+
+    @keyframes usp-spine-fill {
+      0%, 8% { height: 0; }
+      38% { height: 46%; }
+      72% { height: 82%; }
+      92%, 100% { height: 100%; }
+    }
+    @keyframes usp-node-1 {
+      0%, 100% { background: var(--accent); }
+    }
+    @keyframes usp-node-2 {
+      0%, 34% { background: rgba(77, 65, 240, 0.25); }
+      38%, 100% { background: var(--accent); }
+    }
+    @keyframes usp-node-3 {
+      0%, 68% { background: rgba(77, 65, 240, 0.25); }
+      72%, 100% { background: var(--accent); }
+    }
+    @keyframes usp-unlock-1 {
+      0%, 100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes usp-unlock-2 {
+      0%, 34% { opacity: 0.28; transform: translateY(6px); }
+      38%, 100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes usp-unlock-3 {
+      0%, 68% { opacity: 0.28; transform: translateY(6px); }
+      72%, 100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* D2 · center pulse */
+    .usp-cascade--pulse { position: relative; }
+    .usp-cascade--pulse .usp-pulse-rail {
+      position: absolute;
+      left: 18px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      pointer-events: none;
+    }
+    .usp-cascade--pulse .usp-pulse-rail__track {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, var(--border) 15%, var(--border) 85%, transparent);
+      border-radius: 999px;
+      opacity: 0.6;
+    }
+    .usp-cascade--pulse .usp-pulse-rail__dot {
+      position: absolute;
+      left: -4px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 12px rgba(77, 65, 240, 0.55);
+      animation: usp-pulse-travel 4s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+    }
+    .usp-cascade--pulse .usp-cascade__cards { padding-left: 8px; }
+    .usp-cascade--pulse .usp-card:nth-child(1) { animation: usp-unlock-1 4s ease-in-out infinite; }
+    .usp-cascade--pulse .usp-card:nth-child(2) { animation: usp-unlock-2-pulse 4s ease-in-out infinite; }
+    .usp-cascade--pulse .usp-card:nth-child(3) { animation: usp-unlock-3-pulse 4s ease-in-out infinite; }
+
+    @keyframes usp-pulse-travel {
+      0% { top: 6%; opacity: 1; }
+      32% { top: 38%; }
+      64% { top: 72%; }
+      88%, 100% { top: 94%; opacity: 0.4; }
+    }
+    @keyframes usp-unlock-2-pulse {
+      0%, 28% { opacity: 0.28; transform: translateY(6px); filter: saturate(0.65); }
+      32%, 100% { opacity: 1; transform: translateY(0); filter: saturate(1); }
+    }
+    @keyframes usp-unlock-3-pulse {
+      0%, 60% { opacity: 0.28; transform: translateY(6px); filter: saturate(0.65); }
+      64%, 100% { opacity: 1; transform: translateY(0); filter: saturate(1); }
+    }
+
+    /* D3 · bridge connectors (polished) */
+    .trust-phone--d3 .quiz-scroll { padding: 16px 32px 0; }
+    .trust-phone--d3 .q-head {
+      font-family: var(--display);
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+
+    .usp-cascade--bridge { padding-top: 2px; }
+    .usp-cascade--bridge .usp-cascade__cards { gap: 0; }
+
+    .usp-cascade--bridge .usp-card {
+      border-radius: 20px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: none;
+      opacity: 0.2;
+      transform: scale(0.985);
+      filter: saturate(0.55) brightness(0.92);
+      transition: box-shadow 0.5s ease, filter 0.5s ease;
+      position: relative;
+    }
+    .usp-cascade--bridge .usp-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(168deg, rgba(255, 255, 255, 0.16) 0%, transparent 46%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .usp-cascade--bridge .usp-card__inner {
+      position: relative;
+      z-index: 2;
+      padding: 20px 22px 18px;
+    }
+    .usp-cascade--bridge .usp-card--light .usp-card__inner { padding-bottom: 16px; }
+    .usp-cascade--bridge .usp-card--accent .usp-card__inner { padding-bottom: 14px; }
+
+    .usp-cascade--bridge .usp-card--light {
+      background: linear-gradient(158deg, #8f9bf2 0%, #6e7fe8 42%, #5f72e0 100%);
+    }
+    .usp-cascade--bridge .usp-card--accent {
+      background: linear-gradient(158deg, #6a5ff5 0%, #4d41f0 48%, #4338d4 100%);
+    }
+    .usp-cascade--bridge .usp-card--mid {
+      background: linear-gradient(158deg, #5248c8 0%, #3d34c4 52%, #2f2899 100%);
+    }
+
+    .usp-cascade--bridge .usp-card__kicker {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.72;
+      margin: 0 0 10px;
+    }
+    .usp-cascade--bridge .usp-card__hero {
+      font-family: var(--display);
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 0.88;
+      color: #fff;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .usp-cascade--bridge .usp-card--light .usp-card__hero {
+      font-size: 72px;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+    .usp-cascade--bridge .usp-card__hero--sm {
+      font-size: 52px;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      margin-bottom: 2px;
+    }
+    .usp-cascade--bridge .usp-card__sub {
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.3;
+      color: #fff;
+      margin: 4px 0 0;
+    }
+    .usp-cascade--bridge .usp-card__title {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin: 0 0 8px;
+    }
+    .usp-cascade--bridge .usp-card__body {
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: #fff;
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    .usp-cascade--bridge .usp-dotmap {
+      margin-top: 12px;
+      height: 68px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .usp-cascade--bridge .usp-dotmap__lbl {
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.88;
+    }
+    .usp-cascade--bridge .usp-dotmap__countries {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+      opacity: 0.85;
+    }
+
+    .usp-cascade--bridge .usp-avatars { margin-top: 14px; }
+    .usp-cascade--bridge .usp-avatars__stack i {
+      width: 38px;
+      height: 38px;
+      border: 2px solid rgba(255, 255, 255, 0.42);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.12));
+    }
+    .usp-cascade--bridge .usp-avatars__lbl {
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      opacity: 0.92;
+    }
+
+    .usp-cascade--bridge .usp-bridge-wrap { position: relative; }
+    .usp-cascade--bridge .usp-bridge-line {
+      height: 22px;
+      width: 3px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .usp-cascade--bridge .usp-bridge-line__track {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: rgba(77, 65, 240, 0.14);
+    }
+    .usp-cascade--bridge .usp-bridge-line__fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #8b82f8 0%, var(--accent) 100%);
+      box-shadow: 0 0 10px rgba(77, 65, 240, 0.45);
+    }
+    .usp-cascade--bridge .usp-bridge-line__fill::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      margin-left: -4.5px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 14px rgba(77, 65, 240, 0.65);
+      opacity: 0;
+    }
+    .usp-cascade--bridge .usp-bridge-line__cap {
+      position: absolute;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      margin-left: -3.5px;
+      border-radius: 50%;
+      background: rgba(77, 65, 240, 0.2);
+      border: 1.5px solid var(--ground);
+      z-index: 1;
+    }
+    .usp-cascade--bridge .usp-bridge-line__cap--top { top: -1px; }
+    .usp-cascade--bridge .usp-bridge-line__cap--bot { bottom: -1px; }
+
+    .usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__fill {
+      animation: usp-bridge-fill-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__fill::after {
+      animation: usp-bridge-dot-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-line:nth-child(2) .usp-bridge-line__cap--bot {
+      animation: usp-bridge-cap-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__fill {
+      animation: usp-bridge-fill-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__fill::after {
+      animation: usp-bridge-dot-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-line:nth-child(4) .usp-bridge-line__cap--bot {
+      animation: usp-bridge-cap-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .usp-cascade--bridge .usp-bridge-wrap:nth-child(1) .usp-card {
+      animation: usp-bridge-unlock-1 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-wrap:nth-child(3) .usp-card {
+      animation: usp-bridge-unlock-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .usp-cascade--bridge .usp-bridge-wrap:nth-child(5) .usp-card {
+      animation: usp-bridge-unlock-3 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes usp-bridge-unlock-1 {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: saturate(1) brightness(1);
+        box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+      }
+    }
+    @keyframes usp-bridge-unlock-2 {
+      0%, 32% {
+        opacity: 0.2;
+        transform: scale(0.985);
+        filter: saturate(0.55) brightness(0.92);
+        box-shadow: none;
+      }
+      38%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: saturate(1) brightness(1);
+        box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+      }
+    }
+    @keyframes usp-bridge-unlock-3 {
+      0%, 66% {
+        opacity: 0.2;
+        transform: scale(0.985);
+        filter: saturate(0.55) brightness(0.92);
+        box-shadow: none;
+      }
+      72%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: saturate(1) brightness(1);
+        box-shadow: 0 10px 28px rgba(49, 44, 98, 0.14);
+      }
+    }
+
+    @keyframes usp-bridge-fill-1 {
+      0%, 32% { height: 0; }
+      38%, 100% { height: 100%; }
+    }
+    @keyframes usp-bridge-fill-2 {
+      0%, 66% { height: 0; }
+      72%, 100% { height: 100%; }
+    }
+    @keyframes usp-bridge-dot-1 {
+      0%, 32% { opacity: 0; bottom: -3px; }
+      34% { opacity: 1; }
+      38%, 100% { opacity: 0; bottom: calc(100% - 3px); }
+    }
+    @keyframes usp-bridge-dot-2 {
+      0%, 66% { opacity: 0; bottom: -3px; }
+      68% { opacity: 1; }
+      72%, 100% { opacity: 0; bottom: calc(100% - 3px); }
+    }
+    @keyframes usp-bridge-cap-1 {
+      0%, 36% { background: rgba(77, 65, 240, 0.2); transform: scale(1); }
+      38%, 100% { background: var(--accent); transform: scale(1.15); box-shadow: 0 0 8px rgba(77, 65, 240, 0.5); }
+    }
+    @keyframes usp-bridge-cap-2 {
+      0%, 70% { background: rgba(77, 65, 240, 0.2); transform: scale(1); }
+      72%, 100% { background: var(--accent); transform: scale(1.15); box-shadow: 0 0 8px rgba(77, 65, 240, 0.5); }
+    }
+
+    .trust-phone--d3 .footer-dock--tp .tp-compact {
+      font-family: var(--font);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Safe hands · trust</h1>
+      <p class="meta">002 onboarding · s-44 · Act 3.4<br/>Trustpilot prominent · offline exploration</p>
+      <a href="#concepts">Concept directions</a>
+      <a href="#cascade">D · USP cascade</a>
+      <a href="#mobbin">Mobbin refs</a>
+      <a href="../frames/gallery.html#trust">Templates gallery</a>
+      <a href="mixboard.html#s-44">Main mixboard</a>
+      <a href="../frames/components/gallery.html#trustpilot-row">Trustpilot component</a>
+      <p class="note">
+        <strong>Job:</strong> Bridge programme stack → consult. Reassure on AU platform + MY clinical oversight before Act 5 booking.<br/><br/>
+        <strong>Layout:</strong> Nav bar · left-aligned headline · prominent Trustpilot (not footer row) · fixed CTA.<br/><br/>
+        <strong>Copy:</strong> Provisional exploration. Clinic review required before ship. No new outcome claims.
+      </p>
+    </aside>
+    <main>
+      <section class="chapter" id="concepts">
+        <div class="chapter-head">
+          <h2>Concept directions · s-44</h2>
+          <p>Three treatments for the same copy spine. Trustpilot is content, not a footer row. Pick one direction, then hydrate into <code>tpl-trust</code>.</p>
+        </div>
+        <div class="board" id="concept-board"></div>
+      </section>
+
+      <section class="chapter" id="cascade">
+        <div class="chapter-head">
+          <h2>D · USP cascade · three motion variants</h2>
+          <p>Headline only, then three full-width stacked cards with typographic hierarchy: big white numbers (56px hero, 44px secondary), kickers, titles, body. All card copy is white on blue shades. Line travels down, unlocking opacity slot by slot. CTA + Trustpilot in footer.</p>
+        </div>
+        <div class="board" id="cascade-board"></div>
+      </section>
+
+      <section class="chapter" id="mobbin">
+        <div class="chapter-head">
+          <h2>Mobbin research notes</h2>
+          <p>Patterns that map to MOSHY MY's AU platform + MY licensed doctors story.</p>
+        </div>
+        <ul style="font-size:12px;color:var(--muted);max-width:72ch;line-height:1.55;padding-left:18px;">
+          <li><strong>Closest to D cascade + opacity unlock:</strong> <a href="https://mobbin.com/screens/5f5b275b-5e63-4d3e-bfc2-52ead4e5b55d">Alan</a> onboarding timeline (vertical spine, one active card, others muted); <a href="https://mobbin.com/screens/d906ade6-540e-4f08-ab77-e4ce3f8f27a8">Hers</a> consultation timeline (spine + elevated active card)</li>
+          <li><strong>Big white number on coloured card (best match for card 1):</strong> <a href="https://mobbin.com/screens/08113bd6-f84a-41ca-9372-ec8fd2f8575d">Alma</a> "200,000+ Members" on purple; <a href="https://mobbin.com/screens/d1e9091b-7b5d-424b-b9eb-9807f03bb488">Oura</a> stat card; <a href="https://mobbin.com/screens/f1b987b2-5724-4e00-9280-1a44525bda32">Noom</a>; <a href="https://mobbin.com/screens/9142fb51-ace4-4fa2-8f43-b606e95d62dc">Superpower</a></li>
+          <li><strong>Giant hero number hierarchy:</strong> <a href="https://mobbin.com/flows/6b528238-ded4-48b2-8b45-8ea9d71db138">American Airlines</a> "100" splash on navy; <a href="https://mobbin.com/screens/8eca8aec-6819-45a6-b847-945de7ba2957">Garmin Connect+</a>; <a href="https://mobbin.com/screens/9c591109-164f-4302-b945-65526ac111c4">Life Reset</a>; <a href="https://mobbin.com/screens/8e3f8443-3e45-49b3-a437-0f164c659fa3">Yazio</a>; <a href="https://mobbin.com/screens/f0246ea5-34c7-43ef-be2e-a948e8d038fc">Ahead</a></li>
+          <li><strong>White text on coloured stacked cards:</strong> <a href="https://mobbin.com/screens/cfb39023-cf2d-442a-8aa4-6abe46a7104e">Tomorrow Benefits</a>; <a href="https://mobbin.com/flows/1db19b69-8df5-4526-85c0-7ca224a5bdcc">Gymshark Tier Benefits</a>; <a href="https://mobbin.com/screens/5565661d-accc-422b-a9da-4f94e34161eb">QUITTR</a> dark benefit cards</li>
+          <li><strong>Stacked cards + scroll/opacity reveal:</strong> <a href="https://mobbin.com/flows/b4aad15c-35e6-440e-aec9-77e50d1b7b28">ANZ Plus</a> card intro; <a href="https://mobbin.com/flows/c24ed515-5ddf-46fd-9d6f-28595ffafb6d">Everyday Rewards</a> revealing rewards</li>
+          <li><strong>Clinical trust rows (A/B concepts):</strong> <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a> step cards; <a href="https://mobbin.com/screens/e680983f-8a34-4368-b4ac-4dae8400d65e">Liven</a> laurel stats; <a href="https://mobbin.com/screens/4bc0a418-6bd9-4cbf-8b82-41970041f21b">Me+</a>; <a href="https://mobbin.com/screens/f4fd06f8-9c93-42ab-8cdc-fd28e6c0afe3">Visible</a></li>
+          <li><em>No exact 1:1 for full-width blue USP stack + traveling line + opacity unlock. Alma 200k card + Alan/Hers timeline + Tomorrow coloured cards are the strongest comps.</em></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+
+      var HEAD = "You're in safe hands";
+      var SUB = "Australian telehealth provider. Malaysian licensed doctors.";
+
+      function navHtml() {
+        return (
+          '<div class="nav-shell">' +
+            '<div class="nav-row">' +
+              '<button class="nav-back" type="button" aria-label="Back">‹</button>' +
+              '<div class="prog-pills">' +
+                '<i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function headerHtml() {
+        return (
+          '<h2 class="q-head">' + HEAD + '</h2>' +
+          '<p class="q-sub">' + SUB + '</p>'
+        );
+      }
+
+      function footerHtml() {
+        return (
+          '<div class="footer-dock">' +
+            '<button class="input-cta" type="button">Continue</button>' +
+          '</div>'
+        );
+      }
+
+      function footerWithTpHtml() {
+        return (
+          '<div class="footer-dock footer-dock--tp">' +
+            '<button class="input-cta" type="button">Continue</button>' +
+            '<div class="tp-compact" data-layer="trust block">' +
+              '<span class="tp-compact__stars" aria-hidden="true">★★★★★</span>' +
+              '<span><strong>Excellent</strong> · 4.8 on Trustpilot</span>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function headOnlyHtml() {
+        return '<h2 class="q-head">' + HEAD + '</h2>';
+      }
+
+      function cardInner(content) {
+        return '<div class="usp-card__inner">' + content + '</div>';
+      }
+
+      function dotMapSvgBridge() {
+        return (
+          '<div class="usp-dotmap" aria-hidden="true">' +
+            '<svg viewBox="0 0 280 68" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M72 22 Q120 38 168 28 Q210 42 198 52" stroke="#fff" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="3 4"/>' +
+              '<circle cx="198" cy="52" r="5" fill="#fff" opacity="0.95"/>' +
+              '<circle cx="212" cy="58" r="3.5" fill="#fff" opacity="0.65"/>' +
+              '<circle cx="168" cy="28" r="4" fill="#fff" opacity="0.85"/>' +
+              '<circle cx="72" cy="22" r="6" fill="#fff"/>' +
+              '<circle cx="88" cy="18" r="2.5" fill="#fff" opacity="0.45"/>' +
+            '</svg>' +
+            '<div class="usp-dotmap__countries"><span>AU</span><span>NZ</span><span>MY</span></div>' +
+            '<span class="usp-dotmap__lbl">3 countries</span>' +
+          '</div>'
+        );
+      }
+
+      function cardPatientsD3() {
+        return (
+          '<article class="usp-card usp-card--light">' +
+            cardInner(
+              '<p class="usp-card__kicker">Patients treated</p>' +
+              '<p class="usp-card__hero">200k+</p>' +
+              '<p class="usp-card__sub">Across our platform</p>'
+            ) +
+          '</article>'
+        );
+      }
+
+      function cardGlobalD3() {
+        return (
+          '<article class="usp-card usp-card--accent">' +
+            cardInner(
+              '<p class="usp-card__kicker">Global reach</p>' +
+              '<p class="usp-card__hero usp-card__hero--sm">3</p>' +
+              '<p class="usp-card__title">Australian business.<br/>Malaysian doctors.</p>' +
+              '<p class="usp-card__body">Telehealth built in Australia, delivered with doctors licensed in Malaysia.</p>' +
+              dotMapSvgBridge()
+            ) +
+          '</article>'
+        );
+      }
+
+      function cardPractitionersD3() {
+        return (
+          '<article class="usp-card usp-card--mid">' +
+            cardInner(
+              '<p class="usp-card__kicker">Your care team</p>' +
+              '<p class="usp-card__title">Malaysian practitioners</p>' +
+              '<p class="usp-card__body">Weight loss specialists licensed to practise in Malaysia.</p>' +
+              '<div class="usp-avatars" aria-hidden="true">' +
+                '<div class="usp-avatars__stack"><i></i><i></i><i></i></div>' +
+                '<span class="usp-avatars__lbl">Licensed in Malaysia</span>' +
+              '</div>'
+            ) +
+          '</article>'
+        );
+      }
+
+      function bridgeLineHtml() {
+        return (
+          '<div class="usp-bridge-line" aria-hidden="true">' +
+            '<span class="usp-bridge-line__cap usp-bridge-line__cap--top"></span>' +
+            '<div class="usp-bridge-line__track"></div>' +
+            '<div class="usp-bridge-line__fill"></div>' +
+            '<span class="usp-bridge-line__cap usp-bridge-line__cap--bot"></span>' +
+          '</div>'
+        );
+      }
+
+      function dotMapSvg() {
+        return (
+          '<div class="usp-dotmap" aria-hidden="true">' +
+            '<svg viewBox="0 0 280 80" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<circle cx="198" cy="52" r="5" fill="#fff" opacity="0.95"/>' +
+              '<circle cx="212" cy="58" r="3.5" fill="#fff" opacity="0.7"/>' +
+              '<circle cx="168" cy="28" r="4" fill="#fff" opacity="0.85"/>' +
+              '<circle cx="72" cy="22" r="6" fill="#fff"/>' +
+              '<circle cx="88" cy="18" r="2.5" fill="#fff" opacity="0.5"/>' +
+            '</svg>' +
+            '<div class="usp-dotmap__countries"><span>AU</span><span>NZ</span><span>MY</span></div>' +
+            '<span class="usp-dotmap__lbl">3 countries</span>' +
+          '</div>'
+        );
+      }
+
+      function cardPatients() {
+        return (
+          '<article class="usp-card usp-card--light">' +
+            '<p class="usp-card__kicker">Patients treated</p>' +
+            '<p class="usp-card__hero">200k+</p>' +
+            '<p class="usp-card__sub">Across our platform</p>' +
+          '</article>'
+        );
+      }
+
+      function cardGlobal() {
+        return (
+          '<article class="usp-card usp-card--accent">' +
+            '<p class="usp-card__kicker">Global reach</p>' +
+            '<p class="usp-card__hero usp-card__hero--sm">3</p>' +
+            '<p class="usp-card__title">Australian business.<br/>Malaysian doctors.</p>' +
+            '<p class="usp-card__body">Telehealth built in Australia, delivered with doctors licensed in Malaysia.</p>' +
+            dotMapSvg() +
+          '</article>'
+        );
+      }
+
+      function cardPractitioners() {
+        return (
+          '<article class="usp-card usp-card--mid">' +
+            '<p class="usp-card__kicker">Your care team</p>' +
+            '<p class="usp-card__title">Malaysian practitioners</p>' +
+            '<p class="usp-card__body">Weight loss specialists licensed to practise in Malaysia.</p>' +
+            '<div class="usp-avatars" aria-hidden="true">' +
+              '<div class="usp-avatars__stack"><i></i><i></i><i></i></div>' +
+              '<span class="usp-avatars__lbl">Licensed in Malaysia</span>' +
+            '</div>' +
+          '</article>'
+        );
+      }
+
+      function conceptD1() {
+        return (
+          '<div class="trust-phone trust-phone--d">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headOnlyHtml() +
+                '<div class="usp-cascade usp-cascade--spine">' +
+                  '<div class="usp-spine" aria-hidden="true">' +
+                    '<div class="usp-spine__track"></div>' +
+                    '<div class="usp-spine__fill"></div>' +
+                    '<span class="usp-node usp-node--1"></span>' +
+                    '<span class="usp-node usp-node--2"></span>' +
+                    '<span class="usp-node usp-node--3"></span>' +
+                  '</div>' +
+                  '<div class="usp-cascade__cards">' +
+                    cardPatients() + cardGlobal() + cardPractitioners() +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerWithTpHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptD2() {
+        return (
+          '<div class="trust-phone trust-phone--d">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headOnlyHtml() +
+                '<div class="usp-cascade usp-cascade--pulse">' +
+                  '<div class="usp-pulse-rail" aria-hidden="true">' +
+                    '<div class="usp-pulse-rail__track"></div>' +
+                    '<div class="usp-pulse-rail__dot"></div>' +
+                  '</div>' +
+                  '<div class="usp-cascade__cards">' +
+                    cardPatients() + cardGlobal() + cardPractitioners() +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerWithTpHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptD3() {
+        return (
+          '<div class="trust-phone trust-phone--d trust-phone--d3">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headOnlyHtml() +
+                '<div class="usp-cascade usp-cascade--bridge">' +
+                  '<div class="usp-cascade__cards">' +
+                    '<div class="usp-bridge-wrap">' + cardPatientsD3() + '</div>' +
+                    bridgeLineHtml() +
+                    '<div class="usp-bridge-wrap">' + cardGlobalD3() + '</div>' +
+                    bridgeLineHtml() +
+                    '<div class="usp-bridge-wrap">' + cardPractitionersD3() + '</div>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerWithTpHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptA() {
+        return (
+          '<div class="trust-phone">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtml() +
+                '<div class="tp-hero" data-layer="trust block">' +
+                  '<div class="tp-hero__stars" aria-hidden="true">★★★★★</div>' +
+                  '<p class="tp-hero__label">Excellent</p>' +
+                  '<p class="tp-hero__score">4.8 on Trustpilot</p>' +
+                '</div>' +
+                '<div class="cred-grid">' +
+                  '<div class="cred-card"><span class="ico">🇦🇺</span><span class="lbl">Australian-owned telehealth</span></div>' +
+                  '<div class="cred-card"><span class="ico">🇲🇾</span><span class="lbl">MY licensed doctors</span></div>' +
+                  '<div class="cred-card"><span class="stat">200k+</span><span class="lbl">Patients treated</span></div>' +
+                  '<div class="cred-card"><span class="ico">🩺</span><span class="lbl">Weight loss specialists</span></div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptB() {
+        return (
+          '<div class="trust-phone trust-phone--b">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtml() +
+                '<div class="rating-orb" data-layer="trust block">' +
+                  '<span class="rating-orb__stars" aria-hidden="true">★★★★★</span>' +
+                  '<span class="rating-orb__num">4.8</span>' +
+                  '<span class="rating-orb__lbl">Trustpilot · Excellent</span>' +
+                  '<span class="rating-orb__wreath" aria-hidden="true">🌿</span>' +
+                '</div>' +
+                '<div class="review-rail" aria-label="Sample reviews">' +
+                  '<article class="review-card">' +
+                    '<div class="review-card__top">' +
+                      '<span class="review-card__stars">★★★★★</span>' +
+                      '<span class="review-card__name">Sarah M.</span>' +
+                    '</div>' +
+                    '<p class="review-card__title">Clear and supportive</p>' +
+                    '<p class="review-card__body">The consult felt thorough. My doctor explained everything without pressure.</p>' +
+                  '</article>' +
+                  '<article class="review-card">' +
+                    '<div class="review-card__top">' +
+                      '<span class="review-card__stars">★★★★★</span>' +
+                      '<span class="review-card__name">Priya K.</span>' +
+                    '</div>' +
+                    '<p class="review-card__title">Easy from home</p>' +
+                    '<p class="review-card__body">Booking was simple and the team answered my questions quickly.</p>' +
+                  '</article>' +
+                '</div>' +
+                '<div class="pill-row">' +
+                  '<span class="pill"><span>🇦🇺</span> AU platform</span>' +
+                  '<span class="pill"><span>🇲🇾</span> MY doctors</span>' +
+                  '<span class="pill"><span>200k+</span> patients</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      function conceptC() {
+        return (
+          '<div class="trust-phone trust-phone--c">' +
+            navHtml() +
+            '<div class="quiz-scroll">' +
+              '<div class="quiz-main">' +
+                headerHtml() +
+                '<div class="laurel-stat">' +
+                  '<div class="laurel-stat__inner">' +
+                    '<span class="laurel-stat__wreath laurel-stat__wreath--l" aria-hidden="true">🌿</span>' +
+                    '<span class="laurel-stat__num">200k+</span>' +
+                    '<span class="laurel-stat__lbl">Patients treated</span>' +
+                    '<span class="laurel-stat__wreath laurel-stat__wreath--r" aria-hidden="true">🌿</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="bridge-list">' +
+                  '<div class="bridge-row">' +
+                    '<div class="bridge-thumb bridge-thumb--au">🇦🇺</div>' +
+                    '<div class="bridge-copy">' +
+                      '<b>Australian-owned telehealth</b>' +
+                      '<p>Built on Moshy’s AU platform with proven weight care experience.</p>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="bridge-row">' +
+                    '<div class="bridge-thumb bridge-thumb--my">🇲🇾</div>' +
+                    '<div class="bridge-copy">' +
+                      '<b>Malaysian licensed doctors</b>' +
+                      '<p>Your consult is reviewed by doctors licensed to practise in Malaysia.</p>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="bridge-row">' +
+                    '<div class="bridge-thumb bridge-thumb--spec">🩺</div>' +
+                    '<div class="bridge-copy">' +
+                      '<b>Weight loss specialists</b>' +
+                      '<p>Clinicians focused on women’s weight care, not general practice only.</p>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="tp-compact" data-layer="trust block">' +
+                  '<span class="tp-compact__stars" aria-hidden="true">★★★★★</span>' +
+                  '<span><strong>Excellent</strong> · 4.8 on Trustpilot</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            footerHtml() +
+          '</div>'
+        );
+      }
+
+      var concepts = [
+        {
+          id: "a",
+          tag: "A · Credential grid",
+          title: "Trustpilot card + 2×2 proof grid",
+          job: "Direct hi-fi lift of lofi mixboard. Trustpilot as hero card; credentials in equal tiles. Scannable, low cognitive load.",
+          psych: "Recognition · parity",
+          mobbin: 'Refs: <a href="https://mobbin.com/screens/e680983f-8a34-4368-b4ac-4dae8400d65e">Liven</a>, wireframe baseline',
+          render: conceptA
+        },
+        {
+          id: "b",
+          tag: "B · Rating hero",
+          title: "Orb score + review carousel",
+          job: "Me+ pattern: big 4.8 focal point, swipeable review cards, credential pills below. Trustpilot leads; AU/MY facts compress to chips.",
+          psych: "Social proof · affect",
+          mobbin: 'Refs: <a href="https://mobbin.com/screens/4bc0a418-6bd9-4cbf-8b82-41970041f21b">Me+</a>, <a href="https://mobbin.com/screens/f4fd06f8-9c93-42ab-8cdc-fd28e6c0afe3">Visible</a>',
+          render: conceptB
+        },
+        {
+          id: "c",
+          tag: "C · Clinical bridge",
+          title: "200k hero + AU→MY step rows",
+          job: "Hers consultation cards: thumb + credential copy per row. Patient count as laurel stat; Trustpilot compact at bottom of scroll.",
+          psych: "Authority · local fit",
+          mobbin: 'Refs: <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a>, <a href="https://mobbin.com/screens/b7d200ff-36e2-43c3-a83d-16b7e4c389bd">Noom</a>',
+          render: conceptC
+        }
+      ];
+
+      var board = document.getElementById("concept-board");
+      concepts.forEach(function (c) {
+        var art = document.createElement("article");
+        art.className = "art";
+        art.id = "trust-" + c.id;
+        art.innerHTML =
+          '<div class="art-label">' +
+            '<span class="tag">' + c.tag + '</span>' +
+            '<b>' + c.title + '</b>' +
+            '<div class="job">' + c.job + '</div>' +
+            '<span class="psych">' + c.psych + '</span>' +
+            '<div class="mobbin-ref">' + c.mobbin + '</div>' +
+          '</div>' +
+          '<div class="hifi-viewport">' +
+            '<div class="hifi-viewport__inner">' + c.render() + '</div>' +
+          '</div>';
+        board.appendChild(art);
+      });
+
+      var cascadeConcepts = [
+        {
+          id: "d1",
+          tag: "D1 · Timeline spine",
+          title: "Left rail fills slot by slot",
+          job: "Vertical spine on the left with nodes at each card. Line fills downward; each node lights accent blue as the fill passes. Cards unlock opacity in sync.",
+          psych: "Progressive disclosure · journey",
+          mobbin: '<a href="https://mobbin.com/screens/5f5b275b-5e63-4d3e-bfc2-52ead4e5b55d">Alan</a> timeline spine · <a href="https://mobbin.com/screens/847b3139-f357-4acb-9c0b-eea5617875e7">Hers</a> step cards',
+          render: conceptD1
+        },
+        {
+          id: "d2",
+          tag: "D2 · Pulse dot",
+          title: "Glowing dot travels the gutter",
+          job: "Single accent dot with glow sweeps down a faint rail between cards. Cards stay visible but desaturated until the pulse reaches them, then snap to full colour.",
+          psych: "Attention guidance · reveal",
+          mobbin: '<a href="https://mobbin.com/flows/c24ed515-5ddf-46fd-9d6f-28595ffafb6d">Everyday Rewards</a> reveal pacing · <a href="https://mobbin.com/screens/b7d200ff-36e2-43c3-a83d-16b7e4c389bd">Noom</a> big stat',
+          render: conceptD2
+        },
+        {
+          id: "d3",
+          tag: "D3 · Bridge connectors",
+          title: "Connector lines between cards",
+          job: "Polished stack: Area Inktrap hero numbers (64px/52px), Figtree kickers and body, white-on-blue gradients. Centered bridge fills with glow dot unlock each card in sequence.",
+          psych: "Cause → effect · sequencing",
+          mobbin: '<a href="https://mobbin.com/flows/b4aad15c-35e6-440e-aec9-77e50d1b7b28">ANZ Plus</a> bridge fill · <a href="https://mobbin.com/screens/08113bd6-f84a-41ca-9372-ec8fd2f8575d">Alma</a> 200k stat · <a href="https://mobbin.com/screens/cfb39023-cf2d-442a-8aa4-6abe46a7104e">Tomorrow Benefits</a>',
+          render: conceptD3
+        }
+      ];
+
+      var cascadeBoard = document.getElementById("cascade-board");
+      cascadeConcepts.forEach(function (c) {
+        var art = document.createElement("article");
+        art.className = "art";
+        art.id = "trust-" + c.id;
+        art.innerHTML =
+          '<div class="art-label">' +
+            '<span class="tag">' + c.tag + '</span>' +
+            '<b>' + c.title + '</b>' +
+            '<div class="job">' + c.job + '</div>' +
+            '<span class="psych">' + c.psych + '</span>' +
+            '<div class="mobbin-ref">' + c.mobbin + '</div>' +
+          '</div>' +
+          '<div class="hifi-viewport">' +
+            '<div class="hifi-viewport__inner">' + c.render() + '</div>' +
+          '</div>';
+        cascadeBoard.appendChild(art);
+      });
+    })();
+  </script>
+</body>
+</html>

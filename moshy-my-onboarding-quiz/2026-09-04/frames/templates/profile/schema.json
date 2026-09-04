@@ -1,0 +1,31 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "profile",
+  "required": ["screenId", "headline", "wins", "details", "progress", "ctaLabel"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string (optional)",
+    "showSubhead": { "type": "boolean", "default": true },
+    "aboutSectionLabel": "string (default A little more about you)",
+    "progress": { "done": "int", "current": "int", "total": "int" },
+    "wins": [
+      {
+        "icon": "check | trend",
+        "title": "string",
+        "sub": "string (fine print)"
+      }
+    ],
+    "details": [
+      {
+        "label": "string",
+        "value": "string",
+        "femaleClass": "string (optional, e.g. profile-detail--female)"
+      }
+    ],
+    "ctaLabel": "string",
+    "trustpilot": { "type": "boolean", "default": true },
+    "legal": { "type": "boolean", "default": false }
+  }
+}

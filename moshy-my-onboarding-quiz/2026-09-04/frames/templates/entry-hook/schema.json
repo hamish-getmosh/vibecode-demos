@@ -1,0 +1,24 @@
+{
+  "$schema": "quiz-frame-hydration",
+  "template": "entry-hook",
+  "required": ["screenId", "headline", "ctaLabel"],
+  "fields": {
+    "screenId": "string",
+    "title": "string (document title)",
+    "headline": "string",
+    "subhead": "string (optional)",
+    "showSubhead": {
+      "type": "boolean",
+      "default": true
+    },
+    "ctaLabel": "string",
+    "trustpilot": {
+      "type": "boolean",
+      "default": true
+    },
+    "legal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

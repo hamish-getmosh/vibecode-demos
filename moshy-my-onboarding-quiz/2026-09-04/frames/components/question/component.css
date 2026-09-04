@@ -1,0 +1,57 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh question */
+
+
+.phone--hifi .question-block,
+.question-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.phone--hifi .q-head {
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -0.02em;
+  color: rgb(49, 44, 98);
+  margin: 0;
+  text-align: left;
+}
+
+.q-head {
+  font-family: "Area Inktrap", Figtree, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -0.02em;
+  color: rgb(49, 44, 98);
+  margin: 0;
+  text-align: left;
+}
+
+.phone--hifi .q-sub {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4em;
+  color: var(--ink-muted);
+  margin: 0;
+  text-align: left;
+}
+
+.q-sub {
+  font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4em;
+  color: var(--ink-muted);
+  margin: 0;
+  text-align: left;
+}
+
+.phone--hifi .q-sub.q-sub--accent,
+.q-sub.q-sub--accent {
+  color: var(--accent);
+}

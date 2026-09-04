@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" class="frame-preview">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>300g reframe</title>
+  <link rel="stylesheet" href="../../design/act-2-spacing.lock.css" />
+  <link rel="stylesheet" href="../../design/midfi-shared.css" />
+  <link rel="stylesheet" href="../../design/frame-hifi.css" />
+  <link rel="stylesheet" href="../components/cta-primary/component.css" />
+  <link rel="stylesheet" href="../components/question/component.css" />
+  <link rel="stylesheet" href="../components/trustpilot-row/component.css" />
+  <link rel="stylesheet" href="../components/legal-fine/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input/component.css" />
+  <link rel="stylesheet" href="../components/numeric-input-dock/component.css" />
+  <link rel="stylesheet" href="../components/loader-step/component.css" />
+  <link rel="stylesheet" href="../components/loader-stack/component.css" />
+  <link rel="stylesheet" href="../templates/loader/template.css" />
+  <link rel="stylesheet" href="../templates/reframe/template.css" />
+<style id="template-spacing">
+:root {
+  --quiz-gap-body-note: 12px;
+  --quiz-gap-bridge-pill: 16px;
+  --quiz-gap-chrome-headline: 24px;
+  --quiz-gap-content-footer: 24px;
+  --quiz-gap-pill-body: 16px;
+}
+</style>
+</head>
+<body>
+<div class="phone phone--hifi phone--reframe has-footer-dock" data-reveal-motion data-variant="reframeFadeHold">
+  <div class="nav-shell">
+    <div class="nav-row">
+      <button class="back-min" type="button" aria-label="Back">‹</button>
+      <div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></div>
+      <span class="nav-row__spacer" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="quiz-scroll">
+    <div class="quiz-main quiz-main--reframe">
+      <div class="spacing-block" data-gap="chrome-headline" data-token="lg" data-px="24px"></div>
+      <div class="mnode bridge-wrap" data-k="bridge">
+        <p class="reframe-bridge">14 kg sounds like a lot.</p>
+        <p class="reframe-bridge-sub">Spread over 12 months, the average works out to about:</p>
+      </div>
+      <div class="spacing-block" data-gap="bridge-pill" data-token="md" data-px="16px"></div>
+      <div class="mnode pill-wrap" data-k="pill">
+        <div class="pace-stack">
+  <div class="pace-duo">
+    <div class="daily-pill"><span class="num">40</span><span class="lbl">grams / day</span></div>
+    <span class="pace-or">or</span>
+    <div class="daily-pill daily-pill--week"><span class="num">300</span><span class="lbl">grams / week</span></div>
+  </div>
+</div>
+
+      </div>
+      <div class="spacing-block" data-gap="pill-body" data-token="md" data-px="16px"></div>
+      <p class="reframe-body mnode" data-k="reframe">Some weeks you'll lose more, some less. That's normal. It's the average over time that counts, not any single week.</p>
+      <div class="spacing-block" data-gap="body-note" data-token="sm" data-px="12px"></div>
+      <p class="reframe-note">Estimate only · your pace will vary</p>
+    </div>
+  </div>
+  <div class="footer-dock">
+    <div class="spacing-block" data-gap="content-footer" data-token="lg" data-px="24px"></div>
+    <div class="mnode" data-k="cta"><button class="input-cta" type="button">How it works →</button></div>
+  </div>
+</div>
+<script src="../shared/reveal-motion-engine.js"></script>
+<script src="../templates/reframe/preview.js"></script>
+
+</body>
+</html>

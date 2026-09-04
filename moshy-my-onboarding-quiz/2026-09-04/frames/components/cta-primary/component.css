@@ -1,0 +1,17 @@
+/* GENERATED — do not hand-edit; run ./scripts/pull-quiz-component.sh cta-primary */
+
+
+.phone--hifi .input-cta,
+.input-cta {
+  border-radius: 999px;
+  background: rgb(154, 2, 57);
+  color: rgb(252, 252, 252);
+  font-family: Figtree, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2em;
+  padding: 18px 28px 18px 28px;
+  box-shadow: 0px 8px 24px 0px rgba(154,2,57,0.28);
+  border: 0;
+  width: 100%;
+}

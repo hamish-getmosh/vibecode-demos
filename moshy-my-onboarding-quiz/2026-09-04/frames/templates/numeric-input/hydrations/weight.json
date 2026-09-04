@@ -1,0 +1,18 @@
+{
+  "screenId": "s-24",
+  "template": "numeric-input",
+  "title": "Weight",
+  "headline": "My weight is\u2026",
+  "value": "82",
+  "unit": "kg",
+  "ariaLabel": "Weight in kilograms",
+  "showNumpad": true,
+  "progress": {
+    "done": 2,
+    "current": 2,
+    "total": 4
+  },
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}

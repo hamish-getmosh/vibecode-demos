@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>002 · Reveal motion · 7 concepts</title>
+  <link rel="stylesheet" href="../design/frame-hifi.css" />
+  <style>
+    :root {
+      --ink: #312c62; --muted: #8b86b0; --ground: #fcfcfc; --surface: #f4f3f6;
+      --accent: #4d41f0; --accent-soft: #ece9ff; --ruby: #9a0239; --border: #e2e0e8;
+      --side-w: 228px; --phone-w: 390px; --phone-h: 844px;
+      --font: Figtree, ui-sans-serif, system-ui, sans-serif;
+      --display: "Area Inktrap", Figtree, sans-serif;
+      --pill-display: "Area Inktrap", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: #e8e6ee; color: var(--ink); font-size: 13px; line-height: 1.45; }
+    .layout { display: flex; min-height: 100vh; }
+    .side {
+      width: var(--side-w); flex-shrink: 0; background: #fff; border-right: 1px solid var(--border);
+      padding: 16px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .side h1 { margin: 0 0 4px; padding: 0 16px; font-size: 15px; }
+    .side .meta { padding: 0 16px 12px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; line-height: 1.5; }
+    .side button.slide-link {
+      display: block; width: 100%; text-align: left; border: none; background: none;
+      padding: 6px 16px; font-size: 12px; color: var(--accent); cursor: pointer; font-family: inherit;
+    }
+    .side button.slide-link:hover { background: var(--surface); }
+    .side button.slide-link.is-active { background: var(--accent-soft); font-weight: 600; color: var(--ink); }
+    .side a { display: block; padding: 6px 16px; font-size: 12px; color: var(--accent); text-decoration: none; }
+    .side a:hover { background: var(--surface); }
+    .side .note { padding: 12px 16px; font-size: 10px; color: var(--muted); line-height: 1.55; border-top: 1px solid var(--border); margin-top: 8px; }
+
+    main {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px 32px 48px; min-width: 0;
+    }
+    .carousel { width: 100%; max-width: var(--phone-w); }
+    .carousel-meta { text-align: center; margin-bottom: 16px; min-height: 88px; }
+    .carousel-meta .tag { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+    .carousel-meta h2 { margin: 4px 0 6px; font-size: 20px; font-weight: 700; }
+    .carousel-meta .job { font-size: 12px; color: var(--muted); line-height: 1.45; max-width: 36ch; margin: 0 auto; }
+    .carousel-meta .psych { font-size: 10px; color: #5a5580; background: #f0edff; border-radius: 6px; padding: 4px 8px; margin-top: 8px; display: inline-block; }
+
+    .carousel-viewport {
+      position: relative; overflow: hidden; border-radius: 24px;
+      border: 2px solid var(--ink); background: var(--ground);
+      box-shadow: 0 12px 40px rgba(49, 44, 98, 0.1);
+      width: var(--phone-w); height: var(--phone-h);
+    }
+    .carousel-track {
+      display: flex; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform; height: 100%;
+    }
+    .carousel-slide {
+      flex: 0 0 100%; width: 100%; height: var(--phone-h);
+      overflow: hidden;
+    }
+
+    .carousel-nav {
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      margin-top: 20px;
+    }
+    .carousel-nav button {
+      border: 1px solid var(--border); background: #fff; border-radius: 999px;
+      padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+      color: var(--ink); min-width: 88px;
+    }
+    .carousel-nav button:hover { background: var(--surface); }
+    .carousel-nav button:disabled { opacity: 0.35; cursor: default; }
+    .carousel-nav .counter { font-size: 12px; color: var(--muted); min-width: 64px; text-align: center; }
+    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+    .carousel-dots button {
+      width: 8px; height: 8px; border-radius: 50%; border: none; padding: 0;
+      background: var(--border); cursor: pointer;
+    }
+    .carousel-dots button.is-active { background: var(--accent); transform: scale(1.2); }
+
+    .reveal-phone {
+      width: 100%; height: 100%; background: var(--ground);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .reveal-phone .nav-shell { padding: 12px 20px 0; }
+    .reveal-phone .prog-pills { display: flex; gap: 6px; justify-content: center; }
+    .reveal-phone .prog-pills i { width: 28px; height: 4px; border-radius: 999px; background: var(--surface); display: block; }
+    .reveal-phone .prog-pills i.done { background: var(--accent); }
+    .reveal-phone .prog-pills i.on { background: var(--accent); opacity: 0.45; }
+    .reveal-phone .stage {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 20px 8px; text-align: center; overflow: hidden;
+    }
+    .reveal-phone[data-variant="fadeHold"] .stage {
+      justify-content: flex-start;
+      padding-top: 20px;
+      overflow-y: auto;
+    }
+    .reveal-phone[data-variant="fadeHold"] .bridge-wrap { margin-top: 24px; }
+    .reveal-phone .mnode { will-change: transform, opacity; }
+    .reveal-phone .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+    .reveal-phone .lead { font-size: 16px; line-height: 1.45; color: var(--muted); margin: 0 0 4px; max-width: 30ch; }
+    .reveal-phone .stat-hero { font-family: var(--display); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--accent); margin: 0; font-size: 72px; }
+    .reveal-phone .stat-hero .unit { font-size: 0.45em; }
+    .reveal-phone .stat-sub { font-size: 15px; line-height: 1.4; margin: 6px 0 0; color: var(--ink); }
+    .reveal-phone .stat-sub em { font-style: normal; display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .reveal-phone .chart-wrap { width: 100%; max-width: 280px; margin-top: 10px; }
+    .reveal-phone .weight-chart { height: 120px; position: relative; }
+    .reveal-phone .weight-chart svg { width: 100%; height: 100%; display: block; }
+    .reveal-phone .weight-chart .main { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .reveal-phone .weight-chart .fill { opacity: 0; }
+    .reveal-phone .weight-chart .axis-label { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-top: 4px; }
+    .reveal-phone .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; }
+    .reveal-phone .start-dot { left: 2%; top: 18%; }
+    .reveal-phone .end-dot { right: 2%; bottom: 22%; }
+    .reveal-phone .bridge-wrap { margin-top: 32px; }
+    .reveal-phone .bridge { font-family: var(--display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0; }
+    .reveal-phone .pill-wrap { margin-top: 12px; }
+    .reveal-phone .daily-pill { display: inline-flex; align-items: baseline; gap: 5px; background: var(--accent-soft); border-radius: 14px; padding: 10px 16px; }
+    .reveal-phone .daily-pill .num { font-family: var(--pill-display); font-size: 38px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .reveal-phone .daily-pill .lbl { font-size: 14px; font-weight: 500; }
+    .reveal-phone .reframe { font-size: 14px; line-height: 1.5; color: var(--muted); margin: 14px 0 0; max-width: 28ch; }
+    .reveal-phone .reframe strong { color: var(--ink); }
+    .reveal-phone .footer-dock { padding: 10px 20px 16px; border-top: 1px solid var(--border); }
+    .reveal-phone .cta { width: 100%; border: none; border-radius: 999px; background: var(--ruby); color: #fff; font-size: 15px; font-weight: 600; padding: 14px 18px; font-family: inherit; }
+
+    .carousel-hint { margin-top: 16px; font-size: 10px; color: var(--muted); text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <h1>Reveal motion · 7</h1>
+      <p class="meta">Carousel · arrow keys · one anim at a time</p>
+      <nav id="side-nav"></nav>
+      <a href="reveal-split-play.html">Split play (G · 2 screens)</a>
+      <a href="reveal-staged-morph-play.html">Full play (A)</a>
+      <a href="reveal-staged-morph.html">Scene strip</a>
+      <p class="note">← → to navigate. Only the visible concept loops. Pick one for Framer handoff.</p>
+    </aside>
+    <main>
+      <div class="carousel" id="carousel">
+        <div class="carousel-meta" id="carousel-meta"></div>
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+        <div class="carousel-nav">
+          <button type="button" id="btn-prev" aria-label="Previous concept">← Prev</button>
+          <span class="counter" id="carousel-counter">1 / 7</span>
+          <button type="button" id="btn-next" aria-label="Next concept">Next →</button>
+        </div>
+        <div class="carousel-dots" id="carousel-dots"></div>
+        <p class="carousel-hint">Keyboard: ← → · Restarts animation on each slide</p>
+      </div>
+    </main>
+  </div>
+  <script src="reveal-motion-engine.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var CONCEPTS = [
+        { id: "a", letter: "A", tag: "Selected direction", title: "Blended spring", job: "Overlap ticker + chart + sub. Soft rise-ins. Compact 14 kg stays readable.", psych: "Peak-end · cognitive fluency", variant: "blended" },
+        { id: "b", letter: "B", tag: "Minimal motion", title: "Soft fade cascade", job: "Opacity + 10px rise only. No scale bounce. Waterfall stagger.", psych: "Calm · medical trust", variant: "fade" },
+        { id: "c", letter: "C", tag: "Stat first", title: "Ticker hero", job: "Copy floats in, then 0→14 holds focus. Chart waits until ticker lands.", psych: "Anchoring · number magnetism", variant: "tickerHero" },
+        { id: "d", letter: "D", tag: "Visual first", title: "Chart-led reveal", job: "Chart draws down first. Stat ticks in sync with line progress.", psych: "Mental simulation · path before number", variant: "chartLed" },
+        { id: "e", letter: "E", tag: "One slot", title: "Morph handoff", job: "14 kg shrinks up, 300g pill rises into same vertical band.", psych: "Continuity · reframe as transform", variant: "morphHandoff" },
+        { id: "f", letter: "F", tag: "Clear beats", title: "Sequential theatre", job: "Distinct beats: copy → ticker → chart → compact → pill → close.", psych: "Processing time · clarity", variant: "sequential" },
+        { id: "g", letter: "G", tag: "B · persistent", title: "Fade cascade · hold", job: "Same soft waterfall as B. Once an element lands, it stays: no shrink, hide, or reposition.", psych: "Calm · no bait-and-switch", variant: "fadeHold" }
+      ];
+
+      function phoneHtml(variant) {
+        return (
+          '<div class="reveal-phone" data-variant="' + variant + '">' +
+          '<div class="nav-shell"><div class="prog-pills"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></div></div>' +
+          '<div class="stage" data-stage>' +
+          '<div class="mnode" data-k="eyebrow"><p class="eyebrow">Your 12-month estimate</p></div>' +
+          '<div class="mnode" data-k="lead"><p class="lead">At your current weight, with Moshy you could lose up to</p></div>' +
+          '<div class="mnode" data-k="statBlock">' +
+          '<p class="stat-hero mnode" data-k="stat"><span data-stat-num>0</span><span class="unit">kg</span></p>' +
+          '<p class="stat-sub mnode" data-k="sub"><strong>over 12 months</strong><em>~12% body mass · estimate only</em></p></div>' +
+          '<div class="mnode chart-wrap" data-k="chart"><div class="weight-chart">' +
+          '<div class="dot start-dot mnode" data-k="startDot"></div><div class="dot end-dot mnode" data-k="endDot"></div>' +
+          '<svg viewBox="0 0 300 140" preserveAspectRatio="none"><defs><linearGradient data-chart-grad x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="#4d41f0" stop-opacity="0.2"/><stop offset="100%" stop-color="#4d41f0" stop-opacity="0"/></linearGradient></defs>' +
+          '<path class="fill" data-chart-fill pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118 L278,132 L12,132 Z" fill="url(#g)"/>' +
+          '<path class="main" data-chart-line pathLength="1" d="M12,32 C80,38 140,72 200,98 S280,118 278,118"/></svg>' +
+          '<div class="axis-label mnode" data-k="axis"><span>Today</span><span>12 months</span></div></div></div>' +
+          '<div class="mnode bridge-wrap" data-k="bridge"><p class="bridge">That breaks down to only</p></div>' +
+          '<div class="mnode pill-wrap" data-k="pill"><div class="daily-pill"><span class="num">300</span><span class="lbl">grams / day</span></div></div>' +
+          '<p class="reframe mnode" data-k="reframe"><strong>Small, steady progress</strong> with ongoing weight loss medication is how you get to where you want to be.</p>' +
+          '</div><div class="footer-dock"><div class="mnode" data-k="cta"><button type="button" class="cta">How it works →</button></div></div></div>'
+        );
+      }
+
+      var track = document.getElementById("carousel-track");
+      var meta = document.getElementById("carousel-meta");
+      var sideNav = document.getElementById("side-nav");
+      var dotsEl = document.getElementById("carousel-dots");
+      var counterEl = document.getElementById("carousel-counter");
+      var instances = [];
+      var index = 0;
+
+      CONCEPTS.forEach(function (c, i) {
+        var slide = document.createElement("div");
+        slide.className = "carousel-slide";
+        slide.id = "slide-" + c.id;
+        slide.innerHTML = phoneHtml(c.variant);
+        track.appendChild(slide);
+
+        var phone = slide.querySelector(".reveal-phone");
+        var gid = "g" + i;
+        var fill = phone.querySelector("[data-chart-fill]");
+        var grad = phone.querySelector("[data-chart-grad]");
+        if (fill) fill.setAttribute("fill", "url(#" + gid + ")");
+        if (grad) grad.id = gid;
+        instances.push(RevealMotion.mount(phone, { autoplay: false }));
+
+        var sideBtn = document.createElement("button");
+        sideBtn.type = "button";
+        sideBtn.className = "slide-link";
+        sideBtn.textContent = c.letter + " · " + c.title;
+        sideBtn.dataset.index = String(i);
+        sideBtn.addEventListener("click", function () { goTo(i); });
+        sideNav.appendChild(sideBtn);
+
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "carousel-dots-btn";
+        dot.setAttribute("aria-label", "Concept " + c.letter);
+        dot.dataset.index = String(i);
+        dot.addEventListener("click", function () { goTo(i); });
+        dotsEl.appendChild(dot);
+      });
+
+      function updateMeta(i) {
+        var c = CONCEPTS[i];
+        meta.innerHTML =
+          '<span class="tag">' + c.letter + " · " + c.tag + '</span>' +
+          "<h2>" + c.title + "</h2>" +
+          '<p class="job">' + c.job + '</p>' +
+          '<span class="psych">' + c.psych + "</span>";
+        counterEl.textContent = (i + 1) + " / " + CONCEPTS.length;
+        document.getElementById("btn-prev").disabled = i === 0;
+        document.getElementById("btn-next").disabled = i === CONCEPTS.length - 1;
+        sideNav.querySelectorAll(".slide-link").forEach(function (btn, j) {
+          btn.classList.toggle("is-active", j === i);
+        });
+        dotsEl.querySelectorAll("button").forEach(function (btn, j) {
+          btn.classList.toggle("is-active", j === i);
+        });
+      }
+
+      function playActiveOnly(i) {
+        instances.forEach(function (inst, j) {
+          inst.stop();
+          inst.reset();
+          if (j === i) inst.play();
+        });
+      }
+
+      function goTo(i) {
+        if (i < 0 || i >= CONCEPTS.length) return;
+        index = i;
+        track.style.transform = "translateX(-" + (i * 100) + "%)";
+        updateMeta(i);
+        playActiveOnly(i);
+        if (history.replaceState) {
+          history.replaceState(null, "", "#" + CONCEPTS[i].id);
+        }
+      }
+
+      document.getElementById("btn-prev").addEventListener("click", function () { goTo(index - 1); });
+      document.getElementById("btn-next").addEventListener("click", function () { goTo(index + 1); });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { e.preventDefault(); goTo(index - 1); }
+        if (e.key === "ArrowRight") { e.preventDefault(); goTo(index + 1); }
+      });
+
+      var hash = (location.hash || "").replace("#", "");
+      var start = CONCEPTS.findIndex(function (c) { return c.id === hash; });
+      goTo(start >= 0 ? start : 0);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "screenId": "s-34",
+  "template": "radio",
+  "title": "Yo-yo history",
+  "headline": "Have you lost weight before and gained it back?",
+  "subhead": "This helps us model a realistic trajectory for you.",
+  "progress": {
+    "done": 3,
+    "current": 3,
+    "total": 4
+  },
+  "options": [
+    {
+      "label": "No, not really",
+      "selected": false
+    },
+    {
+      "label": "Once",
+      "selected": false
+    },
+    {
+      "label": "A few times",
+      "selected": false
+    },
+    {
+      "label": "Yes \u2014 yo-yo for years",
+      "selected": true
+    }
+  ],
+  "trustpilot": true,
+  "legal": false,
+  "showSubhead": false
+}
