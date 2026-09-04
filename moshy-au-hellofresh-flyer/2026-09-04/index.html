@@ -1,0 +1,2144 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOSHY AU × HelloFresh flyer · mobile preview</title>
+<style>
+/**
+ * Shared section shell — Explore through Finals.
+ * SSOT: design/module-build-rules.md + design/framer-architecture.md
+ *
+ * Section root = full-bleed surface + shell padding.
+ * max width content stack = capped column only.
+ * Mixboard cards / thumbnails wrap this from outside; they are not part of this CSS.
+ */
+
+/**
+ * Page shell fills the Hub artboard (iframe width) at 100%.
+ * Never put max-width on .page-compose / section roots — that paints
+ * "phone column gutters" inside the scrubber. Only the content stack is capped.
+ * Hub sets artboard width via RunFrame; is-mobile / is-desktop only switch pad + stack max.
+ */
+.page-compose,
+.final-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.locked-stack,
+.final-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.phone-section {
+  width: 100%;
+}
+
+/* Named section root: fill artboard; owns background + shell padding */
+section[data-layer],
+.section-shell {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: clip;
+}
+
+/* Mobile shell defaults */
+.is-mobile section[data-layer],
+.is-mobile .section-shell,
+section[data-layer].is-mobile-shell,
+.section-shell.is-mobile-shell {
+  padding: 44px 24px;
+}
+
+/* Desktop shell defaults */
+.is-desktop section[data-layer],
+.is-desktop .section-shell,
+section[data-layer].is-desktop-shell,
+.section-shell.is-desktop-shell {
+  padding: 88px 64px;
+}
+
+/* Content column — width cap only; shell pad stays on the section root */
+[data-layer="max width content stack"] {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: visible;
+}
+
+.is-mobile [data-layer="max width content stack"],
+.section-shell.is-mobile-shell [data-layer="max width content stack"] {
+  max-width: 380px;
+}
+
+.is-desktop [data-layer="max width content stack"],
+.section-shell.is-desktop-shell [data-layer="max width content stack"] {
+  max-width: 896px;
+}
+
+/* Desktop reading-rail preview. Framer uses hug-grid Columns; HTML caps max-width to the same widths. */
+.is-desktop [data-layer="max width content stack"][data-reading-cols="7"],
+.section-shell.is-desktop-shell [data-layer="max width content stack"][data-reading-cols="7"] {
+  max-width: 781px;
+}
+.is-desktop [data-layer="max width content stack"][data-reading-cols="6"],
+.section-shell.is-desktop-shell [data-layer="max width content stack"][data-reading-cols="6"] {
+  max-width: 666px;
+}
+.is-desktop [data-layer="max width content stack"][data-reading-cols="5"],
+.section-shell.is-desktop-shell [data-layer="max width content stack"][data-reading-cols="5"] {
+  max-width: 551px;
+}
+.is-desktop [data-layer="max width content stack"][data-reading-cols="4"],
+.section-shell.is-desktop-shell [data-layer="max width content stack"][data-reading-cols="4"] {
+  max-width: 436px;
+}
+
+/**
+ * keep-stack: same content max (and usually same shell pad) on Desktop.
+ * Set data-desktop-choice="keep-stack" on .page-compose / .final-page.
+ */
+.page-compose.is-desktop[data-desktop-choice="keep-stack"] [data-layer="max width content stack"],
+.final-page.is-desktop[data-desktop-choice="keep-stack"] [data-layer="max width content stack"] {
+  max-width: 380px !important;
+}
+
+.page-compose.is-desktop[data-desktop-choice="keep-stack"] section[data-layer],
+.final-page.is-desktop[data-desktop-choice="keep-stack"] section[data-layer],
+.page-compose.is-desktop[data-desktop-choice="keep-stack"] .section-shell,
+.final-page.is-desktop[data-desktop-choice="keep-stack"] .section-shell {
+  padding: 44px 24px;
+}
+
+/**
+ * Content column grid (geometry lock contentGrid, 2026-08-10).
+ * Inside max width content stack only. Compose with spans — never Nfr/Mfr splits.
+ * Mobile: 4 cols · gutter 16 (spacing md). Desktop: 8 cols · gutter 24 (off-ladder, gutters only).
+ */
+.page-compose,
+.final-page,
+.section-shell,
+section[data-layer] {
+  --content-cols: 4;
+  --content-gutter: 16px;
+}
+
+.is-desktop.page-compose,
+.is-desktop.final-page,
+.is-desktop .section-shell,
+.is-desktop section[data-layer],
+.section-shell.is-desktop-shell,
+section[data-layer].is-desktop-shell {
+  --content-cols: 8;
+  --content-gutter: 24px;
+}
+
+[data-layer="content grid"],
+.content-grid {
+  box-sizing: border-box;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--content-cols), minmax(0, 1fr));
+  column-gap: var(--content-gutter);
+  row-gap: 0;
+  align-items: stretch;
+}
+
+[data-span="1"], .span-1 { grid-column: span 1; }
+[data-span="2"], .span-2 { grid-column: span 2; }
+[data-span="3"], .span-3 { grid-column: span 3; }
+[data-span="4"], .span-4 { grid-column: span 4; }
+[data-span="5"], .span-5 { grid-column: span 5; }
+[data-span="6"], .span-6 { grid-column: span 6; }
+[data-span="7"], .span-7 { grid-column: span 7; }
+[data-span="8"], .span-8 { grid-column: span 8; }
+[data-span="full"], .span-full { grid-column: 1 / -1; }
+
+/* ------------------------------------------------------------------
+   Carried over from the dropped board cell wrapper
+   ------------------------------------------------------------------ */
+.final-page,
+.final-page * {
+  box-sizing: border-box;
+}
+
+.final-page .vF-hero4-root,
+.final-page .vF-hero4-section {
+  font-family: "HeroAddFigtree", sans-serif;
+  color: #312C62;
+}
+
+.final-page .vE-orient4-root,
+.final-page .vE-orient4-section {
+  font-family: "Orient Figtree", Arial, sans-serif;
+  color: #312C62;
+}
+
+.final-page .vA-offer-root,
+.final-page .vA-offer-section {
+  font-family: "Offer Figtree", sans-serif;
+  color: #312c62;
+}
+
+.final-page .vB-proof-root,
+.final-page .vB-proof-section {
+  font-family: "ProofFigtree", sans-serif;
+  color: #312C62;
+}
+
+/* ------------------------------------------------------------------
+   Final adaptations · msy-005-hellofresh-flyer
+   Mobile is the Design-repaired stack. Desktop is composed per section.
+   Every rule is scoped .final-page so it outranks the imported section
+   CSS regardless of injection order.
+   ------------------------------------------------------------------ */
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Explore sized every section to the 390 phone. On the page the section root
+   is the full-bleed surface and only its content stack is capped. */
+.final-page .phone-section > section,
+.final-page .vE-orient4-inner {
+  max-width: none;
+}
+
+/* Explore framed the hero as a floating phone card. On the page it is a
+   section: full-bleed surface, square corners, no drop shadow. */
+.final-page .vF-hero4-root {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* The hero owns a full-bleed photo, so the shell inset lives on the zones
+   inside it rather than the section root. Logged as a Stage 06 exception.
+   Needs to outrank the shared `.is-desktop section[data-layer]` shell rule. */
+.final-page.is-mobile .vF-hero4-root,
+.final-page.is-desktop .vF-hero4-root,
+.final-page.is-mobile .vD-start3-section,
+.final-page.is-desktop .vD-start3-section {
+  padding: 0;
+}
+
+.final-page .vF-hero4-copy-stack,
+.final-page .vD-start3-stack {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.final-page .vF-hero4-copy-stack,
+.final-page .vD-start3-stack,
+.final-page .vF-hero4-equation-stack {
+  max-width: 380px;
+}
+
+.final-page.is-mobile .vD-start3-section,
+.final-page.is-desktop .vD-start3-section {
+  padding: 44px 24px;
+}
+
+/* The content stack is a flex column, so a child with `margin-inline: auto`
+   collapses to its text width unless it also claims the full column. */
+.final-page [data-layer="max width content stack"] > * {
+  width: 100%;
+}
+
+/* Below the hero fold: 5 of 8 desktop columns (551), not the full 896. */
+.final-page.is-desktop .vE-orient4-stack,
+.final-page.is-desktop .vA-offer-stack,
+.final-page.is-desktop .vB-proof-stack,
+.final-page.is-desktop .vD-start3-stack,
+.final-page.is-desktop .vF-hero4-equation-stack {
+  max-width: 551px !important;
+}
+
+.final-page.is-desktop .vA-offer-root,
+.final-page.is-desktop .vE-orient4-shell,
+.final-page.is-desktop .vB-proof-shell,
+.final-page.is-desktop .vD-start3-section {
+  padding: 88px 64px;
+}
+
+.final-page.is-desktop .vF-hero4-zone-two {
+  padding: 88px 64px;
+}
+
+.final-page.is-desktop .vF-hero4-equation-title,
+.final-page.is-desktop .vF-hero4-bridge,
+.final-page.is-desktop .vE-orient4-title,
+.final-page.is-desktop .vE-orient4-intro,
+.final-page.is-desktop .vA-offer-heading,
+.final-page.is-desktop .vA-offer-support,
+.final-page.is-desktop .vB-proof-title,
+.final-page.is-desktop .vD-start3-heading,
+.final-page.is-desktop .vD-start3-copy {
+  max-width: none;
+}
+
+.final-page .vA-offer-root { padding: 44px 24px; }
+
+/* ---------------------------------------------------------------------
+   Desktop: hero fold only. Copy left, photo right, locked at 1024.
+   --------------------------------------------------------------------- */
+
+.final-page .vF-hero4-root {
+  align-items: stretch;
+}
+
+.final-page .vF-hero4-zone-one,
+.final-page .vF-hero4-zone-two {
+  width: 100%;
+}
+
+.final-page.is-desktop .vF-hero4-zone-one {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 64px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  column-gap: 32px;
+  align-items: center;
+}
+
+.final-page.is-desktop .vF-hero4-copy {
+  grid-column: 1 / span 4;
+  grid-row: 1;
+  margin-top: 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  text-align: left;
+}
+
+.final-page.is-desktop .vF-hero4-copy-stack {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+
+.final-page.is-desktop .vF-hero4-visual {
+  grid-column: 5 / span 4;
+  grid-row: 1;
+  height: 480px;
+  border-radius: 28px;
+}
+
+.final-page.is-desktop .vF-hero4-title,
+.final-page.is-desktop .vF-hero4-subhead,
+.final-page.is-desktop .vF-hero4-cta-note {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+}
+
+.final-page.is-desktop .vF-hero4-title { font-size: 46px; }
+.final-page.is-desktop .vF-hero4-subhead { font-size: 18px; margin-top: 15px; }
+
+.final-page.is-desktop .vF-hero4-promo,
+.final-page.is-desktop .vF-hero4-cta {
+  margin-inline: 0;
+}
+
+.final-page.is-desktop .vF-hero4-cta {
+  display: inline-flex;
+  width: auto;
+  min-width: 280px;
+}
+
+.final-page .vF-hero4-zone-two {
+  background: linear-gradient(160deg, #FAF5FF 0%, #ECE2FC 100%);
+}
+
+.final-page.is-mobile .vF-hero4-zone-two {
+  padding: 44px 24px;
+}
+
+.final-page.is-desktop .vF-hero4-zone-two {
+  background: linear-gradient(160deg, #FAF5FF 0%, #ECE2FC 100%);
+}
+
+.final-page .vF-hero4-zone-two::before {
+  display: none;
+}
+
+.final-page .vF-hero4-package {
+  height: 168px;
+}
+
+.final-page .vF-hero4-lid,
+.final-page .vF-hero4-package-body,
+.final-page .vF-hero4-box-hf,
+.final-page .vF-hero4-box-moshy {
+  display: none;
+}
+
+.final-page .vF-hero4-box-photo {
+  display: block;
+  width: 100%;
+  height: 168px;
+  object-fit: contain;
+}
+
+.final-page .vE-orient4-shell,
+.final-page .vB-proof-shell,
+.final-page .vA-offer-root,
+.final-page .vD-start3-section {
+  font-family: Figtree, "Orient Figtree", "ProofFigtree", "Offer Figtree", "Start Figtree", sans-serif;
+}
+.final-page .vE-orient4-step-title {
+  font-family: "Orient Figtree", Figtree, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+}
+
+.final-page .vE-orient4-step-text {
+  font-family: "Orient Figtree", Figtree, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.final-page .vB-proof-title {
+  font-family: "ProofArea", "HeroAddArea", sans-serif;
+}
+
+.final-page .vB-proof-quote,
+.final-page .vB-proof-member,
+.final-page .vB-proof-source,
+.final-page .vB-proof-score-copy,
+.final-page .vB-proof-score-brand {
+  font-family: "ProofFigtree", Figtree, sans-serif;
+}
+
+.final-page .vB-proof-widget {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.final-page .vB-proof-widget-host {
+  width: 100%;
+  min-height: 150px;
+}
+
+.final-page .vB-proof-widget-block {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+@font-face {
+    font-family: "HeroAddArea";
+    src: url("./design/moshy/assets/fonts/AreaInktrap-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }@font-face {
+    font-family: "HeroAddGelica";
+    src: url("./design/moshy/assets/fonts/gelica-medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }@font-face {
+    font-family: "HeroAddFigtree";
+    src: url("./design/moshy/assets/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+    font-weight: 300 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .vF-hero4-root {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    overflow: hidden;
+    border: 1px solid #ECE2FC;
+    border-radius: 32px;
+    background: #FCFCFC;
+    box-shadow: 0 24px 64px rgba(49, 44, 98, 0.14);
+  }
+
+  .vF-hero4-zone-one {
+    position: relative;
+    /* Natural height so the equation sits directly under the CTA.
+       Fixed 844px left a large empty gap below the fold. */
+    overflow: hidden;
+    background: #FCFCFC;
+  }
+
+  .vF-hero4-visual {
+    position: relative;
+    height: 354px;
+    overflow: hidden;
+    background: #E8D5C8;
+  }
+
+  .vF-hero4-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 52% 42%;
+  }
+
+  .vF-hero4-lockup {
+    position: absolute;
+    z-index: 8;
+    top: 18px;
+    left: 50%;
+    display: grid;
+    grid-template-columns: 82px 16px 64px;
+    min-height: 54px;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    border: 1px solid rgba(236, 226, 252, 0.9);
+    border-radius: 999px;
+    background: rgba(252, 252, 252, 0.96);
+    box-shadow: 0 12px 28px rgba(49, 44, 98, 0.16);
+    transform: translateX(-50%);
+    backdrop-filter: blur(8px);
+  }
+
+  .vF-hero4-moshy {
+    display: block;
+    width: 82px;
+    height: auto;
+  }
+
+  .vF-hero4-cross {
+    color: #4D41F0;
+    font-family: "HeroAddGelica", serif;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .vF-hero4-hf {
+    display: block;
+    width: 64px;
+    height: 33px;
+    object-fit: contain;
+  }
+
+  .vF-hero4-table {
+    position: absolute;
+    top: 78px;
+    left: 54px;
+    width: 302px;
+    height: 302px;
+    border: 2px solid rgba(49, 44, 98, 0.12);
+    border-radius: 50%;
+    background: #EABFAB;
+    box-shadow:
+      inset 0 0 0 17px rgba(255, 255, 255, 0.28),
+      0 26px 52px rgba(49, 44, 98, 0.2);
+    transform: rotate(8deg);
+  }
+
+  .vF-hero4-spinner {
+    position: absolute;
+    inset: 50px;
+    border: 2px solid rgba(49, 44, 98, 0.1);
+    border-radius: 50%;
+    background: #FFF9F4;
+    box-shadow: inset 0 0 0 12px rgba(236, 226, 252, 0.62);
+  }
+
+  .vF-hero4-plate {
+    position: absolute;
+    display: grid;
+    border: 6px solid #FCFCFC;
+    border-radius: 50%;
+    place-items: center;
+    box-shadow: 0 8px 20px rgba(49, 44, 98, 0.16);
+  }
+
+  .vF-hero4-plate::before,
+  .vF-hero4-plate::after {
+    position: absolute;
+    border-radius: 999px;
+    content: "";
+  }
+
+  .vF-hero4-plate-salad {
+    top: 16px;
+    left: 98px;
+    width: 88px;
+    height: 88px;
+    background:
+      radial-gradient(circle at 34% 38%, #FCFCFC 0 6px, transparent 7px),
+      radial-gradient(circle at 62% 60%, #D46D45 0 7px, transparent 8px),
+      #9DAC65;
+  }
+
+  .vF-hero4-plate-salad::before {
+    width: 43px;
+    height: 14px;
+    background: #6F7F3F;
+    transform: rotate(-18deg);
+  }
+
+  .vF-hero4-plate-bowl {
+    right: 11px;
+    bottom: 69px;
+    width: 101px;
+    height: 101px;
+    background:
+      radial-gradient(circle at 34% 42%, #F2D99D 0 8px, transparent 9px),
+      radial-gradient(circle at 61% 58%, #8D4C3B 0 10px, transparent 11px),
+      radial-gradient(circle at 63% 30%, #D46D45 0 7px, transparent 8px),
+      #DFC5E8;
+  }
+
+  .vF-hero4-plate-bowl::before {
+    width: 48px;
+    height: 14px;
+    background: #FCFCFC;
+    transform: rotate(-18deg);
+  }
+
+  .vF-hero4-plate-toast {
+    bottom: 18px;
+    left: 42px;
+    width: 84px;
+    height: 84px;
+    background: #F4D38B;
+  }
+
+  .vF-hero4-plate-toast::before {
+    width: 46px;
+    height: 31px;
+    border-radius: 13px 13px 7px 7px;
+    background: #C77A48;
+    transform: rotate(-18deg);
+  }
+
+  .vF-hero4-plate-toast::after {
+    width: 28px;
+    height: 11px;
+    background: #F7C65D;
+    transform: rotate(15deg);
+  }
+
+  .vF-hero4-flyer {
+    position: absolute;
+    z-index: 5;
+    bottom: 18px;
+    left: -15px;
+    width: 190px;
+    min-height: 112px;
+    padding: 20px 20px 17px 34px;
+    background: #312C62;
+    box-shadow: 0 18px 32px rgba(49, 44, 98, 0.25);
+    clip-path: polygon(0 9%, 94% 0, 100% 90%, 8% 100%);
+    color: #FCFCFC;
+    transform: rotate(-5deg);
+  }
+
+  .vF-hero4-flyer p {
+    margin: 0;
+    font-family: "HeroAddGelica", serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.02;
+  }
+
+  .vF-hero4-flyer span {
+    color: #8E85FF;
+  }
+
+  .vF-hero4-copy {
+    position: relative;
+    z-index: 10;
+    margin-top: -30px;
+    padding: 30px 22px 22px;
+    border-radius: 34px 34px 0 0;
+    background: linear-gradient(180deg, #FCFCFC 0%, #FCFCFC 72%, #F3ECFF 100%);
+    text-align: center;
+  }
+
+  .vF-hero4-title {
+    max-width: 332px;
+    margin: 0 auto;
+    color: #312C62;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 41px;
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .vF-hero4-title span {
+    color: #4D41F0;
+    font-family: "HeroAddGelica", serif;
+    font-weight: 500;
+  }
+
+  .vF-hero4-subhead {
+    max-width: 318px;
+    margin: 15px auto 0;
+    color: #312C62;
+    font-family: "HeroAddGelica", serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .vF-hero4-promo {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 17px;
+    padding: 12px 14px;
+    border: 1px solid #D9D4FF;
+    border-radius: 16px;
+    background: #F4F2FF;
+    text-align: left;
+  }
+
+  .vF-hero4-promo-value {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #4D41F0;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .vF-hero4-promo-value span {
+    display: block;
+    margin-top: 3px;
+    font-family: "HeroAddFigtree", sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .vF-hero4-promo-code {
+    margin: 0;
+    color: #4D41F0;
+    font-size: 12px;
+    font-weight: 850;
+    line-height: 1.15;
+    letter-spacing: 0.035em;
+  }
+
+  .vF-hero4-cta {
+    display: flex;
+    width: 100%;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 17px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: #9A0239;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .vF-hero4-cta-note {
+    margin: 9px 0 0;
+    color: #8B86B0;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .vF-hero4-zone-two {
+    position: relative;
+    padding: 24px 20px 36px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #F3ECFF 0%, #ECE2FC 42%, #E4D7FA 100%);
+  }
+
+  .vF-hero4-zone-two::before {
+    position: absolute;
+    top: -72px;
+    right: -66px;
+    width: 180px;
+    height: 180px;
+    border: 30px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    content: "";
+    opacity: 0.74;
+  }
+
+  .vF-hero4-zone-two::after {
+    display: none;
+  }
+
+  .vF-hero4-equation-stack {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .vF-hero4-equation-title {
+    max-width: 328px;
+    margin: 0;
+    color: #312C62;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 33px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .vF-hero4-equation-title span {
+    display: block;
+    color: #4D41F0;
+    font-family: "HeroAddGelica", serif;
+    font-size: 37px;
+    font-weight: 500;
+    line-height: 1.02;
+  }
+
+  .vF-hero4-bridge {
+    max-width: 330px;
+    margin: 18px 0 0;
+    color: #8B86B0;
+    font-size: 15px;
+    font-weight: 450;
+    line-height: 1.45;
+  }
+
+  .vF-hero4-equation {
+    position: relative;
+    margin-top: 28px;
+    padding: 17px;
+    border: 1px solid #ECE2FC;
+    border-radius: 25px;
+    background: #FCFCFC;
+    box-shadow: 0 18px 38px rgba(49, 44, 98, 0.08);
+  }
+
+  .vF-hero4-inputs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 27px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .vF-hero4-input {
+    min-width: 0;
+  }
+
+  .vF-hero4-package {
+    position: relative;
+    height: 112px;
+  }
+
+  .vF-hero4-lid {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    left: 7px;
+    height: 37px;
+    border: 1px solid #312C62;
+    border-radius: 8px 8px 3px 3px;
+    background: #ECE2FC;
+    transform: skewY(-3deg);
+  }
+
+  .vF-hero4-package-moshy .vF-hero4-lid {
+    border-color: #4D41F0;
+    transform: skewY(3deg);
+  }
+
+  .vF-hero4-package-body {
+    position: absolute;
+    right: 2px;
+    bottom: 4px;
+    left: 2px;
+    display: grid;
+    height: 72px;
+    place-items: center;
+    border: 1px solid #312C62;
+    border-radius: 5px 5px 13px 13px;
+    background: #FAF5FF;
+    box-shadow: 5px 6px 0 #ECE2FC;
+  }
+
+  .vF-hero4-package-moshy .vF-hero4-package-body {
+    border-color: #4D41F0;
+    background: #FCFCFC;
+    box-shadow: 5px 6px 0 #4D41F0;
+  }
+
+  .vF-hero4-box-hf {
+    display: block;
+    width: 70px;
+    max-height: 45px;
+    object-fit: contain;
+  }
+
+  .vF-hero4-box-moshy {
+    display: block;
+    width: 67px;
+    height: auto;
+  }
+
+  .vF-hero4-plus {
+    align-self: center;
+    padding-top: 30px;
+    color: #4D41F0;
+    font-family: "HeroAddGelica", serif;
+    font-size: 30px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .vF-hero4-input-label {
+    min-height: 34px;
+    margin: 11px 0 0;
+    color: #8B86B0;
+    font-size: 10.5px;
+    font-weight: 650;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .vF-hero4-equals {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    margin: 13px auto -21px;
+    place-items: center;
+    border: 1px solid #4D41F0;
+    border-radius: 50%;
+    background: #FCFCFC;
+    color: #4D41F0;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .vF-hero4-result {
+    position: relative;
+    overflow: hidden;
+    padding: 31px 19px 19px;
+    border-radius: 18px;
+    background: #312C62;
+    color: #FCFCFC;
+  }
+
+  .vF-hero4-result::after {
+    position: absolute;
+    right: -27px;
+    bottom: -39px;
+    width: 116px;
+    height: 116px;
+    border: 22px solid #4D41F0;
+    border-radius: 50%;
+    content: "";
+    opacity: 0.55;
+  }
+
+  .vF-hero4-result-row {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 13px;
+    align-items: center;
+  }
+
+  .vF-hero4-result-mark {
+    display: grid;
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    border-radius: 50%;
+    background: #4D41F0;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .vF-hero4-result-copy {
+    margin: 0;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  .vF-hero4-result-copy span {
+    display: block;
+    margin-top: 4px;
+    color: #ECE2FC;
+    font-family: "HeroAddGelica", serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .vF-hero4-claim {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 14px;
+    align-items: center;
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid #D9D4FF;
+    border-radius: 18px;
+    background: #FCFCFC;
+  }
+
+  .vF-hero4-claim-number {
+    margin: 0;
+    color: #4D41F0;
+    font-family: "HeroAddArea", sans-serif;
+    font-size: 39px;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+  }
+
+  .vF-hero4-claim-number span {
+    display: block;
+    margin-top: 5px;
+    font-family: "HeroAddFigtree", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .vF-hero4-claim-copy {
+    margin: 0;
+    color: #312C62;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .vF-hero4-legal {
+    margin: 14px 0 0;
+    color: #8B86B0;
+    font-size: 10.5px;
+    font-weight: 450;
+    line-height: 1.42;
+  }@font-face {
+    font-family: "Orient Area";
+    src: url("./design/moshy/assets/fonts/AreaInktrap-Bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+  }@font-face {
+    font-family: "Orient Gelica";
+    src: url("./design/moshy/assets/fonts/gelica-medium.otf") format("opentype");
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+  }@font-face {
+    font-family: "Orient Figtree";
+    src: url("./design/moshy/assets/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+  }
+
+  .vE-orient4-inner {
+    width: 100%;
+    max-width: 390px;
+  }
+
+  .vE-orient4-shell {
+    width: 100%;
+    max-width: 390px;
+    padding: 44px 24px;
+    overflow: hidden;
+    background: #FCFCFC;
+    color: #312C62;
+  }
+
+  .vE-orient4-stack {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .vE-orient4-title {
+    max-width: 338px;
+    margin: 0;
+    font-family: "Orient Area", "Orient Figtree", sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+
+  .vE-orient4-title-accent {
+    color: #4D41F0;
+  }
+
+  .vE-orient4-intro {
+    max-width: 330px;
+    margin: 18px 0 0;
+    color: #8B86B0;
+    font-size: 16px;
+    font-weight: 480;
+    line-height: 1.5;
+  }
+
+  .vE-orient4-photo-wrap {
+    position: relative;
+    width: 100%;
+    margin: 0 0 28px;
+    padding: 0 14px 26px 0;
+  }
+
+  .vE-orient4-photo-crop {
+    position: relative;
+    width: 100%;
+    height: 254px;
+    overflow: hidden;
+    border-radius: 28px 28px 8px 28px;
+    background: #ECE2FC;
+  }
+
+  .vE-orient4-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 46%;
+  }
+
+  .vE-orient4-logo-plate {
+    position: absolute;
+    z-index: 2;
+    top: 14px;
+    left: 14px;
+    display: grid;
+    width: 74px;
+    height: 34px;
+    place-items: center;
+    border-radius: 17px;
+    background: rgb(252 252 252 / 92%);
+    box-shadow: 0 8px 22px rgb(49 44 98 / 10%);
+  }
+
+  .vE-orient4-logo {
+    display: block;
+    width: 50px;
+    height: auto;
+  }
+
+  .vE-orient4-care-team {
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 7px 10px 7px 7px;
+    border: 1px solid #D8C9F1;
+    border-radius: 30px;
+    background: #FAF5FF;
+    box-shadow: 0 10px 24px rgb(49 44 98 / 12%);
+    transform: rotate(-2deg);
+  }
+
+  .vE-orient4-care-avatar {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border: 2px solid #FCFCFC;
+    border-radius: 50%;
+  }
+
+  .vE-orient4-care-avatar + .vE-orient4-care-avatar {
+    margin-left: -10px;
+  }
+
+  .vE-orient4-care-label {
+    margin-left: 8px;
+    color: #312C62;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .vE-orient4-route {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    margin: 34px 0 0;
+  }
+
+  .vE-orient4-route::before {
+    position: absolute;
+    top: 28px;
+    bottom: 28px;
+    left: 36px;
+    z-index: 0;
+    width: 0;
+    border-left: 2px dotted #B7A9E8;
+    content: "";
+    pointer-events: none;
+  }
+
+  .vE-orient4-step {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+    padding: 18px;
+    border: 1px solid #ECE2FC;
+    border-radius: 18px;
+    background: #FAF5FF;
+  }
+
+  .vE-orient4-number {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 2px solid #4D41F0;
+    border-radius: 50%;
+    color: #4D41F0;
+    font-family: "Orient Gelica", serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .vE-orient4-step-title {
+    margin: 1px 0 5px;
+    color: #312C62;
+    font-size: 16px;
+    font-weight: 780;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .vE-orient4-step-text {
+    margin: 0;
+    color: #8B86B0;
+    font-size: 14px;
+    font-weight: 450;
+    line-height: 1.48;
+  }
+
+  .vE-orient4-cta-wrap {
+    margin: 30px 0 0;
+  }
+
+  .vE-orient4-cta {
+    display: flex;
+    width: 100%;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 18px;
+    border-radius: 27px;
+    background: #9A0239;
+    color: #FCFCFC;
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .vE-orient4-disclaimer {
+    margin: 16px 0 0;
+    color: #8B86B0;
+    font-size: 11px;
+    font-weight: 450;
+    line-height: 1.45;
+    text-align: center;
+  }@font-face {
+    font-family: "Offer Area";
+    src: url("./design/moshy/assets/fonts/AreaInktrap-Bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+  }@font-face {
+    font-family: "Offer Gelica";
+    src: url("./design/moshy/assets/fonts/gelica-medium.otf") format("opentype");
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+  }@font-face {
+    font-family: "Offer Figtree";
+    src: url("./design/moshy/assets/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+  }
+
+  .vA-offer-root,
+  .vB-offer-root {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    overflow: clip;
+    padding: 44px 24px;
+  }
+
+  .vA-offer-root {
+    position: relative;
+    background: #faf5ff;
+  }
+
+  .vA-offer-root::before {
+    position: absolute;
+    top: -54px;
+    right: -72px;
+    width: 188px;
+    height: 188px;
+    border: 34px solid #ece2fc;
+    border-radius: 50%;
+    content: "";
+    opacity: 0.72;
+  }
+
+  .vA-offer-stack,
+  .vB-offer-stack {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    max-width: 380px;
+    flex-direction: column;
+    gap: 0;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .vA-offer-partner-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 32px;
+  }
+
+  .vA-offer-logo {
+    display: block;
+    width: 83px;
+    height: auto;
+  }
+
+  .vA-offer-partner-divider {
+    width: 1px;
+    height: 27px;
+    background: #8b86b0;
+  }
+
+  .vA-offer-partner-name {
+    margin: 0;
+    color: #312c62;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .vA-offer-heading {
+    max-width: 315px;
+    margin: 0;
+    font-family: "Offer Gelica", serif;
+    font-size: 31px;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .vA-offer-support {
+    max-width: 308px;
+    margin: 0;
+    padding-top: 16px;
+    color: #8b86b0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.48;
+  }
+
+  .vA-offer-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    margin-top: 32px;
+    padding: 24px 0 21px;
+    border-top: 1px solid #ece2fc;
+    border-bottom: 1px solid #ece2fc;
+  }
+
+  .vA-offer-amount {
+    margin: 0;
+    color: #4d41f0;
+    font-family: "Offer Area", sans-serif;
+    font-size: 58px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.83;
+  }
+
+  .vA-offer-forever {
+    max-width: 86px;
+    margin: 0;
+    padding-bottom: 2px;
+    color: #4d41f0;
+    font-family: "Offer Area", sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 0.98;
+    text-align: right;
+  }
+
+  .vA-offer-code-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 24px;
+  }
+
+  .vA-offer-code-copy {
+    margin: 0;
+    color: #8b86b0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .vA-offer-code {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px dashed #4d41f0;
+    border-radius: 8px;
+    color: #4d41f0;
+    background: #f4f2ff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    line-height: 1;
+  }
+
+  .vA-offer-auto {
+    margin: 0;
+    padding-top: 16px;
+    color: #312c62;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.42;
+  }
+
+  .vA-offer-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 32px;
+  }
+
+  .vA-offer-price {
+    max-width: 185px;
+    margin: 0;
+    color: #8b86b0;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .vA-offer-terms {
+    flex: 0 0 auto;
+    color: #8b86b0;
+    font-size: 12px;
+    font-weight: 700;
+    text-underline-offset: 3px;
+  }
+
+  .vA-offer-terms:focus-visible,
+  .vB-offer-terms:focus-visible {
+    outline: 2px solid #9a0239;
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .vA-offer-legal,
+  .vB-offer-legal {
+    margin: 0;
+    padding-top: 16px;
+    color: #8b86b0;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.42;
+  }@font-face {
+    font-family: "ProofArea";
+    src: url("./design/moshy/assets/fonts/AreaInktrap-Bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+  }@font-face {
+    font-family: "ProofGelica";
+    src: url("./design/moshy/assets/fonts/gelica-medium.otf") format("opentype");
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+  }@font-face {
+    font-family: "ProofFigtree";
+    src: url("./design/moshy/assets/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+  }
+
+  .vA-proof-inner,
+  .vB-proof-inner {
+    width: 100%;
+  }
+
+  .vA-proof-shell,
+  .vB-proof-shell {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    overflow: clip;
+    padding: 44px 24px;
+  }
+
+  .vA-proof-stack,
+  .vB-proof-stack {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .vA-proof-source,
+  .vB-proof-source {
+    margin: 24px 0 0;
+    color: #8B86B0;
+    font-size: 11px;
+    font-weight: 450;
+    line-height: 1.42;
+  }
+
+  .vB-proof-shell {
+    background: #FCFCFC;
+  }
+
+  .vB-proof-title {
+    max-width: 326px;
+    margin: 0;
+    font: 700 34px/1.16 "ProofArea", sans-serif;
+    letter-spacing: -0.025em;
+  }
+
+  .vB-proof-title-accent {
+    color: #4D41F0;
+    font: 500 38px/1.02 "ProofGelica", serif;
+    letter-spacing: -0.015em;
+  }
+
+  .vB-proof-score {
+    position: relative;
+    overflow: hidden;
+    margin-top: 26px;
+    padding: 22px 20px;
+    border-radius: 20px;
+    background: #312C62;
+    color: #FCFCFC;
+  }
+
+  .vB-proof-score::after {
+    position: absolute;
+    right: -35px;
+    bottom: -48px;
+    width: 128px;
+    height: 128px;
+    border: 23px solid #4D41F0;
+    border-radius: 50%;
+    content: "";
+    opacity: 0.62;
+  }
+
+  .vB-proof-score-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .vB-proof-score-stars {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    color: #F0B44D;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: 0.015em;
+  }
+
+  .vB-proof-score-copy {
+    max-width: 220px;
+    margin: 12px 0 0;
+    font: 700 19px/1.24 "ProofArea", sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  .vB-proof-score-brand {
+    display: block;
+    margin-top: 7px;
+    color: #ECE2FC;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .vB-proof-quotes {
+    margin-top: 12px;
+    border: 1px solid #ECE2FC;
+    border-radius: 20px;
+    background: #FAF5FF;
+  }
+
+  .vB-proof-review {
+    position: relative;
+    padding: 20px 18px 18px 44px;
+  }
+
+  .vB-proof-review + .vB-proof-review {
+    border-top: 1px solid #ECE2FC;
+  }
+
+  .vB-proof-quote-mark {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+    color: #4D41F0;
+    font: 500 31px/1 "ProofGelica", serif;
+  }
+
+  .vB-proof-quote {
+    margin: 0;
+    color: #312C62;
+    font-size: 15px;
+    font-weight: 520;
+    line-height: 1.45;
+    letter-spacing: -0.004em;
+  }
+
+  .vB-proof-review-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 13px;
+  }
+
+  .vB-proof-member {
+    color: #8B86B0;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.2;
+  }
+
+  .vB-proof-stars {
+    color: #D9972F;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.015em;
+    white-space: nowrap;
+  }@font-face {
+    font-family: "Start Area";
+    src: url("./design/moshy/assets/fonts/AreaInktrap-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }@font-face {
+    font-family: "Start Gelica";
+    src: url("./design/moshy/assets/fonts/gelica-medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }@font-face {
+    font-family: "Start Figtree";
+    src: url("./design/moshy/assets/fonts/figtree/Figtree-VariableFont_wght.ttf") format("truetype");
+    font-weight: 300 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .vD-start3-section {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 52px 24px 28px;
+    overflow: hidden;
+    background: #FCFCFC;
+    color: #312C62;
+    font-family: "Start Figtree", Arial, sans-serif;
+  }
+
+  .vD-start3-section * {
+    box-sizing: border-box;
+  }
+
+  .vD-start3-stack {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .vD-start3-heading {
+    max-width: 330px;
+    margin: 0;
+    font-family: "Start Gelica", Georgia, serif;
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .vD-start3-heading em {
+    position: relative;
+    color: #4D41F0;
+    font-style: normal;
+    white-space: nowrap;
+  }
+
+  .vD-start3-heading em::after {
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    left: 0;
+    height: 7px;
+    border-top: 2px solid #4D41F0;
+    border-radius: 50%;
+    content: "";
+    opacity: 0.55;
+    transform: rotate(-1deg);
+  }
+
+  .vD-start3-copy {
+    max-width: 310px;
+    margin: 24px 0 0;
+    font-size: 17px;
+    font-weight: 450;
+    line-height: 1.5;
+  }
+
+  .vD-start3-quiz-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 18px;
+    padding: 14px 0;
+    border-top: 1px solid #ECE2FC;
+    border-bottom: 1px solid #ECE2FC;
+  }
+
+  .vD-start3-time {
+    display: grid;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid #4D41F0;
+    border-radius: 50%;
+    color: #4D41F0;
+    font-family: "Start Area", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .vD-start3-quiz-copy {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .vD-start3-quiz-copy strong {
+    display: block;
+    font-weight: 750;
+  }
+
+  .vD-start3-cta {
+    display: flex;
+    width: 100%;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: #9A0239;
+    box-shadow: 0 8px 18px rgba(154, 2, 57, 0.16);
+    color: #FFFFFF;
+    font: 700 16px/1 "Start Figtree", Arial, sans-serif;
+    text-decoration: none;
+  }
+
+  .vD-start3-arrow {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(252, 252, 252, 0.16);
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .vD-start3-after {
+    margin: 14px 0 0;
+    color: #8B86B0;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .vD-start3-offer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 28px 0 16px;
+    padding: 12px 14px;
+    border: 1px solid #ECE2FC;
+    border-radius: 14px;
+    background: #FAF5FF;
+  }
+
+  .vD-start3-offer-copy {
+    min-width: 0;
+  }
+
+  .vD-start3-code {
+    display: block;
+    color: #4D41F0;
+    font-family: "Start Area", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+
+  .vD-start3-supplied {
+    display: block;
+    margin-top: 4px;
+    color: #8B86B0;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .vD-start3-saving {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #4D41F0;
+    font-family: "Start Gelica", Georgia, serif;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-align: right;
+  }
+
+  .vD-start3-legal {
+    margin: 26px 0 0;
+    color: #8B86B0;
+    font-size: 10px;
+    line-height: 1.45;
+    text-align: center;
+  }
+</style>
+<script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="page-compose is-mobile final-page" data-page="locked-stack" data-desktop-choice="">
+    <main class="locked-stack final-stack">
+      <div class="phone-section" data-slot="hero-additive" data-version="F">
+        <section class="section-shell vF-hero4-root" data-layer="hero-additive">
+      <div class="vF-hero4-zone-one" data-layer="above fold hero">
+        <div class="vF-hero4-visual" aria-label="Fresh plated dinner on a kitchen table">
+          <img class="vF-hero4-photo" src="./assets/hero-food-table.png" alt="">
+          <div class="vF-hero4-lockup" data-sot="Brand/Partner lockup" aria-label="Moshy and HelloFresh">
+            <img class="vF-hero4-moshy" src="./design/moshy/assets/logos/logo-on-light.svg" alt="Moshy">
+            <span class="vF-hero4-cross" aria-hidden="true">×</span>
+            <img class="vF-hero4-hf" src="./assets/hellofresh-logo.png" alt="HelloFresh">
+          </div>
+
+          
+        </div>
+
+        <div class="vF-hero4-copy">
+          <div class="vF-hero4-copy-stack" data-layer="max width content stack">
+          <h1 class="vF-hero4-title" data-copy-field="headline" data-copy-wrap="headline">Up to 20% of body weight lost in clinical trials.*</h1>
+          <p class="vF-hero4-subhead" data-copy-field="category-subhead" data-copy-wrap="category-subhead">Moshy is practitioner-led medical weight loss, online from home.</p>
+
+          <div class="vF-hero4-promo" data-sot="Chrome/Partner promo" data-layer="compact partner promo">
+            <p class="vF-hero4-promo-value" data-copy-field="promo-value" data-copy-wrap="promo-value">$60 off<span>forever</span></p>
+            <p class="vF-hero4-promo-code" data-copy-field="promo-code" data-copy-wrap="promo-code">HELLOFRESH60</p>
+          </div>
+
+          <a class="vF-hero4-cta" href="#eligibility-quiz" data-copy-field="cta" data-copy-wrap="cta">Check if I’m eligible</a>
+          <p class="vF-hero4-cta-note" data-copy-field="cta-note" data-copy-wrap="cta-note">Start with a short eligibility quiz. Clinical assessment required.</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="vF-hero4-zone-two" data-layer="healthy help equation">
+        <div class="vF-hero4-equation-stack" data-layer="max width content stack" data-reading-cols="5" data-reading-cols="5">
+          <h2 class="vF-hero4-equation-title" data-copy-field="equation-title" data-copy-wrap="equation-title">Medical weight care starts.</h2>
+          <p class="vF-hero4-bridge" data-copy-field="equation-bridge" data-copy-wrap="equation-bridge">For a lot of Aussies, food alone can only do so much for weight management. That is biology, not willpower. Moshy adds practitioner-led medical weight loss into the mix.</p>
+
+          <div class="vF-hero4-equation" data-sot="Surfaces/Delivery equation" data-layer="complete delivery equation" aria-label="HelloFresh plus Moshy equals healthy help delivered">
+            <div class="vF-hero4-inputs">
+              <div class="vF-hero4-input">
+                <div class="vF-hero4-package vF-hero4-package-hf"><img class="vF-hero4-box-photo" src="./assets/hellofresh-box.png" alt=""></div>
+                <p class="vF-hero4-input-label" data-copy-field="equation-input-food" data-copy-wrap="equation-input-food">Healthy dinners,<br>delivered</p>
+              </div>
+
+              <span class="vF-hero4-plus" aria-hidden="true">+</span>
+
+              <div class="vF-hero4-input">
+                <div class="vF-hero4-package vF-hero4-package-moshy"><img class="vF-hero4-box-photo" src="./assets/moshy-box.png" alt=""></div>
+                <p class="vF-hero4-input-label" data-copy-field="equation-input-moshy" data-copy-wrap="equation-input-moshy">Medical weight loss treatment, delivered</p>
+              </div>
+            </div>
+
+            <span class="vF-hero4-equals" aria-hidden="true">=</span>
+
+            <div class="vF-hero4-result" data-layer="complete result term">
+              <div class="vF-hero4-result-row">
+                <span class="vF-hero4-result-mark" aria-hidden="true">✓</span>
+                <p class="vF-hero4-result-copy" data-copy-field="equation-result" data-copy-wrap="equation-result">A plan that covers both sides.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="vF-hero4-claim" data-layer="provisional result claim">
+            <p class="vF-hero4-claim-number" data-copy-field="claim-stat" data-copy-wrap="claim-stat">20%*</p>
+            <p class="vF-hero4-claim-copy" data-copy-field="claim-caption" data-copy-wrap="claim-caption">In clinical trials, people lost up to 20% of their body weight.* Individual results may vary.</p>
+          </div>
+          <p class="vF-hero4-legal">*Based on published clinical trial results, not Moshy member outcomes. Individual results may vary. Treatments might not be effective for everyone. Eligibility and clinical assessment required. Speak to a healthcare professional to understand what is suitable for you.</p>
+        </div>
+      </div>
+    </section>
+      </div>
+      <div class="phone-section" data-slot="orientation" data-version="E">
+        <section class="section-shell orientation vE-orient4-shell" data-layer="orientation">
+      <div class="vE-orient4-stack" data-layer="max width content stack" data-reading-cols="5" data-reading-cols="5">
+        <div class="vE-orient4-photo-wrap" data-layer="care team image spread">
+          <div class="vE-orient4-photo-crop" data-layer="video call image crop">
+            <img class="vE-orient4-photo" src="./design/moshy/assets/placeholders/woman-video-call-phone.jpg" alt="A woman speaking with her care team by video call">
+            <span class="vE-orient4-logo-plate">
+              <img class="vE-orient4-logo" src="./design/moshy/assets/logos/logo-on-light.svg" alt="Moshy">
+            </span>
+          </div>
+          <div class="vE-orient4-care-team" aria-label="Practitioner care team">
+            <img class="vE-orient4-care-avatar" src="./design/moshy/assets/placeholders/practitioner-video-portrait.jpg" alt="A Moshy practitioner">
+            <img class="vE-orient4-care-avatar" src="./design/moshy/assets/placeholders/practitioner-studio-portrait.jpg" alt="A second Moshy practitioner">
+            <span class="vE-orient4-care-label" data-copy-field="care-team-caption" data-copy-wrap="care-team-caption">your care team</span>
+          </div>
+        </div>
+
+        <header class="vE-orient4-headline" data-layer="headline block">
+          <h2 class="vE-orient4-title" data-copy-field="headline" data-copy-wrap="headline">This is medical weight loss, not another diet.</h2>
+          <p class="vE-orient4-intro" data-copy-field="intro" data-copy-wrap="intro">
+            Start from home. A practitioner reviews your eligibility before you can access the program.
+          </p>
+        </header>
+
+        <div class="vE-orient4-route" data-layer="program path">
+          <article class="vE-orient4-step" data-sot="Chrome/Numbered step" data-layer="path step">
+            <span class="vE-orient4-number" aria-hidden="true">1</span>
+            <div class="vE-orient4-step-copy">
+              <h3 class="vE-orient4-step-title" data-copy-field="step-1-title" data-copy-wrap="step-1-title">Answer a few questions</h3>
+              <p class="vE-orient4-step-text" data-copy-field="step-1-text" data-copy-wrap="step-1-text">Two minutes of questions, answered from your phone.</p>
+            </div>
+          </article>
+
+          <article class="vE-orient4-step" data-layer="path step">
+            <span class="vE-orient4-number" aria-hidden="true">2</span>
+            <div class="vE-orient4-step-copy">
+              <h3 class="vE-orient4-step-title" data-copy-field="step-2-title" data-copy-wrap="step-2-title">A practitioner reviews your answers</h3>
+              <p class="vE-orient4-step-text" data-copy-field="step-2-text" data-copy-wrap="step-2-text">
+                Your answers are assessed to determine whether the program could be suitable.
+              </p>
+            </div>
+          </article>
+
+          <article class="vE-orient4-step" data-layer="path step">
+            <span class="vE-orient4-number" aria-hidden="true">3</span>
+            <div class="vE-orient4-step-copy">
+              <h3 class="vE-orient4-step-title" data-copy-field="step-3-title" data-copy-wrap="step-3-title">Get medical weight loss treatment if eligible</h3>
+              <p class="vE-orient4-step-text" data-copy-field="step-3-text" data-copy-wrap="step-3-text">Moshy delivers discreet medical weight loss treatment to your door each month + gives you the online clinical support you need to achieve your weight goals</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="vE-orient4-cta-wrap" data-layer="cta block">
+          <a class="vE-orient4-cta" href="#start-assessment" data-copy-field="cta" data-copy-wrap="cta">Check if I’m eligible</a>
+        </div>
+
+        <p class="vE-orient4-disclaimer">
+          Eligibility and clinical assessment required. Outcomes vary.
+        </p>
+      </div>
+    </section>
+      </div>
+      <div class="phone-section" data-slot="partner-offer" data-version="A">
+        <section class="section-shell vA-offer-root" data-layer="partner offer">
+    <div class="vA-offer-stack" data-layer="max width content stack" data-reading-cols="5" data-reading-cols="5">
+      <div class="vA-offer-partner-row" data-layer="partner lockup">
+        <img class="vA-offer-logo" src="./design/moshy/assets/logos/logo-on-light.svg" alt="Moshy">
+        <span class="vA-offer-partner-divider" aria-hidden="true"></span>
+        <p class="vA-offer-partner-name" data-copy-field="partner-lockup-label" data-copy-wrap="partner-lockup-label">For HelloFresh members</p>
+      </div>
+
+      <div data-layer="headline block">
+        <h2 class="vA-offer-heading" data-copy-field="headline" data-copy-wrap="headline">$60 off your Moshy program, forever.</h2>
+        <p class="vA-offer-support" data-copy-field="body" data-copy-wrap="body">
+          Your HelloFresh box came with a head start from Moshy, made to keep supporting your next step.
+        </p>
+      </div>
+
+      <div class="vA-offer-band" data-sot="Chrome/Forever offer" data-layer="offer band">
+        <p class="vA-offer-amount" data-copy-field="offer-amount" data-copy-wrap="offer-amount">$60 off</p>
+        <p class="vA-offer-forever" data-copy-field="offer-term" data-copy-wrap="offer-term">forever</p>
+      </div>
+
+      <div class="vA-offer-code-row" data-layer="offer code">
+        <p class="vA-offer-code-copy" data-copy-field="code-label" data-copy-wrap="code-label">Your exclusive code</p>
+        <p class="vA-offer-code" data-copy-field="code" data-copy-wrap="code">HELLOFRESH60</p>
+      </div>
+      <p class="vA-offer-auto" data-copy-field="auto-apply-note" data-copy-wrap="auto-apply-note">Start through this page and your code will be applied automatically.</p>
+
+      <div class="vA-offer-footer" data-layer="offer details">
+        
+        <a class="vA-offer-terms" href="#" data-copy-field="terms-link" data-copy-wrap="terms-link">T&amp;Cs apply</a>
+      </div>
+      <p class="vA-offer-legal" data-layer="legal note">
+        Eligibility and clinical assessment required. Outcomes vary.
+      </p>
+    </div>
+  </section>
+      </div>
+      <div class="phone-section" data-slot="proof-reviews" data-version="B">
+        <section class="section-shell vB-proof-shell" data-layer="proof-reviews">
+      <div class="vB-proof-stack" data-layer="max width content stack" data-reading-cols="5" data-reading-cols="5">
+        <h2 class="vB-proof-title" data-copy-field="headline" data-copy-wrap="headline">Rated by Moshy members on Trustpilot.</h2>
+
+        <!-- TODO: replace with cleared Trustpilot score + count before handoff -->
+        <div class="vB-proof-widget" data-layer="Trustpilot mini widget">
+          <div class="vB-proof-widget-host">
+            <div
+              class="trustpilot-widget"
+              data-locale="en-US"
+              data-template-id="53aa8807dec7e10d38f59f32"
+              data-businessunit-id="665c9030d93d3d8666e023d9"
+              data-style-height="150px"
+              data-style-width="100%"
+              data-token="ed87766b-1c3a-4c3f-b9e0-4e8f63e8c022"
+            ></div>
+          </div>
+          <span class="vB-proof-widget-block" aria-hidden="true"></span>
+        </div>
+        <span class="vB-proof-score-brand" data-copy-field="quotes-intro" data-copy-wrap="quotes-intro">Support, shared in their own words</span>
+
+        <div class="vB-proof-quotes" data-layer="member quotes">
+          <article class="vB-proof-review">
+            <span class="vB-proof-quote-mark" aria-hidden="true">“</span>
+            <blockquote class="vB-proof-quote">"Moshy gives you support from the get go! The amount of information provided is endless and they really do help you on your journey."</blockquote>
+            <div class="vB-proof-review-footer">
+              <span class="vB-proof-member">Rudy</span>
+              <span class="vB-proof-stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>
+            </div>
+          </article>
+
+          <article class="vB-proof-review">
+            <span class="vB-proof-quote-mark" aria-hidden="true">“</span>
+            <blockquote class="vB-proof-quote">"Loving the process so far, very supportive team that checks in. I am so glad I chose Moshy"</blockquote>
+            <div class="vB-proof-review-footer">
+              <span class="vB-proof-member">Kel</span>
+              <span class="vB-proof-stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>
+            </div>
+          </article>
+        </div>
+
+        <p class="vB-proof-source" data-copy-field="source-note" data-copy-wrap="source-note">Verified Trustpilot reviews. Individual experiences vary.</p>
+      </div>
+    </section>
+      </div>
+      <div class="phone-section" data-slot="start-assessment" data-version="D">
+        <section class="vD-start3-section" aria-labelledby="vD-start3-title">
+    <div class="vD-start3-stack" data-layer="max width content stack" data-reading-cols="5" data-reading-cols="5">
+      <h2 class="vD-start3-heading" id="vD-start3-title" data-copy-field="headline" data-copy-wrap="headline">
+        Start with a <em>two-minute check.</em>
+      </h2>
+      <p class="vD-start3-copy" data-copy-field="body" data-copy-wrap="body">A few questions to see whether this is right for you. No big decision today.</p>
+
+      <div class="vD-start3-offer" data-sot="Chrome/Closing offer" aria-label="HelloFresh member offer">
+        <div class="vD-start3-offer-copy">
+          <span class="vD-start3-code" data-copy-field="code" data-copy-wrap="code">HELLOFRESH60</span>
+          <span class="vD-start3-supplied" data-copy-field="code-caption" data-copy-wrap="code-caption">Auto-applied when you start · exclusive to HelloFresh members</span>
+        </div>
+        <p class="vD-start3-saving" data-copy-field="offer-value" data-copy-wrap="offer-value">$60 off<br>forever</p>
+      </div>
+
+      <a class="vD-start3-cta" href="#" aria-label="Check if I am eligible" data-copy-field="cta" data-copy-wrap="cta">Check if I’m eligible</a>
+
+      <p class="vD-start3-after" data-copy-field="after-note" data-copy-wrap="after-note">A practitioner reviews your answers before anything is offered.</p>
+
+      <p class="vD-start3-legal">Eligibility and clinical assessment required. Outcomes vary.</p>
+    </div>
+  </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
