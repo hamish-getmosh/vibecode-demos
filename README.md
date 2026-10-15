@@ -8,6 +8,7 @@ Interactive HTML demos and ideation runs, shareable without Cursor.
 
 | Demo | Date | Browse | Prototype |
 |---|---|---|---|
+| Moshy pre-order V3 content review | 2026-10-16 | [folder](moshy-preorder/2026-10-16/) | [open review board](https://hamish-getmosh.github.io/vibecode-demos/moshy-preorder/2026-10-16/) |
 | Experiment platform ideation | 2026-07-29 | [folder](experiment-platform/2026-07-29/) | [open prototype](https://hamish-getmosh.github.io/vibecode-demos/experiment-platform/2026-07-29/prototype/index.html) |
 | MOSHY AU HelloFresh box flyer landing page | 2026-09-04 | [folder](moshy-au-hellofresh-flyer/2026-09-04/) | [open mobile final](https://hamish-getmosh.github.io/vibecode-demos/moshy-au-hellofresh-flyer/2026-09-04/index.html) |
 | MOSHY MY quiz 002 onboarding mixboard | 2026-09-04 | [folder](moshy-my-onboarding-quiz/2026-09-04/) | [open mixboard](https://hamish-getmosh.github.io/vibecode-demos/moshy-my-onboarding-quiz/2026-09-04/boards/mixboard.html) |
